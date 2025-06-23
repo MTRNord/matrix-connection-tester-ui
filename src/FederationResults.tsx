@@ -160,10 +160,10 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             <Table.Cell>
                                                 {info.Addrs && info.Addrs.length > 0
                                                     ? info.Addrs.join(", ")
-                                                    : <Tag backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                                    : <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
                                             </Table.Cell>
                                             <Table.Cell>
-                                                {info.CName || <Tag backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                                {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
                                             </Table.Cell>
                                             <Table.Cell>
                                                 {info.Error ? (
@@ -171,14 +171,14 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                         {info.Error}
                                                     </ErrorText>
                                                 ) : (
-                                                    <Tag backgroundColor="#00703c" color="white">OK</Tag>
+                                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">OK</Tag>
                                                 )}
                                             </Table.Cell>
                                         </Table.Row>
                                     ))}
                                 </Table>
                             ) : (
-                                <Tag backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
+                                <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
                             )}
                         </Table.Cell>
                     </Table.Row>
