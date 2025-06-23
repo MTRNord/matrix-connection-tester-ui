@@ -1,4 +1,4 @@
-import { H2, Table, Panel, Details, Tag, Link, LoadingBox, ErrorText, Paragraph, } from "govuk-react";
+import { H2, Table, Panel, Details, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, } from "govuk-react";
 import type { ApiSchemaType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
@@ -275,7 +275,110 @@ export default function FederationResults({ serverName }: { serverName: string }
                                         )}
                                     </Table.Cell>
                                 </Table.Row>
-                                {/* Add more checks as needed */}
+                                <Table.Row>
+                                    <Table.Cell>Maching serverName</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.MatchingServerName ? (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#00703c"
+                                                color="white">Yes</Tag>
+                                        ) : (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#d4351c"
+                                                color="white"
+                                            >No</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Matching Signature for all keys</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.AllEd25519ChecksOK ? (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#00703c"
+                                                color="white">Yes</Tag>
+                                        ) : (
+                                            <>
+                                                <Tag
+                                                    style={{ paddingRight: 8, marginBottom: 4 }}
+                                                    backgroundColor="#d4351c"
+                                                    color="white"
+                                                >No</Tag>
+                                                {report.Checks.Ed25519Checks && (
+                                                    <div style={{ marginTop: 8 }}>
+                                                        <strong>Failing keys:</strong>
+                                                        {Object.entries(report.Checks.Ed25519Checks)
+                                                            .filter(([, check]) => !check.MatchingSignature)
+                                                            .map(([key]) => (
+                                                                <ListItem key={key}>
+                                                                    <Tag
+                                                                        backgroundColor="#d4351c"
+                                                                        color="white"
+                                                                        style={{ paddingRight: 8, marginBottom: 4 }}
+                                                                    >
+                                                                        <code>{key}</code>
+                                                                    </Tag>
+                                                                </ListItem>
+                                                            ))}
+                                                    </div>
+                                                )}
+                                            </>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                            </Table>
+                            <H2 size="SMALL">Keys</H2>
+                            <Table>
+                                <Table.Row>
+                                    <Table.CellHeader>Key ID</Table.CellHeader>
+                                    <Table.CellHeader>Key</Table.CellHeader>
+                                </Table.Row>
+                                {report.Keys?.verify_keys && Object.entries(report.Keys.verify_keys).map(([keyId, keyObj]) => (
+                                    <Table.Row key={keyId}>
+                                        <Table.Cell>
+                                            <code>{keyId}</code>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <code>{keyObj.key}</code>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                                {report.Keys?.old_verify_keys && Object.entries(report.Keys.old_verify_keys).map(([keyId, keyObj]) => (
+                                    <Table.Row key={keyId}>
+                                        <Table.Cell>
+                                            <code
+                                                style={{ marginRight: 8 }}
+                                            >{keyId}</code> <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">Expired</Tag>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts * 1000).toLocaleString()})
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table>
+                            <H2 size="SMALL">Certificates</H2>
+                            <Table>
+                                <Table.Row>
+                                    <Table.CellHeader>Issuer</Table.CellHeader>
+                                    <Table.CellHeader>Subject</Table.CellHeader>
+                                    <Table.CellHeader>SHA256 Fingerprint</Table.CellHeader>
+                                    <Table.CellHeader>DNS Names</Table.CellHeader>
+                                </Table.Row>
+                                {report.Certificates && report.Certificates.map((cert, index) => (
+                                    <Table.Row key={index}>
+                                        <Table.Cell>{cert.IssuerCommonName}</Table.Cell>
+                                        <Table.Cell>{cert.SubjectCommonName}</Table.Cell>
+                                        <Table.Cell>{cert.SHA256Fingerprint}</Table.Cell>
+                                        <Table.Cell>
+                                            {cert.DNSNames && cert.DNSNames.length > 0
+                                                ? cert.DNSNames.join(", ")
+                                                : "None"}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
                             </Table>
                             <Details summary="Show Raw Report">
                                 <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>

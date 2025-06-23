@@ -3,19 +3,12 @@ import { z } from "zod/v4"
 export const ApiSchema = z.object({
     ConnectionReports: z.record(z.string(), z.object({
         Certificates: z.array(
-            z.union([
-                z.object({
-                    DNSNames: z.array(z.string()),
-                    IssuerCommonName: z.string(),
-                    SHA256Fingerprint: z.string(),
-                    SubjectCommonName: z.string()
-                }),
-                z.object({
-                    IssuerCommonName: z.string(),
-                    SHA256Fingerprint: z.string(),
-                    SubjectCommonName: z.string()
-                })
-            ])
+            z.object({
+                DNSNames: z.array(z.string()).optional(),
+                IssuerCommonName: z.string(),
+                SHA256Fingerprint: z.string(),
+                SubjectCommonName: z.string()
+            }),
         ),
         Checks: z.object({
             AllChecksOK: z.boolean(),
