@@ -43,7 +43,7 @@ export const ApiSchema = z.object({
         })
     })).optional(),
     ConnectionErrors: z.record(z.string(), z.object({
-        Error: z.string(),
+        Error: z.string().optional(),
     })).optional(),
     DNSResult: z.object({
         Addrs: z.array(z.string()),
