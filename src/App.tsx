@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FederationResults from './FederationResults';
-import { Button, ErrorText, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph } from 'govuk-react';
+import { Button, ErrorText, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from './SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -58,11 +58,17 @@ function App() {
 
       {submittedServerName && (
         <>
-          <hr style={{ margin: '32px 0' }} />
+          <SectionBreak
+            level="LARGE"
+            visible
+          />
           <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
             <FederationResults serverName={submittedServerName} />
           </ErrorBoundary>
-          <hr style={{ margin: '32px 0' }} />
+          <SectionBreak
+            level="LARGE"
+            visible
+          />
           <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
             <SupportInfo serverName={submittedServerName} />
           </ErrorBoundary>
