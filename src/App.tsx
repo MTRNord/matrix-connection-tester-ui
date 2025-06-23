@@ -26,7 +26,10 @@ function App() {
         Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.
       </LeadParagraph>
 
-      <div style={{ background: '#f3f2f1', padding: 24, borderRadius: 6, margin: '24px 0' }}>
+      <form
+        onSubmit={handleSubmit}
+        style={{ background: '#f3f2f1', padding: 24, borderRadius: 6, margin: '24px 0' }}
+      >
         <FormGroup>
           <Label>
             <LabelText>Server Name</LabelText>
@@ -50,9 +53,8 @@ function App() {
             />
           </Label>
         </FormGroup>
-        <Button onClick={handleSubmit}>Go</Button>
-      </div>
-
+        <Button type="submit">Go</Button>
+      </form>
 
       {submittedServerName && (
         <>
@@ -64,10 +66,8 @@ function App() {
           <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
             <SupportInfo serverName={submittedServerName} />
           </ErrorBoundary>
-
         </>
-      )
-      }
+      )}
     </>
   )
 }
