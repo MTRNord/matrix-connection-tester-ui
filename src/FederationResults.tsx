@@ -120,7 +120,8 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             <Tabs.Panel id="overview" selected={selectedTab === "overview"}>
                 <H2>Federation Overview</H2>
-                {isValidating && (
+                {/* eslint-disable-next-line no-constant-binary-expression -- This seems to be overly jumpy*/}
+                {isValidating && false && (
                     <LoadingBox loading={true}>
                         <Paragraph supportingText>Refreshing data…</Paragraph>
                     </LoadingBox>

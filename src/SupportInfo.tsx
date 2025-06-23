@@ -37,7 +37,8 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
 
     return (
         <div>
-            {isValidating && (
+            {/* eslint-disable-next-line no-constant-binary-expression -- This seems to be overly jumpy*/}
+            {isValidating && false && (
                 <LoadingBox loading={true}>
                     <Paragraph supportingText>Refreshing support info…</Paragraph>
                 </LoadingBox>
