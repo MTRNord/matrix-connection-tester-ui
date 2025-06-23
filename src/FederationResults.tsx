@@ -144,44 +144,41 @@ export default function FederationResults({ serverName }: { serverName: string }
             <Details summary="Show DNS Hosts">
                 <Table>
                     <Table.Row>
-                        <Table.CellHeader>DNS Hosts</Table.CellHeader>
-                        <Table.Cell>
-                            {Object.keys(dnsHosts).length > 0 ? (
-                                <Table>
-                                    <Table.Row>
-                                        <Table.CellHeader>Host</Table.CellHeader>
-                                        <Table.CellHeader>Addresses</Table.CellHeader>
-                                        <Table.CellHeader>CNAME</Table.CellHeader>
-                                        <Table.CellHeader>Error</Table.CellHeader>
-                                    </Table.Row>
-                                    {Object.entries(dnsHosts).map(([host, info]) => (
-                                        <Table.Row key={host}>
-                                            <Table.Cell><code>{host}</code></Table.Cell>
-                                            <Table.Cell>
-                                                {info.Addrs && info.Addrs.length > 0
-                                                    ? info.Addrs.join(", ")
-                                                    : <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                                {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
-                                            </Table.Cell>
-                                            <Table.Cell>
-                                                {info.Error ? (
-                                                    <ErrorText >
-                                                        {info.Error}
-                                                    </ErrorText>
-                                                ) : (
-                                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">OK</Tag>
-                                                )}
-                                            </Table.Cell>
-                                        </Table.Row>
-                                    ))}
-                                </Table>
-                            ) : (
-                                <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
-                            )}
-                        </Table.Cell>
+                        <Table.CellHeader>Host</Table.CellHeader>
+                        <Table.CellHeader>Addresses</Table.CellHeader>
+                        <Table.CellHeader>CNAME</Table.CellHeader>
+                        <Table.CellHeader>Error</Table.CellHeader>
                     </Table.Row>
+                    {Object.keys(dnsHosts).length > 0 ? (
+                        Object.entries(dnsHosts).map(([host, info]) => (
+                            <Table.Row key={host}>
+                                <Table.Cell><code>{host}</code></Table.Cell>
+                                <Table.Cell>
+                                    {info.Addrs && info.Addrs.length > 0
+                                        ? info.Addrs.join(", ")
+                                        : <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {info.Error ? (
+                                        <ErrorText >
+                                            {info.Error}
+                                        </ErrorText>
+                                    ) : (
+                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">OK</Tag>
+                                    )}
+                                </Table.Cell>
+                            </Table.Row>
+                        ))
+                    ) : (
+                        <Table.Row>
+                            <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                                <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
+                            </Table.Cell>
+                        </Table.Row>
+                    )}
                 </Table>
             </Details>
 
