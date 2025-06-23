@@ -1,11 +1,19 @@
-import { ApiSchema, SupportWellKnownSchema } from "./apiTypes";
-import type { ApiSchemaType, SupportWellKnownType } from "./apiTypes";
+import { ApiSchema, ConfigSchema, SupportWellKnownSchema } from "./apiTypes";
+import type { ApiSchemaType, ConfigType, SupportWellKnownType } from "./apiTypes";
 
-const API_SERVER_URL = import.meta.env.VITE_API_SERVER_URL || "http://127.0.0.1:8080";
+async function getConfig(): Promise<ConfigType> {
+    const response = await fetch(`/config.json`);
+    const config = await response.json();
+    return ConfigSchema.parse(config);
+}
 
 export const fetchData = async (serverName: string): Promise<ApiSchemaType> => {
     if (!serverName) {
         throw new Error("Server name cannot be empty");
+    }
+    const API_SERVER_URL = (await getConfig()).api_server_url;
+    if (!API_SERVER_URL) {
+        throw new Error("API server URL is not configured");
     }
     const response = await fetch(`${API_SERVER_URL}/api/report?server_name=${serverName}`);
     if (!response.ok) {

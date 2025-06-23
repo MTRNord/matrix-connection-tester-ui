@@ -70,3 +70,10 @@ export const SupportWellKnownSchema = z.object({
 });
 
 export type SupportWellKnownType = z.infer<typeof SupportWellKnownSchema>;
+
+
+export const ConfigSchema = z.object({
+    api_server_url: z.url(),
+});
+
+export type ConfigType = z.infer<typeof ConfigSchema>;
