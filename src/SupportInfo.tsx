@@ -63,7 +63,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     {data.contacts.map((contact, idx) => (
                         <Table.Row key={idx}>
                             <Table.Cell>
-                                {contact.role === "m.role.admin" ? "Admin" : "Security"}
+                                {contact.role === "m.role.admin" ? "Admin" : contact.role === "m.role.security" ? "Security" : contact.role}
                             </Table.Cell>
                             <Table.Cell>
                                 {contact.email_address ? (

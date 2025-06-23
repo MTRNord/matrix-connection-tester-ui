@@ -46,10 +46,11 @@ export const ApiSchema = z.object({
         Error: z.string().optional(),
     })).optional(),
     DNSResult: z.object({
-        Addrs: z.array(z.string()),
+        Addrs: z.array(z.string()).optional(),
         Hosts: z.record(z.string(), z.object({
-            Addrs: z.array(z.string()),
-            CName: z.string()
+            Addrs: z.array(z.string()).optional(),
+            CName: z.string(),
+            Error: z.string().optional(),
         })),
         SRVSkipped: z.boolean()
     }),
@@ -67,7 +68,7 @@ export const SupportWellKnownSchema = z.object({
     contacts: z.array(z.object({
         email_address: z.email().optional(),
         matrix_id: z.string().optional(),
-        role: z.enum(["m.role.admin", "m.role.security"]),
+        role: z.string(),
     })).optional(),
     support_page: z.string().optional(),
 });

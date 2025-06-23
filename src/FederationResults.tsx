@@ -49,6 +49,7 @@ export default function FederationResults({ serverName }: { serverName: string }
 
     // DNS info
     const dnsAddrs = data?.DNSResult?.Addrs || [];
+    const dnsHosts = data?.DNSResult?.Hosts || {};
     const wellKnown = Object.entries(data?.WellKnownResult || {});
 
     // Connection reports
@@ -139,6 +140,50 @@ export default function FederationResults({ serverName }: { serverName: string }
                     </Table.Cell>
                 </Table.Row>
             </Table >
+
+            <Details summary="Show DNS Hosts">
+                <Table>
+                    <Table.Row>
+                        <Table.CellHeader>DNS Hosts</Table.CellHeader>
+                        <Table.Cell>
+                            {Object.keys(dnsHosts).length > 0 ? (
+                                <Table>
+                                    <Table.Row>
+                                        <Table.CellHeader>Host</Table.CellHeader>
+                                        <Table.CellHeader>Addresses</Table.CellHeader>
+                                        <Table.CellHeader>CNAME</Table.CellHeader>
+                                        <Table.CellHeader>Error</Table.CellHeader>
+                                    </Table.Row>
+                                    {Object.entries(dnsHosts).map(([host, info]) => (
+                                        <Table.Row key={host}>
+                                            <Table.Cell><code>{host}</code></Table.Cell>
+                                            <Table.Cell>
+                                                {info.Addrs && info.Addrs.length > 0
+                                                    ? info.Addrs.join(", ")
+                                                    : <Tag backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                {info.CName || <Tag backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                {info.Error ? (
+                                                    <ErrorText >
+                                                        {info.Error}
+                                                    </ErrorText>
+                                                ) : (
+                                                    <Tag backgroundColor="#00703c" color="white">OK</Tag>
+                                                )}
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                </Table>
+                            ) : (
+                                <Tag backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
+                            )}
+                        </Table.Cell>
+                    </Table.Row>
+                </Table>
+            </Details>
 
             <Details summary="Show Well-Known Results">
                 <Table>
