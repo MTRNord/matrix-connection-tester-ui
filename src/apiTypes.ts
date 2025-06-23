@@ -35,7 +35,7 @@ export const ApiSchema = z.object({
             old_verify_keys: z.record(z.string(), z.object({
                 expired_ts: z.number(),
                 key: z.string()
-            })),
+            })).optional(),
             server_name: z.string(),
             signatures: z.record(z.string(), z.record(z.string(), z.string())),
             valid_until_ts: z.number(),
