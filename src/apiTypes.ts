@@ -59,3 +59,14 @@ export const ApiSchema = z.object({
 })
 
 export type ApiSchemaType = z.infer<typeof ApiSchema>;
+
+export const SupportWellKnownSchema = z.object({
+    contacts: z.array(z.object({
+        email_address: z.email().optional(),
+        matrix_id: z.string().optional(),
+        role: z.enum(["m.role.admin", "m.role.security"]),
+    })).optional(),
+    support_page: z.string().optional(),
+});
+
+export type SupportWellKnownType = z.infer<typeof SupportWellKnownSchema>;

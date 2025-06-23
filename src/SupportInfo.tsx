@@ -1,0 +1,97 @@
+import useSWR from "swr";
+import { fetchSupportInfo } from "./api";
+import type { SupportWellKnownType } from "./apiTypes";
+import { H2, Table, Tag, Link, HintText, LoadingBox, ErrorText, Paragraph } from "govuk-react";
+
+export default function SupportInfo({ serverName }: { serverName: string }) {
+    const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
+        serverName ? ['support', serverName] : null,
+        () => fetchSupportInfo(serverName),
+        { keepPreviousData: true }
+    );
+
+    if (isLoading && !data) {
+        return (
+            <LoadingBox loading={true}>
+                <p>⌛ Getting support info…</p>
+            </LoadingBox>
+        );
+    }
+
+    if (error) {
+        return (
+            <>
+                <H2>Support Contacts</H2>
+                <ErrorText>
+                    ⚠️ Could not load support info<br />
+                    <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{error.message}</pre>
+                </ErrorText>
+            </>
+        );
+    }
+
+    if (!data || (!data.contacts && !data.support_page)) {
+        return (
+            <>
+                <H2>Support Contacts</H2>
+                <Tag backgroundColor="#b1b4b6" color="black">No support information published</Tag>
+                <HintText>
+                    If you are the server administrator, please consider publishing your support contacts in
+                    <code>.well-known/matrix/support</code> to help users find assistance
+                    <br /><br />
+                    If you believe this is an error, please check the server configuration or contact the server administrator.
+                </HintText>
+            </>
+        );
+    }
+
+    return (
+        <div>
+            {isValidating && (
+                <LoadingBox loading={true}>
+                    <Paragraph supportingText>Refreshing support info…</Paragraph>
+                </LoadingBox>
+            )}
+            <H2>Support Contacts</H2>
+            {data.contacts && data.contacts.length > 0 ? (
+                <Table>
+                    <Table.Row>
+                        <Table.CellHeader>Role</Table.CellHeader>
+                        <Table.CellHeader>Email</Table.CellHeader>
+                        <Table.CellHeader>Matrix ID</Table.CellHeader>
+                    </Table.Row>
+                    {data.contacts.map((contact, idx) => (
+                        <Table.Row key={idx}>
+                            <Table.Cell>
+                                {contact.role === "m.role.admin" ? "Admin" : "Security"}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {contact.email_address ? (
+                                    <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
+                                ) : (
+                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                )}
+                            </Table.Cell>
+                            <Table.Cell>
+                                {contact.matrix_id ? (
+                                    <code>{contact.matrix_id}</code>
+                                ) : (
+                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                )}
+                            </Table.Cell>
+                        </Table.Row>
+                    ))}
+                </Table>
+            ) : (
+                <Tag backgroundColor="#b1b4b6" color="black">No contacts published</Tag>
+
+            )}
+
+            {data.support_page && (
+                <Paragraph>
+                    {`**Support Page:** [${data.support_page}](${data.support_page})`}
+                </Paragraph>
+            )}
+        </div>
+    );
+}

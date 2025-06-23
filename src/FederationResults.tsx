@@ -1,4 +1,4 @@
-import { H2, Table, Panel, Details, Tag, Link, Paragraph, } from "govuk-react";
+import { H2, Table, Panel, Details, Tag, Link, LoadingBox, ErrorText, Paragraph, } from "govuk-react";
 import type { ApiSchemaType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
@@ -17,11 +17,29 @@ function getServerSoftwareInfo(name: string) {
 }
 
 export default function FederationResults({ serverName }: { serverName: string }) {
-    const { data } = useSWR<ApiSchemaType>(
-        serverName,
+    const { data, error, isLoading, isValidating } = useSWR<ApiSchemaType>(
+        serverName ? ['federation', serverName] : null,
         () => fetchData(serverName),
-        { suspense: true }
+        { keepPreviousData: true }
     );
+
+    if (isLoading && !data) {
+        return (
+            <LoadingBox loading={true}>
+                <p>⌛ Getting info from API…</p>
+            </LoadingBox>
+        );
+    }
+
+    if (error || !data) {
+        return (
+            <ErrorText>
+                ⚠️ Something went wrong talking to the API<br />
+                <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{error.message}</pre>
+            </ErrorText>
+        );
+    }
+
 
     // Federation status
     const federationOK = data?.FederationOK;
@@ -39,6 +57,11 @@ export default function FederationResults({ serverName }: { serverName: string }
     return (
         <>
             <H2>Federation Test Result</H2>
+            {isValidating && (
+                <LoadingBox loading={true}>
+                    <Paragraph supportingText>Refreshing data…</Paragraph>
+                </LoadingBox>
+            )}
             <Panel
                 title={federationOK
                     ? "Federation is working for this server."

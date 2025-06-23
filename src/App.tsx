@@ -1,8 +1,9 @@
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import FederationResults from './FederationResults';
-import { ErrorBoundary } from 'react-error-boundary';
-import { Button, ErrorText, FormGroup, H1, HintText, Input, Label, LabelText, LoadingBox, Paragraph, } from 'govuk-react';
+import { Button, ErrorText, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph } from 'govuk-react';
 import { mutate } from 'swr';
+import SupportInfo from './SupportInfo';
+import { ErrorBoundary } from 'react-error-boundary';
 
 function App() {
   const [inputValue, setInputValue] = useState<string>('');
@@ -12,17 +13,18 @@ function App() {
     if (e) e.preventDefault();
     const trimmed = inputValue.trim();
     if (!trimmed) return;
-    mutate(trimmed, undefined, { revalidate: true });
+    mutate(['federation', trimmed], undefined, { revalidate: true });
+    mutate(['support', trimmed], undefined, { revalidate: true });
     setSubmittedServerName(trimmed);
   };
 
   return (
     <>
       <H1>Matrix Connection Tester</H1>
-      <Paragraph>
+      <LeadParagraph>
         This tool checks if a Matrix server is reachable and federates correctly with the wider Matrix network.
         Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.
-      </Paragraph>
+      </LeadParagraph>
 
       <div style={{ background: '#f3f2f1', padding: 24, borderRadius: 6, margin: '24px 0' }}>
         <FormGroup>
@@ -51,19 +53,21 @@ function App() {
         <Button onClick={handleSubmit}>Go</Button>
       </div>
 
-      <hr style={{ margin: '32px 0' }} />
 
-      <ErrorBoundary fallback={<ErrorText>⚠️ Something went wrong talking to the API</ErrorText>}>
-        <Suspense fallback={
-          <LoadingBox loading={true}>
-            <Paragraph>⌛ Getting info from API…</Paragraph>
-          </LoadingBox>
-        }>
-          {submittedServerName && (
+      {submittedServerName && (
+        <>
+          <hr style={{ margin: '32px 0' }} />
+          <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
             <FederationResults serverName={submittedServerName} />
-          )}
-        </Suspense>
-      </ErrorBoundary>
+          </ErrorBoundary>
+          <hr style={{ margin: '32px 0' }} />
+          <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
+            <SupportInfo serverName={submittedServerName} />
+          </ErrorBoundary>
+
+        </>
+      )
+      }
     </>
   )
 }
