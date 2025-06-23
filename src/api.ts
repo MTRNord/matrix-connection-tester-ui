@@ -31,9 +31,10 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    if (response.headers.get("content-type") !== "application/json") {
-        throw new Error("Expected JSON response from support endpoint");
-    }
+    // Cloudflare sadly doesnt allow for this so we just have to assume it's JSON
+    // if (response.headers.get("content-type") !== "application/json") {
+    //     throw new Error("Expected JSON response from support endpoint");
+    // }
 
     const data = await response.json();
     return SupportWellKnownSchema.parse(data);
