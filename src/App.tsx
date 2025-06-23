@@ -28,7 +28,7 @@ function App() {
 
       <form
         onSubmit={handleSubmit}
-        style={{ background: '#f3f2f1', padding: 24, borderRadius: 6, margin: '24px 0' }}
+        style={{ background: '#f3f2f1', padding: 24, margin: '24px 0' }}
       >
         <FormGroup>
           <Label>

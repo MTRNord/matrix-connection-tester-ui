@@ -1,4 +1,5 @@
-import { H2, Table, Panel, Details, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, } from "govuk-react";
+import { useState } from "react";
+import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, Tabs, Details } from "govuk-react";
 import type { ApiSchemaType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
@@ -17,6 +18,8 @@ function getServerSoftwareInfo(name: string) {
 }
 
 export default function FederationResults({ serverName }: { serverName: string }) {
+    const [selectedTab, setSelectedTab] = useState<string>("overview");
+
     const { data, error, isLoading, isValidating } = useSWR<ApiSchemaType>(
         serverName ? ['federation', serverName] : null,
         () => fetchData(serverName),
@@ -73,75 +76,117 @@ export default function FederationResults({ serverName }: { serverName: string }
         }
     }
 
+    // Helper for tab selection
+    const handleTabClick = (tab: string) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        setSelectedTab(tab);
+    };
+
     return (
-        <>
-            <H2>Federation Test Result</H2>
-            {isValidating && (
-                <LoadingBox loading={true}>
-                    <Paragraph supportingText>Refreshing data…</Paragraph>
-                </LoadingBox>
-            )}
-            <Panel
-                title={panelTitle}
-                style={{
-                    background: panelColor,
-                    color: "white",
-                }}
-            />
+        <Tabs>
+            <Tabs.Title>Federation Test Results</Tabs.Title>
+            <Tabs.List>
+                <Tabs.Tab
+                    href="#overview"
+                    selected={selectedTab === "overview"}
+                    onClick={handleTabClick("overview")}
+                >Overview</Tabs.Tab>
+                <Tabs.Tab
+                    href="#dns"
+                    selected={selectedTab === "dns"}
+                    onClick={handleTabClick("dns")}
+                >DNS Hosts</Tabs.Tab>
+                <Tabs.Tab
+                    href="#wellknown"
+                    selected={selectedTab === "wellknown"}
+                    onClick={handleTabClick("wellknown")}
+                >Well-Known</Tabs.Tab>
+                <Tabs.Tab
+                    href="#reports"
+                    selected={selectedTab === "reports"}
+                    onClick={handleTabClick("reports")}
+                >Connection Reports</Tabs.Tab>
+                {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (<Tabs.Tab
+                    href="#errors"
+                    selected={selectedTab === "errors"}
+                    onClick={handleTabClick("errors")}
+                >Connection Errors</Tabs.Tab>)}
+                <Tabs.Tab
+                    href="#raw"
+                    selected={selectedTab === "raw"}
+                    onClick={handleTabClick("raw")}
+                >Raw API</Tabs.Tab>
+            </Tabs.List>
 
-            <Table>
-                <Table.Row>
-                    <Table.CellHeader>Server Software</Table.CellHeader>
-                    <Table.Cell>
-                        {softwareInfo ? (
-                            <>
-                                <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+            <Tabs.Panel id="overview" selected={selectedTab === "overview"}>
+                <H2>Federation Overview</H2>
+                {isValidating && (
+                    <LoadingBox loading={true}>
+                        <Paragraph supportingText>Refreshing data…</Paragraph>
+                    </LoadingBox>
+                )}
+                <Panel
+                    title={panelTitle}
+                    style={{
+                        background: panelColor,
+                        color: "white",
+                    }}
+                />
+                <Table>
+                    <Table.Row>
+                        <Table.CellHeader>Server Software</Table.CellHeader>
+                        <Table.Cell>
+                            {softwareInfo ? (
+                                <>
+                                    <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+                                        {versionName}
+                                    </Link>
+                                    {" "}
+                                    <Tag
+                                        backgroundColor={softwareInfo.maturity === "Stable"
+                                            ? "#00703c"
+                                            : softwareInfo.maturity === "Beta"
+                                                ? "#1d70b8"
+                                                : "#f47738"}
+                                        color="white"
+                                        style={{ paddingRight: 8 }}
+                                    >
+                                        {softwareInfo.maturity}
+                                    </Tag>
+                                </>
+                            ) : (
+                                <>
                                     {versionName}
-                                </Link>
-                                {" "}
-                                <Tag
-                                    backgroundColor={softwareInfo.maturity === "Stable"
-                                        ? "#00703c"
-                                        : softwareInfo.maturity === "Beta"
-                                            ? "#1d70b8"
-                                            : "#f47738"}
-                                    color="white"
-                                    style={{ paddingRight: 8 }}
-                                >
-                                    {softwareInfo.maturity}
-                                </Tag>
-                            </>
-                        ) : (
-                            <>
-                                {versionName}
-                            </>
-                        )}
-                        {!softwareInfo && versionName !== "Unknown" && (
-                            <>
-                                {" "}
-                                < Tag
-                                    style={{ paddingRight: 8 }}
-                                    backgroundColor="#b1b4b6"
-                                    color="black">Unknown</Tag>
-                            </>
-                        )}
-                    </Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                    <Table.CellHeader>Version</Table.CellHeader>
-                    <Table.Cell>{versionString}</Table.Cell>
-                </Table.Row>
-                <Table.Row>
-                    <Table.CellHeader>DNS Addresses</Table.CellHeader>
-                    <Table.Cell>
-                        {dnsAddrs.length > 0
-                            ? dnsAddrs.map(addr => <div key={addr}>{addr}</div>)
-                            : "No addresses found"}
-                    </Table.Cell>
-                </Table.Row>
-            </Table >
+                                </>
+                            )}
+                            {!softwareInfo && versionName !== "Unknown" && (
+                                <>
+                                    {" "}
+                                    <Tag
+                                        style={{ paddingRight: 8 }}
+                                        backgroundColor="#b1b4b6"
+                                        color="black">Unknown</Tag>
+                                </>
+                            )}
+                        </Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.CellHeader>Version</Table.CellHeader>
+                        <Table.Cell>{versionString}</Table.Cell>
+                    </Table.Row>
+                    <Table.Row>
+                        <Table.CellHeader>DNS Addresses</Table.CellHeader>
+                        <Table.Cell>
+                            {dnsAddrs.length > 0
+                                ? dnsAddrs.map(addr => <div key={addr}>{addr}</div>)
+                                : "No addresses found"}
+                        </Table.Cell>
+                    </Table.Row>
+                </Table>
+            </Tabs.Panel>
 
-            <Details summary="Show DNS Hosts">
+            <Tabs.Panel id="dns" selected={selectedTab === "dns"}>
+                <H2>DNS Hosts</H2>
                 <Table>
                     <Table.Row>
                         <Table.CellHeader>Host</Table.CellHeader>
@@ -180,9 +225,10 @@ export default function FederationResults({ serverName }: { serverName: string }
                         </Table.Row>
                     )}
                 </Table>
-            </Details>
+            </Tabs.Panel>
 
-            <Details summary="Show Well-Known Results">
+            <Tabs.Panel id="wellknown" selected={selectedTab === "wellknown"}>
+                <H2>Well-Known Results</H2>
                 <Table>
                     <Table.Row>
                         <Table.CellHeader>Key</Table.CellHeader>
@@ -201,12 +247,12 @@ export default function FederationResults({ serverName }: { serverName: string }
                         </Table.Row>
                     ))}
                 </Table>
-            </Details>
+            </Tabs.Panel>
 
-
-            {connReports.length > 0 && (
-                <Details summary="Show Connection Reports">
-                    {connReports.map(([host, report]) => (
+            <Tabs.Panel id="reports" selected={selectedTab === "reports"}>
+                <H2>Connection Reports</H2>
+                {connReports.length > 0 ? (
+                    connReports.map(([host, report]) => (
                         <div key={host} style={{ marginBottom: 24 }}>
                             <H2 size="SMALL">{host}</H2>
                             <Table>
@@ -307,19 +353,21 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                 {report.Checks.Ed25519Checks && (
                                                     <div style={{ marginTop: 8 }}>
                                                         <strong>Failing keys:</strong>
-                                                        {Object.entries(report.Checks.Ed25519Checks)
-                                                            .filter(([, check]) => !check.MatchingSignature)
-                                                            .map(([key]) => (
-                                                                <ListItem key={key}>
-                                                                    <Tag
-                                                                        backgroundColor="#d4351c"
-                                                                        color="white"
-                                                                        style={{ paddingRight: 8, marginBottom: 4 }}
-                                                                    >
-                                                                        <code>{key}</code>
-                                                                    </Tag>
-                                                                </ListItem>
-                                                            ))}
+                                                        <ul style={{ margin: 0, paddingLeft: 18 }}>
+                                                            {Object.entries(report.Checks.Ed25519Checks)
+                                                                .filter(([, check]) => !check.MatchingSignature)
+                                                                .map(([key]) => (
+                                                                    <ListItem key={key}>
+                                                                        <Tag
+                                                                            backgroundColor="#d4351c"
+                                                                            color="white"
+                                                                            style={{ paddingRight: 8, marginBottom: 4 }}
+                                                                        >
+                                                                            <code>{key}</code>
+                                                                        </Tag>
+                                                                    </ListItem>
+                                                                ))}
+                                                        </ul>
                                                     </div>
                                                 )}
                                             </>
@@ -383,11 +431,15 @@ export default function FederationResults({ serverName }: { serverName: string }
                                 </pre>
                             </Details>
                         </div>
-                    ))}
-                </Details>)}
-
+                    ))
+                ) : (
+                    <Paragraph>No connection reports available.</Paragraph>
+                )}
+            </Tabs.Panel>
             {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
-                <Details summary="Show Connection Errors">
+                <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
+                    <H2>Connection Errors</H2>
+
                     <Table>
                         <Table.Row>
                             <Table.CellHeader>Host/IP</Table.CellHeader>
@@ -404,14 +456,15 @@ export default function FederationResults({ serverName }: { serverName: string }
                             </Table.Row>
                         ))}
                     </Table>
-                </Details>
-            )}
 
-            <Details summary="Show Full Raw API Response">
+                </Tabs.Panel>)}
+
+            < Tabs.Panel id="raw" selected={selectedTab === "raw"}>
+                <H2>Full Raw API Response</H2>
                 <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
                     {JSON.stringify(data, null, 2)}
                 </pre>
-            </Details>
-        </>
+            </Tabs.Panel>
+        </Tabs >
     );
 }
