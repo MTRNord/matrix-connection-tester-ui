@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { fetchSupportInfo } from "./api";
 import type { SupportWellKnownType } from "./apiTypes";
-import { H2, Table, Tag, Link, HintText, LoadingBox, ErrorText, Paragraph } from "govuk-react";
+import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText } from "govuk-react";
 
 export default function SupportInfo({ serverName }: { serverName: string }) {
     const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
@@ -18,19 +18,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
         );
     }
 
-    if (error) {
-        return (
-            <>
-                <H2>Support Contacts</H2>
-                <ErrorText>
-                    ⚠️ Could not load support info<br />
-                    <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{error.message}</pre>
-                </ErrorText>
-            </>
-        );
-    }
-
-    if (!data || (!data.contacts && !data.support_page)) {
+    if (error || !data || (!data.contacts && !data.support_page)) {
         return (
             <>
                 <H2>Support Contacts</H2>
@@ -40,6 +28,8 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     <code>.well-known/matrix/support</code> to help users find assistance
                     <br /><br />
                     If you believe this is an error, please check the server configuration or contact the server administrator.
+                    <br /><br />
+                    {error && <ErrorText>{error.message}</ErrorText>}
                 </HintText>
             </>
         );
