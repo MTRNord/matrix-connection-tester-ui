@@ -1,0 +1,15 @@
+/* css reset  */
+* {
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label ::after {
+  // Fix weird wrapping issue in Firefox
+  display: inline-block !important;
+}
