@@ -41,7 +41,10 @@ export const ApiSchema = z.object({
             valid_until_ts: z.number(),
             verify_keys: z.record(z.string(), z.object({ key: z.string() }))
         })
-    })),
+    })).optional(),
+    ConnectionErrors: z.record(z.string(), z.object({
+        Error: z.string(),
+    })).optional(),
     DNSResult: z.object({
         Addrs: z.array(z.string()),
         Hosts: z.record(z.string(), z.object({

@@ -145,83 +145,106 @@ export default function FederationResults({ serverName }: { serverName: string }
                 </Table>
             </Details>
 
-            <Details summary="Show Connection Reports">
-                {connReports.map(([host, report]) => (
-                    <div key={host} style={{ marginBottom: 24 }}>
-                        <H2 size="SMALL">{host}</H2>
-                        <Table>
-                            <Table.Row>
-                                <Table.CellHeader>Check</Table.CellHeader>
-                                <Table.CellHeader>Result</Table.CellHeader>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>All Checks OK</Table.Cell>
+
+            {connReports.length === 0 && (
+                <Details summary="Show Connection Reports">
+                    {connReports.map(([host, report]) => (
+                        <div key={host} style={{ marginBottom: 24 }}>
+                            <H2 size="SMALL">{host}</H2>
+                            <Table>
+                                <Table.Row>
+                                    <Table.CellHeader>Check</Table.CellHeader>
+                                    <Table.CellHeader>Result</Table.CellHeader>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>All Checks OK</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.AllChecksOK ? (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#00703c"
+                                                color="white">Yes</Tag>
+                                        ) : (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#d4351c"
+                                                color="white"
+                                            >No</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Cipher Suite</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Cipher.CipherSuite} ({report.Cipher.Version})
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Valid Certificates</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.ValidCertificates ? (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#00703c"
+                                                color="white"
+                                            >Yes</Tag>
+                                        ) : (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#d4351c"
+                                                color="white"
+                                            >No</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Ed25519 Key Present</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.HasEd25519Key ? (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#00703c"
+                                                color="white">Yes</Tag>
+                                        ) : (
+                                            <Tag
+                                                style={{ paddingRight: 8 }}
+                                                backgroundColor="#d4351c"
+                                                color="white"
+                                            >No</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                                {/* Add more checks as needed */}
+                            </Table>
+                            <Details summary="Show Raw Report">
+                                <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
+                                    {JSON.stringify(report, null, 2)}
+                                </pre>
+                            </Details>
+                        </div>
+                    ))}
+                </Details>)}
+
+            {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
+                <Details summary="Show Connection Errors">
+                    <Table>
+                        <Table.Row>
+                            <Table.CellHeader>Host/IP</Table.CellHeader>
+                            <Table.CellHeader>Error</Table.CellHeader>
+                        </Table.Row>
+                        {Object.entries(data.ConnectionErrors ?? []).map(([host, errObj]) => (
+                            <Table.Row key={host}>
                                 <Table.Cell>
-                                    {report.Checks.AllChecksOK ? (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#00703c"
-                                            color="white">Yes</Tag>
-                                    ) : (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#d4351c"
-                                            color="white"
-                                        >No</Tag>
-                                    )}
+                                    <code>{host}</code>
+                                </Table.Cell>
+                                <Table.Cell>
+                                    <span style={{ color: "#d4351c" }}>{errObj.Error}</span>
                                 </Table.Cell>
                             </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>Cipher Suite</Table.Cell>
-                                <Table.Cell>
-                                    {report.Cipher.CipherSuite} ({report.Cipher.Version})
-                                </Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>Valid Certificates</Table.Cell>
-                                <Table.Cell>
-                                    {report.Checks.ValidCertificates ? (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#00703c"
-                                            color="white"
-                                        >Yes</Tag>
-                                    ) : (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#d4351c"
-                                            color="white"
-                                        >No</Tag>
-                                    )}
-                                </Table.Cell>
-                            </Table.Row>
-                            <Table.Row>
-                                <Table.Cell>Ed25519 Key Present</Table.Cell>
-                                <Table.Cell>
-                                    {report.Checks.HasEd25519Key ? (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#00703c"
-                                            color="white">Yes</Tag>
-                                    ) : (
-                                        <Tag
-                                            style={{ paddingRight: 8 }}
-                                            backgroundColor="#d4351c"
-                                            color="white"
-                                        >No</Tag>
-                                    )}
-                                </Table.Cell>
-                            </Table.Row>
-                            {/* Add more checks as needed */}
-                        </Table>
-                        <Details summary="Show Raw Report">
-                            <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
-                                {JSON.stringify(report, null, 2)}
-                            </pre>
-                        </Details>
-                    </div>
-                ))}
-            </Details>
+                        ))}
+                    </Table>
+                </Details>
+            )}
 
             <Details summary="Show Full Raw API Response">
                 <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
