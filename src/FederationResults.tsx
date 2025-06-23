@@ -146,7 +146,7 @@ export default function FederationResults({ serverName }: { serverName: string }
             </Details>
 
 
-            {connReports.length === 0 && (
+            {connReports.length > 0 && (
                 <Details summary="Show Connection Reports">
                     {connReports.map(([host, report]) => (
                         <div key={host} style={{ marginBottom: 24 }}>
