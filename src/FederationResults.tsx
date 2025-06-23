@@ -54,6 +54,24 @@ export default function FederationResults({ serverName }: { serverName: string }
     // Connection reports
     const connReports = Object.entries(data?.ConnectionReports ?? {});
 
+    // Determine if any connection report was successful
+    const anyConnectionSuccess = connReports.some(
+        ([, report]) => report.Checks?.AllChecksOK
+    );
+
+    // Determine panel message and color
+    let panelTitle = "Federation is working for this server.";
+    let panelColor = "#00703c";
+    if (!federationOK) {
+        if (anyConnectionSuccess) {
+            panelTitle = "Federation partially failed for this server. Check below for more information.";
+            panelColor = "#f47738"; // GOV.UK orange for warning/partial
+        } else {
+            panelTitle = "Federation failed for this server.";
+            panelColor = "#d4351c";
+        }
+    }
+
     return (
         <>
             <H2>Federation Test Result</H2>
@@ -63,11 +81,9 @@ export default function FederationResults({ serverName }: { serverName: string }
                 </LoadingBox>
             )}
             <Panel
-                title={federationOK
-                    ? "Federation is working for this server."
-                    : "Federation failed for this server."}
+                title={panelTitle}
                 style={{
-                    background: federationOK ? "#00703c" : "#d4351c",
+                    background: panelColor,
                     color: "white",
                 }}
             />
