@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import FederationResults from './FederationResults';
-import { Button, ErrorText, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
+import { Button, ErrorSummary, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from './SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -53,7 +53,7 @@ function App() {
             />
           </Label>
         </FormGroup>
-        <Button type="submit">Go</Button>
+        <Button start type="submit">Go</Button>
       </form>
 
       {submittedServerName && (
@@ -62,14 +62,24 @@ function App() {
             level="LARGE"
             visible
           />
-          <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
+          <ErrorBoundary fallback={
+            <ErrorSummary
+              heading="The UI failed to load"
+              description='The component failed to load. Please contact the page admin'
+            />
+          }>
             <FederationResults serverName={submittedServerName} />
           </ErrorBoundary>
           <SectionBreak
             level="LARGE"
             visible
           />
-          <ErrorBoundary fallback={<ErrorText>The component failed to load. Please contact the page admin</ErrorText>}>
+          <ErrorBoundary fallback={
+            <ErrorSummary
+              heading="The UI failed to load"
+              description='The component failed to load. Please contact the page admin'
+            />
+          }>
             <SupportInfo serverName={submittedServerName} />
           </ErrorBoundary>
         </>
