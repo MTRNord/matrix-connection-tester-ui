@@ -20,7 +20,7 @@ export default function FederationResults({ serverName }: { serverName: string }
     const { data, error, isLoading, isValidating } = useSWR<ApiSchemaType>(
         serverName ? ['federation', serverName] : null,
         () => fetchData(serverName),
-        { keepPreviousData: true }
+        { keepPreviousData: false }
     );
 
     if (isLoading && !data) {

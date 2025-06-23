@@ -7,7 +7,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
     const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
         serverName ? ['support', serverName] : null,
         () => fetchSupportInfo(serverName),
-        { keepPreviousData: true }
+        { keepPreviousData: false }
     );
 
     if (isLoading && !data) {
