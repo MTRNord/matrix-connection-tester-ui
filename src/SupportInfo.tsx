@@ -59,34 +59,36 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
             )}
             <H2>Support Contacts</H2>
             {data.contacts && data.contacts.length > 0 ? (
-                <Table>
-                    <Table.Row>
-                        <Table.CellHeader>Role</Table.CellHeader>
-                        <Table.CellHeader>Email</Table.CellHeader>
-                        <Table.CellHeader>Matrix ID</Table.CellHeader>
-                    </Table.Row>
-                    {data.contacts.map((contact, idx) => (
-                        <Table.Row key={idx}>
-                            <Table.Cell>
-                                {contact.role === "m.role.admin" ? "Admin" : contact.role === "m.role.security" ? "Security" : contact.role}
-                            </Table.Cell>
-                            <Table.Cell>
-                                {contact.email_address ? (
-                                    <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
-                                ) : (
-                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
-                                )}
-                            </Table.Cell>
-                            <Table.Cell>
-                                {contact.matrix_id ? (
-                                    <code>{contact.matrix_id}</code>
-                                ) : (
-                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
-                                )}
-                            </Table.Cell>
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                    <Table>
+                        <Table.Row>
+                            <Table.CellHeader>Role</Table.CellHeader>
+                            <Table.CellHeader>Email</Table.CellHeader>
+                            <Table.CellHeader>Matrix ID</Table.CellHeader>
                         </Table.Row>
-                    ))}
-                </Table>
+                        {data.contacts.map((contact, idx) => (
+                            <Table.Row key={idx}>
+                                <Table.Cell>
+                                    {contact.role === "m.role.admin" ? "Admin" : contact.role === "m.role.security" ? "Security" : contact.role}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {contact.email_address ? (
+                                        <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
+                                    ) : (
+                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                    )}
+                                </Table.Cell>
+                                <Table.Cell>
+                                    {contact.matrix_id ? (
+                                        <code>{contact.matrix_id}</code>
+                                    ) : (
+                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                    )}
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table>
+                </div>
             ) : (
                 <Tag backgroundColor="#b1b4b6" color="black">No contacts published</Tag>
 

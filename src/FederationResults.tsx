@@ -130,176 +130,188 @@ export default function FederationResults({ serverName }: { serverName: string }
                         color: "white",
                     }}
                 />
-                <Table>
-                    <Table.Row>
-                        <Table.CellHeader>Server Software</Table.CellHeader>
-                        <Table.Cell>
-                            {(() => {
-                                // Use the first available per-host version name for software info
-                                const firstVersion = connReports.find(([, report]) => report.Version)?.[1]?.Version;
-                                const versionName = firstVersion?.name || "Unknown";
-                                const softwareInfo = getServerSoftwareInfo(versionName);
-                                return softwareInfo ? (
-                                    <>
-                                        <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
-                                            {versionName}
-                                        </Link>
-                                        {" "}
-                                        <Tag
-                                            backgroundColor={softwareInfo.maturity === "Stable"
-                                                ? "#00703c"
-                                                : softwareInfo.maturity === "Beta"
-                                                    ? "#1d70b8"
-                                                    : "#f47738"}
-                                            color="white"
-                                            style={{ paddingRight: 8 }}
-                                        >
-                                            {softwareInfo.maturity}
-                                        </Tag>
-                                    </>
-                                ) : (
-                                    <>
-                                        {versionName}
-                                        {!softwareInfo && versionName !== "Unknown" && (
+
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                    <Table>
+                        <Table.Row>
+                            <Table.CellHeader>Server Software</Table.CellHeader>
+                            <Table.Cell>
+                                {(() => {
+                                    // Use the first available per-host version name for software info
+                                    const firstVersion = connReports.find(([, report]) => report.Version)?.[1]?.Version;
+                                    const versionName = firstVersion?.name || "Unknown";
+                                    const softwareInfo = getServerSoftwareInfo(versionName);
+                                    return softwareInfo ? (
+                                        <>
+                                            <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+                                                {versionName}
+                                            </Link>
+                                            {" "}
                                             <Tag
-                                                style={{ paddingRight: 8, marginLeft: 8 }}
-                                                backgroundColor="#b1b4b6"
-                                                color="black"
-                                            >Unknown</Tag>
-                                        )}
-                                    </>
-                                );
-                            })()}
-                        </Table.Cell>
-                    </Table.Row>
-                    {/* Versions (per host) header row */}
-                    <Table.Row>
-                        <Table.CellHeader rowSpan={connReports.length > 0 ? connReports.length + 1 : 2} style={{ verticalAlign: "top" }}>
-                            Versions (per host)
-                        </Table.CellHeader>
-                        {connReports.length > 0 ? (
-                            <>
-                                <Table.CellHeader>Host</Table.CellHeader>
-                                <Table.CellHeader>Version</Table.CellHeader>
-                                {connReports.some(([, r]) => !!r.Error) && (
-                                    <Table.CellHeader>Error</Table.CellHeader>
-                                )}
-                            </>
-                        ) : (
+                                                backgroundColor={softwareInfo.maturity === "Stable"
+                                                    ? "#00703c"
+                                                    : softwareInfo.maturity === "Beta"
+                                                        ? "#1d70b8"
+                                                        : "#f47738"}
+                                                color="white"
+                                                style={{ paddingRight: 8 }}
+                                            >
+                                                {softwareInfo.maturity}
+                                            </Tag>
+                                        </>
+                                    ) : (
+                                        <>
+                                            {versionName}
+                                            {!softwareInfo && versionName !== "Unknown" && (
+                                                <Tag
+                                                    style={{ paddingRight: 8, marginLeft: 8 }}
+                                                    backgroundColor="#b1b4b6"
+                                                    color="black"
+                                                >Unknown</Tag>
+                                            )}
+                                        </>
+                                    );
+                                })()}
+                            </Table.Cell>
+                        </Table.Row>
+
+                        <Table.Row>
+                            <Table.CellHeader>DNS Addresses</Table.CellHeader>
                             <Table.Cell>
-                                <Tag backgroundColor="#b1b4b6" color="black">No reports</Tag>
+                                {dnsAddrs.length > 0
+                                    ? dnsAddrs.map(addr => <div key={addr}>{addr}</div>)
+                                    : "No addresses found"}
                             </Table.Cell>
-                        )}
-                    </Table.Row>
-                    {/* Render a row for each host if there are reports */}
-                    {connReports.length > 0 && connReports.map(([host, report]) => (
-                        <Table.Row key={host}>
-                            <Table.Cell>
-                                <code>{host}</code>
-                            </Table.Cell>
-                            <Table.Cell style={{
-                                maxWidth: 320,
-                                overflowWrap: "break-word",
-                                wordBreak: "break-all",
-                                verticalAlign: "top"
-                            }}>
-                                {report.Version
-                                    ? <span style={{
-                                        display: "inline-block",
-                                        maxWidth: 300,
-                                        overflowWrap: "break-word",
-                                        wordBreak: "break-all",
-                                        verticalAlign: "top"
-                                    }}>
-                                        {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
-                                    </span>
-                                    : <Tag backgroundColor="#b1b4b6" color="black">Unknown</Tag>
-                                }
-                            </Table.Cell>
-                            {connReports.some(([, r]) => !!r.Error) && (
-                                <Table.Cell style={{ verticalAlign: "top" }}>
-                                    {report.Error && (
-                                        <Tag backgroundColor="#d4351c" color="white">
-                                            {report.Error}
-                                        </Tag>
+                        </Table.Row>
+                    </Table>
+                </div>
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                    <H2 size="SMALL">Versions (per host)</H2>
+                    <Table>
+                        {/* Versions (per host) header row */}
+                        <Table.Row>
+                            {connReports.length > 0 ? (
+                                <>
+                                    <Table.CellHeader>Host</Table.CellHeader>
+                                    <Table.CellHeader>Version</Table.CellHeader>
+                                    {connReports.some(([, r]) => !!r.Error) && (
+                                        <Table.CellHeader>Error</Table.CellHeader>
                                     )}
+                                </>
+                            ) : (
+                                <Table.Cell>
+                                    <Tag backgroundColor="#b1b4b6" color="black">No reports</Tag>
                                 </Table.Cell>
                             )}
                         </Table.Row>
-                    ))}
-                    <Table.Row>
-                        <Table.CellHeader>DNS Addresses</Table.CellHeader>
-                        <Table.Cell>
-                            {dnsAddrs.length > 0
-                                ? dnsAddrs.map(addr => <div key={addr}>{addr}</div>)
-                                : "No addresses found"}
-                        </Table.Cell>
-                    </Table.Row>
-                </Table>
+                        {/* Render a row for each host if there are reports */}
+                        {connReports.length > 0 && connReports.map(([host, report]) => (
+                            <Table.Row key={host}>
+                                <Table.Cell>
+                                    <code>{host}</code>
+                                </Table.Cell>
+                                <Table.Cell style={{
+                                    maxWidth: 320,
+                                    overflowWrap: "break-word",
+                                    wordBreak: "break-all",
+                                    verticalAlign: "top"
+                                }}>
+                                    {report.Version
+                                        ? <span style={{
+                                            display: "inline-block",
+                                            maxWidth: 300,
+                                            overflowWrap: "break-word",
+                                            wordBreak: "break-all",
+                                            verticalAlign: "top"
+                                        }}>
+                                            {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
+                                        </span>
+                                        : <Tag backgroundColor="#b1b4b6" color="black">Unknown</Tag>
+                                    }
+                                </Table.Cell>
+                                {connReports.some(([, r]) => !!r.Error) && (
+                                    <Table.Cell style={{ verticalAlign: "top" }}>
+                                        {report.Error && (
+                                            <Tag backgroundColor="#d4351c" color="white">
+                                                {report.Error}
+                                            </Tag>
+                                        )}
+                                    </Table.Cell>
+                                )}
+                            </Table.Row>
+                        ))}
+                    </Table>
+                </div>
             </Tabs.Panel>
 
             <Tabs.Panel id="dns" selected={selectedTab === "dns"}>
                 <H2>DNS Hosts</H2>
-                <Table>
-                    <Table.Row>
-                        <Table.CellHeader>Host</Table.CellHeader>
-                        <Table.CellHeader>Addresses</Table.CellHeader>
-                        <Table.CellHeader>CNAME</Table.CellHeader>
-                        <Table.CellHeader>Error</Table.CellHeader>
-                    </Table.Row>
-                    {Object.keys(dnsHosts).length > 0 ? (
-                        Object.entries(dnsHosts).map(([host, info]) => (
-                            <Table.Row key={host}>
-                                <Table.Cell><code>{host}</code></Table.Cell>
-                                <Table.Cell>
-                                    {info.Addrs && info.Addrs.length > 0
-                                        ? info.Addrs.join(", ")
-                                        : <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
-                                </Table.Cell>
-                                <Table.Cell>
-                                    {info.Error ? (
-                                        <ErrorText >
-                                            {info.Error}
-                                        </ErrorText>
-                                    ) : (
-                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">OK</Tag>
-                                    )}
+
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                    <Table>
+                        <Table.Row>
+                            <Table.CellHeader>Host</Table.CellHeader>
+                            <Table.CellHeader>Addresses</Table.CellHeader>
+                            <Table.CellHeader>CNAME</Table.CellHeader>
+                            <Table.CellHeader>Error</Table.CellHeader>
+                        </Table.Row>
+                        {Object.keys(dnsHosts).length > 0 ? (
+                            Object.entries(dnsHosts).map(([host, info]) => (
+                                <Table.Row key={host}>
+                                    <Table.Cell><code>{host}</code></Table.Cell>
+                                    <Table.Cell>
+                                        {info.Addrs && info.Addrs.length > 0
+                                            ? info.Addrs.join(", ")
+                                            : <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">None</Tag>}
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        {info.Error ? (
+                                            <ErrorText >
+                                                {info.Error}
+                                            </ErrorText>
+                                        ) : (
+                                            <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">OK</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                            ))
+                        ) : (
+                            <Table.Row>
+                                <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                                    <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
                                 </Table.Cell>
                             </Table.Row>
-                        ))
-                    ) : (
-                        <Table.Row>
-                            <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
-                                <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">No hosts found</Tag>
-                            </Table.Cell>
-                        </Table.Row>
-                    )}
-                </Table>
+                        )}
+                    </Table>
+                </div>
             </Tabs.Panel>
 
             <Tabs.Panel id="wellknown" selected={selectedTab === "wellknown"}>
                 <H2>Well-Known Results</H2>
-                <Table>
-                    <Table.Row>
-                        <Table.CellHeader>Key</Table.CellHeader>
-                        <Table.CellHeader>m.server</Table.CellHeader>
-                        <Table.CellHeader>Cache Expires At</Table.CellHeader>
-                    </Table.Row>
-                    {wellKnown.map(([key, value]) => (
-                        <Table.Row key={key}>
-                            <Table.Cell>{key}</Table.Cell>
-                            <Table.Cell>{value["m.server"]}</Table.Cell>
-                            <Table.Cell>
-                                {value.CacheExpiresAt
-                                    ? new Date(value.CacheExpiresAt * 1000).toLocaleString()
-                                    : ""}
-                            </Table.Cell>
+
+                <div style={{ overflowX: "auto", width: "100%" }}>
+                    <Table>
+                        <Table.Row>
+                            <Table.CellHeader>Key</Table.CellHeader>
+                            <Table.CellHeader>m.server</Table.CellHeader>
+                            <Table.CellHeader>Cache Expires At</Table.CellHeader>
                         </Table.Row>
-                    ))}
-                </Table>
+                        {wellKnown.map(([key, value]) => (
+                            <Table.Row key={key}>
+                                <Table.Cell>{key}</Table.Cell>
+                                <Table.Cell>{value["m.server"]}</Table.Cell>
+                                <Table.Cell>
+                                    {value.CacheExpiresAt
+                                        ? new Date(value.CacheExpiresAt * 1000).toLocaleString()
+                                        : ""}
+                                </Table.Cell>
+                            </Table.Row>
+                        ))}
+                    </Table>
+                </div>
             </Tabs.Panel>
 
             <Tabs.Panel id="reports" selected={selectedTab === "reports"}>
@@ -308,186 +320,194 @@ export default function FederationResults({ serverName }: { serverName: string }
                     connReports.map(([host, report]) => (
                         <div key={host} style={{ marginBottom: 24 }}>
                             <H2 size="SMALL">{host}</H2>
-                            <Table>
-                                <Table.Row>
-                                    <Table.CellHeader>Check</Table.CellHeader>
-                                    <Table.CellHeader>Result</Table.CellHeader>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>All Checks OK</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.AllChecksOK ? (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#00703c"
-                                                color="white">Yes</Tag>
-                                        ) : (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#d4351c"
-                                                color="white"
-                                            >No</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Server Version Parses</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.ServerVersionParses ? (
-                                            <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">Yes</Tag>
-                                        ) : (
-                                            <Tag style={{ paddingRight: 8 }} backgroundColor="#d4351c" color="white">No</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Cipher Suite</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Cipher.CipherSuite} ({report.Cipher.Version})
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Valid Certificates</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.ValidCertificates ? (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#00703c"
-                                                color="white"
-                                            >Yes</Tag>
-                                        ) : (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#d4351c"
-                                                color="white"
-                                            >No</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Ed25519 Key Present</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.HasEd25519Key ? (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#00703c"
-                                                color="white">Yes</Tag>
-                                        ) : (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#d4351c"
-                                                color="white"
-                                            >No</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Maching serverName</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.MatchingServerName ? (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#00703c"
-                                                color="white">Yes</Tag>
-                                        ) : (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#d4351c"
-                                                color="white"
-                                            >No</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                                <Table.Row>
-                                    <Table.Cell>Matching Signature for all keys</Table.Cell>
-                                    <Table.Cell>
-                                        {report.Checks.AllEd25519ChecksOK ? (
-                                            <Tag
-                                                style={{ paddingRight: 8 }}
-                                                backgroundColor="#00703c"
-                                                color="white">Yes</Tag>
-                                        ) : (
-                                            <>
+                            <div style={{ overflowX: "auto", width: "100%" }}>
+                                <Table>
+                                    <Table.Row>
+                                        <Table.CellHeader>Check</Table.CellHeader>
+                                        <Table.CellHeader>Result</Table.CellHeader>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>All Checks OK</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.AllChecksOK ? (
                                                 <Tag
-                                                    style={{ paddingRight: 8, marginBottom: 4 }}
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#00703c"
+                                                    color="white">Yes</Tag>
+                                            ) : (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
                                                     backgroundColor="#d4351c"
                                                     color="white"
                                                 >No</Tag>
-                                                {report.Checks.Ed25519Checks && (
-                                                    <div style={{ marginTop: 8 }}>
-                                                        <strong>Failing keys:</strong>
-                                                        <ul style={{ margin: 0, paddingLeft: 18 }}>
-                                                            {Object.entries(report.Checks.Ed25519Checks)
-                                                                .filter(([, check]) => !check.MatchingSignature)
-                                                                .map(([key]) => (
-                                                                    <ListItem key={key}>
-                                                                        <Tag
-                                                                            backgroundColor="#d4351c"
-                                                                            color="white"
-                                                                            style={{ paddingRight: 8, marginBottom: 4 }}
-                                                                        >
-                                                                            <code>{key}</code>
-                                                                        </Tag>
-                                                                    </ListItem>
-                                                                ))}
-                                                        </ul>
-                                                    </div>
-                                                )}
-                                            </>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                            </Table>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Server Version Parses</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.ServerVersionParses ? (
+                                                <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">Yes</Tag>
+                                            ) : (
+                                                <Tag style={{ paddingRight: 8 }} backgroundColor="#d4351c" color="white">No</Tag>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Cipher Suite</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Cipher.CipherSuite} ({report.Cipher.Version})
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Valid Certificates</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.ValidCertificates ? (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#00703c"
+                                                    color="white"
+                                                >Yes</Tag>
+                                            ) : (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#d4351c"
+                                                    color="white"
+                                                >No</Tag>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Ed25519 Key Present</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.HasEd25519Key ? (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#00703c"
+                                                    color="white">Yes</Tag>
+                                            ) : (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#d4351c"
+                                                    color="white"
+                                                >No</Tag>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Maching serverName</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.MatchingServerName ? (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#00703c"
+                                                    color="white">Yes</Tag>
+                                            ) : (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#d4351c"
+                                                    color="white"
+                                                >No</Tag>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>Matching Signature for all keys</Table.Cell>
+                                        <Table.Cell>
+                                            {report.Checks.AllEd25519ChecksOK ? (
+                                                <Tag
+                                                    style={{ paddingRight: 8 }}
+                                                    backgroundColor="#00703c"
+                                                    color="white">Yes</Tag>
+                                            ) : (
+                                                <>
+                                                    <Tag
+                                                        style={{ paddingRight: 8, marginBottom: 4 }}
+                                                        backgroundColor="#d4351c"
+                                                        color="white"
+                                                    >No</Tag>
+                                                    {report.Checks.Ed25519Checks && (
+                                                        <div style={{ marginTop: 8 }}>
+                                                            <strong>Failing keys:</strong>
+                                                            <ul style={{ margin: 0, paddingLeft: 18 }}>
+                                                                {Object.entries(report.Checks.Ed25519Checks)
+                                                                    .filter(([, check]) => !check.MatchingSignature)
+                                                                    .map(([key]) => (
+                                                                        <ListItem key={key}>
+                                                                            <Tag
+                                                                                backgroundColor="#d4351c"
+                                                                                color="white"
+                                                                                style={{ paddingRight: 8, marginBottom: 4 }}
+                                                                            >
+                                                                                <code>{key}</code>
+                                                                            </Tag>
+                                                                        </ListItem>
+                                                                    ))}
+                                                            </ul>
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                </Table>
+                            </div>
                             <H2 size="SMALL">Keys</H2>
-                            <Table>
-                                <Table.Row>
-                                    <Table.CellHeader>Key ID</Table.CellHeader>
-                                    <Table.CellHeader>Key</Table.CellHeader>
-                                </Table.Row>
-                                {report.Keys?.verify_keys && Object.entries(report.Keys.verify_keys).map(([keyId, keyObj]) => (
-                                    <Table.Row key={keyId}>
-                                        <Table.Cell>
-                                            <code>{keyId}</code>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <code>{keyObj.key}</code>
-                                        </Table.Cell>
+
+                            <div style={{ overflowX: "auto", width: "100%" }}>
+                                <Table>
+                                    <Table.Row>
+                                        <Table.CellHeader>Key ID</Table.CellHeader>
+                                        <Table.CellHeader>Key</Table.CellHeader>
                                     </Table.Row>
-                                ))}
-                                {report.Keys?.old_verify_keys && Object.entries(report.Keys.old_verify_keys).map(([keyId, keyObj]) => (
-                                    <Table.Row key={keyId}>
-                                        <Table.Cell>
-                                            <code
-                                                style={{ marginRight: 8 }}
-                                            >{keyId}</code> <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">Expired</Tag>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </Table>
+                                    {report.Keys?.verify_keys && Object.entries(report.Keys.verify_keys).map(([keyId, keyObj]) => (
+                                        <Table.Row key={keyId}>
+                                            <Table.Cell>
+                                                <code>{keyId}</code>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <code>{keyObj.key}</code>
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                    {report.Keys?.old_verify_keys && Object.entries(report.Keys.old_verify_keys).map(([keyId, keyObj]) => (
+                                        <Table.Row key={keyId}>
+                                            <Table.Cell>
+                                                <code
+                                                    style={{ marginRight: 8 }}
+                                                >{keyId}</code> <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">Expired</Tag>
+                                            </Table.Cell>
+                                            <Table.Cell>
+                                                <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                </Table>
+                            </div>
                             <H2 size="SMALL">Certificates</H2>
-                            <Table>
-                                <Table.Row>
-                                    <Table.CellHeader>Issuer</Table.CellHeader>
-                                    <Table.CellHeader>Subject</Table.CellHeader>
-                                    <Table.CellHeader>SHA256 Fingerprint</Table.CellHeader>
-                                    <Table.CellHeader>DNS Names</Table.CellHeader>
-                                </Table.Row>
-                                {report.Certificates && report.Certificates.map((cert, index) => (
-                                    <Table.Row key={index}>
-                                        <Table.Cell>{cert.IssuerCommonName}</Table.Cell>
-                                        <Table.Cell>{cert.SubjectCommonName}</Table.Cell>
-                                        <Table.Cell>{cert.SHA256Fingerprint}</Table.Cell>
-                                        <Table.Cell>
-                                            {cert.DNSNames && cert.DNSNames.length > 0
-                                                ? cert.DNSNames.join(", ")
-                                                : "None"}
-                                        </Table.Cell>
+
+                            <div style={{ overflowX: "auto", width: "100%" }}>
+                                <Table>
+                                    <Table.Row>
+                                        <Table.CellHeader>Issuer</Table.CellHeader>
+                                        <Table.CellHeader>Subject</Table.CellHeader>
+                                        <Table.CellHeader>SHA256 Fingerprint</Table.CellHeader>
+                                        <Table.CellHeader>DNS Names</Table.CellHeader>
                                     </Table.Row>
-                                ))}
-                            </Table>
+                                    {report.Certificates && report.Certificates.map((cert, index) => (
+                                        <Table.Row key={index}>
+                                            <Table.Cell>{cert.IssuerCommonName}</Table.Cell>
+                                            <Table.Cell>{cert.SubjectCommonName}</Table.Cell>
+                                            <Table.Cell>{cert.SHA256Fingerprint}</Table.Cell>
+                                            <Table.Cell>
+                                                {cert.DNSNames && cert.DNSNames.length > 0
+                                                    ? cert.DNSNames.join(", ")
+                                                    : "None"}
+                                            </Table.Cell>
+                                        </Table.Row>
+                                    ))}
+                                </Table>
+                            </div>
                             <Details summary="Show Raw Report">
                                 <pre
                                     style={{
@@ -508,28 +528,33 @@ export default function FederationResults({ serverName }: { serverName: string }
                     <Paragraph>No connection reports available.</Paragraph>
                 )}
             </Tabs.Panel>
-            {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
-                <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
-                    <H2>Connection Errors</H2>
+            {
+                Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
+                    <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
+                        <H2>Connection Errors</H2>
 
-                    <Table>
-                        <Table.Row>
-                            <Table.CellHeader>Host/IP</Table.CellHeader>
-                            <Table.CellHeader>Error</Table.CellHeader>
-                        </Table.Row>
-                        {Object.entries(data.ConnectionErrors ?? []).map(([host, errObj]) => (
-                            <Table.Row key={host}>
-                                <Table.Cell>
-                                    <code>{host}</code>
-                                </Table.Cell>
-                                <Table.Cell>
-                                    <span style={{ color: "#d4351c" }}>{errObj.Error}</span>
-                                </Table.Cell>
-                            </Table.Row>
-                        ))}
-                    </Table>
 
-                </Tabs.Panel>)}
+                        <div style={{ overflowX: "auto", width: "100%" }}>
+                            <Table>
+                                <Table.Row>
+                                    <Table.CellHeader>Host/IP</Table.CellHeader>
+                                    <Table.CellHeader>Error</Table.CellHeader>
+                                </Table.Row>
+                                {Object.entries(data.ConnectionErrors ?? []).map(([host, errObj]) => (
+                                    <Table.Row key={host}>
+                                        <Table.Cell>
+                                            <code>{host}</code>
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            <span style={{ color: "#d4351c" }}>{errObj.Error}</span>
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table>
+                        </div>
+
+                    </Tabs.Panel>)
+            }
 
             < Tabs.Panel id="raw" selected={selectedTab === "raw"}>
                 <H2>Full Raw API Response</H2>
