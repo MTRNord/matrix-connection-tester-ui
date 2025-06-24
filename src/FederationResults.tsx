@@ -400,7 +400,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             >{keyId}</code> <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">Expired</Tag>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts * 1000).toLocaleString()})
+                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}
