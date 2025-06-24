@@ -32,7 +32,7 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
         throw new Error(`HTTP error! status: ${response.status}`);
     }
     if (response.headers.get("content-type") !== "application/json") {
-        throw new Error("Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards");
+        throw new Error("Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards. Be aware that MSC2499 will lift this requirement in the future: https://github.com/matrix-org/matrix-spec-proposals/pull/2499");
     }
 
     const data = await response.json();
