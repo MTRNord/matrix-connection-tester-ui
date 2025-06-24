@@ -63,7 +63,6 @@ function App() {
               name="serverName"
               value={inputValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-              autoFocus
               placeholder="example.com"
               required
               pattern="^[a-zA-Z0-9.\-]+$"
