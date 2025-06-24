@@ -3,22 +3,15 @@ FROM node:24-bookworm AS builder
 
 WORKDIR /app
 
-COPY package.json pnpm-lock.yaml* package-lock.json* yarn.lock* ./
-# Install dependencies (prefer pnpm, fallback to npm)
-RUN if [ -f pnpm-lock.yaml ]; then \
-      npm install -g pnpm && pnpm install --frozen-lockfile; \
-    elif [ -f yarn.lock ]; then \
-      npm install -g yarn && yarn install --frozen-lockfile; \
-    else \
-      npm install --frozen-lockfile; \
-    fi
+COPY package.json pnpm-lock.yaml ./
+RUN npm install -g pnpm && pnpm install --frozen-lockfile
 
 COPY . .
 
 
 ARG VITE_APP_VERSION
 ENV VITE_APP_VERSION=$VITE_APP_VERSION
-RUN npm run build
+RUN pnpm run build
 
 # Production stage
 FROM nginx:1.27-alpine
