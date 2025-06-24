@@ -427,7 +427,16 @@ export default function FederationResults({ serverName }: { serverName: string }
                                 ))}
                             </Table>
                             <Details summary="Show Raw Report">
-                                <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
+                                <pre
+                                    style={{
+                                        background: "#f3f2f1",
+                                        padding: 12,
+                                        borderRadius: 4,
+                                        overflowX: "auto",
+                                        maxWidth: "100%",
+                                        boxSizing: "border-box"
+                                    }}
+                                >
                                     {JSON.stringify(report, null, 2)}
                                 </pre>
                             </Details>
@@ -462,7 +471,16 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             < Tabs.Panel id="raw" selected={selectedTab === "raw"}>
                 <H2>Full Raw API Response</H2>
-                <pre style={{ background: "#f3f2f1", padding: 12, borderRadius: 4 }}>
+                <pre
+                    style={{
+                        background: "#f3f2f1",
+                        padding: 12,
+                        borderRadius: 4,
+                        overflowX: "auto",
+                        maxWidth: "100%",
+                        boxSizing: "border-box"
+                    }}
+                >
                     {JSON.stringify(data, null, 2)}
                 </pre>
             </Tabs.Panel>
