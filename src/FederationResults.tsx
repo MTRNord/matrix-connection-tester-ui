@@ -172,62 +172,61 @@ export default function FederationResults({ serverName }: { serverName: string }
                             })()}
                         </Table.Cell>
                     </Table.Row>
+                    {/* Versions (per host) header row */}
                     <Table.Row>
-                        <Table.CellHeader>Versions (per host)</Table.CellHeader>
-                        <Table.Cell>
-                            {connReports.length > 0 ? (
-                                <div style={{ maxHeight: 120, overflowY: "auto", overflowX: "auto" }}>
-                                    <Table>
-                                        <Table.Row>
-                                            <Table.CellHeader>Host</Table.CellHeader>
-                                            <Table.CellHeader>Version</Table.CellHeader>
-                                            {connReports.some(([, r]) => !!r.Error) && (
-                                                <Table.CellHeader>Error</Table.CellHeader>
-                                            )}
-                                        </Table.Row>
-                                        {connReports.map(([host, report]) => (
-                                            <Table.Row key={host}>
-                                                <Table.Cell style={{ verticalAlign: "top" }}>
-                                                    <code>{host}</code>
-                                                </Table.Cell>
-                                                <Table.Cell style={{
-                                                    maxWidth: 320,
-                                                    overflowWrap: "break-word",
-                                                    wordBreak: "break-all",
-                                                    verticalAlign: "top"
-                                                }}>
-                                                    {report.Version
-                                                        ? <span style={{
-                                                            display: "inline-block",
-                                                            maxWidth: 300,
-                                                            overflowWrap: "break-word",
-                                                            wordBreak: "break-all",
-                                                            verticalAlign: "top"
-                                                        }}>
-                                                            {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
-                                                        </span>
-                                                        : <Tag backgroundColor="#b1b4b6" color="black">Unknown</Tag>
-                                                    }
-                                                </Table.Cell>
-                                                {/* Only render Error cell if at least one report has an error */}
-                                                {connReports.some(([, r]) => !!r.Error) && (
-                                                    <Table.Cell style={{ verticalAlign: "top" }}>
-                                                        {report.Error && (
-                                                            <Tag backgroundColor="#d4351c" color="white">
-                                                                {report.Error}
-                                                            </Tag>
-                                                        )}
-                                                    </Table.Cell>
-                                                )}
-                                            </Table.Row>
-                                        ))}
-                                    </Table>
-                                </div>
-                            ) : (
+                        <Table.CellHeader rowSpan={connReports.length > 0 ? connReports.length + 1 : 2} style={{ verticalAlign: "top" }}>
+                            Versions (per host)
+                        </Table.CellHeader>
+                        {connReports.length > 0 ? (
+                            <>
+                                <Table.CellHeader>Host</Table.CellHeader>
+                                <Table.CellHeader>Version</Table.CellHeader>
+                                {connReports.some(([, r]) => !!r.Error) && (
+                                    <Table.CellHeader>Error</Table.CellHeader>
+                                )}
+                            </>
+                        ) : (
+                            <Table.Cell>
                                 <Tag backgroundColor="#b1b4b6" color="black">No reports</Tag>
-                            )}
-                        </Table.Cell>
+                            </Table.Cell>
+                        )}
                     </Table.Row>
+                    {/* Render a row for each host if there are reports */}
+                    {connReports.length > 0 && connReports.map(([host, report]) => (
+                        <Table.Row key={host}>
+                            <Table.Cell>
+                                <code>{host}</code>
+                            </Table.Cell>
+                            <Table.Cell style={{
+                                maxWidth: 320,
+                                overflowWrap: "break-word",
+                                wordBreak: "break-all",
+                                verticalAlign: "top"
+                            }}>
+                                {report.Version
+                                    ? <span style={{
+                                        display: "inline-block",
+                                        maxWidth: 300,
+                                        overflowWrap: "break-word",
+                                        wordBreak: "break-all",
+                                        verticalAlign: "top"
+                                    }}>
+                                        {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
+                                    </span>
+                                    : <Tag backgroundColor="#b1b4b6" color="black">Unknown</Tag>
+                                }
+                            </Table.Cell>
+                            {connReports.some(([, r]) => !!r.Error) && (
+                                <Table.Cell style={{ verticalAlign: "top" }}>
+                                    {report.Error && (
+                                        <Tag backgroundColor="#d4351c" color="white">
+                                            {report.Error}
+                                        </Tag>
+                                    )}
+                                </Table.Cell>
+                            )}
+                        </Table.Row>
+                    ))}
                     <Table.Row>
                         <Table.CellHeader>DNS Addresses</Table.CellHeader>
                         <Table.Cell>
