@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { fetchSupportInfo } from "./api";
 import type { SupportWellKnownType } from "./apiTypes";
-import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText } from "govuk-react";
+import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText, LeadParagraph } from "govuk-react";
 
 function linkify(text: string) {
     // Simple URL regex
@@ -58,6 +58,11 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                 </LoadingBox>
             )}
             <H2>Support Contacts</H2>
+            <LeadParagraph>
+                This server has published support contacts in its <code>.well-known/matrix/support</code> endpoint.
+                These contacts can help you with issues related to this server or Trust and Safety related questions.
+            </LeadParagraph>
+
             {data.contacts && data.contacts.length > 0 ? (
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>

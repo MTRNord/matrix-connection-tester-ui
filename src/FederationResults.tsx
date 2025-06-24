@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, Tabs, Details } from "govuk-react";
+import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, Tabs, Details, LeadParagraph } from "govuk-react";
 import type { ApiSchemaType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
@@ -61,14 +61,14 @@ export default function FederationResults({ serverName }: { serverName: string }
     );
 
     // Determine panel message and color
-    let panelTitle = "Federation is working for this server.";
+    let panelTitle = "Federation is working.";
     let panelColor = "#00703c";
     if (!federationOK) {
         if (anyConnectionSuccess) {
-            panelTitle = "Federation partially failed for this server. Check below for more information.";
+            panelTitle = "Federation partially failed. Check below for more information.";
             panelColor = "#f47738"; // GOV.UK orange for warning/partial
         } else {
-            panelTitle = "Federation failed for this server.";
+            panelTitle = "Federation failed.";
             panelColor = "#d4351c";
         }
     }
@@ -117,6 +117,13 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             <Tabs.Panel id="overview" selected={selectedTab === "overview"}>
                 <H2>Federation Overview</H2>
+
+                <LeadParagraph>
+                    This page informs you about the federation status.
+                    If it is green below you can assume that the server is reachable and federates correctly with the wider Matrix network.
+                    If there it is orange or red, there are issues with the server. To debug this please check each tab step by step.
+                </LeadParagraph>
+
                 {/* eslint-disable-next-line no-constant-binary-expression -- This seems to be overly jumpy*/}
                 {isValidating && false && (
                     <LoadingBox loading={true}>
@@ -246,6 +253,12 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             <Tabs.Panel id="dns" selected={selectedTab === "dns"}>
                 <H2>DNS Hosts</H2>
+                <LeadParagraph>
+                    The following hosts were found when using the Server-Server Discovery algorithm.
+                    <br />
+                    If you see no hosts here, the server has either invalid SRV records or no DNS entries at all.
+                    Check the error column for more information.
+                </LeadParagraph>
 
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
@@ -291,6 +304,11 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             <Tabs.Panel id="server-wellknown" selected={selectedTab === "server-wellknown"}>
                 <H2>Server Well-Known Results</H2>
+                <LeadParagraph>
+                    The following well-known results were found when querying the server for its <code>/.well-known/matrix/server</code> endpoint.
+                    If you see no entries here, the server has either no well-known endpoint or it is not configured correctly.
+                    If you see a <code>m.server</code> entry, this is the server that the Matrix client should connect to.
+                </LeadParagraph>
 
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
@@ -558,6 +576,11 @@ export default function FederationResults({ serverName }: { serverName: string }
 
             < Tabs.Panel id="raw" selected={selectedTab === "raw"}>
                 <H2>Full Raw API Response</H2>
+                <LeadParagraph>
+                    This is the raw JSON response from the API.
+                    It contains all the information that was used to generate the information in the other tabs.
+                    You can use this to debug issues or to see more detailed information about the server.
+                </LeadParagraph>
                 <pre
                     style={{
                         background: "#f3f2f1",
