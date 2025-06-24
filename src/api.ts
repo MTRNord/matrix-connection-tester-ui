@@ -31,10 +31,9 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
     }
-    // Cloudflare sadly doesnt allow for this so we just have to assume it's JSON
-    // if (response.headers.get("content-type") !== "application/json") {
-    //     throw new Error("Expected JSON response from support endpoint");
-    // }
+    if (response.headers.get("content-type") !== "application/json") {
+        throw new Error("Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards");
+    }
 
     const data = await response.json();
     return SupportWellKnownSchema.parse(data);

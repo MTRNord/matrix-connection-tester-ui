@@ -3,6 +3,20 @@ import { fetchSupportInfo } from "./api";
 import type { SupportWellKnownType } from "./apiTypes";
 import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText } from "govuk-react";
 
+function linkify(text: string) {
+    // Simple URL regex
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const parts = text.split(urlRegex);
+    return parts.map((part, i) =>
+        urlRegex.test(part) ? (
+            <Link key={i} href={part} target="_blank" rel="noopener noreferrer">{part}</Link>
+        ) : (
+            part
+        )
+    );
+}
+
+
 export default function SupportInfo({ serverName }: { serverName: string }) {
     const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
         serverName ? ['support', serverName] : null,
@@ -29,7 +43,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     <br /><br />
                     If you believe this is an error, please check the server configuration or contact the server administrator.
                     <br /><br />
-                    {error && <ErrorText>{error.message}</ErrorText>}
+                    {error && <ErrorText>{linkify(error.message)}</ErrorText>}
                 </HintText>
             </>
         );
