@@ -62,6 +62,15 @@ docker pull ghcr.io/MTRNord/matrix-connection-tester-ui:latest
 
 ---
 
+## Roadmap
+
+- [ ] Add Internationalization (i18n) support
+- [ ] Improve error handling and user feedback
+- [ ] Add guides explaining common issues and how to resolve them
+- [ ] Implement a way to attach the server name as a query parameter to the URL
+
+---
+
 ## License
 
 This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**.  
