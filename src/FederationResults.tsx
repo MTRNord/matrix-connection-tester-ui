@@ -94,9 +94,9 @@ export default function FederationResults({ serverName }: { serverName: string }
                     onClick={handleTabClick("dns")}
                 >DNS Hosts</Tabs.Tab>
                 <Tabs.Tab
-                    href="#wellknown"
-                    selected={selectedTab === "wellknown"}
-                    onClick={handleTabClick("wellknown")}
+                    href="#server-wellknown"
+                    selected={selectedTab === "server-wellknown"}
+                    onClick={handleTabClick("server-wellknown")}
                 >Well-Known</Tabs.Tab>
                 <Tabs.Tab
                     href="#reports"
@@ -289,8 +289,8 @@ export default function FederationResults({ serverName }: { serverName: string }
                 </div>
             </Tabs.Panel>
 
-            <Tabs.Panel id="wellknown" selected={selectedTab === "wellknown"}>
-                <H2>Well-Known Results</H2>
+            <Tabs.Panel id="server-wellknown" selected={selectedTab === "server-wellknown"}>
+                <H2>Server Well-Known Results</H2>
 
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
