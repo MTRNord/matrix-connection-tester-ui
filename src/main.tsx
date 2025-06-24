@@ -1,35 +1,29 @@
 import { StrictMode, } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.scss'
-import App from './App.tsx'
-import { Footer, GlobalStyle, Page, TopNav } from 'govuk-react'
-import { ReloadPrompt } from './ReloadPrompt.tsx'
-const APP_VERSION = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "dev";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import Fetch from 'i18next-fetch-backend';
+import LanguageDetector from 'i18next-browser-languagedetector';
+import Main from './Layout';
 
+
+i18n
+  .use(Fetch)
+  .use(LanguageDetector)
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    supportedLngs: ['en'],
+    lng: "en", // if you're using a language detector, do not define the lng option
+    fallbackLng: "en",
+
+    interpolation: {
+      escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    }
+  });
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <GlobalStyle />
-    <ReloadPrompt />
-    <TopNav company="Connection Tester">
-    </TopNav>
-    <Page.WidthContainer>
-      <Page.Main>
-        <App />
-      </Page.Main>
-    </Page.WidthContainer>
-    {/* TODO: Link to repo */}
-    <Footer meta={
-      <>
-        <Footer.MetaLinks heading='Project Links'>
-          <Footer.Link href="https://matrix.org/">Matrix.org</Footer.Link>
-          <Footer.Link href="https://github.com/MTRNord/matrix-connection-tester-ui/">UI Repository</Footer.Link>
-          <Footer.Link href="https://github.com/MTRNord/rust-federation-tester/">Federation Tester API Repository</Footer.Link>
-        </Footer.MetaLinks>
-        <Footer.MetaCustom>
-          Version: {APP_VERSION}
-        </Footer.MetaCustom>
-      </>
-    } />
-  </StrictMode>,
+    <Main />
+  </StrictMode>
 )

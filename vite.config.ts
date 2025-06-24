@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 import { writeFileSync } from 'fs'
 const ReactCompilerConfig = { /* ... */ };
 
-const version = process.env.GITHUB_SHA || process.env.VITE_APP_VERSION || Date.now().toString();
+const version = process.env.GITHUB_SHA || process.env.VITE_APP_VERSION || new Date(Date.now()).toLocaleDateString();
 
 // https://vite.dev/config/
 export default defineConfig({
