@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FederationResults from './FederationResults';
 import { Button, ErrorSummary, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
@@ -8,6 +8,26 @@ import { ErrorBoundary } from 'react-error-boundary';
 function App() {
   const [inputValue, setInputValue] = useState<string>('');
   const [submittedServerName, setSubmittedServerName] = useState<string>('');
+
+  // Read serverName from URL on mount
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const serverName = params.get('serverName');
+    if (serverName) {
+      setInputValue(serverName);
+      setSubmittedServerName(serverName);
+    }
+  }, []);
+
+  // Update URL when submittedServerName changes
+  useEffect(() => {
+    if (submittedServerName) {
+      const params = new URLSearchParams(window.location.search);
+      params.set('serverName', submittedServerName);
+      const newUrl = `${window.location.pathname}?${params.toString()}`;
+      window.history.replaceState({}, '', newUrl);
+    }
+  }, [submittedServerName]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
