@@ -46,9 +46,6 @@ export default function FederationResults({ serverName }: { serverName: string }
 
     // Federation status
     const federationOK = data?.FederationOK;
-    const versionName = data?.Version?.name || "Unknown";
-    const versionString = data?.Version?.version || "";
-    const softwareInfo = getServerSoftwareInfo(versionName);
 
     // DNS info
     const dnsAddrs = data?.DNSResult?.Addrs || [];
@@ -137,43 +134,99 @@ export default function FederationResults({ serverName }: { serverName: string }
                     <Table.Row>
                         <Table.CellHeader>Server Software</Table.CellHeader>
                         <Table.Cell>
-                            {softwareInfo ? (
-                                <>
-                                    <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+                            {(() => {
+                                // Use the first available per-host version name for software info
+                                const firstVersion = connReports.find(([, report]) => report.Version)?.[1]?.Version;
+                                const versionName = firstVersion?.name || "Unknown";
+                                const softwareInfo = getServerSoftwareInfo(versionName);
+                                return softwareInfo ? (
+                                    <>
+                                        <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+                                            {versionName}
+                                        </Link>
+                                        {" "}
+                                        <Tag
+                                            backgroundColor={softwareInfo.maturity === "Stable"
+                                                ? "#00703c"
+                                                : softwareInfo.maturity === "Beta"
+                                                    ? "#1d70b8"
+                                                    : "#f47738"}
+                                            color="white"
+                                            style={{ paddingRight: 8 }}
+                                        >
+                                            {softwareInfo.maturity}
+                                        </Tag>
+                                    </>
+                                ) : (
+                                    <>
                                         {versionName}
-                                    </Link>
-                                    {" "}
-                                    <Tag
-                                        backgroundColor={softwareInfo.maturity === "Stable"
-                                            ? "#00703c"
-                                            : softwareInfo.maturity === "Beta"
-                                                ? "#1d70b8"
-                                                : "#f47738"}
-                                        color="white"
-                                        style={{ paddingRight: 8 }}
-                                    >
-                                        {softwareInfo.maturity}
-                                    </Tag>
-                                </>
-                            ) : (
-                                <>
-                                    {versionName}
-                                </>
-                            )}
-                            {!softwareInfo && versionName !== "Unknown" && (
-                                <>
-                                    {" "}
-                                    <Tag
-                                        style={{ paddingRight: 8 }}
-                                        backgroundColor="#b1b4b6"
-                                        color="black">Unknown</Tag>
-                                </>
-                            )}
+                                        {!softwareInfo && versionName !== "Unknown" && (
+                                            <Tag
+                                                style={{ paddingRight: 8, marginLeft: 8 }}
+                                                backgroundColor="#b1b4b6"
+                                                color="black"
+                                            >Unknown</Tag>
+                                        )}
+                                    </>
+                                );
+                            })()}
                         </Table.Cell>
                     </Table.Row>
                     <Table.Row>
-                        <Table.CellHeader>Version</Table.CellHeader>
-                        <Table.Cell>{versionString}</Table.Cell>
+                        <Table.CellHeader>Versions (per host)</Table.CellHeader>
+                        <Table.Cell>
+                            {connReports.length > 0 ? (
+                                <div style={{ maxHeight: 120, overflowY: "auto", overflowX: "auto" }}>
+                                    <Table>
+                                        <Table.Row>
+                                            <Table.CellHeader>Host</Table.CellHeader>
+                                            <Table.CellHeader>Version</Table.CellHeader>
+                                            {connReports.some(([, r]) => !!r.Error) && (
+                                                <Table.CellHeader>Error</Table.CellHeader>
+                                            )}
+                                        </Table.Row>
+                                        {connReports.map(([host, report]) => (
+                                            <Table.Row key={host}>
+                                                <Table.Cell style={{ verticalAlign: "top" }}>
+                                                    <code>{host}</code>
+                                                </Table.Cell>
+                                                <Table.Cell style={{
+                                                    maxWidth: 320,
+                                                    overflowWrap: "break-word",
+                                                    wordBreak: "break-all",
+                                                    verticalAlign: "top"
+                                                }}>
+                                                    {report.Version
+                                                        ? <span style={{
+                                                            display: "inline-block",
+                                                            maxWidth: 300,
+                                                            overflowWrap: "break-word",
+                                                            wordBreak: "break-all",
+                                                            verticalAlign: "top"
+                                                        }}>
+                                                            {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
+                                                        </span>
+                                                        : <Tag backgroundColor="#b1b4b6" color="black">Unknown</Tag>
+                                                    }
+                                                </Table.Cell>
+                                                {/* Only render Error cell if at least one report has an error */}
+                                                {connReports.some(([, r]) => !!r.Error) && (
+                                                    <Table.Cell style={{ verticalAlign: "top" }}>
+                                                        {report.Error && (
+                                                            <Tag backgroundColor="#d4351c" color="white">
+                                                                {report.Error}
+                                                            </Tag>
+                                                        )}
+                                                    </Table.Cell>
+                                                )}
+                                            </Table.Row>
+                                        ))}
+                                    </Table>
+                                </div>
+                            ) : (
+                                <Tag backgroundColor="#b1b4b6" color="black">No reports</Tag>
+                            )}
+                        </Table.Cell>
                     </Table.Row>
                     <Table.Row>
                         <Table.CellHeader>DNS Addresses</Table.CellHeader>
@@ -275,6 +328,16 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                 backgroundColor="#d4351c"
                                                 color="white"
                                             >No</Tag>
+                                        )}
+                                    </Table.Cell>
+                                </Table.Row>
+                                <Table.Row>
+                                    <Table.Cell>Server Version Parses</Table.Cell>
+                                    <Table.Cell>
+                                        {report.Checks.ServerVersionParses ? (
+                                            <Tag style={{ paddingRight: 8 }} backgroundColor="#00703c" color="white">Yes</Tag>
+                                        ) : (
+                                            <Tag style={{ paddingRight: 8 }} backgroundColor="#d4351c" color="white">No</Tag>
                                         )}
                                     </Table.Cell>
                                 </Table.Row>

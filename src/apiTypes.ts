@@ -20,7 +20,8 @@ export const ApiSchema = z.object({
             FutureValidUntilTS: z.boolean(),
             HasEd25519Key: z.boolean(),
             MatchingServerName: z.boolean(),
-            ValidCertificates: z.boolean()
+            ValidCertificates: z.boolean(),
+            ServerVersionParses: z.boolean(),
         }),
         Cipher: z.object({ CipherSuite: z.string(), Version: z.string() }),
         Ed25519VerifyKeys: z.record(z.string(), z.string()),
@@ -33,7 +34,12 @@ export const ApiSchema = z.object({
             signatures: z.record(z.string(), z.record(z.string(), z.string())),
             valid_until_ts: z.number(),
             verify_keys: z.record(z.string(), z.object({ key: z.string() }))
-        })
+        }),
+        Version: z.object({
+            name: z.string(),
+            version: z.string()
+        }),
+        Error: z.string().optional(),
     })).optional(),
     ConnectionErrors: z.record(z.string(), z.object({
         Error: z.string().optional(),
