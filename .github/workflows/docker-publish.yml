@@ -38,6 +38,8 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: ghcr.io/mtrnord/matrix-connection-tester-ui:main
+          build-args: |
+            VITE_APP_VERSION=${{ github.sha }}
 
       # Build and push for tags (releases)
       - name: Build and push Docker image (release)
@@ -50,3 +52,5 @@ jobs:
           tags: |
             ghcr.io/mtrnord/matrix-connection-tester-ui:latest
             ghcr.io/mtrnord/matrix-connection-tester-ui:${{ github.ref_name }}
+          build-args: |
+            VITE_APP_VERSION=${{ github.sha }}
