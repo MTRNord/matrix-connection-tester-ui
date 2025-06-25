@@ -80,14 +80,14 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                                     {contact.email_address ? (
                                         <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">N/A</Tag>
                                     )}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {contact.matrix_id ? (
                                         <code>{contact.matrix_id}</code>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} backgroundColor="#b1b4b6" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">N/A</Tag>
                                     )}
                                 </Table.Cell>
                             </Table.Row>
@@ -95,7 +95,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     </Table>
                 </div>
             ) : (
-                <Tag backgroundColor="#b1b4b6" color="black">No contacts published</Tag>
+                <Tag backgroundColor="GREY" color="black">No contacts published</Tag>
 
             )}
 
