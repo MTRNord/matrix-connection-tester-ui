@@ -64,7 +64,7 @@ docker pull ghcr.io/MTRNord/matrix-connection-tester-ui:latest
 
 ## Roadmap
 
-- [ ] Add Internationalization (i18n) support
+- [x] Add Internationalization (i18n) support
 - [ ] Improve error handling and user feedback
 - [ ] Add guides explaining common issues and how to resolve them
 - [x] Implement a way to attach the server name as a query parameter to the URL
