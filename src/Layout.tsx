@@ -10,9 +10,11 @@ export default function Main() {
     return (
         <>
             <GlobalStyle />
-            <ReloadPrompt />
-            <TopNav company={t("Connection Tester")}>
-            </TopNav>
+            <header>
+                <ReloadPrompt />
+                <TopNav company={t("Connection Tester")}>
+                </TopNav>
+            </header>
             <Page.WidthContainer>
                 <Page.Main>
                     <App />

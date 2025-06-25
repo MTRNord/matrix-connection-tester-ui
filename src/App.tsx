@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import FederationResults from './FederationResults';
-import { Button, ErrorSummary, FormGroup, H1, HintText, Input, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
+import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from './SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -47,31 +47,30 @@ function App() {
         {t('app.description')}
       </LeadParagraph>
 
-      <form
-        onSubmit={handleSubmit}
-        style={{ background: '#f3f2f1', padding: 24, margin: '24px 0' }}
-      >
-        <FormGroup>
-          <Label>
-            <LabelText>{t('app.form.serverName')}</LabelText>
-            <HintText className="form-label">
-              <Trans i18nKey="app.form.hint" components={{ code: <code /> }} />
-            </HintText>
-            <Input
-              name="serverName"
-              value={inputValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-              placeholder={t('app.form.placeholder')}
-              required
-              pattern="^[a-zA-Z0-9.\-]+(:[0-9]+)?$"
-              title={t('app.form.title')}
-              aria-label={t('app.form.ariaLabel')}
-              style={{ maxWidth: 300 }}
-            />
-          </Label>
-        </FormGroup>
-        <Button start type="submit">{t('app.form.goButton')}</Button>
-      </form>
+      <InsetText>
+        <form onSubmit={handleSubmit}>
+          <FormGroup>
+            <Label>
+              <LabelText>{t('app.form.serverName')}</LabelText>
+              <HintText className="form-label">
+                <Trans i18nKey="app.form.hint" components={{ code: <code /> }} />
+              </HintText>
+              <Input
+                name="serverName"
+                value={inputValue}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+                placeholder={t('app.form.placeholder')}
+                required
+                pattern="^[a-zA-Z0-9.\-]+(:[0-9]+)?$"
+                title={t('app.form.title')}
+                aria-label={t('app.form.ariaLabel')}
+                style={{ maxWidth: 300 }}
+              />
+            </Label>
+          </FormGroup>
+          <Button start type="submit">{t('app.form.goButton')}</Button>
+        </form>
+      </InsetText>
 
       {submittedServerName && (
         <>
