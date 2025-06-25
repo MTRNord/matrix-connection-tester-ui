@@ -36,7 +36,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
         return (
             <>
                 <H2>Support Contacts</H2>
-                <Tag backgroundColor="#b1b4b6" color="black">No support information published</Tag>
+                <Tag tint="GREY" color="black">No support information published</Tag>
                 <HintText>
                     If you are the server administrator, please consider publishing your support contacts in
                     <code>.well-known/matrix/support</code> to help users find assistance
@@ -80,14 +80,14 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                                     {contact.email_address ? (
                                         <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">N/A</Tag>
                                     )}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {contact.matrix_id ? (
                                         <code>{contact.matrix_id}</code>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">N/A</Tag>
                                     )}
                                 </Table.Cell>
                             </Table.Row>
@@ -95,7 +95,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     </Table>
                 </div>
             ) : (
-                <Tag backgroundColor="GREY" color="black">No contacts published</Tag>
+                <Tag tint="GREY" color="black">No contacts published</Tag>
 
             )}
 

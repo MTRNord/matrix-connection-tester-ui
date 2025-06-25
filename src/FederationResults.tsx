@@ -62,14 +62,14 @@ export default function FederationResults({ serverName }: { serverName: string }
 
     // Determine panel message and color
     let panelTitle = "Federation is working.";
-    let panelColor = "GREEN";
+    let panelColor = undefined;
     if (!federationOK) {
         if (anyConnectionSuccess) {
             panelTitle = "Federation partially failed. Check below for more information.";
-            panelColor = "ORANGE"; // GOV.UK orange for warning/partial
+            panelColor = "#f47738"; // GOV.UK orange for warning/partial
         } else {
             panelTitle = "Federation failed.";
-            panelColor = "RED";
+            panelColor = "#d4351c";
         }
     }
 
@@ -155,12 +155,12 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             </Link>
                                             {" "}
                                             <Tag
-                                                backgroundColor={softwareInfo.maturity === "Stable"
+                                                tint={softwareInfo.maturity === "Stable"
                                                     ? "GREEN"
                                                     : softwareInfo.maturity === "Beta"
-                                                        ? "SOLID"
+                                                        ? "BLUE"
                                                         : "ORANGE"}
-                                                color="white"
+                                                color="black"
                                                 style={{ paddingRight: 8 }}
                                             >
                                                 {softwareInfo.maturity}
@@ -172,7 +172,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {!softwareInfo && versionName !== "Unknown" && (
                                                 <Tag
                                                     style={{ paddingRight: 8, marginLeft: 8 }}
-                                                    backgroundColor="GREY"
+                                                    tint="GREY"
                                                     color="black"
                                                 >Unknown</Tag>
                                             )}
@@ -207,7 +207,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                 </>
                             ) : (
                                 <Table.Cell>
-                                    <Tag backgroundColor="#b1b4b6" color="black">No reports</Tag>
+                                    <Tag tint="GREY" color="black">No reports</Tag>
                                 </Table.Cell>
                             )}
                         </Table.Row>
@@ -233,13 +233,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                         }}>
                                             {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
                                         </span>
-                                        : <Tag backgroundColor="GREY" color="black">Unknown</Tag>
+                                        : <Tag tint="GREY" color="black">Unknown</Tag>
                                     }
                                 </Table.Cell>
                                 {connReports.some(([, r]) => !!r.Error) && (
                                     <Table.Cell style={{ verticalAlign: "top" }}>
                                         {report.Error && (
-                                            <Tag backgroundColor="RED" color="white">
+                                            <Tag tint="RED" color="white">
                                                 {report.Error}
                                             </Tag>
                                         )}
@@ -275,10 +275,10 @@ export default function FederationResults({ serverName }: { serverName: string }
                                     <Table.Cell>
                                         {info.Addrs && info.Addrs.length > 0
                                             ? info.Addrs.join(", ")
-                                            : <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">None</Tag>}
+                                            : <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        {info.CName || <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">None</Tag>}
+                                        {info.CName || <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {info.Error ? (
@@ -286,7 +286,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                 {info.Error}
                                             </ErrorText>
                                         ) : (
-                                            <Tag style={{ paddingRight: 8 }} backgroundColor="GREEN" color="white">OK</Tag>
+                                            <Tag style={{ paddingRight: 8 }} tint="GREEN" color="black">OK</Tag>
                                         )}
                                     </Table.Cell>
                                 </Table.Row>
@@ -294,7 +294,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                         ) : (
                             <Table.Row>
                                 <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
-                                    <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">No hosts found</Tag>
+                                    <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">No hosts found</Tag>
                                 </Table.Cell>
                             </Table.Row>
                         )}
@@ -350,13 +350,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {report.Checks.AllChecksOK ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="GREEN"
-                                                    color="white">Yes</Tag>
+                                                    tint="GREEN"
+                                                    color="black">Yes</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="RED"
-                                                    color="white"
+                                                    tint="RED"
+                                                    color="black"
                                                 >No</Tag>
                                             )}
                                         </Table.Cell>
@@ -365,9 +365,9 @@ export default function FederationResults({ serverName }: { serverName: string }
                                         <Table.Cell>Server Version Parses</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.ServerVersionParses ? (
-                                                <Tag style={{ paddingRight: 8 }} backgroundColor="GREEN" color="white">Yes</Tag>
+                                                <Tag style={{ paddingRight: 8 }} tint="GREEN" color="black">Yes</Tag>
                                             ) : (
-                                                <Tag style={{ paddingRight: 8 }} backgroundColor="RED" color="white">No</Tag>
+                                                <Tag style={{ paddingRight: 8 }} tint="RED" color="black">No</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
@@ -383,14 +383,14 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {report.Checks.ValidCertificates ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="GREEN"
-                                                    color="white"
+                                                    tint="GREEN"
+                                                    color="black"
                                                 >Yes</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="RED"
-                                                    color="white"
+                                                    tint="RED"
+                                                    color="black"
                                                 >No</Tag>
                                             )}
                                         </Table.Cell>
@@ -401,13 +401,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {report.Checks.HasEd25519Key ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="GREEN"
-                                                    color="white">Yes</Tag>
+                                                    tint="GREEN"
+                                                    color="black">Yes</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="RED"
-                                                    color="white"
+                                                    tint="RED"
+                                                    color="black"
                                                 >No</Tag>
                                             )}
                                         </Table.Cell>
@@ -418,13 +418,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {report.Checks.MatchingServerName ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="GREEN"
-                                                    color="white">Yes</Tag>
+                                                    tint="GREEN"
+                                                    color="black">Yes</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="RED"
-                                                    color="white"
+                                                    tint="RED"
+                                                    color="black"
                                                 >No</Tag>
                                             )}
                                         </Table.Cell>
@@ -435,14 +435,14 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             {report.Checks.AllEd25519ChecksOK ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
-                                                    backgroundColor="GREEN"
-                                                    color="white">Yes</Tag>
+                                                    tint="GREEN"
+                                                    color="black">Yes</Tag>
                                             ) : (
                                                 <>
                                                     <Tag
                                                         style={{ paddingRight: 8, marginBottom: 4 }}
-                                                        backgroundColor="RED"
-                                                        color="white"
+                                                        tint="RED"
+                                                        color="black"
                                                     >No</Tag>
                                                     {report.Checks.Ed25519Checks && (
                                                         <div style={{ marginTop: 8 }}>
@@ -453,8 +453,8 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                                     .map(([key]) => (
                                                                         <ListItem key={key}>
                                                                             <Tag
-                                                                                backgroundColor="RED"
-                                                                                color="white"
+                                                                                tint="RED"
+                                                                                color="black"
                                                                                 style={{ paddingRight: 8, marginBottom: 4 }}
                                                                             >
                                                                                 <code>{key}</code>
@@ -493,7 +493,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             <Table.Cell>
                                                 <code
                                                     style={{ marginRight: 8 }}
-                                                >{keyId}</code> <Tag style={{ paddingRight: 8 }} backgroundColor="GREY" color="black">Expired</Tag>
+                                                >{keyId}</code> <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">Expired</Tag>
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
