@@ -1,5 +1,12 @@
 import { z } from "zod/v4"
 
+export const ErrorSchema = z.object({
+    Error: z.string(),
+    ErrorCode: z.enum(["Unknown", "NoAddressFound", "SRVPointsToCNAME", "DNSLookupTimeout", "SRVLookupTimeout"])
+});
+
+export type ErrorType = z.infer<typeof ErrorSchema>;
+
 export const ApiSchema = z.object({
     ConnectionReports: z.record(z.string(), z.object({
         Certificates: z.array(
@@ -46,11 +53,14 @@ export const ApiSchema = z.object({
     })).optional(),
     DNSResult: z.object({
         Addrs: z.array(z.string()).optional(),
-        Hosts: z.record(z.string(), z.object({
+        SrvTargets: z.record(z.string(), z.array(z.object({
+            Target: z.string(),
             Addrs: z.array(z.string()).optional(),
-            ResolvedHostname: z.string().optional(),
-            Error: z.string().optional(),
-        })),
+            Error: ErrorSchema.optional(),
+            Port: z.number(),
+            Priority: z.number().optional(),
+            Weight: z.number().optional()
+        }))).optional(),
         SRVSkipped: z.boolean()
     }),
     FederationOK: z.boolean(),

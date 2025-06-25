@@ -5,5 +5,14 @@
     "org": "Matrix.org"
   },
   "UI Repository": "UI Repository",
-  "Version:": "Version:"
+  "Version:": "Version:",
+  "DNS": {
+    "errorCodes": {
+      "Unknown": "An unknown error occurred during DNS resolution",
+      "NoAddressFound": "No IP addresses were found for this hostname",
+      "SRVPointsToCNAME": "The SRV record points to a CNAME, which is not allowed according to RFC standards",
+      "DNSLookupTimeout": "The DNS lookup timed out - this might indicate network issues or slow DNS servers",
+      "SRVLookupTimeout": "The SRV record lookup timed out - this is not critical as SRV records are optional"
+    }
+  }
 }

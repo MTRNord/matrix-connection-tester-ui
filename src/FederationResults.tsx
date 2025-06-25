@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, Tabs, Details, LeadParagraph } from "govuk-react";
-import type { ApiSchemaType } from "./apiTypes";
+import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem, Tabs, Details, LeadParagraph, ErrorSummary } from "govuk-react";
+import type { ApiSchemaType, ErrorType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
+import { useTranslation } from "react-i18next";
 
 // Example lookup table for known server software
 const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
@@ -10,7 +11,8 @@ const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Exp
     "dendrite": { maturity: "Beta", url: "https://github.com/matrix-org/dendrite" },
     "conduit": { maturity: "Experimental", url: "https://gitlab.com/famedly/conduit" },
     "construct": { maturity: "Experimental", url: "https://github.com/matrix-construct/construct" },
-    "continuwuity": { maturity: "Beta", url: "https://continuwuity.org/" }
+    "continuwuity": { maturity: "Beta", url: "https://continuwuity.org/" },
+    "matrix-key-server": { maturity: "Experimental", url: "https://github.com/t2bot/matrix-key-server" },
 };
 
 function getServerSoftwareInfo(name: string) {
@@ -19,6 +21,7 @@ function getServerSoftwareInfo(name: string) {
 
 export default function FederationResults({ serverName }: { serverName: string }) {
     const [selectedTab, setSelectedTab] = useState<string>("overview");
+    const { t } = useTranslation();
 
     const { data, error, isLoading, isValidating } = useSWR<ApiSchemaType>(
         serverName ? ['federation', serverName] : null,
@@ -49,7 +52,7 @@ export default function FederationResults({ serverName }: { serverName: string }
 
     // DNS info
     const dnsAddrs = data?.DNSResult?.Addrs || [];
-    const dnsHosts = data?.DNSResult?.Hosts || {};
+    const srvTargets = Object.entries(data?.DNSResult?.SrvTargets || {});
     const wellKnown = Object.entries(data?.WellKnownResult || {});
 
     // Connection reports
@@ -79,6 +82,15 @@ export default function FederationResults({ serverName }: { serverName: string }
         setSelectedTab(tab);
     };
 
+    // Helper to get user-friendly error message
+    const getErrorMessage = (error: ErrorType) => {
+        const translationKey = `DNS.errorCodes.${error.ErrorCode}`;
+        const translatedMessage = t(translationKey);
+
+        // If no translation found, fall back to the raw error message
+        return translatedMessage !== translationKey ? translatedMessage : error.Error;
+    };
+
     return (
         <Tabs>
             <Tabs.Title>Federation Test Results</Tabs.Title>
@@ -92,7 +104,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                     href="#dns"
                     selected={selectedTab === "dns"}
                     onClick={handleTabClick("dns")}
-                >DNS Hosts</Tabs.Tab>
+                >DNS Resolution</Tabs.Tab>
                 <Tabs.Tab
                     href="#server-wellknown"
                     selected={selectedTab === "server-wellknown"}
@@ -252,49 +264,105 @@ export default function FederationResults({ serverName }: { serverName: string }
             </Tabs.Panel>
 
             <Tabs.Panel id="dns" selected={selectedTab === "dns"}>
-                <H2>DNS Hosts</H2>
+                <H2>DNS Resolution</H2>
                 <LeadParagraph>
-                    The following hosts were found when using the Server-Server Discovery algorithm.
-                    <br />
-                    If you see no hosts here, the server has either invalid SRV records or no DNS entries at all.
-                    Check the error column for more information.
+                    This section shows the DNS resolution results including direct IP addresses and SRV records found during the Server-Server Discovery algorithm.
                 </LeadParagraph>
+
+                {/* DNS Addresses Section */}
+                {dnsAddrs.length > 0 && (
+                    <>
+                        <H2 size="SMALL">Direct IP Addresses</H2>
+                        <LeadParagraph>
+                            These are the direct IP addresses resolved for the server.
+                        </LeadParagraph>
+                        <div style={{ overflowX: "auto", width: "100%", marginBottom: "2rem" }}>
+                            <Table>
+                                <Table.Row>
+                                    <Table.CellHeader>IP Address</Table.CellHeader>
+                                </Table.Row>
+                                {dnsAddrs.map(addr => (
+                                    <Table.Row key={addr}>
+                                        <Table.Cell><code>{addr}</code></Table.Cell>
+                                    </Table.Row>
+                                ))}
+                            </Table>
+                        </div>
+                    </>
+                )}
+
+                {/* SRV Records Section */}
+                <H2 size="SMALL">SRV Records</H2>
+                <LeadParagraph>
+                    The following SRV records were found when using the Server-Server Discovery algorithm.
+                    If you see no SRV records here, the server has no SRV records configured.
+                </LeadParagraph>
+
+                {/* Error Messages for SRV Records */}
+                {srvTargets.some(([, targets]) => targets.some(target => target.Error)) && (
+                    <ErrorSummary
+                        heading="DNS Resolution Issues"
+                        description={
+                            srvTargets
+                                .flatMap(([srvRecord, targets]) =>
+                                    targets
+                                        .filter(target => target.Error)
+                                        .map(target => `${srvRecord} → ${target.Target}: ${getErrorMessage(target.Error!)}`)
+                                )
+                                .join('\n\n')
+                        }
+                    />
+                )}
 
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
                         <Table.Row>
-                            <Table.CellHeader>Host</Table.CellHeader>
+                            <Table.CellHeader>Target</Table.CellHeader>
+                            <Table.CellHeader>Port</Table.CellHeader>
+                            <Table.CellHeader>Priority</Table.CellHeader>
+                            <Table.CellHeader>Weight</Table.CellHeader>
                             <Table.CellHeader>Addresses</Table.CellHeader>
-                            <Table.CellHeader>Resolved Hostname</Table.CellHeader>
-                            <Table.CellHeader>Error</Table.CellHeader>
+                            <Table.CellHeader>Status</Table.CellHeader>
                         </Table.Row>
-                        {Object.keys(dnsHosts).length > 0 ? (
-                            Object.entries(dnsHosts).map(([host, info]) => (
-                                <Table.Row key={host}>
-                                    <Table.Cell><code>{host}</code></Table.Cell>
-                                    <Table.Cell>
-                                        {info.Addrs && info.Addrs.length > 0
-                                            ? info.Addrs.join(", ")
-                                            : <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {info.ResolvedHostname || <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
-                                    </Table.Cell>
-                                    <Table.Cell>
-                                        {info.Error ? (
-                                            <ErrorText >
-                                                {info.Error}
-                                            </ErrorText>
-                                        ) : (
-                                            <Tag style={{ paddingRight: 8 }} tint="GREEN" color="black">OK</Tag>
-                                        )}
-                                    </Table.Cell>
-                                </Table.Row>
-                            ))
+                        {srvTargets.length > 0 ? (
+                            srvTargets.map(([srvRecord, targets]) =>
+                                targets.map((target, index) => (
+                                    <Table.Row key={`${srvRecord}-${index}`}>
+                                        <Table.Cell><code>{target.Target}</code></Table.Cell>
+                                        <Table.Cell>{target.Port}</Table.Cell>
+                                        <Table.Cell>
+                                            {target.Priority !== undefined
+                                                ? target.Priority
+                                                : <Tag tint="GREY" color="black">N/A</Tag>}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {target.Weight !== undefined
+                                                ? target.Weight
+                                                : <Tag tint="GREY" color="black">N/A</Tag>}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {target.Addrs && target.Addrs.length > 0
+                                                ? target.Addrs.map(addr => <div key={addr}>{addr}</div>)
+                                                : <Tag tint="GREY" color="black">None</Tag>}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {target.Error ? (
+                                                <Tag tint="RED" color="black">Error</Tag>
+                                            ) : (
+                                                <Tag tint="GREEN" color="black">OK</Tag>
+                                            )}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                ))
+                            )
                         ) : (
                             <Table.Row>
-                                <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
-                                    <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">No hosts found</Tag>
+                                <Table.Cell colSpan={7} style={{ textAlign: "center" }}>
+                                    <Tag tint={data?.DNSResult?.SRVSkipped ? "GREEN" : "GREY"} color="black">
+                                        {data?.DNSResult?.SRVSkipped
+                                            ? "SRV lookup was skipped"
+                                            : "No SRV records found"}
+                                    </Tag>
                                 </Table.Cell>
                             </Table.Row>
                         )}
@@ -546,35 +614,36 @@ export default function FederationResults({ serverName }: { serverName: string }
                     <Paragraph>No connection reports available.</Paragraph>
                 )}
             </Tabs.Panel>
-            {
-                Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
-                    <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
-                        <H2>Connection Errors</H2>
+            {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
+                <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
+                    <H2>Connection Errors</H2>
+                    <LeadParagraph>
+                        The following connection errors were encountered when trying to connect to the server.
+                        These errors indicate issues with the network connectivity or server configuration.
+                    </LeadParagraph>
 
-
-                        <div style={{ overflowX: "auto", width: "100%" }}>
-                            <Table>
-                                <Table.Row>
-                                    <Table.CellHeader>Host/IP</Table.CellHeader>
-                                    <Table.CellHeader>Error</Table.CellHeader>
+                    <div style={{ overflowX: "auto", width: "100%" }}>
+                        <Table>
+                            <Table.Row>
+                                <Table.CellHeader>Host/IP</Table.CellHeader>
+                                <Table.CellHeader>Error</Table.CellHeader>
+                            </Table.Row>
+                            {Object.entries(data.ConnectionErrors ?? {}).map(([host, errObj]) => (
+                                <Table.Row key={host}>
+                                    <Table.Cell>
+                                        <code>{host}</code>
+                                    </Table.Cell>
+                                    <Table.Cell>
+                                        <span style={{ color: "#d4351c" }}>{errObj.Error}</span>
+                                    </Table.Cell>
                                 </Table.Row>
-                                {Object.entries(data.ConnectionErrors ?? []).map(([host, errObj]) => (
-                                    <Table.Row key={host}>
-                                        <Table.Cell>
-                                            <code>{host}</code>
-                                        </Table.Cell>
-                                        <Table.Cell>
-                                            <span style={{ color: "#d4351c" }}>{errObj.Error}</span>
-                                        </Table.Cell>
-                                    </Table.Row>
-                                ))}
-                            </Table>
-                        </div>
+                            ))}
+                        </Table>
+                    </div>
+                </Tabs.Panel>
+            )}
 
-                    </Tabs.Panel>)
-            }
-
-            < Tabs.Panel id="raw" selected={selectedTab === "raw"}>
+            <Tabs.Panel id="raw" selected={selectedTab === "raw"}>
                 <H2>Full Raw API Response</H2>
                 <LeadParagraph>
                     This is the raw JSON response from the API.

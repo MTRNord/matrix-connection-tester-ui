@@ -1,9 +1,18 @@
 {
-  "Connection Tester": "Connection Tester",
+  "Connection Tester": "Verbindungstester",
   "Federation Tester API Repository": "Federation Tester API Repository",
   "Matrix": {
     "org": "Matrix.org"
   },
   "UI Repository": "UI Repository",
-  "Version:": "Version:"
+  "Version:": "Version:",
+  "DNS": {
+    "errorCodes": {
+      "Unknown": "Ein unbekannter Fehler ist bei der DNS-Auflösung aufgetreten",
+      "NoAddressFound": "Es wurden keine IP-Adressen für diesen Hostnamen gefunden",
+      "SRVPointsToCNAME": "Der SRV-Eintrag zeigt auf einen CNAME, was laut RFC-Standards nicht erlaubt ist",
+      "DNSLookupTimeout": "Die DNS-Abfrage ist abgelaufen - dies könnte auf Netzwerkprobleme oder langsame DNS-Server hindeuten",
+      "SRVLookupTimeout": "Die SRV-Eintrags-Abfrage ist abgelaufen - dies ist nicht kritisch, da SRV-Einträge optional sind"
+    }
+  }
 }

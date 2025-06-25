@@ -65,7 +65,7 @@ function App() {
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
               placeholder="example.com"
               required
-              pattern="^[a-zA-Z0-9.\-]+$"
+              pattern="^[a-zA-Z0-9.\-]+(:[0-9]+)?$"
               title="Server name must be alphanumeric and can include dots and hyphens."
               aria-label="Server Name"
               style={{ maxWidth: 300 }}
