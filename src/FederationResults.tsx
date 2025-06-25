@@ -265,7 +265,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                         <Table.Row>
                             <Table.CellHeader>Host</Table.CellHeader>
                             <Table.CellHeader>Addresses</Table.CellHeader>
-                            <Table.CellHeader>CNAME</Table.CellHeader>
+                            <Table.CellHeader>Resolved Hostname</Table.CellHeader>
                             <Table.CellHeader>Error</Table.CellHeader>
                         </Table.Row>
                         {Object.keys(dnsHosts).length > 0 ? (
@@ -278,7 +278,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             : <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
                                     </Table.Cell>
                                     <Table.Cell>
-                                        {info.CName || <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
+                                        {info.ResolvedHostname || <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">None</Tag>}
                                     </Table.Cell>
                                     <Table.Cell>
                                         {info.Error ? (

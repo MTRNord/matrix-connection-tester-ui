@@ -48,7 +48,7 @@ export const ApiSchema = z.object({
         Addrs: z.array(z.string()).optional(),
         Hosts: z.record(z.string(), z.object({
             Addrs: z.array(z.string()).optional(),
-            CName: z.string(),
+            ResolvedHostname: z.string().optional(),
             Error: z.string().optional(),
         })),
         SRVSkipped: z.boolean()
