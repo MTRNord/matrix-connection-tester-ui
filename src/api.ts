@@ -35,6 +35,10 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
         throw new Error("Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards but be aware that MSC2499 will lift this requirement in the future: https://github.com/matrix-org/matrix-spec-proposals/pull/2499");
     }
 
-    const data = await response.json();
-    return SupportWellKnownSchema.parse(data);
+    try {
+        const data = await response.json();
+        return SupportWellKnownSchema.parse(data);
+    } catch (e: unknown) {
+        throw new Error(`The json replied is either missing or not complete. Make sure to check https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport as an admin of this Homeserver.\nAdditionally the error was: "${e}"`)
+    }
 }
