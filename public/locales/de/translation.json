@@ -152,7 +152,7 @@
     "API_SERVER_NOT_CONFIGURED": "API-Server-URL ist nicht konfiguriert",
     "API_HTTP_ERROR": "Verbindung zum Federation-API-Server fehlgeschlagen",
     "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden",
-    "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation: https://spec.matrix.org/v1.14/client-server-api/#api-standards aber beachten Sie, dass MSC2499 diese Anforderung in Zukunft aufheben wird: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
+    "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation einen Content-Type Header mit dem wert \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards aber beachten Sie, dass MSC2499 diese Anforderung in Zukunft aufheben wird: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
     "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport als Administrator dieses Homeservers prüfen."
   },
   "support": {
