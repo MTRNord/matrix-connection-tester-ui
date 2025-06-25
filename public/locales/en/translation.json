@@ -109,6 +109,7 @@
       "checks": {
         "check": "Check",
         "result": "Result",
+        "serverVersion": "Server Version",
         "allChecksOk": "All Checks OK",
         "serverVersionParses": "Server Version Readable",
         "cipherSuite": "Cipher Suite",
