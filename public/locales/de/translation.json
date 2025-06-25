@@ -6,6 +6,36 @@
   },
   "UI Repository": "UI Repository",
   "Version:": "Version:",
+  "common": {
+    "error": "Fehler",
+    "none": "Keine",
+    "ok": "OK",
+    "host": "Host",
+    "version": "Version",
+    "unknown": "Unbekannt",
+    "na": "N/V"
+  },
+  "app": {
+    "title": "Matrix Verbindungstester",
+    "description": "Dieses Tool überprüft, ob ein Matrix-Server erreichbar ist und korrekt mit dem breiteren Matrix-Netzwerk föderiert. Geben Sie einen Servernamen ein, um zu sehen, ob die Federation funktioniert, welche Software er verwendet und detaillierte Debug-Informationen über seine Konfiguration und Konnektivität.",
+    "form": {
+      "serverName": "Servername",
+      "hintExtra": "Der Servername ist der Teil der Matrix-ID nach dem @-Symbol. Zum Beispiel ist für @alice:matrix.org der Servername matrix.org.",
+      "hint": "Geben Sie den Namen des Matrix-Servers ein, den Sie abfragen möchten, z.B.: <code>matrix.org</code><br/>Der Servername ist der Teil der Matrix-ID nach dem <code>@</code>-Symbol. Zum Beispiel ist für <code>@alice:matrix.org</code> der Servername <code>matrix.org</code>.",
+      "placeholder": "example.com",
+      "title": "Der Servername muss alphanumerisch sein und kann Punkte und Bindestriche enthalten.",
+      "ariaLabel": "Servername",
+      "goButton": "Los"
+    },
+    "errors": {
+      "uiFailedToLoad": "Die Benutzeroberfläche konnte nicht geladen werden",
+      "componentFailedToLoad": "Die Komponente konnte nicht geladen werden. Bitte kontaktieren Sie den Seitenadministrator"
+    },
+    "reloadPrompt": {
+      "newVersionAvailable": "Eine neue Version dieser Anwendung ist verfügbar.",
+      "reloadButton": "Neu laden"
+    }
+  },
   "DNS": {
     "errorCodes": {
       "Unknown": "Ein unbekannter Fehler ist bei der DNS-Auflösung aufgetreten",
@@ -14,5 +44,135 @@
       "DNSLookupTimeout": "Die DNS-Abfrage ist abgelaufen - dies könnte auf Netzwerkprobleme oder langsame DNS-Server hindeuten",
       "SRVLookupTimeout": "Die SRV-Eintrags-Abfrage ist abgelaufen - dies ist nicht kritisch, da SRV-Einträge optional sind"
     }
+  },
+  "federation": {
+    "title": "Federation Test Ergebnisse",
+    "tabs": {
+      "overview": "Übersicht",
+      "dns": "DNS-Auflösung",
+      "wellKnown": "Well-Known",
+      "reports": "Verbindungsberichte",
+      "errors": "Verbindungsfehler",
+      "raw": "Rohe API"
+    },
+    "overview": {
+      "title": "Federation Übersicht",
+      "description": "Diese Seite informiert Sie über den Federation-Status. Wenn es unten grün ist, können Sie davon ausgehen, dass der Server erreichbar ist und korrekt mit dem breiteren Matrix-Netzwerk föderiert. Wenn es orange oder rot ist, gibt es Probleme mit dem Server. Um dies zu debuggen, überprüfen Sie bitte jeden Tab Schritt für Schritt.",
+      "status": {
+        "working": "Federation funktioniert.",
+        "partiallyFailed": "Federation teilweise fehlgeschlagen. Überprüfen Sie unten für weitere Informationen.",
+        "failed": "Federation fehlgeschlagen."
+      },
+      "serverSoftware": "Server-Software",
+      "dnsAddresses": "DNS-Adressen",
+      "noAddressesFound": "Keine Adressen gefunden",
+      "versionsPerHost": "Versionen (pro Host)",
+      "noReports": "Keine Berichte",
+      "maturity": {
+        "Stable": "Stabil",
+        "Beta": "Beta",
+        "Experimental": "Experimentell"
+      }
+    },
+    "dns": {
+      "title": "DNS-Auflösung",
+      "description": "Dieser Abschnitt zeigt die DNS-Auflösungsergebnisse einschließlich direkter IP-Adressen und SRV-Einträge, die während des Server-Server-Discovery-Algorithmus gefunden wurden.",
+      "directIpAddresses": {
+        "title": "Direkte IP-Adressen",
+        "description": "Dies sind die direkten IP-Adressen, die für den Server aufgelöst wurden.",
+        "ipAddress": "IP-Adresse"
+      },
+      "srvRecords": {
+        "title": "SRV-Einträge",
+        "description": "Die folgenden SRV-Einträge wurden beim Server-Server-Discovery-Algorithmus gefunden. Wenn Sie hier keine SRV-Einträge sehen, hat der Server keine SRV-Einträge konfiguriert.",
+        "errorHeading": "DNS-Auflösungsprobleme",
+        "target": "Ziel",
+        "port": "Port",
+        "priority": "Priorität",
+        "weight": "Gewicht",
+        "addresses": "Adressen",
+        "status": "Status",
+        "srvSkipped": "SRV-Abfrage wurde übersprungen",
+        "noRecords": "Keine SRV-Einträge gefunden"
+      }
+    },
+    "wellKnown": {
+      "title": "Server Well-Known Ergebnisse",
+      "description": "Die folgenden Well-Known-Ergebnisse wurden beim Abfragen des Servers für seinen <code>/.well-known/matrix/server</code> Endpunkt gefunden. Wenn Sie hier keine Einträge sehen, hat der Server entweder keinen Well-Known-Endpunkt oder er ist nicht korrekt konfiguriert. Wenn Sie einen <code>m.server</code> Eintrag sehen, ist dies der Server, zu dem der Matrix-Client eine Verbindung herstellen sollte.",
+      "key": "Schlüssel",
+      "server": "m.server",
+      "cacheExpiresAt": "Cache läuft ab am"
+    },
+    "reports": {
+      "title": "Verbindungsberichte",
+      "noReportsAvailable": "Keine Verbindungsberichte verfügbar.",
+      "checks": {
+        "check": "Überprüfung",
+        "result": "Ergebnis",
+        "allChecksOk": "Alle Überprüfungen OK",
+        "serverVersionParses": "Server-Version lesbar",
+        "cipherSuite": "Cipher Suite",
+        "validCertificates": "Gültige Zertifikate",
+        "ed25519KeyPresent": "Ed25519-Schlüssel vorhanden",
+        "matchingServerName": "Übereinstimmender Servername",
+        "matchingSignature": "Übereinstimmende Signatur für alle Schlüssel",
+        "failingKeys": "Fehlgeschlagene Schlüssel:",
+        "yes": "Ja",
+        "no": "Nein"
+      },
+      "keys": {
+        "title": "Schlüssel",
+        "keyId": "Schlüssel-ID",
+        "key": "Schlüssel",
+        "expired": "Abgelaufen"
+      },
+      "certificates": {
+        "title": "Zertifikate",
+        "issuer": "Aussteller",
+        "subject": "Betreff",
+        "fingerprint": "SHA256-Fingerabdruck",
+        "dnsNames": "DNS-Namen"
+      },
+      "showRawReport": "Rohen Bericht anzeigen"
+    },
+    "connectionErrors": {
+      "title": "Verbindungsfehler",
+      "description": "Die folgenden Verbindungsfehler sind beim Versuch, eine Verbindung zum Server herzustellen, aufgetreten. Diese Fehler weisen auf Probleme mit der Netzwerkverbindung oder Serverkonfiguration hin.",
+      "hostIp": "Host/IP"
+    },
+    "raw": {
+      "title": "Vollständige Rohe API-Antwort",
+      "description": "Dies ist die rohe JSON-Antwort von der API. Sie enthält alle Informationen, die zur Generierung der Informationen in den anderen Tabs verwendet wurden. Sie können dies verwenden, um Probleme zu debuggen oder detailliertere Informationen über den Server zu sehen."
+    },
+    "loading": "⌛ Informationen von der API abrufen…",
+    "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"
+  },
+  "apiErrors": {
+    "EMPTY_SERVER_NAME": "Servername darf nicht leer sein",
+    "API_SERVER_NOT_CONFIGURED": "API-Server-URL ist nicht konfiguriert",
+    "API_HTTP_ERROR": "Verbindung zum Federation-API-Server fehlgeschlagen",
+    "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden",
+    "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation: https://spec.matrix.org/v1.14/client-server-api/#api-standards aber beachten Sie, dass MSC2499 diese Anforderung in Zukunft aufheben wird: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
+    "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport als Administrator dieses Homeservers prüfen."
+  },
+  "support": {
+    "title": "Support-Kontakte",
+    "loading": "⌛ Support-Informationen abrufen…",
+    "refreshing": "Support-Informationen aktualisieren…",
+    "noSupportPublished": "Keine Support-Informationen veröffentlicht",
+    "noContactsPublished": "Keine Kontakte veröffentlicht",
+    "description": "Dieser Server hat Support-Kontakte in seinem <code>.well-known/matrix/support</code> Endpunkt veröffentlicht. Diese Kontakte können Ihnen bei Problemen mit diesem Server oder Trust and Safety-bezogenen Fragen helfen.",
+    "adminHint": "Wenn Sie der Server-Administrator sind, erwägen Sie bitte, Ihre Support-Kontakte in <code>.well-known/matrix/support</code> zu veröffentlichen, um Benutzern bei der Hilfesuche zu helfen",
+    "errorHint": "Wenn Sie glauben, dass dies ein Fehler ist, überprüfen Sie bitte die Server-Konfiguration oder kontaktieren Sie den Server-Administrator.",
+    "table": {
+      "role": "Rolle",
+      "email": "E-Mail",
+      "matrixId": "Matrix-ID"
+    },
+    "roles": {
+      "admin": "Administrator",
+      "security": "Sicherheit"
+    },
+    "supportPage": "Support-Seite:"
   }
 }

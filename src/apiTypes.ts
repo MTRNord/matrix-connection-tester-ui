@@ -1,5 +1,22 @@
 import { z } from "zod/v4"
 
+// API Error types for structured error handling
+export class ApiError extends Error {
+    code: string;
+    details?: Record<string, unknown>;
+
+    constructor(
+        code: string,
+        message: string,
+        details?: Record<string, unknown>
+    ) {
+        super(message);
+        this.name = 'ApiError';
+        this.code = code;
+        this.details = details;
+    }
+}
+
 export const ErrorSchema = z.object({
     Error: z.string(),
     ErrorCode: z.enum(["Unknown", "NoAddressFound", "SRVPointsToCNAME", "DNSLookupTimeout", "SRVLookupTimeout"])

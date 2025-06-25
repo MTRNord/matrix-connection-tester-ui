@@ -3,7 +3,8 @@ import { H2, Table, Panel, Tag, Link, LoadingBox, ErrorText, Paragraph, ListItem
 import type { ApiSchemaType, ErrorType } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData } from "./api";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
+import { translateApiError } from "./utils/errorTranslation";
 
 // Example lookup table for known server software
 const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
@@ -32,7 +33,7 @@ export default function FederationResults({ serverName }: { serverName: string }
     if (isLoading && !data) {
         return (
             <LoadingBox loading={true}>
-                <p>⌛ Getting info from API…</p>
+                <p>{t('federation.loading')}</p>
             </LoadingBox>
         );
     }
@@ -40,8 +41,8 @@ export default function FederationResults({ serverName }: { serverName: string }
     if (error || !data) {
         return (
             <ErrorText>
-                ⚠️ Something went wrong talking to the API<br />
-                <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{error.message}</pre>
+                {t('federation.apiError')}<br />
+                <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(error, t)}</pre>
             </ErrorText>
         );
     }
@@ -64,14 +65,14 @@ export default function FederationResults({ serverName }: { serverName: string }
     );
 
     // Determine panel message and color
-    let panelTitle = "Federation is working.";
+    let panelTitle = t('federation.overview.status.working');
     let panelColor = undefined;
     if (!federationOK) {
         if (anyConnectionSuccess) {
-            panelTitle = "Federation partially failed. Check below for more information.";
+            panelTitle = t('federation.overview.status.partiallyFailed');
             panelColor = "#f47738"; // GOV.UK orange for warning/partial
         } else {
-            panelTitle = "Federation failed.";
+            panelTitle = t('federation.overview.status.failed');
             panelColor = "#d4351c";
         }
     }
@@ -93,47 +94,45 @@ export default function FederationResults({ serverName }: { serverName: string }
 
     return (
         <Tabs>
-            <Tabs.Title>Federation Test Results</Tabs.Title>
+            <Tabs.Title>{t('federation.title')}</Tabs.Title>
             <Tabs.List>
                 <Tabs.Tab
                     href="#overview"
                     selected={selectedTab === "overview"}
                     onClick={handleTabClick("overview")}
-                >Overview</Tabs.Tab>
+                >{t('federation.tabs.overview')}</Tabs.Tab>
                 <Tabs.Tab
                     href="#dns"
                     selected={selectedTab === "dns"}
                     onClick={handleTabClick("dns")}
-                >DNS Resolution</Tabs.Tab>
+                >{t('federation.tabs.dns')}</Tabs.Tab>
                 <Tabs.Tab
                     href="#server-wellknown"
                     selected={selectedTab === "server-wellknown"}
                     onClick={handleTabClick("server-wellknown")}
-                >Well-Known</Tabs.Tab>
+                >{t('federation.tabs.wellKnown')}</Tabs.Tab>
                 <Tabs.Tab
                     href="#reports"
                     selected={selectedTab === "reports"}
                     onClick={handleTabClick("reports")}
-                >Connection Reports</Tabs.Tab>
+                >{t('federation.tabs.reports')}</Tabs.Tab>
                 {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (<Tabs.Tab
                     href="#errors"
                     selected={selectedTab === "errors"}
                     onClick={handleTabClick("errors")}
-                >Connection Errors</Tabs.Tab>)}
+                >{t('federation.tabs.errors')}</Tabs.Tab>)}
                 <Tabs.Tab
                     href="#raw"
                     selected={selectedTab === "raw"}
                     onClick={handleTabClick("raw")}
-                >Raw API</Tabs.Tab>
+                >{t('federation.tabs.raw')}</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel id="overview" selected={selectedTab === "overview"}>
-                <H2>Federation Overview</H2>
+                <H2>{t('federation.overview.title')}</H2>
 
                 <LeadParagraph>
-                    This page informs you about the federation status.
-                    If it is green below you can assume that the server is reachable and federates correctly with the wider Matrix network.
-                    If there it is orange or red, there are issues with the server. To debug this please check each tab step by step.
+                    {t('federation.overview.description')}
                 </LeadParagraph>
 
                 {/* eslint-disable-next-line no-constant-binary-expression -- This seems to be overly jumpy*/}
@@ -153,12 +152,12 @@ export default function FederationResults({ serverName }: { serverName: string }
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
                         <Table.Row>
-                            <Table.CellHeader>Server Software</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.overview.serverSoftware')}</Table.CellHeader>
                             <Table.Cell>
                                 {(() => {
                                     // Use the first available per-host version name for software info
                                     const firstVersion = connReports.find(([, report]) => report.Version)?.[1]?.Version;
-                                    const versionName = firstVersion?.name || "Unknown";
+                                    const versionName = firstVersion?.name || t('common.unknown');
                                     const softwareInfo = getServerSoftwareInfo(versionName);
                                     return softwareInfo ? (
                                         <>
@@ -175,18 +174,18 @@ export default function FederationResults({ serverName }: { serverName: string }
                                                 color="black"
                                                 style={{ paddingRight: 8 }}
                                             >
-                                                {softwareInfo.maturity}
+                                                {t(`federation.overview.maturity.${softwareInfo.maturity}`)}
                                             </Tag>
                                         </>
                                     ) : (
                                         <>
                                             {versionName}
-                                            {!softwareInfo && versionName !== "Unknown" && (
+                                            {!softwareInfo && versionName !== t('common.unknown') && (
                                                 <Tag
                                                     style={{ paddingRight: 8, marginLeft: 8 }}
                                                     tint="GREY"
                                                     color="black"
-                                                >Unknown</Tag>
+                                                >{t('common.unknown')}</Tag>
                                             )}
                                         </>
                                     );
@@ -195,31 +194,31 @@ export default function FederationResults({ serverName }: { serverName: string }
                         </Table.Row>
 
                         <Table.Row>
-                            <Table.CellHeader>DNS Addresses</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.overview.dnsAddresses')}</Table.CellHeader>
                             <Table.Cell>
                                 {dnsAddrs.length > 0
                                     ? dnsAddrs.map(addr => <div key={addr}>{addr}</div>)
-                                    : "No addresses found"}
+                                    : t('federation.overview.noAddressesFound')}
                             </Table.Cell>
                         </Table.Row>
                     </Table>
                 </div>
                 <div style={{ overflowX: "auto", width: "100%" }}>
-                    <H2 size="SMALL">Versions (per host)</H2>
+                    <H2 size="SMALL">{t('federation.overview.versionsPerHost')}</H2>
                     <Table>
                         {/* Versions (per host) header row */}
                         <Table.Row>
                             {connReports.length > 0 ? (
                                 <>
-                                    <Table.CellHeader>Host</Table.CellHeader>
-                                    <Table.CellHeader>Version</Table.CellHeader>
+                                    <Table.CellHeader>{t('common.host')}</Table.CellHeader>
+                                    <Table.CellHeader>{t('common.version')}</Table.CellHeader>
                                     {connReports.some(([, r]) => !!r.Error) && (
-                                        <Table.CellHeader>Error</Table.CellHeader>
+                                        <Table.CellHeader>{t('common.error')}</Table.CellHeader>
                                     )}
                                 </>
                             ) : (
                                 <Table.Cell>
-                                    <Tag tint="GREY" color="black">No reports</Tag>
+                                    <Tag tint="GREY" color="black">{t('federation.overview.noReports')}</Tag>
                                 </Table.Cell>
                             )}
                         </Table.Row>
@@ -245,7 +244,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                         }}>
                                             {report.Version.name} <span style={{ color: "#6c757d" }}>({report.Version.version})</span>
                                         </span>
-                                        : <Tag tint="GREY" color="black">Unknown</Tag>
+                                        : <Tag tint="GREY" color="black">{t('common.unknown')}</Tag>
                                     }
                                 </Table.Cell>
                                 {connReports.some(([, r]) => !!r.Error) && (
@@ -264,22 +263,22 @@ export default function FederationResults({ serverName }: { serverName: string }
             </Tabs.Panel>
 
             <Tabs.Panel id="dns" selected={selectedTab === "dns"}>
-                <H2>DNS Resolution</H2>
+                <H2>{t('federation.dns.title')}</H2>
                 <LeadParagraph>
-                    This section shows the DNS resolution results including direct IP addresses and SRV records found during the Server-Server Discovery algorithm.
+                    {t('federation.dns.description')}
                 </LeadParagraph>
 
                 {/* DNS Addresses Section */}
                 {dnsAddrs.length > 0 && (
                     <>
-                        <H2 size="SMALL">Direct IP Addresses</H2>
+                        <H2 size="SMALL">{t('federation.dns.directIpAddresses.title')}</H2>
                         <LeadParagraph>
-                            These are the direct IP addresses resolved for the server.
+                            {t('federation.dns.directIpAddresses.description')}
                         </LeadParagraph>
                         <div style={{ overflowX: "auto", width: "100%", marginBottom: "2rem" }}>
                             <Table>
                                 <Table.Row>
-                                    <Table.CellHeader>IP Address</Table.CellHeader>
+                                    <Table.CellHeader>{t('federation.dns.directIpAddresses.ipAddress')}</Table.CellHeader>
                                 </Table.Row>
                                 {dnsAddrs.map(addr => (
                                     <Table.Row key={addr}>
@@ -292,16 +291,15 @@ export default function FederationResults({ serverName }: { serverName: string }
                 )}
 
                 {/* SRV Records Section */}
-                <H2 size="SMALL">SRV Records</H2>
+                <H2 size="SMALL">{t('federation.dns.srvRecords.title')}</H2>
                 <LeadParagraph>
-                    The following SRV records were found when using the Server-Server Discovery algorithm.
-                    If you see no SRV records here, the server has no SRV records configured.
+                    {t('federation.dns.srvRecords.description')}
                 </LeadParagraph>
 
                 {/* Error Messages for SRV Records */}
                 {srvTargets.some(([, targets]) => targets.some(target => target.Error)) && (
                     <ErrorSummary
-                        heading="DNS Resolution Issues"
+                        heading={t('federation.dns.srvRecords.errorHeading')}
                         description={
                             srvTargets
                                 .flatMap(([srvRecord, targets]) =>
@@ -317,12 +315,12 @@ export default function FederationResults({ serverName }: { serverName: string }
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
                         <Table.Row>
-                            <Table.CellHeader>Target</Table.CellHeader>
-                            <Table.CellHeader>Port</Table.CellHeader>
-                            <Table.CellHeader>Priority</Table.CellHeader>
-                            <Table.CellHeader>Weight</Table.CellHeader>
-                            <Table.CellHeader>Addresses</Table.CellHeader>
-                            <Table.CellHeader>Status</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.target')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.port')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.priority')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.weight')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.addresses')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.dns.srvRecords.status')}</Table.CellHeader>
                         </Table.Row>
                         {srvTargets.length > 0 ? (
                             srvTargets.map(([srvRecord, targets]) =>
@@ -333,23 +331,23 @@ export default function FederationResults({ serverName }: { serverName: string }
                                         <Table.Cell>
                                             {target.Priority !== undefined
                                                 ? target.Priority
-                                                : <Tag tint="GREY" color="black">N/A</Tag>}
+                                                : <Tag tint="GREY" color="black">{t('common.na')}</Tag>}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {target.Weight !== undefined
                                                 ? target.Weight
-                                                : <Tag tint="GREY" color="black">N/A</Tag>}
+                                                : <Tag tint="GREY" color="black">{t('common.na')}</Tag>}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {target.Addrs && target.Addrs.length > 0
                                                 ? target.Addrs.map(addr => <div key={addr}>{addr}</div>)
-                                                : <Tag tint="GREY" color="black">None</Tag>}
+                                                : <Tag tint="GREY" color="black">{t('common.none')}</Tag>}
                                         </Table.Cell>
                                         <Table.Cell>
                                             {target.Error ? (
-                                                <Tag tint="RED" color="black">Error</Tag>
+                                                <Tag tint="RED" color="black">{t('common.error')}</Tag>
                                             ) : (
-                                                <Tag tint="GREEN" color="black">OK</Tag>
+                                                <Tag tint="GREEN" color="black">{t('common.ok')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
@@ -360,8 +358,8 @@ export default function FederationResults({ serverName }: { serverName: string }
                                 <Table.Cell colSpan={7} style={{ textAlign: "center" }}>
                                     <Tag tint={data?.DNSResult?.SRVSkipped ? "GREEN" : "GREY"} color="black">
                                         {data?.DNSResult?.SRVSkipped
-                                            ? "SRV lookup was skipped"
-                                            : "No SRV records found"}
+                                            ? t('federation.dns.srvRecords.srvSkipped')
+                                            : t('federation.dns.srvRecords.noRecords')}
                                     </Tag>
                                 </Table.Cell>
                             </Table.Row>
@@ -371,19 +369,17 @@ export default function FederationResults({ serverName }: { serverName: string }
             </Tabs.Panel>
 
             <Tabs.Panel id="server-wellknown" selected={selectedTab === "server-wellknown"}>
-                <H2>Server Well-Known Results</H2>
+                <H2>{t('federation.wellKnown.title')}</H2>
                 <LeadParagraph>
-                    The following well-known results were found when querying the server for its <code>/.well-known/matrix/server</code> endpoint.
-                    If you see no entries here, the server has either no well-known endpoint or it is not configured correctly.
-                    If you see a <code>m.server</code> entry, this is the server that the Matrix client should connect to.
+                    <Trans i18nKey="federation.wellKnown.description" components={{ code: <code /> }} />
                 </LeadParagraph>
 
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
                         <Table.Row>
-                            <Table.CellHeader>Key</Table.CellHeader>
-                            <Table.CellHeader>m.server</Table.CellHeader>
-                            <Table.CellHeader>Cache Expires At</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.wellKnown.key')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.wellKnown.server')}</Table.CellHeader>
+                            <Table.CellHeader>{t('federation.wellKnown.cacheExpiresAt')}</Table.CellHeader>
                         </Table.Row>
                         {wellKnown.map(([key, value]) => (
                             <Table.Row key={key}>
@@ -401,7 +397,7 @@ export default function FederationResults({ serverName }: { serverName: string }
             </Tabs.Panel>
 
             <Tabs.Panel id="reports" selected={selectedTab === "reports"}>
-                <H2>Connection Reports</H2>
+                <H2>{t('federation.reports.title')}</H2>
                 {connReports.length > 0 ? (
                     connReports.map(([host, report]) => (
                         <div key={host} style={{ marginBottom: 24 }}>
@@ -409,112 +405,112 @@ export default function FederationResults({ serverName }: { serverName: string }
                             <div style={{ overflowX: "auto", width: "100%" }}>
                                 <Table>
                                     <Table.Row>
-                                        <Table.CellHeader>Check</Table.CellHeader>
-                                        <Table.CellHeader>Result</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.checks.check')}</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.checks.result')}</Table.CellHeader>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>All Checks OK</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.allChecksOk')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.AllChecksOK ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="GREEN"
-                                                    color="black">Yes</Tag>
+                                                    color="black">{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="RED"
                                                     color="black"
-                                                >No</Tag>
+                                                >{t('federation.reports.checks.no')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Server Version Parses</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.serverVersionParses')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.ServerVersionParses ? (
-                                                <Tag style={{ paddingRight: 8 }} tint="GREEN" color="black">Yes</Tag>
+                                                <Tag style={{ paddingRight: 8 }} tint="GREEN" color="black">{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
-                                                <Tag style={{ paddingRight: 8 }} tint="RED" color="black">No</Tag>
+                                                <Tag style={{ paddingRight: 8 }} tint="RED" color="black">{t('federation.reports.checks.no')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Cipher Suite</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.cipherSuite')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Cipher.CipherSuite} ({report.Cipher.Version})
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Valid Certificates</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.validCertificates')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.ValidCertificates ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="GREEN"
                                                     color="black"
-                                                >Yes</Tag>
+                                                >{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="RED"
                                                     color="black"
-                                                >No</Tag>
+                                                >{t('federation.reports.checks.no')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Ed25519 Key Present</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.ed25519KeyPresent')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.HasEd25519Key ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="GREEN"
-                                                    color="black">Yes</Tag>
+                                                    color="black">{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="RED"
                                                     color="black"
-                                                >No</Tag>
+                                                >{t('federation.reports.checks.no')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Maching serverName</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.matchingServerName')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.MatchingServerName ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="GREEN"
-                                                    color="black">Yes</Tag>
+                                                    color="black">{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="RED"
                                                     color="black"
-                                                >No</Tag>
+                                                >{t('federation.reports.checks.no')}</Tag>
                                             )}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
-                                        <Table.Cell>Matching Signature for all keys</Table.Cell>
+                                        <Table.Cell>{t('federation.reports.checks.matchingSignature')}</Table.Cell>
                                         <Table.Cell>
                                             {report.Checks.AllEd25519ChecksOK ? (
                                                 <Tag
                                                     style={{ paddingRight: 8 }}
                                                     tint="GREEN"
-                                                    color="black">Yes</Tag>
+                                                    color="black">{t('federation.reports.checks.yes')}</Tag>
                                             ) : (
                                                 <>
                                                     <Tag
                                                         style={{ paddingRight: 8, marginBottom: 4 }}
                                                         tint="RED"
                                                         color="black"
-                                                    >No</Tag>
+                                                    >{t('federation.reports.checks.no')}</Tag>
                                                     {report.Checks.Ed25519Checks && (
                                                         <div style={{ marginTop: 8 }}>
-                                                            <strong>Failing keys:</strong>
+                                                            <strong>{t('federation.reports.checks.failingKeys')}</strong>
                                                             <ul style={{ margin: 0, paddingLeft: 18 }}>
                                                                 {Object.entries(report.Checks.Ed25519Checks)
                                                                     .filter(([, check]) => !check.MatchingSignature)
@@ -538,13 +534,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                     </Table.Row>
                                 </Table>
                             </div>
-                            <H2 size="SMALL">Keys</H2>
+                            <H2 size="SMALL">{t('federation.reports.keys.title')}</H2>
 
                             <div style={{ overflowX: "auto", width: "100%" }}>
                                 <Table>
                                     <Table.Row>
-                                        <Table.CellHeader>Key ID</Table.CellHeader>
-                                        <Table.CellHeader>Key</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.keys.keyId')}</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.keys.key')}</Table.CellHeader>
                                     </Table.Row>
                                     {report.Keys?.verify_keys && Object.entries(report.Keys.verify_keys).map(([keyId, keyObj]) => (
                                         <Table.Row key={keyId}>
@@ -561,7 +557,7 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             <Table.Cell>
                                                 <code
                                                     style={{ marginRight: 8 }}
-                                                >{keyId}</code> <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">Expired</Tag>
+                                                >{keyId}</code> <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">{t('federation.reports.keys.expired')}</Tag>
                                             </Table.Cell>
                                             <Table.Cell>
                                                 <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
@@ -570,15 +566,15 @@ export default function FederationResults({ serverName }: { serverName: string }
                                     ))}
                                 </Table>
                             </div>
-                            <H2 size="SMALL">Certificates</H2>
+                            <H2 size="SMALL">{t('federation.reports.certificates.title')}</H2>
 
                             <div style={{ overflowX: "auto", width: "100%" }}>
                                 <Table>
                                     <Table.Row>
-                                        <Table.CellHeader>Issuer</Table.CellHeader>
-                                        <Table.CellHeader>Subject</Table.CellHeader>
-                                        <Table.CellHeader>SHA256 Fingerprint</Table.CellHeader>
-                                        <Table.CellHeader>DNS Names</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.certificates.issuer')}</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.certificates.subject')}</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.certificates.fingerprint')}</Table.CellHeader>
+                                        <Table.CellHeader>{t('federation.reports.certificates.dnsNames')}</Table.CellHeader>
                                     </Table.Row>
                                     {report.Certificates && report.Certificates.map((cert, index) => (
                                         <Table.Row key={index}>
@@ -588,13 +584,13 @@ export default function FederationResults({ serverName }: { serverName: string }
                                             <Table.Cell>
                                                 {cert.DNSNames && cert.DNSNames.length > 0
                                                     ? cert.DNSNames.join(", ")
-                                                    : "None"}
+                                                    : t('common.none')}
                                             </Table.Cell>
                                         </Table.Row>
                                     ))}
                                 </Table>
                             </div>
-                            <Details summary="Show Raw Report">
+                            <Details summary={t('federation.reports.showRawReport')}>
                                 <pre
                                     style={{
                                         background: "#f3f2f1",
@@ -611,22 +607,21 @@ export default function FederationResults({ serverName }: { serverName: string }
                         </div>
                     ))
                 ) : (
-                    <Paragraph>No connection reports available.</Paragraph>
+                    <Paragraph>{t('federation.reports.noReportsAvailable')}</Paragraph>
                 )}
             </Tabs.Panel>
             {Object.keys(data.ConnectionErrors ?? {}).length > 0 && (
                 <Tabs.Panel id="errors" selected={selectedTab === "errors"}>
-                    <H2>Connection Errors</H2>
+                    <H2>{t('federation.connectionErrors.title')}</H2>
                     <LeadParagraph>
-                        The following connection errors were encountered when trying to connect to the server.
-                        These errors indicate issues with the network connectivity or server configuration.
+                        {t('federation.connectionErrors.description')}
                     </LeadParagraph>
 
                     <div style={{ overflowX: "auto", width: "100%" }}>
                         <Table>
                             <Table.Row>
-                                <Table.CellHeader>Host/IP</Table.CellHeader>
-                                <Table.CellHeader>Error</Table.CellHeader>
+                                <Table.CellHeader>{t('federation.connectionErrors.hostIp')}</Table.CellHeader>
+                                <Table.CellHeader>{t('common.error')}</Table.CellHeader>
                             </Table.Row>
                             {Object.entries(data.ConnectionErrors ?? {}).map(([host, errObj]) => (
                                 <Table.Row key={host}>
@@ -644,11 +639,9 @@ export default function FederationResults({ serverName }: { serverName: string }
             )}
 
             <Tabs.Panel id="raw" selected={selectedTab === "raw"}>
-                <H2>Full Raw API Response</H2>
+                <H2>{t('federation.raw.title')}</H2>
                 <LeadParagraph>
-                    This is the raw JSON response from the API.
-                    It contains all the information that was used to generate the information in the other tabs.
-                    You can use this to debug issues or to see more detailed information about the server.
+                    {t('federation.raw.description')}
                 </LeadParagraph>
                 <pre
                     style={{

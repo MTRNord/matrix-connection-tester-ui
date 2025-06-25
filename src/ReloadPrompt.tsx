@@ -1,5 +1,6 @@
 import { Button, WarningText } from "govuk-react";
 import useSWR from "swr";
+import { useTranslation } from "react-i18next";
 
 const APP_VERSION = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "dev";
 
@@ -11,6 +12,7 @@ const fetchVersion = async () => {
 };
 
 export function ReloadPrompt() {
+    const { t } = useTranslation();
     const { data: latestVersion } = useSWR("/version.json", fetchVersion, {
         refreshInterval: 0,
         revalidateOnFocus: true,
@@ -37,7 +39,7 @@ export function ReloadPrompt() {
             }}
         >
             <WarningText style={{ width: "fit-content", margin: "0 1rem" }}>
-                A new version of this app is available.
+                {t('app.reloadPrompt.newVersionAvailable')}
             </WarningText>
             <Button
                 onClick={() => window.location.reload()}
@@ -52,7 +54,7 @@ export function ReloadPrompt() {
                     margin: "0 1rem",
                 }}
             >
-                Reload
+                {t('app.reloadPrompt.reloadButton')}
             </Button>
         </div>
     );

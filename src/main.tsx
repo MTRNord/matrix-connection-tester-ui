@@ -13,10 +13,15 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    supportedLngs: ['en'],
-    lng: "en", // if you're using a language detector, do not define the lng option
+    supportedLngs: ['en', 'de'],
     fallbackLng: "en",
-
+    backend: {
+      loadPath: '/locales/{{lng}}/{{ns}}.json',
+    },
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag'],
+      caches: ['localStorage'],
+    },
     interpolation: {
       escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
     }

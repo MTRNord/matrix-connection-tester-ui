@@ -4,10 +4,12 @@ import { Button, ErrorSummary, FormGroup, H1, HintText, Input, Label, LabelText,
 import { mutate } from 'swr';
 import SupportInfo from './SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
+import { useTranslation, Trans } from 'react-i18next';
 
 function App() {
   const [inputValue, setInputValue] = useState<string>('');
   const [submittedServerName, setSubmittedServerName] = useState<string>('');
+  const { t } = useTranslation();
 
   // Read serverName from URL on mount
   useEffect(() => {
@@ -40,10 +42,9 @@ function App() {
 
   return (
     <>
-      <H1>Matrix Connection Tester</H1>
+      <H1>{t('app.title')}</H1>
       <LeadParagraph>
-        This tool checks if a Matrix server is reachable and federates correctly with the wider Matrix network.
-        Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.
+        {t('app.description')}
       </LeadParagraph>
 
       <form
@@ -52,27 +53,24 @@ function App() {
       >
         <FormGroup>
           <Label>
-            <LabelText>Server Name</LabelText>
+            <LabelText>{t('app.form.serverName')}</LabelText>
             <HintText className="form-label">
-              Enter the name of the Matrix server you want to query, e.g.: <code>matrix.org</code>
-              <br />
-              The server name is the part of the Matrix ID after the <code>@</code> symbol.
-              For example, for <code>@alice:matrix.org</code>, the server name is <code>matrix.org</code>.
+              <Trans i18nKey="app.form.hint" components={{ code: <code /> }} />
             </HintText>
             <Input
               name="serverName"
               value={inputValue}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
-              placeholder="example.com"
+              placeholder={t('app.form.placeholder')}
               required
               pattern="^[a-zA-Z0-9.\-]+(:[0-9]+)?$"
-              title="Server name must be alphanumeric and can include dots and hyphens."
-              aria-label="Server Name"
+              title={t('app.form.title')}
+              aria-label={t('app.form.ariaLabel')}
               style={{ maxWidth: 300 }}
             />
           </Label>
         </FormGroup>
-        <Button start type="submit">Go</Button>
+        <Button start type="submit">{t('app.form.goButton')}</Button>
       </form>
 
       {submittedServerName && (
@@ -83,8 +81,8 @@ function App() {
           />
           <ErrorBoundary fallback={
             <ErrorSummary
-              heading="The UI failed to load"
-              description='The component failed to load. Please contact the page admin'
+              heading={t('app.errors.uiFailedToLoad')}
+              description={t('app.errors.componentFailedToLoad')}
             />
           }>
             <FederationResults serverName={submittedServerName} />
@@ -95,8 +93,8 @@ function App() {
           />
           <ErrorBoundary fallback={
             <ErrorSummary
-              heading="The UI failed to load"
-              description='The component failed to load. Please contact the page admin'
+              heading={t('app.errors.uiFailedToLoad')}
+              description={t('app.errors.componentFailedToLoad')}
             />
           }>
             <SupportInfo serverName={submittedServerName} />

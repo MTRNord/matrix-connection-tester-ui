@@ -2,6 +2,8 @@ import useSWR from "swr";
 import { fetchSupportInfo } from "./api";
 import type { SupportWellKnownType } from "./apiTypes";
 import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText, LeadParagraph } from "govuk-react";
+import { useTranslation, Trans } from "react-i18next";
+import { translateApiError } from "./utils/errorTranslation";
 
 function linkify(text: string) {
     // Simple URL regex
@@ -18,6 +20,7 @@ function linkify(text: string) {
 
 
 export default function SupportInfo({ serverName }: { serverName: string }) {
+    const { t } = useTranslation();
     const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
         serverName ? ['support', serverName] : null,
         () => fetchSupportInfo(serverName),
@@ -27,7 +30,7 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
     if (isLoading && !data) {
         return (
             <LoadingBox loading={true}>
-                <p>⌛ Getting support info…</p>
+                <p>{t('support.loading')}</p>
             </LoadingBox>
         );
     }
@@ -35,15 +38,14 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
     if (error || !data || (!data.contacts && !data.support_page)) {
         return (
             <>
-                <H2>Support Contacts</H2>
-                <Tag tint="GREY" color="black">No support information published</Tag>
+                <H2>{t('support.title')}</H2>
+                <Tag tint="GREY" color="black">{t('support.noSupportPublished')}</Tag>
                 <HintText>
-                    If you are the server administrator, please consider publishing your support contacts in
-                    <code>.well-known/matrix/support</code> to help users find assistance
+                    <Trans i18nKey="support.adminHint" components={{ code: <code /> }} />
                     <br /><br />
-                    If you believe this is an error, please check the server configuration or contact the server administrator.
+                    {t('support.errorHint')}
                     <br /><br />
-                    {error && <ErrorText>{linkify(error.message)}</ErrorText>}
+                    {error && <ErrorText>{linkify(translateApiError(error, t))}</ErrorText>}
                 </HintText>
             </>
         );
@@ -54,40 +56,41 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
             {/* eslint-disable-next-line no-constant-binary-expression -- This seems to be overly jumpy*/}
             {isValidating && false && (
                 <LoadingBox loading={true}>
-                    <Paragraph supportingText>Refreshing support info…</Paragraph>
+                    <Paragraph supportingText>{t('support.refreshing')}</Paragraph>
                 </LoadingBox>
             )}
-            <H2>Support Contacts</H2>
+            <H2>{t('support.title')}</H2>
             <LeadParagraph>
-                This server has published support contacts in its <code>.well-known/matrix/support</code> endpoint.
-                These contacts can help you with issues related to this server or Trust and Safety related questions.
+                <Trans i18nKey="support.description" components={{ code: <code /> }} />
             </LeadParagraph>
 
             {data.contacts && data.contacts.length > 0 ? (
                 <div style={{ overflowX: "auto", width: "100%" }}>
                     <Table>
                         <Table.Row>
-                            <Table.CellHeader>Role</Table.CellHeader>
-                            <Table.CellHeader>Email</Table.CellHeader>
-                            <Table.CellHeader>Matrix ID</Table.CellHeader>
+                            <Table.CellHeader>{t('support.table.role')}</Table.CellHeader>
+                            <Table.CellHeader>{t('support.table.email')}</Table.CellHeader>
+                            <Table.CellHeader>{t('support.table.matrixId')}</Table.CellHeader>
                         </Table.Row>
                         {data.contacts.map((contact, idx) => (
                             <Table.Row key={idx}>
                                 <Table.Cell>
-                                    {contact.role === "m.role.admin" ? "Admin" : contact.role === "m.role.security" ? "Security" : contact.role}
+                                    {contact.role === "m.role.admin" ? t('support.roles.admin') :
+                                        contact.role === "m.role.security" ? t('support.roles.security') :
+                                            contact.role}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {contact.email_address ? (
                                         <Link href={`mailto:${contact.email_address}`}>{contact.email_address}</Link>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">{t('common.na')}</Tag>
                                     )}
                                 </Table.Cell>
                                 <Table.Cell>
                                     {contact.matrix_id ? (
                                         <code>{contact.matrix_id}</code>
                                     ) : (
-                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">N/A</Tag>
+                                        <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">{t('common.na')}</Tag>
                                     )}
                                 </Table.Cell>
                             </Table.Row>
@@ -95,13 +98,13 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     </Table>
                 </div>
             ) : (
-                <Tag tint="GREY" color="black">No contacts published</Tag>
+                <Tag tint="GREY" color="black">{t('support.noContactsPublished')}</Tag>
 
             )}
 
             {data.support_page && (
                 <Paragraph>
-                    {`**Support Page:** [${data.support_page}](${data.support_page})`}
+                    {`**${t('support.supportPage')}** [${data.support_page}](${data.support_page})`}
                 </Paragraph>
             )}
         </div>

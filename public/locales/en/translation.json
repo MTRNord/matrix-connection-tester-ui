@@ -6,6 +6,36 @@
   },
   "UI Repository": "UI Repository",
   "Version:": "Version:",
+  "common": {
+    "error": "Error",
+    "none": "None",
+    "ok": "OK",
+    "host": "Host",
+    "version": "Version",
+    "unknown": "Unknown",
+    "na": "N/A"
+  },
+  "app": {
+    "title": "Matrix Connection Tester",
+    "description": "This tool checks if a Matrix server is reachable and federates correctly with the wider Matrix network. Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.",
+    "form": {
+      "serverName": "Server Name",
+      "hintExtra": "The server name is the part of the Matrix ID after the @ symbol. For example, for @alice:matrix.org, the server name is matrix.org.",
+      "hint": "Enter the name of the Matrix server you want to query, e.g.: <code>matrix.org</code><br/>The server name is the part of the Matrix ID after the <code>@</code> symbol. For example, for <code>@alice:matrix.org</code>, the server name is <code>matrix.org</code>.",
+      "placeholder": "example.com",
+      "title": "Server name must be alphanumeric and can include dots and hyphens.",
+      "ariaLabel": "Server Name",
+      "goButton": "Go"
+    },
+    "errors": {
+      "uiFailedToLoad": "The UI failed to load",
+      "componentFailedToLoad": "The component failed to load. Please contact the page admin"
+    },
+    "reloadPrompt": {
+      "newVersionAvailable": "A new version of this app is available.",
+      "reloadButton": "Reload"
+    }
+  },
   "DNS": {
     "errorCodes": {
       "Unknown": "An unknown error occurred during DNS resolution",
@@ -14,5 +44,135 @@
       "DNSLookupTimeout": "The DNS lookup timed out - this might indicate network issues or slow DNS servers",
       "SRVLookupTimeout": "The SRV record lookup timed out - this is not critical as SRV records are optional"
     }
+  },
+  "federation": {
+    "title": "Federation Test Results",
+    "tabs": {
+      "overview": "Overview",
+      "dns": "DNS Resolution",
+      "wellKnown": "Well-Known",
+      "reports": "Connection Reports",
+      "errors": "Connection Errors",
+      "raw": "Raw API"
+    },
+    "overview": {
+      "title": "Federation Overview",
+      "description": "This page informs you about the federation status. If it is green below you can assume that the server is reachable and federates correctly with the wider Matrix network. If there it is orange or red, there are issues with the server. To debug this please check each tab step by step.",
+      "status": {
+        "working": "Federation is working.",
+        "partiallyFailed": "Federation partially failed. Check below for more information.",
+        "failed": "Federation failed."
+      },
+      "serverSoftware": "Server Software",
+      "dnsAddresses": "DNS Addresses",
+      "noAddressesFound": "No addresses found",
+      "versionsPerHost": "Versions (per host)",
+      "noReports": "No reports",
+      "maturity": {
+        "Stable": "Stable",
+        "Beta": "Beta",
+        "Experimental": "Experimental"
+      }
+    },
+    "dns": {
+      "title": "DNS Resolution",
+      "description": "This section shows the DNS resolution results including direct IP addresses and SRV records found during the Server-Server Discovery algorithm.",
+      "directIpAddresses": {
+        "title": "Direct IP Addresses",
+        "description": "These are the direct IP addresses resolved for the server.",
+        "ipAddress": "IP Address"
+      },
+      "srvRecords": {
+        "title": "SRV Records",
+        "description": "The following SRV records were found when using the Server-Server Discovery algorithm. If you see no SRV records here, the server has no SRV records configured.",
+        "errorHeading": "DNS Resolution Issues",
+        "target": "Target",
+        "port": "Port",
+        "priority": "Priority",
+        "weight": "Weight",
+        "addresses": "Addresses",
+        "status": "Status",
+        "srvSkipped": "SRV lookup was skipped",
+        "noRecords": "No SRV records found"
+      }
+    },
+    "wellKnown": {
+      "title": "Server Well-Known Results",
+      "description": "The following well-known results were found when querying the server for its <code>/.well-known/matrix/server</code> endpoint. If you see no entries here, the server has either no well-known endpoint or it is not configured correctly. If you see a <code>m.server</code> entry, this is the server that the Matrix client should connect to.",
+      "key": "Key",
+      "server": "m.server",
+      "cacheExpiresAt": "Cache Expires At"
+    },
+    "reports": {
+      "title": "Connection Reports",
+      "noReportsAvailable": "No connection reports available.",
+      "checks": {
+        "check": "Check",
+        "result": "Result",
+        "allChecksOk": "All Checks OK",
+        "serverVersionParses": "Server Version Readable",
+        "cipherSuite": "Cipher Suite",
+        "validCertificates": "Valid Certificates",
+        "ed25519KeyPresent": "Ed25519 Key Present",
+        "matchingServerName": "Matching serverName",
+        "matchingSignature": "Matching Signature for all keys",
+        "failingKeys": "Failing keys:",
+        "yes": "Yes",
+        "no": "No"
+      },
+      "keys": {
+        "title": "Keys",
+        "keyId": "Key ID",
+        "key": "Key",
+        "expired": "Expired"
+      },
+      "certificates": {
+        "title": "Certificates",
+        "issuer": "Issuer",
+        "subject": "Subject",
+        "fingerprint": "SHA256 Fingerprint",
+        "dnsNames": "DNS Names"
+      },
+      "showRawReport": "Show Raw Report"
+    },
+    "connectionErrors": {
+      "title": "Connection Errors",
+      "description": "The following connection errors were encountered when trying to connect to the server. These errors indicate issues with the network connectivity or server configuration.",
+      "hostIp": "Host/IP"
+    },
+    "raw": {
+      "title": "Full Raw API Response",
+      "description": "This is the raw JSON response from the API. It contains all the information that was used to generate the information in the other tabs. You can use this to debug issues or to see more detailed information about the server."
+    },
+    "loading": "⌛ Getting info from API…",
+    "apiError": "⚠️ Something went wrong talking to the API"
+  },
+  "apiErrors": {
+    "EMPTY_SERVER_NAME": "Server name cannot be empty",
+    "API_SERVER_NOT_CONFIGURED": "API server URL is not configured",
+    "API_HTTP_ERROR": "Failed to connect to the federation API server",
+    "SUPPORT_HTTP_ERROR": "Failed to fetch support information from the server",
+    "SUPPORT_INVALID_CONTENT_TYPE": "Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards but be aware that MSC2499 will lift this requirement in the future: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
+    "SUPPORT_INVALID_JSON": "The JSON replied is either missing or not complete. Make sure to check https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport as an admin of this Homeserver."
+  },
+  "support": {
+    "title": "Support Contacts",
+    "loading": "⌛ Getting support info…",
+    "refreshing": "Refreshing support info…",
+    "noSupportPublished": "No support information published",
+    "noContactsPublished": "No contacts published",
+    "description": "This server has published support contacts in its <code>.well-known/matrix/support</code> endpoint. These contacts can help you with issues related to this server or Trust and Safety related questions.",
+    "adminHint": "If you are the server administrator, please consider publishing your support contacts in <code>.well-known/matrix/support</code> to help users find assistance",
+    "errorHint": "If you believe this is an error, please check the server configuration or contact the server administrator.",
+    "table": {
+      "role": "Role",
+      "email": "Email",
+      "matrixId": "Matrix ID"
+    },
+    "roles": {
+      "admin": "Admin",
+      "security": "Security"
+    },
+    "supportPage": "Support Page:"
   }
 }
