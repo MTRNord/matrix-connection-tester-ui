@@ -24,9 +24,3 @@ dist-ssr
 *.sw?
 .env
 public/locales/**/translation_old.json
-
-# Test results and coverage
-coverage/
-test-results/
-playwright-report/
-playwright/.cache/
