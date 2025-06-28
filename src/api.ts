@@ -15,7 +15,7 @@ export const fetchData = async (serverName: string): Promise<ApiSchemaType> => {
     if (!API_SERVER_URL) {
         throw new ApiError("API_SERVER_NOT_CONFIGURED", "API server URL is not configured");
     }
-    const response = await fetch(`${API_SERVER_URL}/api/report?server_name=${serverName}`);
+    const response = await fetch(`${API_SERVER_URL}/api/report?server_name=${serverName}&no_cache=true`);
     if (!response.ok) {
         throw new ApiError("API_HTTP_ERROR", `HTTP error! status: ${response.status}`, { status: response.status });
     }
