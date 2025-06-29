@@ -65,8 +65,8 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
     let response: Response;
     try {
         response = await fetch(wellKnownUrl);
-    } catch (e: unknown) {
-        throw new ApiError("CLIENT_WELLKNOWN_NETWORK_ERROR", `Failed to fetch client well-known from ${wellKnownUrl}. This could indicate network issues or that the server is unreachable.\nNetwork error: ${e instanceof Error ? e.message : String(e)}`);
+    } catch {
+        throw new ApiError("CLIENT_WELLKNOWN_NETWORK_ERROR", "Failed to fetch client well-known endpoint");
     }
 
     // Check HTTP status according to Matrix Spec 1.15
@@ -78,13 +78,13 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
         };
 
         if (response.status === 404) {
-            throw new ApiError("CLIENT_WELLKNOWN_NOT_FOUND", `Client well-known endpoint not found (404) at ${wellKnownUrl}. This means the server does not provide Matrix client discovery information. According to Matrix Spec 1.15, this is valid but clients will need to use the server name directly as the homeserver URL.`, errorDetails);
+            throw new ApiError("CLIENT_WELLKNOWN_NOT_FOUND", "Client well-known endpoint not found (404)", errorDetails);
         } else if (response.status >= 500) {
-            throw new ApiError("CLIENT_WELLKNOWN_SERVER_ERROR", `Server error (${response.status}) when fetching client well-known from ${wellKnownUrl}. The server may be experiencing issues. Try again later.`, errorDetails);
+            throw new ApiError("CLIENT_WELLKNOWN_SERVER_ERROR", "Server error when fetching client well-known", errorDetails);
         } else if (response.status === 429) {
-            throw new ApiError("CLIENT_WELLKNOWN_RATE_LIMITED", `Rate limited (429) when fetching client well-known from ${wellKnownUrl}. Too many requests have been made. Wait before trying again.`, errorDetails);
+            throw new ApiError("CLIENT_WELLKNOWN_RATE_LIMITED", "Rate limited when fetching client well-known", errorDetails);
         } else {
-            throw new ApiError("CLIENT_WELLKNOWN_HTTP_ERROR", `HTTP error ${response.status} (${response.statusText}) when fetching client well-known from ${wellKnownUrl}. Check server configuration and Matrix Spec 1.15 compliance.`, errorDetails);
+            throw new ApiError("CLIENT_WELLKNOWN_HTTP_ERROR", "HTTP error when fetching client well-known", errorDetails);
         }
     }
 
@@ -93,11 +93,11 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
     const warnings: ApiError[] = [];
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-        // Log warning for developers
+        // Log warning for developers (plain text for console)
         console.warn(`[CLIENT_WELLKNOWN_CONTENT_TYPE_WARNING] Expected 'application/json' Content-Type header for client well-known endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#getwell-knownmatrixclient), but received: '${contentType || 'none'}'. MSC2499 (https://github.com/matrix-org/matrix-spec-proposals/pull/2499) proposes to lift this requirement, but it has not been merged yet. This may cause client compatibility issues with some implementations.`);
 
-        // Create a warning that can be displayed to users
-        const contentTypeWarning = new ApiError("CLIENT_WELLKNOWN_CONTENT_TYPE_WARNING", `Content-Type header is missing or incorrect for client well-known endpoint. Expected 'application/json' but received '${contentType || 'none'}'. This violates the current Matrix specification, though MSC2499 proposes to allow this in the future. Some Matrix clients may not work correctly with this server's configuration.`);
+        // Create a warning that can be displayed to users (HTML formatted for UI)
+        const contentTypeWarning = new ApiError("CLIENT_WELLKNOWN_CONTENT_TYPE_WARNING", "Content-Type header validation warning for client well-known endpoint");
         contentTypeWarning.isWarning = true;
         warnings.push(contentTypeWarning);
     }
@@ -106,8 +106,8 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
     let jsonData: unknown;
     try {
         jsonData = await response.json();
-    } catch (e: unknown) {
-        throw new ApiError("CLIENT_WELLKNOWN_INVALID_JSON", `Failed to parse JSON from client well-known endpoint ${wellKnownUrl}. The response body is not valid JSON as required by Matrix Spec 1.15.\nJSON parse error: ${e instanceof Error ? e.message : String(e)}\nResponse status: ${response.status}`);
+    } catch {
+        throw new ApiError("CLIENT_WELLKNOWN_INVALID_JSON", "Failed to parse JSON from client well-known endpoint");
     }
 
     // Validate against schema with detailed error reporting
@@ -116,18 +116,18 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
 
         // Additional validation for required homeserver field
         if (!parsedData["m.homeserver"]?.base_url) {
-            throw new ApiError("CLIENT_WELLKNOWN_MISSING_HOMESERVER", "The 'm.homeserver.base_url' field is required according to Matrix Spec 1.15 but was not found or is empty in the client well-known response. This field must contain a valid URL pointing to the Matrix homeserver.");
+            throw new ApiError("CLIENT_WELLKNOWN_MISSING_HOMESERVER", "The m.homeserver.base_url field is required but was not found");
         }
 
         // Validate homeserver URL format more strictly
         try {
             const homeserverUrl = new URL(parsedData["m.homeserver"].base_url);
             if (homeserverUrl.protocol !== 'https:' && homeserverUrl.protocol !== 'http:') {
-                throw new ApiError("CLIENT_WELLKNOWN_INVALID_HOMESERVER_PROTOCOL", `Homeserver base_url must use HTTP or HTTPS protocol according to Matrix Spec 1.15, but found: ${homeserverUrl.protocol}`);
+                throw new ApiError("CLIENT_WELLKNOWN_INVALID_HOMESERVER_PROTOCOL", "Homeserver base_url must use HTTP or HTTPS protocol");
             }
         } catch (urlError) {
             if (urlError instanceof ApiError) throw urlError;
-            throw new ApiError("CLIENT_WELLKNOWN_MALFORMED_HOMESERVER_URL", `The 'm.homeserver.base_url' field contains an invalid URL: '${parsedData["m.homeserver"].base_url}'. Must be a valid URL according to Matrix Spec 1.15.\nURL parsing error: ${urlError instanceof Error ? urlError.message : String(urlError)}`);
+            throw new ApiError("CLIENT_WELLKNOWN_MALFORMED_HOMESERVER_URL", "The m.homeserver.base_url field contains an invalid URL");
         }
 
         // Validate identity server URL if present
@@ -135,11 +135,11 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
             try {
                 const identityServerUrl = new URL(parsedData["m.identity_server"].base_url);
                 if (identityServerUrl.protocol !== 'https:' && identityServerUrl.protocol !== 'http:') {
-                    throw new ApiError("CLIENT_WELLKNOWN_INVALID_IDENTITY_SERVER_PROTOCOL", `Identity server base_url must use HTTP or HTTPS protocol according to Matrix Spec 1.15, but found: ${identityServerUrl.protocol}`);
+                    throw new ApiError("CLIENT_WELLKNOWN_INVALID_IDENTITY_SERVER_PROTOCOL", "Identity server base_url must use HTTP or HTTPS protocol");
                 }
             } catch (urlError) {
                 if (urlError instanceof ApiError) throw urlError;
-                throw new ApiError("CLIENT_WELLKNOWN_MALFORMED_IDENTITY_SERVER_URL", `The 'm.identity_server.base_url' field contains an invalid URL: '${parsedData["m.identity_server"].base_url}'. Must be a valid URL according to Matrix Spec 1.15.\nURL parsing error: ${urlError instanceof Error ? urlError.message : String(urlError)}`);
+                throw new ApiError("CLIENT_WELLKNOWN_MALFORMED_IDENTITY_SERVER_URL", "The m.identity_server.base_url field contains an invalid URL");
             }
         }
 
@@ -183,8 +183,13 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
  * 
  * @param serverName - The original server name (domain)
  * @param homeserverUrl - Optional homeserver URL discovered from .well-known/matrix/client
+ * @param hasClientWellKnown - Whether a client well-known response exists (to determine if we should warn about missing base_url)
  */
-export const fetchClientServerVersions = async (serverName: string, homeserverUrl?: string): Promise<ApiResponseWithWarnings<ClientServerVersionsType>> => {
+export const fetchClientServerVersions = async (
+    serverName: string,
+    homeserverUrl?: string,
+    hasClientWellKnown?: boolean
+): Promise<ApiResponseWithWarnings<ClientServerVersionsType>> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty for server version discovery");
     }
@@ -199,13 +204,16 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
 
     // Handle case where no homeserver URL is found in well-known (FAIL_PROMPT scenario)
     if (!homeserverUrl) {
-        // According to Matrix Spec 1.15, this should be a FAIL_PROMPT situation
-        // For debugging purposes, we'll fall back but warn the user
-        actualHomeserverUrl = `https://${serverName}`;
+        // Only show warning if we have a client well-known response but no base_url
+        // Don't warn if there's no client well-known at all (404 case)
+        if (hasClientWellKnown) {
+            const fallbackWarning = new ApiError("CLIENT_DISCOVERY_FALLBACK", "No homeserver URL found in .well-known/matrix/client discovery");
+            fallbackWarning.isWarning = true;
+            warnings.push(fallbackWarning);
+        }
 
-        const fallbackWarning = new ApiError("CLIENT_DISCOVERY_FALLBACK", `No homeserver URL found in .well-known/matrix/client discovery. Per Matrix Spec 3.4.1, this triggers FAIL_PROMPT - some clients may require users to manually enter the server URL. Recommendation: Add {"m.homeserver": {"base_url": "https://${serverName}"}} to your .well-known/matrix/client file for better client compatibility.`);
-        fallbackWarning.isWarning = true;
-        warnings.push(fallbackWarning);
+        // Always fall back to server name for debugging purposes
+        actualHomeserverUrl = `https://${serverName}`;
     }
 
     // At this point, actualHomeserverUrl is guaranteed to be defined
@@ -228,9 +236,8 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
     let response: Response;
     try {
         response = await fetch(versionUrl);
-    } catch (e: unknown) {
-        const discoveryInfo = homeserverUrl ? ` (using homeserver URL from well-known: ${homeserverUrl})` : ` (using fallback to server name: https://${serverName})`;
-        throw new ApiError("SERVER_VERSION_NETWORK_ERROR", `Failed to fetch server version from ${versionUrl}${discoveryInfo}. This could indicate network issues or that the server is unreachable.\nNetwork error: ${e instanceof Error ? e.message : String(e)}`);
+    } catch {
+        throw new ApiError("SERVER_VERSION_NETWORK_ERROR", "Failed to fetch server version endpoint");
     }
 
     // Check HTTP status according to Matrix Spec 1.15
@@ -241,31 +248,29 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
             url: versionUrl
         };
 
-        const discoveryInfo = homeserverUrl ? ` The homeserver URL (${homeserverUrl}) was discovered from .well-known/matrix/client.` : ` Using fallback to server name (https://${serverName}) as no homeserver URL was found in .well-known/matrix/client.`;
-
         if (response.status === 404) {
-            throw new ApiError("SERVER_VERSION_NOT_FOUND", `Client versions endpoint not found (404) at ${versionUrl}.${discoveryInfo} This may indicate that the server is not a Matrix homeserver or does not support the client-server API.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_NOT_FOUND", "Client versions endpoint not found (404)", errorDetails);
         } else if (response.status >= 500) {
-            throw new ApiError("SERVER_VERSION_SERVER_ERROR", `Server error (${response.status}) when fetching client versions from ${versionUrl}.${discoveryInfo} The server may be experiencing issues. Try again later.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_SERVER_ERROR", "Server error when fetching client versions", errorDetails);
         } else if (response.status === 429) {
-            throw new ApiError("SERVER_VERSION_RATE_LIMITED", `Rate limited (429) when fetching client versions from ${versionUrl}.${discoveryInfo} Too many requests have been made. Wait before trying again.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_RATE_LIMITED", "Rate limited when fetching client versions", errorDetails);
         } else {
-            throw new ApiError("SERVER_VERSION_HTTP_ERROR", `HTTP error ${response.status} (${response.statusText}) when fetching client versions from ${versionUrl}.${discoveryInfo} Check server configuration and Matrix Spec 1.15 compliance.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_HTTP_ERROR", "HTTP error when fetching client versions", errorDetails);
         }
     }
 
     // Validate Content-Type header according to Matrix Spec 1.15
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-        throw new ApiError("SERVER_VERSION_INVALID_CONTENT_TYPE", `Expected 'application/json' Content-Type header for client versions endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#get_matrixclientversions), but received: '${contentType || 'none'}'. This violates the Matrix specification and may indicate server configuration issues.`);
+        throw new ApiError("SERVER_VERSION_INVALID_CONTENT_TYPE", "Expected application/json Content-Type header for client versions endpoint");
     }
 
     // Parse JSON response
     let jsonData: unknown;
     try {
         jsonData = await response.json();
-    } catch (e: unknown) {
-        throw new ApiError("SERVER_VERSION_INVALID_JSON", `Failed to parse JSON from client versions endpoint ${versionUrl}. The response body is not valid JSON as required by Matrix Spec 1.15.\nJSON parse error: ${e instanceof Error ? e.message : String(e)}\nResponse status: ${response.status}`);
+    } catch {
+        throw new ApiError("SERVER_VERSION_INVALID_JSON", "Failed to parse JSON from client versions endpoint");
     }
 
     // Validate against schema with detailed error reporting

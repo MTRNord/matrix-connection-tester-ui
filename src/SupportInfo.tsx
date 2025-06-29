@@ -5,20 +5,6 @@ import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText, LeadP
 import { useTranslation, Trans } from "react-i18next";
 import { translateApiError } from "./utils/errorTranslation";
 
-function linkify(text: string) {
-    // Simple URL regex
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-    const parts = text.split(urlRegex);
-    return parts.map((part, i) =>
-        urlRegex.test(part) ? (
-            <Link key={i} href={part} target="_blank" rel="noopener noreferrer">{part}</Link>
-        ) : (
-            part
-        )
-    );
-}
-
-
 export default function SupportInfo({ serverName }: { serverName: string }) {
     const { t } = useTranslation();
     const { data, error, isLoading, isValidating } = useSWR<SupportWellKnownType>(
@@ -45,7 +31,11 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     <br /><br />
                     {t('support.errorHint')}
                     <br /><br />
-                    {error && <ErrorText>{linkify(translateApiError(error, t))}</ErrorText>}
+                    {error &&
+                        <ErrorText>
+                            <div dangerouslySetInnerHTML={{ __html: translateApiError(error, t) }} />
+                        </ErrorText>
+                    }
                 </HintText>
             </>
         );

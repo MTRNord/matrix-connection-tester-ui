@@ -64,7 +64,10 @@ export default function RawDataTab({
             ) : clientWellKnownError ? (
                 <ErrorText>
                     {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
-                    <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
+                    <div
+                        style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                        dangerouslySetInnerHTML={{ __html: translateApiError(clientWellKnownError, t) }}
+                    />
                 </ErrorText>
             ) : (
                 <LoadingBox loading={true}>
@@ -92,7 +95,10 @@ export default function RawDataTab({
             ) : clientServerVersionsError ? (
                 <ErrorText>
                     {t('serverInfo.errors.failedToFetchClientServerVersions')}<br />
-                    <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientServerVersionsError, t)}</pre>
+                    <div
+                        style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                        dangerouslySetInnerHTML={{ __html: translateApiError(clientServerVersionsError, t) }}
+                    />
                 </ErrorText>
             ) : (
                 <LoadingBox loading={true}>

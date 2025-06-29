@@ -66,9 +66,11 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
 
     // Fetch client server versions data - use homeserver URL from well-known if available
     const homeserverUrl = clientWellKnownData?.["m.homeserver"]?.base_url;
+    // Check if we have a client well-known response (even if it doesn't have base_url)
+    const hasClientWellKnown = !!clientWellKnownData && !clientWellKnownError;
     const { data: clientServerVersionsResponse, error: clientServerVersionsError } = useSWR<ApiResponseWithWarnings<ClientServerVersionsType>>(
-        serverName ? ['clientServerVersions', serverName, homeserverUrl] : null,
-        () => fetchClientServerVersions(serverName, homeserverUrl),
+        serverName ? ['clientServerVersions', serverName, homeserverUrl, hasClientWellKnown] : null,
+        () => fetchClientServerVersions(serverName, homeserverUrl, hasClientWellKnown),
         { keepPreviousData: false }
     );
 
@@ -88,7 +90,10 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
         return (
             <ErrorText>
                 {t('federation.apiError')}<br />
-                <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(error, t)}</pre>
+                <div
+                    style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                    dangerouslySetInnerHTML={{ __html: translateApiError(error, t) }}
+                />
             </ErrorText>
         );
     }

@@ -1,4 +1,4 @@
-import { H2, Table, Tag, LoadingBox, ErrorText, LeadParagraph, WarningText } from "govuk-react";
+import { Table, Tag, LoadingBox, ErrorText, LeadParagraph, WarningText, H1 } from "govuk-react";
 import type { ApiSchemaType, ClientWellKnownType } from "../../apiTypes";
 import { ApiError } from "../../apiTypes";
 import { useTranslation, Trans } from "react-i18next";
@@ -23,7 +23,7 @@ export default function WellKnownTab({
 
     return (
         <>
-            <H2>{t('federation.wellKnown.title')}</H2>
+            <H1>{t('federation.wellKnown.title')}</H1>
             <LeadParagraph>
                 <Trans i18nKey="federation.wellKnown.description" components={{ code: <code /> }} />
             </LeadParagraph>
@@ -50,7 +50,7 @@ export default function WellKnownTab({
             </div>
 
             {/* Client Well-Known Section */}
-            <H2 size="SMALL">{t('federation.wellKnown.clientDiscovery.title')}</H2>
+            <H1>{t('federation.wellKnown.clientDiscovery.title')}</H1>
             <LeadParagraph>
                 {t('federation.wellKnown.clientDiscovery.description')}
             </LeadParagraph>
@@ -116,12 +116,18 @@ export default function WellKnownTab({
                 clientWellKnownError instanceof ApiError && clientWellKnownError.isWarning ? (
                     <WarningText>
                         {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
-                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
+                        <div
+                            style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                            dangerouslySetInnerHTML={{ __html: translateApiError(clientWellKnownError, t) }}
+                        />
                     </WarningText>
                 ) : (
                     <ErrorText>
                         {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
-                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
+                        <div
+                            style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+                            dangerouslySetInnerHTML={{ __html: translateApiError(clientWellKnownError, t) }}
+                        />
                     </ErrorText>
                 )
             ) : (
