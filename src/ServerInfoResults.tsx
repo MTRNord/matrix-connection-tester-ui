@@ -57,14 +57,15 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
     const { data: clientWellKnownData, error: clientWellKnownError } = useSWR<ClientWellKnownType>(
         serverName ? ['clientWellKnown', serverName] : null,
         () => fetchClientWellKnown(serverName),
-        { keepPreviousData: false, shouldRetryOnError: false }
+        { keepPreviousData: false }
     );
 
-    // Fetch client server versions data
+    // Fetch client server versions data - use homeserver URL from well-known if available
+    const homeserverUrl = clientWellKnownData?.["m.homeserver"]?.base_url;
     const { data: clientServerVersionsData, error: clientServerVersionsError } = useSWR<ClientServerVersionsType>(
-        serverName ? ['clientServerVersions', serverName] : null,
-        () => fetchClientServerVersions(serverName),
-        { keepPreviousData: false, shouldRetryOnError: false }
+        serverName ? ['clientServerVersions', serverName, homeserverUrl] : null,
+        () => fetchClientServerVersions(serverName, homeserverUrl),
+        { keepPreviousData: false }
     );
 
     if (isLoading && !data) {

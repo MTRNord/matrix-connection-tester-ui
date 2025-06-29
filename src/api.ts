@@ -166,8 +166,11 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ClientWe
  * 
  * This endpoint provides information about the supported Matrix client-server API versions
  * and optionally includes information about the server implementation.
+ * 
+ * @param serverName - The original server name (domain)
+ * @param homeserverUrl - Optional homeserver URL discovered from .well-known/matrix/client
  */
-export const fetchClientServerVersions = async (serverName: string): Promise<ClientServerVersionsType> => {
+export const fetchClientServerVersions = async (serverName: string, homeserverUrl?: string): Promise<ClientServerVersionsType> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty for server version discovery");
     }
@@ -177,13 +180,29 @@ export const fetchClientServerVersions = async (serverName: string): Promise<Cli
         throw new ApiError("INVALID_SERVER_NAME_FORMAT", "Server name should be a domain name only, without protocol or path (e.g. 'matrix.org', not 'https://matrix.org' or 'matrix.org/path')");
     }
 
-    const versionUrl = `https://${serverName}/_matrix/client/versions`;
+    // Use homeserver URL from well-known if available, otherwise fall back to server name
+    let baseUrl: string;
+    if (homeserverUrl) {
+        // Remove trailing slash if present
+        baseUrl = homeserverUrl.replace(/\/$/, '');
+        // Validate that the homeserver URL is properly formatted
+        try {
+            new URL(homeserverUrl);
+        } catch (e) {
+            throw new ApiError("INVALID_HOMESERVER_URL", `Invalid homeserver URL from well-known discovery: ${homeserverUrl}. URL parsing error: ${e instanceof Error ? e.message : String(e)}`);
+        }
+    } else {
+        baseUrl = `https://${serverName}`;
+    }
+
+    const versionUrl = `${baseUrl}/_matrix/client/versions`;
 
     let response: Response;
     try {
         response = await fetch(versionUrl);
     } catch (e: unknown) {
-        throw new ApiError("SERVER_VERSION_NETWORK_ERROR", `Failed to fetch server version from ${versionUrl}. This could indicate network issues or that the server is unreachable.\nNetwork error: ${e instanceof Error ? e.message : String(e)}`);
+        const discoveryInfo = homeserverUrl ? ` (using homeserver URL from well-known: ${homeserverUrl})` : ` (using fallback to server name: ${serverName})`;
+        throw new ApiError("SERVER_VERSION_NETWORK_ERROR", `Failed to fetch server version from ${versionUrl}${discoveryInfo}. This could indicate network issues or that the server is unreachable.\nNetwork error: ${e instanceof Error ? e.message : String(e)}`);
     }
 
     // Check HTTP status according to Matrix Spec 1.15
@@ -194,14 +213,16 @@ export const fetchClientServerVersions = async (serverName: string): Promise<Cli
             url: versionUrl
         };
 
+        const discoveryInfo = homeserverUrl ? ` The homeserver URL (${homeserverUrl}) was discovered from .well-known/matrix/client.` : ` Using fallback to server name (${serverName}).`;
+
         if (response.status === 404) {
-            throw new ApiError("SERVER_VERSION_NOT_FOUND", `Client versions endpoint not found (404) at ${versionUrl}. This may indicate that the server is not a Matrix homeserver or does not support the client-server API.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_NOT_FOUND", `Client versions endpoint not found (404) at ${versionUrl}.${discoveryInfo} This may indicate that the server is not a Matrix homeserver or does not support the client-server API.`, errorDetails);
         } else if (response.status >= 500) {
-            throw new ApiError("SERVER_VERSION_SERVER_ERROR", `Server error (${response.status}) when fetching client versions from ${versionUrl}. The server may be experiencing issues. Try again later.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_SERVER_ERROR", `Server error (${response.status}) when fetching client versions from ${versionUrl}.${discoveryInfo} The server may be experiencing issues. Try again later.`, errorDetails);
         } else if (response.status === 429) {
-            throw new ApiError("SERVER_VERSION_RATE_LIMITED", `Rate limited (429) when fetching client versions from ${versionUrl}. Too many requests have been made. Wait before trying again.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_RATE_LIMITED", `Rate limited (429) when fetching client versions from ${versionUrl}.${discoveryInfo} Too many requests have been made. Wait before trying again.`, errorDetails);
         } else {
-            throw new ApiError("SERVER_VERSION_HTTP_ERROR", `HTTP error ${response.status} (${response.statusText}) when fetching client versions from ${versionUrl}. Check server configuration and Matrix Spec 1.15 compliance.`, errorDetails);
+            throw new ApiError("SERVER_VERSION_HTTP_ERROR", `HTTP error ${response.status} (${response.statusText}) when fetching client versions from ${versionUrl}.${discoveryInfo} Check server configuration and Matrix Spec 1.15 compliance.`, errorDetails);
         }
     }
 
