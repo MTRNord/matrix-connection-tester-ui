@@ -211,7 +211,8 @@
     "API_HTTP_ERROR": "Failed to connect to the federation API server",
     "SUPPORT_HTTP_ERROR": "Failed to fetch support information from the server",
     "SUPPORT_INVALID_CONTENT_TYPE": "Expected JSON response from support endpoint as per Matrix Specification with the Content-Type header containing \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards. Note that MSC2499 proposes to lift this requirement in the future, but it has not been merged yet: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
-    "SUPPORT_INVALID_JSON": "The JSON replied is either missing or not complete. Make sure to check https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport as an admin of this Homeserver."
+    "SUPPORT_INVALID_JSON": "The JSON replied is either missing or not complete. Make sure to check https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport as an admin of this Homeserver.",
+    "CLIENT_DISCOVERY_FALLBACK": "Missing homeserver URL in <code>.well-known/matrix/client</code>. Per <a href=\"https://spec.matrix.org/v1.15/client-server-api/#well-known-uris\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix Spec 3.4.1 Well-known URI</a>, this causes client compatibility issues. Some clients may require users to manually enter the homeserver URL.<br/><br/><strong>Recommendation:</strong> Add <code>m.homeserver.base_url</code> to your well-known file."
   },
   "support": {
     "title": "Support Contacts",

@@ -178,10 +178,13 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ApiRespo
  * This endpoint provides information about the supported Matrix client-server API versions
  * and optionally includes information about the server implementation.
  * 
+ * For debugging purposes, this function will fall back to using the server name directly
+ * if no homeserver URL is found in well-known discovery, but will indicate this as a warning.
+ * 
  * @param serverName - The original server name (domain)
  * @param homeserverUrl - Optional homeserver URL discovered from .well-known/matrix/client
  */
-export const fetchClientServerVersions = async (serverName: string, homeserverUrl?: string): Promise<ClientServerVersionsType> => {
+export const fetchClientServerVersions = async (serverName: string, homeserverUrl?: string): Promise<ApiResponseWithWarnings<ClientServerVersionsType>> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty for server version discovery");
     }
@@ -191,19 +194,33 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
         throw new ApiError("INVALID_SERVER_NAME_FORMAT", "Server name should be a domain name only, without protocol or path (e.g. 'matrix.org', not 'https://matrix.org' or 'matrix.org/path')");
     }
 
-    // Use homeserver URL from well-known if available, otherwise fall back to server name
-    let baseUrl: string;
-    if (homeserverUrl) {
-        // Remove trailing slash if present
-        baseUrl = homeserverUrl.replace(/\/$/, '');
-        // Validate that the homeserver URL is properly formatted
-        try {
-            new URL(homeserverUrl);
-        } catch (e) {
-            throw new ApiError("INVALID_HOMESERVER_URL", `Invalid homeserver URL from well-known discovery: ${homeserverUrl}. URL parsing error: ${e instanceof Error ? e.message : String(e)}`);
-        }
-    } else {
-        baseUrl = `https://${serverName}`;
+    const warnings: ApiError[] = [];
+    let actualHomeserverUrl = homeserverUrl;
+
+    // Handle case where no homeserver URL is found in well-known (FAIL_PROMPT scenario)
+    if (!homeserverUrl) {
+        // According to Matrix Spec 1.15, this should be a FAIL_PROMPT situation
+        // For debugging purposes, we'll fall back but warn the user
+        actualHomeserverUrl = `https://${serverName}`;
+
+        const fallbackWarning = new ApiError("CLIENT_DISCOVERY_FALLBACK", `No homeserver URL found in .well-known/matrix/client discovery. Per Matrix Spec 3.4.1, this triggers FAIL_PROMPT - some clients may require users to manually enter the server URL. Recommendation: Add {"m.homeserver": {"base_url": "https://${serverName}"}} to your .well-known/matrix/client file for better client compatibility.`);
+        fallbackWarning.isWarning = true;
+        warnings.push(fallbackWarning);
+    }
+
+    // At this point, actualHomeserverUrl is guaranteed to be defined
+    if (!actualHomeserverUrl) {
+        throw new ApiError("INTERNAL_ERROR", "Internal error: homeserver URL is undefined after fallback logic");
+    }
+
+    // Remove trailing slash if present
+    const baseUrl = actualHomeserverUrl.replace(/\/$/, '');
+
+    // Validate that the homeserver URL is properly formatted
+    try {
+        new URL(actualHomeserverUrl);
+    } catch (e) {
+        throw new ApiError("INVALID_HOMESERVER_URL", `Invalid homeserver URL: ${actualHomeserverUrl}. URL parsing error: ${e instanceof Error ? e.message : String(e)}`);
     }
 
     const versionUrl = `${baseUrl}/_matrix/client/versions`;
@@ -212,7 +229,7 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
     try {
         response = await fetch(versionUrl);
     } catch (e: unknown) {
-        const discoveryInfo = homeserverUrl ? ` (using homeserver URL from well-known: ${homeserverUrl})` : ` (using fallback to server name: ${serverName})`;
+        const discoveryInfo = homeserverUrl ? ` (using homeserver URL from well-known: ${homeserverUrl})` : ` (using fallback to server name: https://${serverName})`;
         throw new ApiError("SERVER_VERSION_NETWORK_ERROR", `Failed to fetch server version from ${versionUrl}${discoveryInfo}. This could indicate network issues or that the server is unreachable.\nNetwork error: ${e instanceof Error ? e.message : String(e)}`);
     }
 
@@ -224,7 +241,7 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
             url: versionUrl
         };
 
-        const discoveryInfo = homeserverUrl ? ` The homeserver URL (${homeserverUrl}) was discovered from .well-known/matrix/client.` : ` Using fallback to server name (${serverName}).`;
+        const discoveryInfo = homeserverUrl ? ` The homeserver URL (${homeserverUrl}) was discovered from .well-known/matrix/client.` : ` Using fallback to server name (https://${serverName}) as no homeserver URL was found in .well-known/matrix/client.`;
 
         if (response.status === 404) {
             throw new ApiError("SERVER_VERSION_NOT_FOUND", `Client versions endpoint not found (404) at ${versionUrl}.${discoveryInfo} This may indicate that the server is not a Matrix homeserver or does not support the client-server API.`, errorDetails);
@@ -254,7 +271,10 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
     // Validate against schema with detailed error reporting
     try {
         const parsedData = ClientServerVersionsSchema.parse(jsonData);
-        return parsedData;
+        return {
+            data: parsedData,
+            warnings: warnings.length > 0 ? warnings : undefined
+        };
     } catch (zodError: unknown) {
         // Enhanced error reporting for Zod validation errors
         if (zodError instanceof Error && 'issues' in zodError) {

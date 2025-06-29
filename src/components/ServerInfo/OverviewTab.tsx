@@ -1,4 +1,4 @@
-import { H2, Table, Tag, Link, LoadingBox, ErrorText, LeadParagraph, Panel, H1 } from "govuk-react";
+import { H2, Table, Tag, Link, LoadingBox, ErrorText, WarningText, LeadParagraph, Panel, H1 } from "govuk-react";
 import type { ApiSchemaType, ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
@@ -36,6 +36,7 @@ interface OverviewTabProps {
     data: ApiSchemaType;
     clientServerVersionsData?: ClientServerVersionsType;
     clientServerVersionsError?: Error;
+    clientServerVersionsWarnings?: Error[];
     isValidating: boolean;
 }
 
@@ -43,6 +44,7 @@ export default function OverviewTab({
     data,
     clientServerVersionsData,
     clientServerVersionsError,
+    clientServerVersionsWarnings,
     isValidating
 }: OverviewTabProps) {
     const { t } = useTranslation();
@@ -241,6 +243,28 @@ export default function OverviewTab({
                                 />
                             );
                         })()}
+
+                        {/* Show warnings if they exist */}
+                        {clientServerVersionsWarnings && clientServerVersionsWarnings.length > 0 && (
+                            <div style={{ marginBottom: "1rem" }}>
+                                {clientServerVersionsWarnings.map((warning, index) => (
+                                    <WarningText key={index}>
+                                        <strong>Warning:</strong>
+                                        <div
+                                            style={{
+                                                marginTop: "0.5rem",
+                                                padding: "12px",
+                                                backgroundColor: "#fff2e6",
+                                                borderLeft: "10px solid #f47738",
+                                                lineHeight: "1.5"
+                                            }}
+                                            dangerouslySetInnerHTML={{ __html: translateApiError(warning, t) }}
+                                        />
+                                    </WarningText>
+                                ))}
+                            </div>
+                        )}
+
                         {/* Server Information */}
                         {clientServerVersionsData.server && (
                             <>
@@ -350,10 +374,49 @@ export default function OverviewTab({
                         )}
                     </>
                 ) : clientServerVersionsError ? (
-                    <ErrorText>
-                        {t('serverInfo.errors.failedToFetchClientServerVersions')}<br />
-                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientServerVersionsError, t)}</pre>
-                    </ErrorText>
+                    <>
+                        {(() => {
+                            // Check if this is a warning error (like Content-Type issues or fallback scenarios)
+                            const isWarning = 'isWarning' in clientServerVersionsError && clientServerVersionsError.isWarning;
+                            const bannerTitle = isWarning
+                                ? t('serverInfo.clientServerApi.status.partiallyWorking')
+                                : t('serverInfo.clientServerApi.status.failed');
+                            const bannerColor = isWarning ? "#f47738" : "#d4351c"; // Orange for warning, red for error
+
+                            return (
+                                <Panel
+                                    title={bannerTitle}
+                                    style={{
+                                        background: bannerColor,
+                                        color: "white",
+                                        marginBottom: "1rem"
+                                    }}
+                                />
+                            );
+                        })()}
+                        {/* Use WarningText for warnings, ErrorText for actual errors */}
+                        {(() => {
+                            const isWarning = 'isWarning' in clientServerVersionsError && clientServerVersionsError.isWarning;
+                            const TextComponent = isWarning ? WarningText : ErrorText;
+                            const errorMessage = translateApiError(clientServerVersionsError, t);
+
+                            return (
+                                <TextComponent>
+                                    {t('serverInfo.errors.failedToFetchClientServerVersions')}<br />
+                                    <div
+                                        style={{
+                                            marginTop: "0.5rem",
+                                            padding: "12px",
+                                            backgroundColor: "#f3f2f1",
+                                            borderLeft: `10px solid ${isWarning ? "#f47738" : "#d4351c"}`,
+                                            lineHeight: "1.5"
+                                        }}
+                                        dangerouslySetInnerHTML={{ __html: errorMessage }}
+                                    />
+                                </TextComponent>
+                            );
+                        })()}
+                    </>
                 ) : (
                     <LoadingBox loading={true}>
                         <p>{t('serverInfo.errors.loadingClientServerVersions')}</p>

@@ -66,11 +66,15 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
 
     // Fetch client server versions data - use homeserver URL from well-known if available
     const homeserverUrl = clientWellKnownData?.["m.homeserver"]?.base_url;
-    const { data: clientServerVersionsData, error: clientServerVersionsError } = useSWR<ClientServerVersionsType>(
+    const { data: clientServerVersionsResponse, error: clientServerVersionsError } = useSWR<ApiResponseWithWarnings<ClientServerVersionsType>>(
         serverName ? ['clientServerVersions', serverName, homeserverUrl] : null,
         () => fetchClientServerVersions(serverName, homeserverUrl),
         { keepPreviousData: false }
     );
+
+    // Extract data and warnings from the client server versions response
+    const clientServerVersionsData = clientServerVersionsResponse?.data;
+    const clientServerVersionsWarnings = clientServerVersionsResponse?.warnings;
 
     if (isLoading && !data) {
         return (
@@ -137,6 +141,7 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
                     data={data}
                     clientServerVersionsData={clientServerVersionsData}
                     clientServerVersionsError={clientServerVersionsError}
+                    clientServerVersionsWarnings={clientServerVersionsWarnings}
                     isValidating={isValidating}
                 />
             </Tabs.Panel>

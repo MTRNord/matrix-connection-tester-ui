@@ -211,7 +211,8 @@
     "API_HTTP_ERROR": "Verbindung zum Federation-API-Server fehlgeschlagen",
     "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden",
     "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation einen Content-Type Header mit dem Wert \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards. Beachten Sie, dass MSC2499 vorschlägt, diese Anforderung in Zukunft aufzuheben, aber es wurde noch nicht zusammengeführt: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
-    "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport als Administrator dieses Homeservers prüfen."
+    "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport als Administrator dieses Homeservers prüfen.",
+    "CLIENT_DISCOVERY_FALLBACK": "Fehlende Homeserver-URL in <code>.well-known/matrix/client</code>. Gemäß <a href=\"https://spec.matrix.org/v1.15/client-server-api/#well-known-uris\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix-Spezifikation 3.4.1 Well-known URI</a> verursacht dies Client-Kompatibilitätsprobleme. Einige Clients erfordern möglicherweise, dass Benutzer die Homeserver-URL manuell eingeben.<br/><br/><strong>Empfehlung:</strong> Fügen Sie <code>m.homeserver.base_url</code> zu Ihrer Well-Known-Datei hinzu."
   },
   "support": {
     "title": "Support-Kontakte",
