@@ -72,6 +72,31 @@
         "Stable": "Stabil",
         "Beta": "Beta",
         "Experimental": "Experimentell"
+      },
+      "clientServerApi": {
+        "title": "Client Server API Versionen",
+        "description": "Dies sind die Matrix Client-Server-API-Versionen, die dieser Server unterstützt. Neuere Versionen (v1.x) werden gegenüber Legacy-Versionen (r0.x) bevorzugt, da sie die neuesten Funktionen und Sicherheitsverbesserungen enthalten.",
+        "serverInformation": "Server Informationen",
+        "serverName": "Server Name",
+        "serverVersion": "Server Version",
+        "supportedVersions": "Unterstützte Matrix Client-Server-API-Versionen",
+        "noSupportedVersions": "Keine unterstützten Versionen gefunden.",
+        "unstableFeatures": {
+          "title": "Instabile Funktionen",
+          "description": "Instabile Funktionen sind experimentelle Fähigkeiten, die entwickelt oder getestet werden. Diese Funktionen können sich ändern oder in zukünftigen Versionen entfernt werden und sind noch nicht Teil der stabilen Matrix-Spezifikation. Viele entsprechen Matrix Spec Change (MSC) Vorschlägen.",
+          "feature": "Funktion",
+          "status": "Status",
+          "featureDescription": "Beschreibung",
+          "msc": "MSC",
+          "enabled": "Aktiviert",
+          "disabled": "Deaktiviert",
+          "noDescription": "Keine Beschreibung verfügbar",
+          "unknown": "Unbekannt"
+        }
+      },
+      "errors": {
+        "failedToFetchClientServerVersions": "Fehler beim Abrufen der Client-Server-Versionen:",
+        "loadingClientServerVersions": "Lade Client-Server-Versionen..."
       }
     },
     "dns": {
@@ -101,7 +126,22 @@
       "description": "Die folgenden Well-Known-Ergebnisse wurden beim Abfragen des Servers für seinen <code>/.well-known/matrix/server</code> Endpunkt gefunden. Wenn Sie hier keine Einträge sehen, hat der Server entweder keinen Well-Known-Endpunkt oder er ist nicht korrekt konfiguriert. Wenn Sie einen <code>m.server</code> Eintrag sehen, ist dies der Server, zu dem der Matrix-Client eine Verbindung herstellen sollte.",
       "key": "Schlüssel",
       "server": "m.server",
-      "cacheExpiresAt": "Cache läuft ab am"
+      "cacheExpiresAt": "Cache läuft ab am",
+      "clientDiscovery": {
+        "title": "Client Discovery (.well-known/matrix/client)",
+        "description": "Client-seitige Discovery-Informationen. Diese werden von Matrix-Clients verwendet, um Informationen über den Homeserver zu entdecken.",
+        "property": "Eigenschaft",
+        "value": "Wert",
+        "homeserverBaseUrl": "Homeserver Basis-URL",
+        "identityServerBaseUrl": "Identity Server Basis-URL",
+        "tileServerMapStyleUrl": "Tile Server Karten-Stil-URL",
+        "notSpecified": "Nicht angegeben",
+        "custom": "Benutzerdefiniert"
+      },
+      "errors": {
+        "failedToFetchClientWellKnown": "Fehler beim Abrufen der Client Well-Known-Daten:",
+        "loadingClientWellKnown": "Lade Client Well-Known-Daten..."
+      }
     },
     "reports": {
       "title": "Verbindungsberichte",
@@ -142,7 +182,25 @@
     },
     "raw": {
       "title": "Vollständige Rohe API-Antwort",
-      "description": "Dies ist die rohe JSON-Antwort von der API. Sie enthält alle Informationen, die zur Generierung der Informationen in den anderen Tabs verwendet wurden. Sie können dies verwenden, um Probleme zu debuggen oder detailliertere Informationen über den Server zu sehen."
+      "description": "Dies ist die rohe JSON-Antwort von der API. Sie enthält alle Informationen, die zur Generierung der Informationen in den anderen Tabs verwendet wurden. Sie können dies verwenden, um Probleme zu debuggen oder detailliertere Informationen über den Server zu sehen. Die Daten unten sind standardmäßig eingeklappt für bessere Lesbarkeit.",
+      "federationData": {
+        "title": "Federation Daten (Server-seitig)",
+        "showRaw": "Rohe Federation-Daten anzeigen"
+      },
+      "clientWellKnownData": {
+        "title": "Client Well-Known Daten (.well-known/matrix/client)",
+        "showRaw": "Rohe Client Well-Known-Daten anzeigen"
+      },
+      "clientServerVersions": {
+        "title": "Client Server Versionen (/_matrix/client/versions)",
+        "showRaw": "Rohe Client Server Versions-Daten anzeigen"
+      },
+      "errors": {
+        "failedToFetchClientWellKnown": "Fehler beim Abrufen der Client Well-Known-Daten:",
+        "failedToFetchClientServerVersions": "Fehler beim Abrufen der Client-Server-Versionen:",
+        "loadingClientWellKnown": "Lade Client Well-Known-Daten...",
+        "loadingClientServerVersions": "Lade Client-Server-Versionen..."
+      }
     },
     "loading": "⌛ Informationen von der API abrufen…",
     "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"

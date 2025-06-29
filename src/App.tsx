@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import FederationResults from './FederationResults';
+import ServerInfoResults from './ServerInfoResults';
 import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from './SupportInfo';
@@ -84,7 +84,7 @@ function App() {
               description={t('app.errors.componentFailedToLoad')}
             />
           }>
-            <FederationResults serverName={submittedServerName} />
+            <ServerInfoResults serverName={submittedServerName} />
           </ErrorBoundary>
           <SectionBreak
             level="LARGE"

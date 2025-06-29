@@ -72,6 +72,31 @@
         "Stable": "Stable",
         "Beta": "Beta",
         "Experimental": "Experimental"
+      },
+      "clientServerApi": {
+        "title": "Client Server API Versions",
+        "description": "These are the Matrix Client-Server API versions that this server supports. Newer versions (v1.x) are preferred over legacy versions (r0.x) as they include the latest features and security improvements.",
+        "serverInformation": "Server Information",
+        "serverName": "Server Name",
+        "serverVersion": "Server Version",
+        "supportedVersions": "Supported Matrix Client-Server API Versions",
+        "noSupportedVersions": "No supported versions found.",
+        "unstableFeatures": {
+          "title": "Unstable Features",
+          "description": "Unstable features are experimental capabilities that are being developed or tested. These features may change or be removed in future versions and are not part of the stable Matrix specification yet. Many correspond to Matrix Spec Change (MSC) proposals.",
+          "feature": "Feature",
+          "status": "Status",
+          "featureDescription": "Description",
+          "msc": "MSC",
+          "enabled": "Enabled",
+          "disabled": "Disabled",
+          "noDescription": "No description available",
+          "unknown": "Unknown"
+        }
+      },
+      "errors": {
+        "failedToFetchClientServerVersions": "Failed to fetch client server versions:",
+        "loadingClientServerVersions": "Loading client server versions..."
       }
     },
     "dns": {
@@ -101,7 +126,22 @@
       "description": "The following well-known results were found when querying the server for its <code>/.well-known/matrix/server</code> endpoint. If you see no entries here, the server has either no well-known endpoint or it is not configured correctly. If you see a <code>m.server</code> entry, this is the server that the Matrix client should connect to.",
       "key": "Key",
       "server": "m.server",
-      "cacheExpiresAt": "Cache Expires At"
+      "cacheExpiresAt": "Cache Expires At",
+      "clientDiscovery": {
+        "title": "Client Discovery (.well-known/matrix/client)",
+        "description": "Client-side discovery information. This is used by Matrix clients to discover information about the homeserver.",
+        "property": "Property",
+        "value": "Value",
+        "homeserverBaseUrl": "Homeserver Base URL",
+        "identityServerBaseUrl": "Identity Server Base URL",
+        "tileServerMapStyleUrl": "Tile Server Map Style URL",
+        "notSpecified": "Not specified",
+        "custom": "Custom"
+      },
+      "errors": {
+        "failedToFetchClientWellKnown": "Failed to fetch client well-known data:",
+        "loadingClientWellKnown": "Loading client well-known data..."
+      }
     },
     "reports": {
       "title": "Connection Reports",
@@ -142,7 +182,25 @@
     },
     "raw": {
       "title": "Full Raw API Response",
-      "description": "This is the raw JSON response from the API. It contains all the information that was used to generate the information in the other tabs. You can use this to debug issues or to see more detailed information about the server."
+      "description": "This is the raw JSON response from the API. It contains all the information that was used to generate the information in the other tabs. You can use this to debug issues or to see more detailed information about the server. The data below is collapsed by default for better readability.",
+      "federationData": {
+        "title": "Federation Data (Server-side)",
+        "showRaw": "Show raw federation data"
+      },
+      "clientWellKnownData": {
+        "title": "Client Well-Known Data (.well-known/matrix/client)",
+        "showRaw": "Show raw client well-known data"
+      },
+      "clientServerVersions": {
+        "title": "Client Server Versions (/_matrix/client/versions)",
+        "showRaw": "Show raw client server versions data"
+      },
+      "errors": {
+        "failedToFetchClientWellKnown": "Failed to fetch client well-known data:",
+        "failedToFetchClientServerVersions": "Failed to fetch client server versions:",
+        "loadingClientWellKnown": "Loading client well-known data...",
+        "loadingClientServerVersions": "Loading client server versions..."
+      }
     },
     "loading": "⌛ Getting info from API…",
     "apiError": "⚠️ Something went wrong talking to the API"
