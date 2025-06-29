@@ -2,6 +2,7 @@ import { H2, Table, Tag, Link, LoadingBox, ErrorText, LeadParagraph, Panel } fro
 import type { ApiSchemaType, ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
+import unstableFeatures from "../../data/unstableFeatures.json";
 
 // Example lookup table for known server software
 const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
@@ -13,150 +14,21 @@ const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Exp
     "matrix-key-server": { maturity: "Experimental", url: "https://github.com/t2bot/matrix-key-server" },
 };
 
-// Lookup table for unstable features with MSC information
-const UNSTABLE_FEATURES: Record<string, { msc?: string, title?: string, description?: string }> = {
-    "org.matrix.e2e_cross_signing": {
-        msc: "MSC1756",
-        title: "Cross-signing",
-        description: "Device verification via cross-signing"
-    },
-    "org.matrix.label_based_filtering": {
-        msc: "MSC2326",
-        title: "Label-based filtering",
-        description: "Message filtering based on labels"
-    },
-    "org.matrix.msc2432": {
-        msc: "MSC2432",
-        title: "Alias event authorization",
-        description: "Updated authorization rules for alias events"
-    },
-    "org.matrix.msc3026.busy_presence": {
-        msc: "MSC3026",
-        title: "Busy presence",
-        description: "Additional presence state for busy status"
-    },
-    "org.matrix.msc2716": {
-        msc: "MSC2716",
-        title: "Incrementally importing history",
-        description: "Import message history into existing rooms"
-    },
-    "org.matrix.msc3440.stable": {
-        msc: "MSC3440",
-        title: "Threading",
-        description: "Message threading support"
-    },
-    "org.matrix.msc3489": {
-        msc: "MSC3489",
-        title: "Beeper contact discovery",
-        description: "Enhanced contact discovery mechanisms"
-    },
-    "uk.half-shot.msc2666.query_mutual_rooms": {
-        msc: "MSC2666",
-        title: "Query mutual rooms",
-        description: "Query rooms shared with another user"
-    },
-    "org.matrix.msc2285.stable": {
-        msc: "MSC2285",
-        title: "Private Read Receipts",
-        description: "Private read receipts for messages"
-    },
-    "org.matrix.msc3771": {
-        msc: "MSC3771",
-        title: "Read receipts for threads",
-        description: "Read receipts specifically for message threads",
-    },
-    "org.matrix.msc3827.stable": {
-        msc: "MSC3827",
-        title: "Filtering of /publicRooms by room type",
-        description: "Filter public rooms by type",
-    },
-    "org.matrix.msc3773": {
-        msc: "MSC3773",
-        title: "Notifications for threads",
-        description: "Thread notifications",
-    },
-    "fi.mau.msc2815": {
-        msc: "MSC2815",
-        title: "Proposal to allow room moderators to view redacted event content",
-        description: "Allows room moderators to view redacted content in events"
-    },
-    "fi.mau.msc2659.stable": {
-        msc: "MSC2659",
-        title: "Application service ping endpoint",
-        description: "Provides a ping endpoint for application services to check connectivity"
-    },
-    "org.matrix.msc3882": {
-        msc: "MSC3882",
-        title: "Allow an existing session to sign in a new session",
-        description: "Allows an existing session to sign in a new session without re-authentication"
-    },
-    "org.matrix.msc3881": {
-        msc: "MSC3881",
-        title: "Remotely toggle push notifications for another client",
-        description: "Allows a user to remotely toggle push notifications for another client",
-    },
-    "org.matrix.msc3874": {
-        msc: "MSC3874",
-        title: "Filtering threads from the /messages endpoint",
-        description: "Allows filtering of threads from the /messages endpoint",
-    },
-    "org.matrix.msc3912": {
-        msc: "MSC3912",
-        title: "Redaction of related events",
-        description: "Allows redaction of related events in a room",
-    },
-    "org.matrix.msc3981": {
-        msc: "MSC3981",
-        title: "/relations recursion",
-        description: "Allows recursion in /relations queries to fetch related events",
-    },
-    "org.matrix.msc3391": {
-        msc: "MSC3391",
-        title: "API to delete account data",
-        description: "Provides an API to delete account data for a user",
-    },
-    "org.matrix.msc4069": {
-        msc: "MSC4069",
-        title: "Inhibit profile propagation",
-        description: "Allows users to inhibit profile information from being propagated to other clients",
-    },
-    "org.matrix.msc4028": {
-        msc: "MSC4028",
-        title: "Push all encrypted events except for muted rooms",
-        description: "Allows clients to push all encrypted events except for those in muted rooms",
-    },
-    "org.matrix.msc4108": {
-        msc: "MSC4108",
-        title: "Mechanism to allow OIDC sign in and E2EE set up via QR code",
-        description: "Provides a mechanism for OIDC sign-in and E2EE setup via QR code",
-    },
-    "org.matrix.msc4140": {
-        msc: "MSC4140",
-        title: "Delayed events",
-        description: "Allows events to be sent with a delay",
-    },
-    "org.matrix.simplified_msc3575": {
-        msc: "MSC4186",
-        title: "Simplified Sliding Sync",
-        description: "The new sliding sync protocol prominently used by clients like Element X"
-    },
-    "uk.tcpip.msc4133": {
-        msc: "MSC4133",
-        title: "Extending User Profile API with Key:Value Pairs",
-        description: "Extends the User Profile API to support key-value pairs for user profiles"
-    },
-    "org.matrix.msc4155": {
-        msc: "MSC4155",
-        title: "Invite filtering",
-        description: "Allows filtering of invites based on user preferences"
-    }
+// Type for unstable feature info
+type UnstableFeatureInfo = {
+    msc?: string;
+    title?: string;
+    description?: string;
 };
+
+// Unstable features lookup table loaded from JSON
+const UNSTABLE_FEATURES: Record<string, UnstableFeatureInfo> = unstableFeatures;
 
 function getServerSoftwareInfo(name: string) {
     return KNOWN_SERVER_SOFTWARE[name.toLowerCase()] || null;
 }
 
-function getUnstableFeatureInfo(feature: string) {
+function getUnstableFeatureInfo(feature: string): UnstableFeatureInfo | null {
     return UNSTABLE_FEATURES[feature] || null;
 }
 
