@@ -63,12 +63,12 @@ export default function RawDataTab({
                 </Details>
             ) : clientWellKnownError ? (
                 <ErrorText>
-                    {t('federation.raw.errors.failedToFetchClientWellKnown')}<br />
+                    {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
                     <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
                 </ErrorText>
             ) : (
                 <LoadingBox loading={true}>
-                    <p>{t('federation.raw.errors.loadingClientWellKnown')}</p>
+                    <p>{t('serverInfo.errors.loadingClientWellKnown')}</p>
                 </LoadingBox>
             )}
 
@@ -91,12 +91,12 @@ export default function RawDataTab({
                 </Details>
             ) : clientServerVersionsError ? (
                 <ErrorText>
-                    {t('federation.raw.errors.failedToFetchClientServerVersions')}<br />
+                    {t('serverInfo.errors.failedToFetchClientServerVersions')}<br />
                     <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientServerVersionsError, t)}</pre>
                 </ErrorText>
             ) : (
                 <LoadingBox loading={true}>
-                    <p>{t('federation.raw.errors.loadingClientServerVersions')}</p>
+                    <p>{t('serverInfo.errors.loadingClientServerVersions')}</p>
                 </LoadingBox>
             )}
         </>

@@ -115,18 +115,18 @@ export default function WellKnownTab({
                 // Check if this is a warning error (like Content-Type issues)
                 clientWellKnownError instanceof ApiError && clientWellKnownError.isWarning ? (
                     <WarningText>
-                        {t('federation.wellKnown.errors.failedToFetchClientWellKnown')}<br />
+                        {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
                         <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
                     </WarningText>
                 ) : (
                     <ErrorText>
-                        {t('federation.wellKnown.errors.failedToFetchClientWellKnown')}<br />
+                        {t('serverInfo.errors.failedToFetchClientWellKnown')}<br />
                         <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
                     </ErrorText>
                 )
             ) : (
                 <LoadingBox loading={true}>
-                    <p>{t('federation.wellKnown.errors.loadingClientWellKnown')}</p>
+                    <p>{t('serverInfo.errors.loadingClientWellKnown')}</p>
                 </LoadingBox>
             )}
         </>

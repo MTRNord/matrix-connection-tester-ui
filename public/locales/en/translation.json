@@ -73,31 +73,6 @@
         "Stable": "Stable",
         "Beta": "Beta",
         "Experimental": "Experimental"
-      },
-      "clientServerApi": {
-        "title": "Client Server API",
-        "description": "These are the Matrix Client-Server API versions that this server supports. Newer versions (v1.x) are preferred over legacy versions (r0.x) as they include the latest features and security improvements.",
-        "serverInformation": "Server Information",
-        "serverName": "Server Name",
-        "serverVersion": "Server Version",
-        "supportedVersions": "Supported Matrix Client-Server API Versions",
-        "noSupportedVersions": "No supported versions found.",
-        "unstableFeatures": {
-          "title": "Unstable Features",
-          "description": "Unstable features are experimental capabilities that are being developed or tested. These features may change or be removed in future versions and are not part of the stable Matrix specification yet. Many correspond to Matrix Spec Change (MSC) proposals.",
-          "feature": "Feature",
-          "status": "Status",
-          "featureDescription": "Description",
-          "msc": "MSC",
-          "enabled": "Enabled",
-          "disabled": "Disabled",
-          "noDescription": "No description available",
-          "unknown": "Unknown"
-        }
-      },
-      "errors": {
-        "failedToFetchClientServerVersions": "Failed to fetch client server versions:",
-        "loadingClientServerVersions": "Loading client server versions..."
       }
     },
     "dns": {
@@ -138,10 +113,6 @@
         "tileServerMapStyleUrl": "Tile Server Map Style URL",
         "notSpecified": "Not specified",
         "custom": "Custom"
-      },
-      "errors": {
-        "failedToFetchClientWellKnown": "Failed to fetch client well-known data:",
-        "loadingClientWellKnown": "Loading client well-known data..."
       }
     },
     "reports": {
@@ -195,16 +166,44 @@
       "clientServerVersions": {
         "title": "Client Server Versions (/_matrix/client/versions)",
         "showRaw": "Show raw client server versions data"
-      },
-      "errors": {
-        "failedToFetchClientWellKnown": "Failed to fetch client well-known data:",
-        "failedToFetchClientServerVersions": "Failed to fetch client server versions:",
-        "loadingClientWellKnown": "Loading client well-known data...",
-        "loadingClientServerVersions": "Loading client server versions..."
       }
     },
     "loading": "⌛ Getting info from API…",
     "apiError": "⚠️ Something went wrong talking to the API"
+  },
+  "serverInfo": {
+    "clientServerApi": {
+      "title": "Client Server API Versions",
+      "description": "These are the Matrix Client-Server API versions that this server supports. Newer versions (v1.x) are preferred over legacy versions (r0.x) as they include the latest features and security improvements.",
+      "status": {
+        "working": "Client Server API is working.",
+        "partiallyWorking": "Client Server API is working but only supports legacy versions.",
+        "failed": "Client Server API is not available."
+      },
+      "serverInformation": "Server Information",
+      "serverName": "Server Name",
+      "serverVersion": "Server Version",
+      "supportedVersions": "Supported Matrix Client-Server API Versions",
+      "noSupportedVersions": "No supported versions found.",
+      "unstableFeatures": {
+        "title": "Unstable Features",
+        "description": "Unstable features are experimental capabilities that are being developed or tested. These features may change or be removed in future versions and are not part of the stable Matrix specification yet. Many correspond to Matrix Spec Change (MSC) proposals.",
+        "feature": "Feature",
+        "status": "Status",
+        "featureDescription": "Description",
+        "msc": "MSC",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "noDescription": "No description available",
+        "unknown": "Unknown"
+      }
+    },
+    "errors": {
+      "failedToFetchClientServerVersions": "Failed to fetch client server versions:",
+      "loadingClientServerVersions": "Loading client server versions...",
+      "failedToFetchClientWellKnown": "Failed to fetch client well-known data:",
+      "loadingClientWellKnown": "Loading client well-known data..."
+    }
   },
   "apiErrors": {
     "EMPTY_SERVER_NAME": "Server name cannot be empty",

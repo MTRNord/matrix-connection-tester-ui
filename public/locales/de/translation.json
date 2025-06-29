@@ -73,31 +73,6 @@
         "Stable": "Stabil",
         "Beta": "Beta",
         "Experimental": "Experimentell"
-      },
-      "clientServerApi": {
-        "title": "Client Server API",
-        "description": "Dies sind die Matrix Client-Server-API-Versionen, die dieser Server unterstützt. Neuere Versionen (v1.x) werden gegenüber Legacy-Versionen (r0.x) bevorzugt, da sie die neuesten Funktionen und Sicherheitsverbesserungen enthalten.",
-        "serverInformation": "Server Informationen",
-        "serverName": "Server Name",
-        "serverVersion": "Server Version",
-        "supportedVersions": "Unterstützte Matrix Client-Server-API-Versionen",
-        "noSupportedVersions": "Keine unterstützten Versionen gefunden.",
-        "unstableFeatures": {
-          "title": "Instabile Funktionen",
-          "description": "Instabile Funktionen sind experimentelle Fähigkeiten, die entwickelt oder getestet werden. Diese Funktionen können sich ändern oder in zukünftigen Versionen entfernt werden und sind noch nicht Teil der stabilen Matrix-Spezifikation. Viele entsprechen Matrix Spec Change (MSC) Vorschlägen.",
-          "feature": "Funktion",
-          "status": "Status",
-          "featureDescription": "Beschreibung",
-          "msc": "MSC",
-          "enabled": "Aktiviert",
-          "disabled": "Deaktiviert",
-          "noDescription": "Keine Beschreibung verfügbar",
-          "unknown": "Unbekannt"
-        }
-      },
-      "errors": {
-        "failedToFetchClientServerVersions": "Fehler beim Abrufen der Client-Server-Versionen:",
-        "loadingClientServerVersions": "Lade Client-Server-Versionen..."
       }
     },
     "dns": {
@@ -138,10 +113,6 @@
         "tileServerMapStyleUrl": "Tile Server Karten-Stil-URL",
         "notSpecified": "Nicht angegeben",
         "custom": "Benutzerdefiniert"
-      },
-      "errors": {
-        "failedToFetchClientWellKnown": "Fehler beim Abrufen der Client Well-Known-Daten:",
-        "loadingClientWellKnown": "Lade Client Well-Known-Daten..."
       }
     },
     "reports": {
@@ -195,16 +166,44 @@
       "clientServerVersions": {
         "title": "Client Server Versionen (/_matrix/client/versions)",
         "showRaw": "Rohe Client Server Versions-Daten anzeigen"
-      },
-      "errors": {
-        "failedToFetchClientWellKnown": "Fehler beim Abrufen der Client Well-Known-Daten:",
-        "failedToFetchClientServerVersions": "Fehler beim Abrufen der Client-Server-Versionen:",
-        "loadingClientWellKnown": "Lade Client Well-Known-Daten...",
-        "loadingClientServerVersions": "Lade Client-Server-Versionen..."
       }
     },
     "loading": "⌛ Informationen von der API abrufen…",
     "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"
+  },
+  "serverInfo": {
+    "clientServerApi": {
+      "title": "Client Server API Versionen",
+      "description": "Dies sind die Matrix Client-Server-API-Versionen, die dieser Server unterstützt. Neuere Versionen (v1.x) werden gegenüber Legacy-Versionen (r0.x) bevorzugt, da sie die neuesten Funktionen und Sicherheitsverbesserungen enthalten.",
+      "status": {
+        "working": "Client Server API funktioniert.",
+        "partiallyWorking": "Client Server API funktioniert, unterstützt aber nur Legacy-Versionen.",
+        "failed": "Client Server API ist nicht verfügbar."
+      },
+      "serverInformation": "Server Informationen",
+      "serverName": "Server Name",
+      "serverVersion": "Server Version",
+      "supportedVersions": "Unterstützte Matrix Client-Server-API-Versionen",
+      "noSupportedVersions": "Keine unterstützten Versionen gefunden.",
+      "unstableFeatures": {
+        "title": "Instabile Funktionen",
+        "description": "Instabile Funktionen sind experimentelle Fähigkeiten, die entwickelt oder getestet werden. Diese Funktionen können sich ändern oder in zukünftigen Versionen entfernt werden und sind noch nicht Teil der stabilen Matrix-Spezifikation. Viele entsprechen Matrix Spec Change (MSC) Vorschlägen.",
+        "feature": "Funktion",
+        "status": "Status",
+        "featureDescription": "Beschreibung",
+        "msc": "MSC",
+        "enabled": "Aktiviert",
+        "disabled": "Deaktiviert",
+        "noDescription": "Keine Beschreibung verfügbar",
+        "unknown": "Unbekannt"
+      }
+    },
+    "errors": {
+      "failedToFetchClientServerVersions": "Fehler beim Abrufen der Client-Server-Versionen:",
+      "loadingClientServerVersions": "Lade Client-Server-Versionen...",
+      "failedToFetchClientWellKnown": "Fehler beim Abrufen der Client Well-Known-Daten:",
+      "loadingClientWellKnown": "Lade Client Well-Known-Daten..."
+    }
   },
   "apiErrors": {
     "EMPTY_SERVER_NAME": "Servername darf nicht leer sein",
