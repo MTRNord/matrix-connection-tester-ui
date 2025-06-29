@@ -13,7 +13,8 @@
     "host": "Host",
     "version": "Version",
     "unknown": "Unknown",
-    "na": "N/A"
+    "na": "N/A",
+    "warning": "Warning"
   },
   "app": {
     "title": "Matrix Connection Tester",
@@ -74,7 +75,7 @@
         "Experimental": "Experimental"
       },
       "clientServerApi": {
-        "title": "Client Server API Versions",
+        "title": "Client Server API",
         "description": "These are the Matrix Client-Server API versions that this server supports. Newer versions (v1.x) are preferred over legacy versions (r0.x) as they include the latest features and security improvements.",
         "serverInformation": "Server Information",
         "serverName": "Server Name",
@@ -210,7 +211,7 @@
     "API_SERVER_NOT_CONFIGURED": "API server URL is not configured",
     "API_HTTP_ERROR": "Failed to connect to the federation API server",
     "SUPPORT_HTTP_ERROR": "Failed to fetch support information from the server",
-    "SUPPORT_INVALID_CONTENT_TYPE": "Expected JSON response from support endpoint as per Matrix Specification with the Content-Type header containing \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards but be aware that MSC2499 will lift this requirement in the future: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
+    "SUPPORT_INVALID_CONTENT_TYPE": "Expected JSON response from support endpoint as per Matrix Specification with the Content-Type header containing \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards. Note that MSC2499 proposes to lift this requirement in the future, but it has not been merged yet: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
     "SUPPORT_INVALID_JSON": "The JSON replied is either missing or not complete. Make sure to check https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport as an admin of this Homeserver."
   },
   "support": {

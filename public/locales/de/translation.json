@@ -13,7 +13,8 @@
     "host": "Host",
     "version": "Version",
     "unknown": "Unbekannt",
-    "na": "N/V"
+    "na": "N/V",
+    "warning": "Warnung"
   },
   "app": {
     "title": "Matrix Verbindungstester",
@@ -74,7 +75,7 @@
         "Experimental": "Experimentell"
       },
       "clientServerApi": {
-        "title": "Client Server API Versionen",
+        "title": "Client Server API",
         "description": "Dies sind die Matrix Client-Server-API-Versionen, die dieser Server unterstützt. Neuere Versionen (v1.x) werden gegenüber Legacy-Versionen (r0.x) bevorzugt, da sie die neuesten Funktionen und Sicherheitsverbesserungen enthalten.",
         "serverInformation": "Server Informationen",
         "serverName": "Server Name",
@@ -210,7 +211,7 @@
     "API_SERVER_NOT_CONFIGURED": "API-Server-URL ist nicht konfiguriert",
     "API_HTTP_ERROR": "Verbindung zum Federation-API-Server fehlgeschlagen",
     "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden",
-    "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation einen Content-Type Header mit dem wert \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards aber beachten Sie, dass MSC2499 diese Anforderung in Zukunft aufheben wird: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
+    "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß Matrix-Spezifikation einen Content-Type Header mit dem Wert \"application/json\": https://spec.matrix.org/v1.14/client-server-api/#api-standards. Beachten Sie, dass MSC2499 vorschlägt, diese Anforderung in Zukunft aufzuheben, aber es wurde noch nicht zusammengeführt: https://github.com/matrix-org/matrix-spec-proposals/pull/2499",
     "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport als Administrator dieses Homeservers prüfen."
   },
   "support": {

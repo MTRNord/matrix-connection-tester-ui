@@ -1,5 +1,6 @@
-import { H2, Table, Tag, LoadingBox, ErrorText, LeadParagraph } from "govuk-react";
+import { H2, Table, Tag, LoadingBox, ErrorText, LeadParagraph, WarningText } from "govuk-react";
 import type { ApiSchemaType, ClientWellKnownType } from "../../apiTypes";
+import { ApiError } from "../../apiTypes";
 import { useTranslation, Trans } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
 
@@ -7,12 +8,14 @@ interface WellKnownTabProps {
     data: ApiSchemaType;
     clientWellKnownData?: ClientWellKnownType;
     clientWellKnownError?: Error;
+    clientWellKnownWarnings?: ApiError[];
 }
 
 export default function WellKnownTab({
     data,
     clientWellKnownData,
-    clientWellKnownError
+    clientWellKnownError,
+    clientWellKnownWarnings
 }: WellKnownTabProps) {
     const { t } = useTranslation();
 
@@ -51,6 +54,17 @@ export default function WellKnownTab({
             <LeadParagraph>
                 {t('federation.wellKnown.clientDiscovery.description')}
             </LeadParagraph>
+
+            {/* Display warnings if any */}
+            {clientWellKnownWarnings && clientWellKnownWarnings.length > 0 && (
+                <>
+                    {clientWellKnownWarnings.map((warning, index) => (
+                        <WarningText key={index}>
+                            <strong>{t('common.warning')}:</strong> {warning.message}
+                        </WarningText>
+                    ))}
+                </>
+            )}
 
             {clientWellKnownData ? (
                 <div style={{ overflowX: "auto", width: "100%" }}>
@@ -98,10 +112,18 @@ export default function WellKnownTab({
                     </Table>
                 </div>
             ) : clientWellKnownError ? (
-                <ErrorText>
-                    {t('federation.wellKnown.errors.failedToFetchClientWellKnown')}<br />
-                    <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
-                </ErrorText>
+                // Check if this is a warning error (like Content-Type issues)
+                clientWellKnownError instanceof ApiError && clientWellKnownError.isWarning ? (
+                    <WarningText>
+                        {t('federation.wellKnown.errors.failedToFetchClientWellKnown')}<br />
+                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
+                    </WarningText>
+                ) : (
+                    <ErrorText>
+                        {t('federation.wellKnown.errors.failedToFetchClientWellKnown')}<br />
+                        <pre style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{translateApiError(clientWellKnownError, t)}</pre>
+                    </ErrorText>
+                )
             ) : (
                 <LoadingBox loading={true}>
                     <p>{t('federation.wellKnown.errors.loadingClientWellKnown')}</p>

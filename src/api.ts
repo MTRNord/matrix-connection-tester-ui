@@ -1,5 +1,5 @@
 import { ApiSchema, ConfigSchema, SupportWellKnownSchema, ClientWellKnownSchema, ClientServerVersionsSchema, ApiError } from "./apiTypes";
-import type { ApiSchemaType, ConfigType, SupportWellKnownType, ClientWellKnownType, ClientServerVersionsType } from "./apiTypes";
+import type { ApiSchemaType, ConfigType, SupportWellKnownType, ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
 
 async function getConfig(): Promise<ConfigType> {
     const response = await fetch(`/config.json`);
@@ -32,7 +32,7 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
         throw new ApiError("SUPPORT_HTTP_ERROR", `HTTP error! status: ${response.status}`, { status: response.status });
     }
     if (response.headers.get("content-type") !== "application/json") {
-        throw new ApiError("SUPPORT_INVALID_CONTENT_TYPE", "Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards but be aware that MSC2499 will lift this requirement in the future: https://github.com/matrix-org/matrix-spec-proposals/pull/2499");
+        throw new ApiError("SUPPORT_INVALID_CONTENT_TYPE", "Expected JSON response from support endpoint as per Matrix Specification: https://spec.matrix.org/v1.14/client-server-api/#api-standards. Note that MSC2499 proposes to lift this requirement in the future, but it has not been merged yet: https://github.com/matrix-org/matrix-spec-proposals/pull/2499");
     }
 
     try {
@@ -50,7 +50,7 @@ export const fetchSupportInfo = async (serverName: string): Promise<SupportWellK
  * This endpoint is used by Matrix clients to discover the homeserver and identity server
  * URLs for a given domain. It's a critical part of Matrix federation and client discovery.
  */
-export const fetchClientWellKnown = async (serverName: string): Promise<ClientWellKnownType> => {
+export const fetchClientWellKnown = async (serverName: string): Promise<ApiResponseWithWarnings<ClientWellKnownType>> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty for client well-known discovery");
     }
@@ -89,9 +89,17 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ClientWe
     }
 
     // Validate Content-Type header according to Matrix Spec 1.15
+    // Note: This will be a warning as MSC2499 proposes to lift this requirement
+    const warnings: ApiError[] = [];
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-        throw new ApiError("CLIENT_WELLKNOWN_INVALID_CONTENT_TYPE", `Expected 'application/json' Content-Type header for client well-known endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#getwell-knownmatrixclient), but received: '${contentType || 'none'}'. This violates the Matrix specification and may cause client compatibility issues.`);
+        // Log warning for developers
+        console.warn(`[CLIENT_WELLKNOWN_CONTENT_TYPE_WARNING] Expected 'application/json' Content-Type header for client well-known endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#getwell-knownmatrixclient), but received: '${contentType || 'none'}'. MSC2499 (https://github.com/matrix-org/matrix-spec-proposals/pull/2499) proposes to lift this requirement, but it has not been merged yet. This may cause client compatibility issues with some implementations.`);
+
+        // Create a warning that can be displayed to users
+        const contentTypeWarning = new ApiError("CLIENT_WELLKNOWN_CONTENT_TYPE_WARNING", `Content-Type header is missing or incorrect for client well-known endpoint. Expected 'application/json' but received '${contentType || 'none'}'. This violates the current Matrix specification, though MSC2499 proposes to allow this in the future. Some Matrix clients may not work correctly with this server's configuration.`);
+        contentTypeWarning.isWarning = true;
+        warnings.push(contentTypeWarning);
     }
 
     // Parse JSON response
@@ -148,7 +156,10 @@ export const fetchClientWellKnown = async (serverName: string): Promise<ClientWe
             }
         }
 
-        return parsedData;
+        return {
+            data: parsedData,
+            warnings: warnings.length > 0 ? warnings : undefined
+        };
     } catch (zodError: unknown) {
         // Enhanced error reporting for Zod validation errors
         if (zodError instanceof Error && 'issues' in zodError) {
@@ -229,7 +240,7 @@ export const fetchClientServerVersions = async (serverName: string, homeserverUr
     // Validate Content-Type header according to Matrix Spec 1.15
     const contentType = response.headers.get("content-type");
     if (!contentType || !contentType.includes("application/json")) {
-        throw new ApiError("SERVER_VERSION_INVALID_CONTENT_TYPE", `Expected 'application/json' Content-Type header for client versions endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#get_matrixclientversions), but received: '${contentType || 'none'}'. This violates the Matrix specification.`);
+        throw new ApiError("SERVER_VERSION_INVALID_CONTENT_TYPE", `Expected 'application/json' Content-Type header for client versions endpoint as per Matrix Specification 1.15 (https://spec.matrix.org/v1.15/client-server-api/#get_matrixclientversions), but received: '${contentType || 'none'}'. This violates the Matrix specification and may indicate server configuration issues.`);
     }
 
     // Parse JSON response

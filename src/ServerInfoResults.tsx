@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { LoadingBox, ErrorText, Tabs } from "govuk-react";
-import type { ApiSchemaType, ClientWellKnownType, ClientServerVersionsType } from "./apiTypes";
+import type { ApiSchemaType, ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData, fetchClientWellKnown, fetchClientServerVersions } from "./api";
 import { useTranslation } from "react-i18next";
@@ -54,11 +54,15 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
     );
 
     // Fetch client well-known data
-    const { data: clientWellKnownData, error: clientWellKnownError } = useSWR<ClientWellKnownType>(
+    const { data: clientWellKnownResponse, error: clientWellKnownError } = useSWR<ApiResponseWithWarnings<ClientWellKnownType>>(
         serverName ? ['clientWellKnown', serverName] : null,
         () => fetchClientWellKnown(serverName),
         { keepPreviousData: false }
     );
+
+    // Extract data and warnings from the response
+    const clientWellKnownData = clientWellKnownResponse?.data;
+    const clientWellKnownWarnings = clientWellKnownResponse?.warnings;
 
     // Fetch client server versions data - use homeserver URL from well-known if available
     const homeserverUrl = clientWellKnownData?.["m.homeserver"]?.base_url;
@@ -146,6 +150,7 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
                     data={data}
                     clientWellKnownData={clientWellKnownData}
                     clientWellKnownError={clientWellKnownError}
+                    clientWellKnownWarnings={clientWellKnownWarnings}
                 />
             </Tabs.Panel>
 

@@ -1,4 +1,4 @@
-import { H2, Table, Tag, Link, LoadingBox, ErrorText, LeadParagraph, Panel } from "govuk-react";
+import { H2, Table, Tag, Link, LoadingBox, ErrorText, LeadParagraph, Panel, H3, H1 } from "govuk-react";
 import type { ApiSchemaType, ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
@@ -76,7 +76,7 @@ export default function OverviewTab({
 
     return (
         <>
-            <H2>{t('federation.overview.title')}</H2>
+            <H1>{t('federation.overview.title')}</H1>
 
             <LeadParagraph>
                 {t('federation.overview.description')}
@@ -151,7 +151,7 @@ export default function OverviewTab({
                 </Table>
             </div>
             <div style={{ overflowX: "auto", width: "100%" }}>
-                <H2 size="SMALL">{t('federation.overview.versionsPerHost')}</H2>
+                <H2>{t('federation.overview.versionsPerHost')}</H2>
                 <Table>
                     {/* Versions (per host) header row */}
                     <Table.Row>
@@ -210,13 +210,13 @@ export default function OverviewTab({
 
             {/* Client Server Versions Section */}
             <div style={{ overflowX: "auto", width: "100%" }}>
-                <H2 size="SMALL">{t('federation.overview.clientServerApi.title')}</H2>
+                <H1>{t('federation.overview.clientServerApi.title')}</H1>
                 {clientServerVersionsData ? (
                     <>
                         {/* Server Information */}
                         {clientServerVersionsData.server && (
                             <>
-                                <H2 size="SMALL">{t('federation.overview.clientServerApi.serverInformation')}</H2>
+                                <H2>{t('federation.overview.clientServerApi.serverInformation')}</H2>
                                 <Table>
                                     <Table.Row>
                                         <Table.CellHeader>{t('federation.overview.clientServerApi.serverName')}</Table.CellHeader>
@@ -231,7 +231,7 @@ export default function OverviewTab({
                         )}
 
                         {/* Supported Versions */}
-                        <H2 size="SMALL">{t('federation.overview.clientServerApi.supportedVersions')}</H2>
+                        <H2>{t('federation.overview.clientServerApi.supportedVersions')}</H2>
                         <LeadParagraph>
                             {t('federation.overview.clientServerApi.description')}
                         </LeadParagraph>
@@ -270,7 +270,7 @@ export default function OverviewTab({
                         {/* Unstable Features */}
                         {clientServerVersionsData.unstable_features && Object.keys(clientServerVersionsData.unstable_features).length > 0 && (
                             <>
-                                <H2 size="SMALL">{t('federation.overview.clientServerApi.unstableFeatures.title')}</H2>
+                                <H2>{t('federation.overview.clientServerApi.unstableFeatures.title')}</H2>
                                 <LeadParagraph>
                                     {t('federation.overview.clientServerApi.unstableFeatures.description')}
                                 </LeadParagraph>

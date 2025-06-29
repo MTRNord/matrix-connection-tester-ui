@@ -4,6 +4,7 @@ import { z } from "zod/v4"
 export class ApiError extends Error {
     code: string;
     details?: Record<string, unknown>;
+    isWarning?: boolean; // For warnings that should be displayed but not block functionality
 
     constructor(
         code: string,
@@ -14,6 +15,7 @@ export class ApiError extends Error {
         this.name = 'ApiError';
         this.code = code;
         this.details = details;
+        this.isWarning = false; // Default to false
     }
 }
 
@@ -143,3 +145,9 @@ export const ConfigSchema = z.object({
 });
 
 export type ConfigType = z.infer<typeof ConfigSchema>;
+
+// Wrapper type for API responses that can include warnings
+export type ApiResponseWithWarnings<T> = {
+    data: T;
+    warnings?: ApiError[];
+};
