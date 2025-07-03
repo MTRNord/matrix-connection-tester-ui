@@ -298,9 +298,9 @@ export default function OverviewTab({
                                     let tagColor: "GREEN" | "BLUE" | "GREY" | "ORANGE" = "GREY";
 
                                     // Latest stable versions (as of Matrix Spec 1.15)
-                                    if (version === "v1.11" || version === "v1.10" || version === "v1.9") {
+                                    if (version === "v1.15" || version === "v1.14" || version === "v1.13") {
                                         tagColor = "GREEN"; // Latest/current versions
-                                    } else if (version.startsWith("v1.") && parseFloat(version.substring(2)) >= 1) {
+                                    } else if (version.startsWith("v1.")) {
                                         tagColor = "BLUE"; // Stable but older versions
                                     } else if (version.startsWith("r0.")) {
                                         tagColor = "ORANGE"; // Legacy r0.x versions
