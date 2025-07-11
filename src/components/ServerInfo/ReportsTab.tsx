@@ -1,9 +1,9 @@
 import { H2, Table, Tag, ListItem, Details, Paragraph } from "govuk-react";
-import type { ApiSchemaType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
+import type { components } from "../../api/api";
 
 interface ReportsTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
 }
 
 export default function ReportsTab({ data }: ReportsTabProps) {
@@ -177,7 +177,7 @@ export default function ReportsTab({ data }: ReportsTabProps) {
                                             >{keyId}</code> <Tag style={{ paddingRight: 8 }} tint="GREY" color="black">{t('federation.reports.keys.expired')}</Tag>
                                         </Table.Cell>
                                         <Table.Cell>
-                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts).toLocaleString()})
+                                            <code>{keyObj.key}</code> (expired at {new Date(keyObj.expired_ts || 0).toLocaleString()})
                                         </Table.Cell>
                                     </Table.Row>
                                 ))}

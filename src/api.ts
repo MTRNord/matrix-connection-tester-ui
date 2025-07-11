@@ -1,5 +1,8 @@
-import { ApiSchema, ConfigSchema, SupportWellKnownSchema, ClientWellKnownSchema, ClientServerVersionsSchema, ApiError } from "./apiTypes";
-import type { ApiSchemaType, ConfigType, SupportWellKnownType, ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
+import { ConfigSchema, SupportWellKnownSchema, ClientWellKnownSchema, ClientServerVersionsSchema, ApiError } from "./apiTypes";
+import type { ConfigType, SupportWellKnownType, ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
+
+import createClient from "openapi-fetch";
+import type { paths, components } from "./api/api";
 
 async function getConfig(): Promise<ConfigType> {
     const response = await fetch(`/config.json`);
@@ -7,7 +10,7 @@ async function getConfig(): Promise<ConfigType> {
     return ConfigSchema.parse(config);
 }
 
-export const fetchData = async (serverName: string): Promise<ApiSchemaType> => {
+export const fetchData = async (serverName: string): Promise<components["schemas"]["Root"]> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty");
     }
@@ -15,12 +18,28 @@ export const fetchData = async (serverName: string): Promise<ApiSchemaType> => {
     if (!API_SERVER_URL) {
         throw new ApiError("API_SERVER_NOT_CONFIGURED", "API server URL is not configured");
     }
-    const response = await fetch(`${API_SERVER_URL}/api/report?server_name=${serverName}&no_cache=true`);
-    if (!response.ok) {
-        throw new ApiError("API_HTTP_ERROR", `HTTP error! status: ${response.status}`, { status: response.status });
+
+    const client = createClient<paths>({
+        baseUrl: API_SERVER_URL,
+    });
+
+    const { data, error } = await client.GET("/api/federation/report", {
+        params: {
+            query: {
+                server_name: serverName,
+                no_cache: true
+            }
+        }
+    });
+
+    if (error) {
+        if (error instanceof Error) {
+            throw new ApiError("API_FETCH_ERROR", `Failed to fetch data from API: ${error.message}`);
+        }
+        throw new ApiError("API_FETCH_ERROR", `Failed to fetch data from API ${error.toString()}`);
     }
-    const data = await response.json();
-    return ApiSchema.parse(data);
+
+    return data as components["schemas"]["Root"];
 };
 
 export const fetchSupportInfo = async (serverName: string): Promise<SupportWellKnownType> => {

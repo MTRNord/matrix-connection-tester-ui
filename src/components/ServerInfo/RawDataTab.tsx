@@ -1,10 +1,11 @@
 import { H2, LoadingBox, ErrorText, LeadParagraph, Details } from "govuk-react";
-import type { ApiSchemaType, ClientWellKnownType, ClientServerVersionsType } from "../../apiTypes";
+import type { ClientWellKnownType, ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
+import type { components } from "../../api/api";
 
 interface RawDataTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
     clientWellKnownData?: ClientWellKnownType;
     clientWellKnownError?: Error;
     clientServerVersionsData?: ClientServerVersionsType;

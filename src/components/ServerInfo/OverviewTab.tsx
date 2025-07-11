@@ -1,8 +1,9 @@
 import { H2, Table, Tag, Link, LoadingBox, ErrorText, WarningText, LeadParagraph, Panel, H1 } from "govuk-react";
-import type { ApiSchemaType, ClientServerVersionsType } from "../../apiTypes";
+import type { ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
 import unstableFeatures from "../../data/unstableFeatures.json";
+import type { components } from "../../api/api";
 
 // Example lookup table for known server software
 const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
@@ -33,7 +34,7 @@ function getUnstableFeatureInfo(feature: string): UnstableFeatureInfo | null {
 }
 
 interface OverviewTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
     clientServerVersionsData?: ClientServerVersionsType;
     clientServerVersionsError?: Error;
     clientServerVersionsWarnings?: Error[];
@@ -200,7 +201,7 @@ export default function OverviewTab({
                                 <Table.Cell style={{ verticalAlign: "top" }}>
                                     {report.Error && (
                                         <Tag tint="RED" color="white">
-                                            {report.Error}
+                                            {report.Error?.Error}
                                         </Tag>
                                     )}
                                 </Table.Cell>

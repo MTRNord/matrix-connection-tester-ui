@@ -1,11 +1,12 @@
 import { Table, Tag, LoadingBox, ErrorText, LeadParagraph, WarningText, H1 } from "govuk-react";
-import type { ApiSchemaType, ClientWellKnownType } from "../../apiTypes";
+import type { ClientWellKnownType } from "../../apiTypes";
 import { ApiError } from "../../apiTypes";
 import { useTranslation, Trans } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
+import type { components } from "../../api/api";
 
 interface WellKnownTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
     clientWellKnownData?: ClientWellKnownType;
     clientWellKnownError?: Error;
     clientWellKnownWarnings?: ApiError[];

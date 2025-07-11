@@ -1,9 +1,9 @@
 import { H2, Table, Tag, LeadParagraph, ErrorSummary } from "govuk-react";
-import type { ApiSchemaType, ErrorType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
+import type { components } from "../../api/api";
 
 interface DnsTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
 }
 
 export default function DnsTab({ data }: DnsTabProps) {
@@ -14,7 +14,7 @@ export default function DnsTab({ data }: DnsTabProps) {
     const srvTargets = Object.entries(data?.DNSResult?.SrvTargets || {});
 
     // Helper to get user-friendly error message
-    const getErrorMessage = (error: ErrorType) => {
+    const getErrorMessage = (error: components["schemas"]["Error"]) => {
         const translationKey = `DNS.errorCodes.${error.ErrorCode}`;
         const translatedMessage = t(translationKey);
 

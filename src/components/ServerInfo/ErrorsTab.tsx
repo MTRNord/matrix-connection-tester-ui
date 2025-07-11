@@ -1,9 +1,9 @@
 import { H2, Table, LeadParagraph } from "govuk-react";
-import type { ApiSchemaType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
+import type { components } from "../../api/api";
 
 interface ErrorsTabProps {
-    data: ApiSchemaType;
+    data: components["schemas"]["Root"];
 }
 
 export default function ErrorsTab({ data }: ErrorsTabProps) {
