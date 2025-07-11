@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { LoadingBox, ErrorText, Tabs } from "govuk-react";
-import type { ApiSchemaType, ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
+import type { ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData, fetchClientWellKnown, fetchClientServerVersions } from "./api";
 import { useTranslation } from "react-i18next";
@@ -13,6 +13,7 @@ import {
     ErrorsTab,
     RawDataTab
 } from "./components/ServerInfo";
+import type { components } from "./api/api";
 
 export default function ServerInfoResults({ serverName }: { serverName: string }) {
     // Get initial tab from URL hash or default to "overview"
@@ -47,7 +48,7 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
         }
     }, [selectedTab]);
 
-    const { data, error, isLoading, isValidating } = useSWR<ApiSchemaType>(
+    const { data, error, isLoading, isValidating } = useSWR<components["schemas"]["Root"]>(
         serverName ? ['federation', serverName] : null,
         () => fetchData(serverName),
         { keepPreviousData: false }
