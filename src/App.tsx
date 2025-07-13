@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import ServerInfoResults from './ServerInfoResults';
 import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
@@ -7,29 +8,26 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation, Trans } from 'react-i18next';
 
 function App() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [inputValue, setInputValue] = useState<string>('');
   const [submittedServerName, setSubmittedServerName] = useState<string>('');
   const { t } = useTranslation();
 
-  // Read serverName from URL on mount
+  // Sync state with serverName param
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const serverName = params.get('serverName');
-    if (serverName) {
-      setInputValue(serverName);
-      setSubmittedServerName(serverName);
-    }
-  }, []);
+    const serverName = searchParams.get('serverName') || '';
+    setInputValue(serverName);
+    setSubmittedServerName(serverName);
+  }, [searchParams]);
 
-  // Update URL when submittedServerName changes
+  // Update search param when submittedServerName changes
   useEffect(() => {
     if (submittedServerName) {
-      const params = new URLSearchParams(window.location.search);
-      params.set('serverName', submittedServerName);
-      const newUrl = `${window.location.pathname}?${params.toString()}`;
-      window.history.replaceState({}, '', newUrl);
+      setSearchParams({ serverName: submittedServerName }, {
+        preventScrollReset: true,
+      });
     }
-  }, [submittedServerName]);
+  }, [submittedServerName, setSearchParams]);
 
   const handleSubmit = (e?: React.FormEvent) => {
     if (e) e.preventDefault();

@@ -6,6 +6,7 @@ import { initReactI18next } from "react-i18next";
 import Fetch from 'i18next-fetch-backend';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import Main from './Layout';
+import { BrowserRouter, Route, Routes } from 'react-router';
 
 
 i18n
@@ -29,6 +30,12 @@ i18n
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Main />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={
+          <Main />
+        } />
+      </Routes>
+    </BrowserRouter>
   </StrictMode>
 )
