@@ -16,8 +16,34 @@
     "na": "N/A",
     "warning": "Warning"
   },
+  "alerts": {
+    "email": "Email",
+    "createdTitle": "Alert Created. Please check your email to verify.",
+    "emailHint": "Enter your email address to receive alerts about this server.",
+    "serverName": "Server Name",
+    "serverNameHint": "Enter the server name to monitor. This is the part of the Matrix ID after the @ symbol, e.g., for @alice:matrix.org, the server name is matrix.org.",
+    "create": "Create Alert",
+    "creating": "Creating...",
+    "created": "Alert created! Please check your email to verify.",
+    "errorSummary": {
+      "title": "Error creating alert",
+      "description": "An error occurred while creating the alert. Please check the form and try again."
+    },
+    "createTitle": "Create Alert",
+    "noAlerts": "No alerts found.",
+    "info": "Checks for alerts are performed roughly once per hour. You will receive an email to verify your alert after creation."
+  },
+  "alertVerify": {
+    "title": "Alert Verification",
+    "pending": "Verifying your alert...",
+    "success": "Your alert was successfully verified!",
+    "error": "Verification failed.",
+    "noToken": "No verification token provided.",
+    "networkError": "Network error during verification."
+  },
   "app": {
     "title": "Matrix Connection Tester",
+    "alertTitle": "Matrix Connection Tester - Alert Management",
     "description": "This tool checks if a Matrix server is reachable and federates correctly with the wider Matrix network. Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.",
     "form": {
       "serverName": "Server Name",
@@ -209,7 +235,7 @@
     "EMPTY_SERVER_NAME": "Server name cannot be empty",
     "API_SERVER_NOT_CONFIGURED": "API server URL is not configured",
     "API_HTTP_ERROR": "Failed to connect to the federation API server",
-    "SUPPORT_HTTP_ERROR": "Failed to fetch support information from the server",
+    "SUPPORT_HTTP_ERROR": "Failed to fetch support information from the server due to HTTP error: {{status}}",
     "SUPPORT_INVALID_CONTENT_TYPE": "Expected JSON response from support endpoint as per <a href=\"https://spec.matrix.org/v1.14/client-server-api/#api-standards\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix Specification</a> with the Content-Type header containing <code>application/json</code>.<br/><br/><strong>Note:</strong> <a href=\"https://github.com/matrix-org/matrix-spec-proposals/pull/2499\" target=\"_blank\" rel=\"noopener noreferrer\">MSC2499</a> proposes to lift this requirement in the future, but it has not been merged yet.",
     "SUPPORT_INVALID_JSON": "The JSON reply is either missing or not complete. Make sure to check the <a href=\"https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix Specification</a> as an admin of this homeserver.",
     "CLIENT_DISCOVERY_FALLBACK": "Missing homeserver URL in <code>.well-known/matrix/client</code>. Per <a href=\"https://spec.matrix.org/v1.15/client-server-api/#well-known-uris\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix Spec 3.4.1 Well-known URI</a>, this causes client compatibility issues. Some clients may require users to manually enter the homeserver URL.<br/><br/><strong>Recommendation:</strong> Add <code>m.homeserver.base_url</code> to your well-known file.",
@@ -254,6 +280,9 @@
       "admin": "Admin",
       "security": "Security"
     },
-    "supportPage": "Support Page:"
+    "supportPage": "Support Page:",
+    "errorSummary": {
+      "title": "Error fetching support information"
+    }
   }
 }

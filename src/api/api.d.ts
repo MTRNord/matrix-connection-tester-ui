@@ -11,7 +11,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_alerts"];
+        get: operations["List Alerts"];
         put?: never;
         post?: never;
         delete?: never;
@@ -29,7 +29,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        post: operations["register_alert"];
+        post: operations["Register Alert"];
         delete?: never;
         options?: never;
         head?: never;
@@ -43,7 +43,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["verify_alert"];
+        get: operations["Verify Alert Email"];
         put?: never;
         post?: never;
         delete?: never;
@@ -62,7 +62,7 @@ export interface paths {
         get?: never;
         put?: never;
         post?: never;
-        delete: operations["delete_alert"];
+        delete: operations["Delete Alert"];
         options?: never;
         head?: never;
         patch?: never;
@@ -75,7 +75,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_fed_ok"];
+        get: operations["Check Federation Status"];
         put?: never;
         post?: never;
         delete?: never;
@@ -91,7 +91,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["get_report"];
+        get: operations["Get Federation Report as JSON"];
         put?: never;
         post?: never;
         delete?: never;
@@ -107,12 +107,12 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["health"];
+        get: operations["Health Check"];
         put?: never;
         post?: never;
         delete?: never;
         options?: never;
-        head: operations["health"];
+        head: operations["Health Check"];
         patch?: never;
         trace?: never;
     };
@@ -120,6 +120,9 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AlertsList: {
+            alerts: components["schemas"]["Model"][];
+        };
         Certificate: {
             DNSNames?: string[] | null;
             IssuerCommonName: string;
@@ -200,6 +203,16 @@ export interface components {
                 [key: string]: components["schemas"]["Ed25519VerifyKey"];
             };
         };
+        Model: {
+            /** Format: date-time */
+            created_at: string;
+            email: string;
+            /** Format: uuid */
+            id: string;
+            magic_token: string;
+            server_name: string;
+            verified: boolean;
+        };
         RegisterAlert: {
             email: string;
             server_name: string;
@@ -230,6 +243,10 @@ export interface components {
             /** Format: int32 */
             Weight?: number | null;
         };
+        VerificatonResponseData: {
+            /** @description The result status of the verification */
+            status: string;
+        };
         Version: {
             name: string;
             version: string;
@@ -249,30 +266,28 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    list_alerts: {
+    "List Alerts": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterAlert"];
+            };
+        };
         responses: {
-            /** @description List of alerts for the email */
+            /** @description Verification email has successfully been sent */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Unauthorized - invalid or missing token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
+                    /** @example {
+                     *       "status": "verification email sent"
+                     *     } */
                     "application/json": unknown;
                 };
             };
@@ -287,7 +302,7 @@ export interface operations {
             };
         };
     };
-    register_alert: {
+    "Register Alert": {
         parameters: {
             query?: never;
             header?: never;
@@ -332,9 +347,13 @@ export interface operations {
             };
         };
     };
-    verify_alert: {
+    "Verify Alert Email": {
         parameters: {
             query: {
+                /**
+                 * @description JWT token for email verification
+                 * @example 123e4567-e89b-12d3-a456-426
+                 */
                 token: string;
             };
             header?: never;
@@ -343,13 +362,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description Email verified successfully */
+            /** @description List of alerts for the email */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "text/html": unknown;
+                    "application/json": components["schemas"]["AlertsList"];
                 };
             };
             /** @description Invalid or expired token */
@@ -358,7 +377,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "text/html": unknown;
+                    "application/json": unknown;
                 };
             };
             /** @description Internal server error */
@@ -367,37 +386,35 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "text/html": unknown;
+                    "application/json": unknown;
                 };
             };
         };
     };
-    delete_alert: {
+    "Delete Alert": {
         parameters: {
             query?: never;
             header?: never;
             path: {
+                /**
+                 * @description ID of the alert to delete
+                 * @example 123e4567-e89b-12d3-a456-426
+                 */
                 id: string;
             };
             cookie?: never;
         };
         requestBody?: never;
         responses: {
-            /** @description Alert deleted successfully */
+            /** @description Alert deletion verification flow has been started */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
-                };
-            };
-            /** @description Unauthorized - invalid or missing token */
-            401: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
+                    /** @example {
+                     *       "status": "verification email sent"
+                     *     } */
                     "application/json": unknown;
                 };
             };
@@ -421,7 +438,7 @@ export interface operations {
             };
         };
     };
-    get_fed_ok: {
+    "Check Federation Status": {
         parameters: {
             query: {
                 server_name: string;
@@ -460,7 +477,7 @@ export interface operations {
             };
         };
     };
-    get_report: {
+    "Get Federation Report as JSON": {
         parameters: {
             query: {
                 server_name: string;
@@ -502,7 +519,7 @@ export interface operations {
             };
         };
     };
-    health: {
+    "Health Check": {
         parameters: {
             query?: never;
             header?: never;
@@ -517,12 +534,13 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    /** @example ok */
                     "text/plain": string;
                 };
             };
         };
     };
-    health: {
+    "Health Check": {
         parameters: {
             query?: never;
             header?: never;
@@ -537,6 +555,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
+                    /** @example ok */
                     "text/plain": string;
                 };
             };

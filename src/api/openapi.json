@@ -15,18 +15,26 @@
                 "tags": [
                     "Alerts API"
                 ],
-                "operationId": "list_alerts",
-                "responses": {
-                    "200": {
-                        "description": "List of alerts for the email",
-                        "content": {
-                            "application/json": {}
+                "operationId": "List Alerts",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegisterAlert"
+                            }
                         }
                     },
-                    "401": {
-                        "description": "Unauthorized - invalid or missing token",
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Verification email has successfully been sent",
                         "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "example": {
+                                    "status": "verification email sent"
+                                }
+                            }
                         }
                     },
                     "500": {
@@ -43,7 +51,7 @@
                 "tags": [
                     "Alerts API"
                 ],
-                "operationId": "register_alert",
+                "operationId": "Register Alert",
                 "requestBody": {
                     "content": {
                         "application/json": {
@@ -85,34 +93,40 @@
                 "tags": [
                     "Alerts API"
                 ],
-                "operationId": "verify_alert",
+                "operationId": "Verify Alert Email",
                 "parameters": [
                     {
                         "name": "token",
                         "in": "query",
+                        "description": "JWT token for email verification",
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
+                        },
+                        "example": "123e4567-e89b-12d3-a456-426"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Email verified successfully",
+                        "description": "List of alerts for the email",
                         "content": {
-                            "text/html": {}
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AlertsList"
+                                }
+                            }
                         }
                     },
                     "400": {
                         "description": "Invalid or expired token",
                         "content": {
-                            "text/html": {}
+                            "application/json": {}
                         }
                     },
                     "500": {
                         "description": "Internal server error",
                         "content": {
-                            "text/html": {}
+                            "application/json": {}
                         }
                     }
                 }
@@ -123,28 +137,28 @@
                 "tags": [
                     "Alerts API"
                 ],
-                "operationId": "delete_alert",
+                "operationId": "Delete Alert",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
+                        "description": "ID of the alert to delete",
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
+                        },
+                        "example": "123e4567-e89b-12d3-a456-426"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "Alert deleted successfully",
+                        "description": "Alert deletion verification flow has been started",
                         "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "401": {
-                        "description": "Unauthorized - invalid or missing token",
-                        "content": {
-                            "application/json": {}
+                            "application/json": {
+                                "example": {
+                                    "status": "verification email sent"
+                                }
+                            }
                         }
                     },
                     "404": {
@@ -167,7 +181,7 @@
                 "tags": [
                     "Federation Tester API"
                 ],
-                "operationId": "get_fed_ok",
+                "operationId": "Check Federation Status",
                 "parameters": [
                     {
                         "name": "server_name",
@@ -213,7 +227,7 @@
                 "tags": [
                     "Federation Tester API"
                 ],
-                "operationId": "get_report",
+                "operationId": "Get Federation Report as JSON",
                 "parameters": [
                     {
                         "name": "server_name",
@@ -264,7 +278,7 @@
                 "tags": [
                     "Miscellaneous"
                 ],
-                "operationId": "health",
+                "operationId": "Health Check",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -272,7 +286,8 @@
                             "text/plain": {
                                 "schema": {
                                     "type": "string"
-                                }
+                                },
+                                "example": "ok"
                             }
                         }
                     }
@@ -282,7 +297,7 @@
                 "tags": [
                     "Miscellaneous"
                 ],
-                "operationId": "health",
+                "operationId": "Health Check",
                 "responses": {
                     "200": {
                         "description": "Ok",
@@ -290,7 +305,8 @@
                             "text/plain": {
                                 "schema": {
                                     "type": "string"
-                                }
+                                },
+                                "example": "ok"
                             }
                         }
                     }
@@ -300,6 +316,20 @@
     },
     "components": {
         "schemas": {
+            "AlertsList": {
+                "type": "object",
+                "required": [
+                    "alerts"
+                ],
+                "properties": {
+                    "alerts": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Model"
+                        }
+                    }
+                }
+            },
             "Certificate": {
                 "type": "object",
                 "required": [
@@ -677,6 +707,39 @@
                     }
                 }
             },
+            "Model": {
+                "type": "object",
+                "required": [
+                    "id",
+                    "email",
+                    "server_name",
+                    "verified",
+                    "magic_token",
+                    "created_at"
+                ],
+                "properties": {
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "email": {
+                        "type": "string"
+                    },
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "magic_token": {
+                        "type": "string"
+                    },
+                    "server_name": {
+                        "type": "string"
+                    },
+                    "verified": {
+                        "type": "boolean"
+                    }
+                }
+            },
             "RegisterAlert": {
                 "type": "object",
                 "required": [
@@ -798,6 +861,18 @@
                     }
                 }
             },
+            "VerificatonResponseData": {
+                "type": "object",
+                "required": [
+                    "status"
+                ],
+                "properties": {
+                    "status": {
+                        "type": "string",
+                        "description": "The result status of the verification"
+                    }
+                }
+            },
             "Version": {
                 "type": "object",
                 "required": [
@@ -838,6 +913,14 @@
                         "type": "string"
                     }
                 }
+            }
+        },
+        "securitySchemes": {
+            "Authorization": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+                "description": "Use the JWT token obtained from the `/api/alerts/register` endpoint to authenticate."
             }
         }
     },

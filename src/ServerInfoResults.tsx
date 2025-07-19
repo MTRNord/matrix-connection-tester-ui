@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { LoadingBox, ErrorText, Tabs } from "govuk-react";
+import { LoadingBox, Tabs, ErrorSummary } from "govuk-react";
 import type { ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
 import useSWR from "swr";
 import { fetchData, fetchClientWellKnown, fetchClientServerVersions } from "./api";
@@ -89,13 +89,9 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
 
     if (error || !data) {
         return (
-            <ErrorText>
-                {t('federation.apiError')}<br />
-                <div
-                    style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}
-                    dangerouslySetInnerHTML={{ __html: translateApiError(error, t) }}
-                />
-            </ErrorText>
+            <ErrorSummary
+                heading={t('federation.apiError')}
+                description={translateApiError(error, t)} />
         );
     }
 

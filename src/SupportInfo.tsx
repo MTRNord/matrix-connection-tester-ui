@@ -1,7 +1,7 @@
 import useSWR from "swr";
 import { fetchSupportInfo } from "./api";
 import type { SupportWellKnownType } from "./apiTypes";
-import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, ErrorText, LeadParagraph } from "govuk-react";
+import { H2, Table, Tag, Link, HintText, LoadingBox, Paragraph, LeadParagraph, ErrorSummary } from "govuk-react";
 import { useTranslation, Trans } from "react-i18next";
 import { translateApiError } from "./utils/errorTranslation";
 
@@ -32,9 +32,10 @@ export default function SupportInfo({ serverName }: { serverName: string }) {
                     {t('support.errorHint')}
                     <br /><br />
                     {error &&
-                        <ErrorText>
-                            <div dangerouslySetInnerHTML={{ __html: translateApiError(error, t) }} />
-                        </ErrorText>
+                        <ErrorSummary
+                            heading={t('support.errorSummary.title')}
+                            description={translateApiError(error, t)}
+                        />
                     }
                 </HintText>
             </>

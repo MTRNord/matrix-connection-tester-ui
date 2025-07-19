@@ -4,7 +4,7 @@ import type { ConfigType, SupportWellKnownType, ClientWellKnownType, ClientServe
 import createClient from "openapi-fetch";
 import type { paths, components } from "./api/api";
 
-async function getConfig(): Promise<ConfigType> {
+export async function getConfig(): Promise<ConfigType> {
     const response = await fetch(`/config.json`);
     const config = await response.json();
     return ConfigSchema.parse(config);

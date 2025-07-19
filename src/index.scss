@@ -13,3 +13,7 @@ body {
   // Fix weird wrapping issue in Firefox
   display: inline-block !important;
 }
+
+#govuk-react-menu {
+  padding-top: 0px !important;
+}

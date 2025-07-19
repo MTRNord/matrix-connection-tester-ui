@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import ServerInfoResults from './ServerInfoResults';
+import ServerInfoResults from '../ServerInfoResults';
 import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
-import SupportInfo from './SupportInfo';
+import SupportInfo from '../SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useTranslation, Trans } from 'react-i18next';
+import React from 'react';
 
 function App() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -102,4 +103,4 @@ function App() {
   )
 }
 
-export default App
+export default React.memo(App);

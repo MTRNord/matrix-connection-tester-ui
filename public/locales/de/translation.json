@@ -16,8 +16,28 @@
     "na": "N/V",
     "warning": "Warnung"
   },
+  "alerts": {
+    "email": "E-Mail",
+    "createdTitle": "Alarm erstellt. Bitte überprüfen Sie Ihre E-Mail zur Verifizierung.",
+    "serverName": "Servername",
+    "create": "Alarm erstellen",
+    "creating": "Wird erstellt...",
+    "created": "Alarm wurde erstellt! Bitte überprüfen Sie Ihre E-Mails zur Verifizierung.",
+    "error": "Beim Erstellen des Alarms ist ein Fehler aufgetreten.",
+    "noAlerts": "Keine Alarme gefunden.",
+    "info": "Überprüfungen für Alarme werden ungefähr einmal pro Stunde durchgeführt. Nach der Erstellung erhalten Sie eine E-Mail zur Verifizierung."
+  },
+  "alertVerify": {
+    "title": "Alarm-Verifizierung",
+    "pending": "Ihr Alarm wird verifiziert...",
+    "success": "Ihr Alarm wurde erfolgreich verifiziert!",
+    "error": "Verifizierung fehlgeschlagen.",
+    "noToken": "Kein Verifizierungstoken angegeben.",
+    "networkError": "Netzwerkfehler während der Verifizierung."
+  },
   "app": {
     "title": "Matrix Verbindungstester",
+    "alertTitle": "Matrix Verbindungstester - Alarmverwaltung",
     "description": "Dieses Tool überprüft, ob ein Matrix-Server erreichbar ist und korrekt mit dem breiteren Matrix-Netzwerk föderiert. Geben Sie einen Servernamen ein, um zu sehen, ob die Federation funktioniert, welche Software er verwendet und detaillierte Debug-Informationen über seine Konfiguration und Konnektivität.",
     "form": {
       "serverName": "Servername",
@@ -209,7 +229,7 @@
     "EMPTY_SERVER_NAME": "Servername darf nicht leer sein",
     "API_SERVER_NOT_CONFIGURED": "API-Server-URL ist nicht konfiguriert",
     "API_HTTP_ERROR": "Verbindung zum Federation-API-Server fehlgeschlagen",
-    "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden",
+    "SUPPORT_HTTP_ERROR": "Support-Informationen vom Server konnten nicht abgerufen werden weil es den HTTP-Fehler Code {{status}} gab",
     "SUPPORT_INVALID_CONTENT_TYPE": "JSON-Antwort vom Support-Endpunkt erwartet gemäß <a href=\"https://spec.matrix.org/v1.14/client-server-api/#api-standards\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix-Spezifikation</a> einen Content-Type Header mit dem Wert <code>application/json</code>.<br/><br/><strong>Hinweis:</strong> <a href=\"https://github.com/matrix-org/matrix-spec-proposals/pull/2499\" target=\"_blank\" rel=\"noopener noreferrer\">MSC2499</a> schlägt vor, diese Anforderung in Zukunft aufzuheben, aber es wurde noch nicht zusammengeführt.",
     "SUPPORT_INVALID_JSON": "Die JSON-Antwort ist entweder fehlend oder unvollständig. Stellen Sie sicher, dass Sie die <a href=\"https://spec.matrix.org/v1.14/client-server-api/#getwell-knownmatrixsupport\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix-Spezifikation</a> als Administrator dieses Homeservers prüfen.",
     "CLIENT_DISCOVERY_FALLBACK": "Fehlende Homeserver-URL in <code>.well-known/matrix/client</code>. Gemäß <a href=\"https://spec.matrix.org/v1.15/client-server-api/#well-known-uris\" target=\"_blank\" rel=\"noopener noreferrer\">Matrix-Spezifikation 3.4.1 Well-known URI</a> verursacht dies Client-Kompatibilitätsprobleme. Einige Clients erfordern möglicherweise, dass Benutzer die Homeserver-URL manuell eingeben.<br/><br/><strong>Empfehlung:</strong> Fügen Sie <code>m.homeserver.base_url</code> zu Ihrer Well-Known-Datei hinzu.",
@@ -254,6 +274,9 @@
       "admin": "Administrator",
       "security": "Sicherheit"
     },
-    "supportPage": "Support-Seite:"
+    "supportPage": "Support-Seite:",
+    "errorSummary": {
+      "title": "Fehler beim Abrufen der Support-Informationen"
+    }
   }
 }

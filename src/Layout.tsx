@@ -1,7 +1,13 @@
-import { GlobalStyle, TopNav, Page, Footer } from "govuk-react";
+import { GlobalStyle, TopNav, Page, Footer, ErrorSummary } from "govuk-react";
 import { useTranslation, Trans } from "react-i18next";
-import App from "./App";
 import { ReloadPrompt } from "./ReloadPrompt";
+import { BrowserRouter, Route, Routes } from 'react-router';
+import { ErrorBoundary } from "react-error-boundary";
+import { lazy, Suspense } from "react";
+
+const App = lazy(() => import("./pages/Main"));
+const Alerts = lazy(() => import("./pages/Alerts"));
+const AlertVerify = lazy(() => import("./pages/AlertVerify"));
 
 const APP_VERSION = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "dev";
 
@@ -12,12 +18,41 @@ export default function Main() {
             <GlobalStyle />
             <header>
                 <ReloadPrompt />
-                <TopNav company={t("Connection Tester")}>
+                <TopNav company={<TopNav.Anchor href="/" target="new">{t("Connection Tester")}</TopNav.Anchor>}>
+                    <TopNav.NavLink href="/">
+                        Federation Tester
+                    </TopNav.NavLink>
+                    <TopNav.NavLink href="/client">
+                        Client Tester
+                    </TopNav.NavLink>
+                    <TopNav.NavLink href="/alerts">
+                        Alerts
+                    </TopNav.NavLink>
                 </TopNav>
             </header>
             <Page.WidthContainer>
                 <Page.Main>
-                    <App />
+                    <Suspense fallback={<div className="container">Loading...</div>}>
+                        <ErrorBoundary fallback={
+                            <ErrorSummary
+                                heading={t('app.errors.uiFailedToLoad')}
+                                description={t('app.errors.componentFailedToLoad')}
+                            />
+                        }>
+                            <BrowserRouter>
+                                <Routes>
+                                    <Route path="/" element={
+                                        <App />
+                                    } />
+                                    <Route path="/client" element={
+                                        <App />
+                                    } />
+                                    <Route path="/alerts" element={<Alerts />} />
+                                    <Route path="/verify" element={<AlertVerify />} />
+                                </Routes>
+                            </BrowserRouter>
+                        </ErrorBoundary>
+                    </Suspense>
                 </Page.Main>
             </Page.WidthContainer>
             <Footer meta={

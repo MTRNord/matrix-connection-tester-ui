@@ -1,4 +1,4 @@
-import { H2, Table, Tag, Link, LoadingBox, ErrorText, WarningText, LeadParagraph, Panel, H1 } from "govuk-react";
+import { H2, Table, Tag, Link, LoadingBox, WarningText, LeadParagraph, Panel, H1, ErrorSummary } from "govuk-react";
 import type { ClientServerVersionsType } from "../../apiTypes";
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
@@ -398,23 +398,14 @@ export default function OverviewTab({
                         {/* Use WarningText for warnings, ErrorText for actual errors */}
                         {(() => {
                             const isWarning = 'isWarning' in clientServerVersionsError && clientServerVersionsError.isWarning;
-                            const TextComponent = isWarning ? WarningText : ErrorText;
                             const errorMessage = translateApiError(clientServerVersionsError, t);
 
                             return (
-                                <TextComponent>
-                                    {t('serverInfo.errors.failedToFetchClientServerVersions')}<br />
-                                    <div
-                                        style={{
-                                            marginTop: "0.5rem",
-                                            padding: "12px",
-                                            backgroundColor: "#f3f2f1",
-                                            borderLeft: `10px solid ${isWarning ? "#f47738" : "#d4351c"}`,
-                                            lineHeight: "1.5"
-                                        }}
-                                        dangerouslySetInnerHTML={{ __html: errorMessage }}
-                                    />
-                                </TextComponent>
+                                <ErrorSummary
+                                    heading={t('serverInfo.errors.failedToFetchClientServerVersions')}
+                                    description={errorMessage}
+                                    style={isWarning ? { borderColor: "#f47738" } : undefined}
+                                />
                             );
                         })()}
                     </>
