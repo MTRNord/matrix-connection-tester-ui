@@ -18,7 +18,7 @@ export default function Main() {
             <GlobalStyle />
             <header>
                 <ReloadPrompt />
-                <TopNav company={<TopNav.Anchor href="/" target="new">{t("Connection Tester")}</TopNav.Anchor>}>
+                <TopNav company={<TopNav.Anchor href="/">{t("Connection Tester")}</TopNav.Anchor>}>
                     <TopNav.NavLink href="/">
                         Federation Tester
                     </TopNav.NavLink>

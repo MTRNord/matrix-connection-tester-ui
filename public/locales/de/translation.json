@@ -108,6 +108,7 @@
         "description": "Die folgenden SRV-Einträge wurden beim Server-Server-Discovery-Algorithmus gefunden. Wenn Sie hier keine SRV-Einträge sehen, hat der Server keine SRV-Einträge konfiguriert.",
         "errorHeading": "DNS-Auflösungsprobleme",
         "target": "Ziel",
+        "srv_prefix": "SRV Record Präfix",
         "port": "Port",
         "priority": "Priorität",
         "weight": "Gewicht",

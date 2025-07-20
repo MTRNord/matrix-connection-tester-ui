@@ -726,8 +726,8 @@
                         "type": "string"
                     },
                     "id": {
-                        "type": "string",
-                        "format": "uuid"
+                        "type": "integer",
+                        "format": "int32"
                     },
                     "magic_token": {
                         "type": "string"
@@ -847,6 +847,12 @@
                         ],
                         "format": "int32",
                         "minimum": 0
+                    },
+                    "SrvPrefix": {
+                        "type": [
+                            "string",
+                            "null"
+                        ]
                     },
                     "Target": {
                         "type": "string"

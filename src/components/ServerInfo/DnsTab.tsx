@@ -77,6 +77,7 @@ export default function DnsTab({ data }: DnsTabProps) {
                 <Table>
                     <Table.Row>
                         <Table.CellHeader>{t('federation.dns.srvRecords.target')}</Table.CellHeader>
+                        <Table.CellHeader>{t('federation.dns.srvRecords.srv_prefix')}</Table.CellHeader>
                         <Table.CellHeader>{t('federation.dns.srvRecords.port')}</Table.CellHeader>
                         <Table.CellHeader>{t('federation.dns.srvRecords.priority')}</Table.CellHeader>
                         <Table.CellHeader>{t('federation.dns.srvRecords.weight')}</Table.CellHeader>
@@ -88,6 +89,7 @@ export default function DnsTab({ data }: DnsTabProps) {
                             targets.map((target, index) => (
                                 <Table.Row key={`${srvRecord}-${index}`}>
                                     <Table.Cell><code>{target.Target}</code></Table.Cell>
+                                    <Table.Cell><code>{target.SrvPrefix}</code></Table.Cell>
                                     <Table.Cell>{target.Port}</Table.Cell>
                                     <Table.Cell>
                                         {target.Priority !== undefined

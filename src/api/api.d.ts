@@ -207,8 +207,8 @@ export interface components {
             /** Format: date-time */
             created_at: string;
             email: string;
-            /** Format: uuid */
-            id: string;
+            /** Format: int32 */
+            id: number;
             magic_token: string;
             server_name: string;
             verified: boolean;
@@ -239,6 +239,7 @@ export interface components {
             Port: number;
             /** Format: int32 */
             Priority?: number | null;
+            SrvPrefix?: string | null;
             Target: string;
             /** Format: int32 */
             Weight?: number | null;

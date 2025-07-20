@@ -114,6 +114,7 @@
         "description": "The following SRV records were found when using the Server-Server Discovery algorithm. If you see no SRV records here, the server has no SRV records configured.",
         "errorHeading": "DNS Resolution Issues",
         "target": "Target",
+        "srv_prefix": "SRV Record Prefix",
         "port": "Port",
         "priority": "Priority",
         "weight": "Weight",
