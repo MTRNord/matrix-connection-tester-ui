@@ -11,7 +11,7 @@
     },
     "paths": {
         "/api/alerts/list": {
-            "get": {
+            "post": {
                 "tags": [
                     "Alerts API"
                 ],
@@ -20,7 +20,7 @@
                     "content": {
                         "application/json": {
                             "schema": {
-                                "$ref": "#/components/schemas/RegisterAlert"
+                                "$ref": "#/components/schemas/ListAlerts"
                             }
                         }
                     },
@@ -704,6 +704,17 @@
                         "propertyNames": {
                             "type": "string"
                         }
+                    }
+                }
+            },
+            "ListAlerts": {
+                "type": "object",
+                "required": [
+                    "email"
+                ],
+                "properties": {
+                    "email": {
+                        "type": "string"
                     }
                 }
             },

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import ServerInfoResults from '../ServerInfoResults';
+import ServerInfoResults from '../components/ServerInfo/ServerInfoResults';
 import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from '../SupportInfo';

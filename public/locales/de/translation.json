@@ -25,7 +25,14 @@
     "created": "Alarm wurde erstellt! Bitte überprüfen Sie Ihre E-Mails zur Verifizierung.",
     "error": "Beim Erstellen des Alarms ist ein Fehler aufgetreten.",
     "noAlerts": "Keine Alarme gefunden.",
-    "info": "Überprüfungen für Alarme werden ungefähr einmal pro Stunde durchgeführt. Nach der Erstellung erhalten Sie eine E-Mail zur Verifizierung."
+    "info": "Überprüfungen für Alarme werden ungefähr einmal pro Stunde durchgeführt. Nach der Erstellung erhalten Sie eine E-Mail zur Verifizierung.",
+    "checkTitle": "Prüfen der existierenden Alarme",
+    "verificationSent": "Verifizierungs-E-Mail gesendet. Bitte überprüfen Sie Ihren Posteingang.",
+    "checkErrorSummary": {
+      "title": "Fehler beim Überprüfen der Alarme",
+      "description": "Beim Überprüfen der Alarme ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut."
+    },
+    "checkInfo": "Um eine Liste Ihrer Alarme zu erhalten, müssen wir Ihre E-Mail-Adresse kennen. Danach erhalten Sie eine Verifizierungs-E-Mail.\nDurch Klicken auf den Link in dieser E-Mail werden Ihnen die bestehenden Alarme angezeigt, für die Sie sich angemeldet haben, und Sie können sich von ihnen abmelden."
   },
   "alertVerify": {
     "title": "Alarm-Verifizierung",

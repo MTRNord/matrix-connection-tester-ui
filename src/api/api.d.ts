@@ -11,9 +11,9 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["List Alerts"];
+        get?: never;
         put?: never;
-        post?: never;
+        post: operations["List Alerts"];
         delete?: never;
         options?: never;
         head?: never;
@@ -203,6 +203,9 @@ export interface components {
                 [key: string]: components["schemas"]["Ed25519VerifyKey"];
             };
         };
+        ListAlerts: {
+            email: string;
+        };
         Model: {
             /** Format: date-time */
             created_at: string;
@@ -276,7 +279,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["RegisterAlert"];
+                "application/json": components["schemas"]["ListAlerts"];
             };
         };
         responses: {

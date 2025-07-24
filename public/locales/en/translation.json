@@ -22,16 +22,22 @@
     "emailHint": "Enter your email address to receive alerts about this server.",
     "serverName": "Server Name",
     "serverNameHint": "Enter the server name to monitor. This is the part of the Matrix ID after the @ symbol, e.g., for @alice:matrix.org, the server name is matrix.org.",
-    "create": "Create Alert",
     "creating": "Creating...",
     "created": "Alert created! Please check your email to verify.",
-    "errorSummary": {
+    "createErrorSummary": {
       "title": "Error creating alert",
       "description": "An error occurred while creating the alert. Please check the form and try again."
     },
     "createTitle": "Create Alert",
     "noAlerts": "No alerts found.",
-    "info": "Checks for alerts are performed roughly once per hour. You will receive an email to verify your alert after creation."
+    "info": "Checks for alerts are performed roughly once per hour. You will receive an email to verify your alert after creation.",
+    "checkTitle": "Check Alerts",
+    "verificationSent": "Verification email sent. Please check your inbox.",
+    "checkErrorSummary": {
+      "title": "Error checking alerts",
+      "description": "An error occurred while checking alerts. Please try again later."
+    },
+    "checkInfo": "To get a list of your alerts we need to know your email. After that you get a verification email.\nClicking that link will show you the existing alerts you subscribed to and allows you to unsubscribe from them."
   },
   "alertVerify": {
     "title": "Alert Verification",

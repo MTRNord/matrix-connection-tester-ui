@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { LoadingBox, Tabs, ErrorSummary } from "govuk-react";
-import type { ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "./apiTypes";
+import type { ClientWellKnownType, ClientServerVersionsType, ApiResponseWithWarnings } from "../../apiTypes";
 import useSWR from "swr";
-import { fetchData, fetchClientWellKnown, fetchClientServerVersions } from "./api";
+import { fetchData, fetchClientWellKnown, fetchClientServerVersions } from "../../api";
 import { useTranslation } from "react-i18next";
-import { translateApiError } from "./utils/errorTranslation";
+import { translateApiError } from "../../utils/errorTranslation";
 import {
     OverviewTab,
     DnsTab,
@@ -12,8 +12,8 @@ import {
     ReportsTab,
     ErrorsTab,
     RawDataTab
-} from "./components/ServerInfo";
-import type { components } from "./api/api";
+} from ".";
+import type { components } from "../../api/api";
 
 export default function ServerInfoResults({ serverName }: { serverName: string }) {
     // Get initial tab from URL hash or default to "overview"
@@ -24,7 +24,6 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
     };
 
     const [selectedTab, setSelectedTab] = useState<string>(getInitialTab);
-    const { t } = useTranslation();
 
     // Listen for browser back/forward navigation
     useEffect(() => {
@@ -47,6 +46,15 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
             window.history.replaceState(null, '', `#${selectedTab}`);
         }
     }, [selectedTab]);
+
+    // Helper for tab selection - updates both state and URL hash
+    const handleTabClick = useCallback((tab: string) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        setSelectedTab(tab);
+        window.history.pushState(null, '', `#${tab}`);
+    }, []);
+    
+    const { t } = useTranslation();
 
     const { data, error, isLoading, isValidating } = useSWR<components["schemas"]["Root"]>(
         serverName ? ['federation', serverName] : null,
@@ -94,13 +102,6 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
                 description={translateApiError(error, t)} />
         );
     }
-
-    // Helper for tab selection - updates both state and URL hash
-    const handleTabClick = (tab: string) => (e: React.MouseEvent) => {
-        e.preventDefault();
-        setSelectedTab(tab);
-        window.history.pushState(null, '', `#${tab}`);
-    };
 
     return (
         <Tabs>

@@ -1,139 +1,84 @@
-
-
-
-
-
-import { getConfig } from "../api";
-import createClient from "openapi-fetch";
-import React, { useCallback, useState } from "react";
-import { H1, Button, Paragraph, BackLink, Fieldset, Label, Input, LabelText, HintText, LoadingBox, ErrorSummary, Panel } from "govuk-react";
-import { useTranslation } from "react-i18next";
-import type { paths } from "../api/api";
+import React, { useCallback, useEffect, useState } from "react";
+import { BackLink, H1, Paragraph, Tabs } from "govuk-react";
+import CreateAlertForm from "../components/alerts/CreateAlertForm";
 import { Link } from "react-router";
+import CheckAlerts from "../components/alerts/CheckAlerts";
+import { useTranslation } from "react-i18next";
+
+const validTabs = ["create-alert", "check-alerts"];
 
 export default function Alerts() {
     const { t } = useTranslation();
-    const [errors, setErrors] = useState<{
-        email?: string;
-        server_name?: string;
-        [key: string]: string | undefined;
-    }>({});
-    const [isSubmitting, setIsSubmitting] = useState(false);
-    const [success, setSuccess] = useState<string | null>(null);
-    const [email, setEmail] = useState("");
-    const [serverName, setServerName] = useState("");
-    const [error, setError] = useState<string | null>(null);
+    // Get initial tab from URL hash or default to "overview"
+    const getInitialTab = () => {
+        const hash = window.location.hash.slice(1); // Remove the #
+        return validTabs.includes(hash) ? hash : "create-alert";
+    };
 
-    // Create alert
-    const handleCreate = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        setIsSubmitting(true);
-        setSuccess(null);
+    const [selectedTab, setSelectedTab] = useState<string>(getInitialTab);
 
-        // Validate input
-        const newErrors: { [key: string]: string } = {};
-        if (!email) newErrors.email = t("alerts.emailRequired") || "Email is required.";
-        if (!serverName) newErrors.server_name = t("alerts.serverNameRequired") || "Server name is required.";
-        setErrors(newErrors);
-        if (Object.keys(newErrors).length > 0) {
-            setIsSubmitting(false);
-            return;
-        }
-
-        try {
-            const API_SERVER_URL = (await getConfig()).api_server_url;
-            const client = createClient<paths>({ baseUrl: API_SERVER_URL });
-            const { error: regError } = await client.POST("/api/alerts/register", {
-                body: { email: email, server_name: serverName },
-            });
-            if (regError) {
-                setError(regError.toString() || "Failed to create alert.");
-                return;
+    // Listen for browser back/forward navigation
+    useEffect(() => {
+        const handleHashChange = () => {
+            const hash = window.location.hash.slice(1);
+            if (validTabs.includes(hash)) {
+                setSelectedTab(hash);
             }
-            setEmail("");
-            setServerName("");
-            setSuccess(t("alerts.created") || "Alert created! Please check your email to verify.");
+        };
 
-        } catch (e) {
-            setSuccess(null);
-            throw e;
-        } finally {
-            setIsSubmitting(false);
+        window.addEventListener('hashchange', handleHashChange);
+        return () => window.removeEventListener('hashchange', handleHashChange);
+    }, []);
+
+    // Ensure the URL hash matches the selected tab
+    useEffect(() => {
+        const currentHash = window.location.hash.slice(1);
+        if (currentHash !== selectedTab) {
+            window.history.replaceState(null, '', `#${selectedTab}`);
         }
-    }, [email, serverName, t]);
+    }, [selectedTab]);
+
+    // Helper for tab selection - updates both state and URL hash
+    const handleTabClick = useCallback((tab: string) => (e: React.MouseEvent) => {
+        e.preventDefault();
+        setSelectedTab(tab);
+        window.history.pushState(null, '', `#${tab}`);
+    }, []);
 
     return (
         <>
-            {success && <Panel
-                title={t("alerts.createdTitle") || "Alert Created"}
-            />}
-            {!success && (
-                <LoadingBox loading={isSubmitting}>
-                    <BackLink as={Link} to="/">
-                        Home
-                    </BackLink>
-                    <H1>{t("app.alertTitle") || "Alerts Management"}</H1>
-                    <Paragraph>
-                        {t("alerts.info")}
-                    </Paragraph>
-                    {
-                        Object.entries(errors).length > 0 ? (
-                            <ErrorSummary
-                                heading={t("alerts.errorSummary.title") || "Error creating alert"}
-                                description={t("alerts.errorSummary.description") || "An error occurred while creating the alert."}
-                                errors={Object.keys(errors).map((key) => ({
-                                    targetName: key,
-                                    text: errors[key]
-                                }))} />
-                        ) : null
-                    }
-                    {error && (
-                        <ErrorSummary
-                            heading={t("alerts.errorSummary.title") || "Error creating alert"}
-                            description={t("alerts.errorSummary.description") || "An error occurred while creating the alert."}
-                        />)
-                    }
-                    <form onSubmit={handleCreate}>
-                        <Fieldset>
-                            <Fieldset.Legend size="M">
-                                {t("alerts.createTitle") || "Create Alert"}
-                            </Fieldset.Legend>
-                            <Label mb={4}>
-                                <LabelText>
-                                    {t("alerts.email") || "Email"}
-                                </LabelText>
-                                <HintText>
-                                    {t("alerts.emailHint") || "Enter your email to receive alerts."}
-                                </HintText>
-                                <Input
-                                    name="email"
-                                    value={email}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                                    required
-                                    type="email"
-                                />
-                            </Label>
-                            <Label mb={4}>
-                                <LabelText>
-                                    {t("alerts.serverName") || "Server Name"}
-                                </LabelText>
-                                <HintText>
-                                    {t("alerts.serverNameHint") || "Enter the server name to monitor."}
-                                </HintText>
-                                <Input
-                                    name="server_name"
-                                    value={serverName}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setServerName(e.target.value)}
-                                    required
-                                />
-                            </Label>
-                        </Fieldset>
-                        <Button disabled={isSubmitting} type="submit">
-                            {t("alerts.create") || "Create Alert"}
-                        </Button>
-                    </form>
-                </LoadingBox>
-            )}
+            <H1>{t("app.alertTitle") || "Alerts Management"}</H1>
+            <BackLink as={Link} to="/">
+                Federation Tester
+            </BackLink>
+            <Paragraph>
+                {`Create, check or delete alerts which allow you to be notified of connection issues with specific servers. 
+            You will receive an email when a server is unreachable or has connection errors.`}
+            </Paragraph>
+
+
+            <Tabs>
+                <Tabs.Title>Alerts</Tabs.Title>
+                <Tabs.List>
+                    <Tabs.Tab
+                        href="#create-alert"
+                        selected={selectedTab === "create-alert"}
+                        onClick={handleTabClick("create-alert")}
+                    >Create Alert</Tabs.Tab>
+                    <Tabs.Tab
+                        href="#check-alerts"
+                        selected={selectedTab === "check-alerts"}
+                        onClick={handleTabClick("check-alerts")}
+                    >List Alerts</Tabs.Tab>
+                </Tabs.List>
+
+                <Tabs.Panel id="create-alert" selected={selectedTab === "create-alert"}>
+                    <CreateAlertForm />
+                </Tabs.Panel>
+                <Tabs.Panel id="check-alerts" selected={selectedTab === "check-alerts"}>
+                    <CheckAlerts />
+                </Tabs.Panel>
+            </Tabs>
         </>
     );
 }
