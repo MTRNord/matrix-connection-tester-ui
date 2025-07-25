@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
 import unstableFeatures from "../../data/unstableFeatures.json";
 import type { components } from "../../api/api";
+import React from "react";
 
 // Example lookup table for known server software
 const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
@@ -41,7 +42,7 @@ interface OverviewTabProps {
     isValidating: boolean;
 }
 
-export default function OverviewTab({
+function OverviewTab({
     data,
     clientServerVersionsData,
     clientServerVersionsError,
@@ -418,3 +419,5 @@ export default function OverviewTab({
         </>
     );
 }
+
+export default React.memo(OverviewTab);

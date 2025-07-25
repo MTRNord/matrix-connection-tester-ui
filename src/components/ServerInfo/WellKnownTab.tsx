@@ -4,6 +4,7 @@ import { ApiError } from "../../apiTypes";
 import { useTranslation, Trans } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
 import type { components } from "../../api/api";
+import React from "react";
 
 interface WellKnownTabProps {
     data: components["schemas"]["Root"];
@@ -11,8 +12,7 @@ interface WellKnownTabProps {
     clientWellKnownError?: Error;
     clientWellKnownWarnings?: ApiError[];
 }
-
-export default function WellKnownTab({
+function WellKnownTab({
     data,
     clientWellKnownData,
     clientWellKnownError,
@@ -139,3 +139,6 @@ export default function WellKnownTab({
         </>
     );
 }
+
+
+export default React.memo(WellKnownTab);

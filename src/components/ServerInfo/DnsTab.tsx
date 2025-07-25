@@ -1,12 +1,13 @@
 import { H2, Table, Tag, LeadParagraph, ErrorSummary } from "govuk-react";
 import { useTranslation } from "react-i18next";
 import type { components } from "../../api/api";
+import React from "react";
 
 interface DnsTabProps {
     data: components["schemas"]["Root"];
 }
 
-export default function DnsTab({ data }: DnsTabProps) {
+function DnsTab({ data }: DnsTabProps) {
     const { t } = useTranslation();
 
     // DNS info
@@ -132,3 +133,5 @@ export default function DnsTab({ data }: DnsTabProps) {
         </>
     );
 }
+
+export default React.memo(DnsTab);

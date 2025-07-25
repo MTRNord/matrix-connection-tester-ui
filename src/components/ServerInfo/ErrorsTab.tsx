@@ -1,12 +1,13 @@
 import { H2, Table, LeadParagraph } from "govuk-react";
 import { useTranslation } from "react-i18next";
 import type { components } from "../../api/api";
+import React from "react";
 
 interface ErrorsTabProps {
     data: components["schemas"]["Root"];
 }
 
-export default function ErrorsTab({ data }: ErrorsTabProps) {
+function ErrorsTab({ data }: ErrorsTabProps) {
     const { t } = useTranslation();
 
     return (
@@ -37,3 +38,5 @@ export default function ErrorsTab({ data }: ErrorsTabProps) {
         </>
     );
 }
+
+export default React.memo(ErrorsTab);

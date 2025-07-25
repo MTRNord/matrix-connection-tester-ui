@@ -14,8 +14,9 @@ import {
     RawDataTab
 } from ".";
 import type { components } from "../../api/api";
+import React from "react";
 
-export default function ServerInfoResults({ serverName }: { serverName: string }) {
+function ServerInfoResults({ serverName }: { serverName: string }) {
     // Get initial tab from URL hash or default to "overview"
     const getInitialTab = () => {
         const hash = window.location.hash.slice(1); // Remove the #
@@ -53,7 +54,7 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
         setSelectedTab(tab);
         window.history.pushState(null, '', `#${tab}`);
     }, []);
-    
+
     const { t } = useTranslation();
 
     const { data, error, isLoading, isValidating } = useSWR<components["schemas"]["Root"]>(
@@ -184,3 +185,5 @@ export default function ServerInfoResults({ serverName }: { serverName: string }
         </Tabs>
     );
 }
+
+export default React.memo(ServerInfoResults);

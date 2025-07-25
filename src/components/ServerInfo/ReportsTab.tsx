@@ -1,12 +1,13 @@
 import { H2, Table, Tag, ListItem, Details, Paragraph } from "govuk-react";
 import { useTranslation } from "react-i18next";
 import type { components } from "../../api/api";
+import React from "react";
 
 interface ReportsTabProps {
     data: components["schemas"]["Root"];
 }
 
-export default function ReportsTab({ data }: ReportsTabProps) {
+function ReportsTab({ data }: ReportsTabProps) {
     const { t } = useTranslation();
 
     // Connection reports
@@ -229,3 +230,5 @@ export default function ReportsTab({ data }: ReportsTabProps) {
         </>
     );
 }
+
+export default React.memo(ReportsTab);

@@ -3,6 +3,7 @@ import type { ClientWellKnownType, ClientServerVersionsType } from "../../apiTyp
 import { useTranslation } from "react-i18next";
 import { translateApiError } from "../../utils/errorTranslation";
 import type { components } from "../../api/api";
+import React from "react";
 
 interface RawDataTabProps {
     data: components["schemas"]["Root"];
@@ -12,7 +13,7 @@ interface RawDataTabProps {
     clientServerVersionsError?: Error;
 }
 
-export default function RawDataTab({
+function RawDataTab({
     data,
     clientWellKnownData,
     clientWellKnownError,
@@ -109,3 +110,5 @@ export default function RawDataTab({
         </>
     );
 }
+
+export default React.memo(RawDataTab);
