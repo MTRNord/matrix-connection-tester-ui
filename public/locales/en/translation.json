@@ -49,8 +49,10 @@
   },
   "app": {
     "title": "Matrix Connection Tester",
+    "clientTitle": "Matrix Connection Tester - Client-Server API",
     "alertTitle": "Matrix Connection Tester - Alert Management",
     "description": "This tool checks if a Matrix server is reachable and federates correctly with the wider Matrix network. Enter a server name to see if federation works, what software it runs, and detailed debug information about its configuration and connectivity.",
+    "clientDescription": "This tool checks if a Matrix server has a working client-server API and provides information about its supported versions, unstable features, and well-known configuration.",
     "form": {
       "serverName": "Server Name",
       "hintExtra": "The server name is the part of the Matrix ID after the @ symbol. For example, for @alice:matrix.org, the server name is matrix.org.",

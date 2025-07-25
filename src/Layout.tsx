@@ -6,6 +6,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { lazy, Suspense } from "react";
 
 const App = lazy(() => import("./pages/Main"));
+const ClientApp = lazy(() => import("./pages/ClientApp"));
 const Alerts = lazy(() => import("./pages/Alerts"));
 const AlertVerify = lazy(() => import("./pages/AlertVerify"));
 
@@ -22,9 +23,9 @@ export default function Main() {
                     <TopNav.NavLink href="/">
                         Federation Tester
                     </TopNav.NavLink>
-                    <TopNav.NavLink href="/client">
+                    {/*<TopNav.NavLink href="/client">
                         Client Tester
-                    </TopNav.NavLink>
+                    </TopNav.NavLink>*/}
                     <TopNav.NavLink href="/alerts">
                         Alerts
                     </TopNav.NavLink>
@@ -45,7 +46,7 @@ export default function Main() {
                                         <App />
                                     } />
                                     <Route path="/client" element={
-                                        <App />
+                                        <ClientApp />
                                     } />
                                     <Route path="/alerts" element={<Alerts />} />
                                     <Route path="/verify" element={<AlertVerify />} />
