@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import ServerInfoResults from '../components/ServerInfo/ServerInfoResults';
-import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from 'govuk-react';
+import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak, Checkbox } from 'govuk-react';
 import { mutate } from 'swr';
 import SupportInfo from '../SupportInfo';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -13,6 +13,8 @@ function App() {
   const [inputValue, setInputValue] = useState<string>('');
   const [submittedServerName, setSubmittedServerName] = useState<string>('');
   const { t } = useTranslation();
+  const [statsOptIn, setStatsOptIn] = useState<boolean>(false);
+  const [submittedStatsOptIn, setSubmittedStatsOptIn] = useState<boolean>(false);
 
   // Sync state with serverName param
   useEffect(() => {
@@ -34,9 +36,10 @@ function App() {
     if (e) e.preventDefault();
     const trimmed = inputValue.trim();
     if (!trimmed) return;
-    mutate(['federation', trimmed], undefined, { revalidate: true });
+    mutate(['federation', trimmed, statsOptIn ? 'optin' : 'noopt'], undefined, { revalidate: true });
     mutate(['support', trimmed], undefined, { revalidate: true });
     setSubmittedServerName(trimmed);
+    setSubmittedStatsOptIn(statsOptIn);
   };
 
   return (
@@ -67,6 +70,13 @@ function App() {
               />
             </Label>
           </FormGroup>
+          <FormGroup>
+            <Checkbox
+              hint={t('app.stats.optInHint')}
+              checked={statsOptIn}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatsOptIn(e.target.checked)}
+            >{t('app.stats.optInLabel')}</Checkbox>
+          </FormGroup>
           <Button start type="submit">{t('app.form.goButton')}</Button>
         </form>
       </InsetText>
@@ -83,7 +93,7 @@ function App() {
               description={t('app.errors.componentFailedToLoad')}
             />
           }>
-            <ServerInfoResults serverName={submittedServerName} />
+            <ServerInfoResults serverName={submittedServerName} statsOptIn={submittedStatsOptIn} />
           </ErrorBoundary>
           <SectionBreak
             level="LARGE"

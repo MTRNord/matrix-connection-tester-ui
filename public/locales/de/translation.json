@@ -57,6 +57,10 @@
       "ariaLabel": "Servername",
       "goButton": "Los"
     },
+    "stats": {
+      "optInLabel": "Diese Abfrage in anonymisierte Netzwerk-Statistiken aufnehmen",
+      "optInHint": "Wenn ausgewählt, wird diese Abfrage in anonymisierten Statistiken über das Matrix-Netzwerk gezählt. Es werden keine personenbezogenen Daten gespeichert."
+    },
     "errors": {
       "uiFailedToLoad": "Die Benutzeroberfläche konnte nicht geladen werden",
       "componentFailedToLoad": "Die Komponente konnte nicht geladen werden. Bitte kontaktieren Sie den Seitenadministrator"

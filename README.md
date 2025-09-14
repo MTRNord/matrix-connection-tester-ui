@@ -19,7 +19,7 @@ It requires <https://github.com/MTRNord/rust-federation-tester> as a backend API
 
 ## Quick Start
 
-### 1. Run with Docker (TODO: Not yet actually a thing!)
+### 1. Run with Docker
 
 ```sh
 docker run --rm -p 8080:80 ghcr.io/MTRNord/matrix-connection-tester-ui:latest

@@ -1,958 +1,988 @@
 {
-    "openapi": "3.1.0",
-    "info": {
-        "title": "Federation Tester API",
-        "description": "API for testing Matrix federation compatibility of servers.",
-        "license": {
-            "name": "AGPL-3.0-or-later",
-            "identifier": "AGPL-3.0-or-later"
-        },
-        "version": "1.0.0"
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Federation Tester API",
+    "description": "API for testing Matrix federation compatibility of servers.",
+    "license": {
+      "name": "AGPL-3.0-or-later",
+      "identifier": "AGPL-3.0-or-later"
     },
-    "paths": {
-        "/api/alerts/list": {
-            "post": {
-                "tags": [
-                    "Alerts API"
-                ],
-                "operationId": "List Alerts",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/ListAlerts"
-                            }
-                        }
-                    },
-                    "required": true
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/api/alerts/list": {
+      "post": {
+        "tags": [
+          "Alerts API"
+        ],
+        "operationId": "List Alerts",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListAlerts"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email has successfully been sent",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "verification email sent"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/alerts/register": {
+      "post": {
+        "tags": [
+          "Alerts API"
+        ],
+        "operationId": "Register Alert",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterAlert"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "verification email sent"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/alerts/verify": {
+      "get": {
+        "tags": [
+          "Alerts API"
+        ],
+        "operationId": "Verify Alert Email",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "JWT token for email verification",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "example": "123e4567-e89b-12d3-a456-426"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of alerts for the email",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AlertsList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid or expired token",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/alerts/{id}": {
+      "delete": {
+        "tags": [
+          "Alerts API"
+        ],
+        "operationId": "Delete Alert",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the alert to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "example": "123e4567-e89b-12d3-a456-426"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alert deletion verification flow has been started",
+            "content": {
+              "application/json": {
+                "example": {
+                  "status": "verification email sent"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Alert not found",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/api/federation/federation-ok": {
+      "get": {
+        "tags": [
+          "Federation Tester API"
+        ],
+        "operationId": "Check Federation Status",
+        "parameters": [
+          {
+            "name": "server_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stats_opt_in",
+            "in": "query",
+            "description": "When true/1 this request consents to counting anonymized statistics.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns 'GOOD' if federation is ok, 'BAD' otherwise",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
                 },
-                "responses": {
-                    "200": {
-                        "description": "Verification email has successfully been sent",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "status": "verification email sent"
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
+                "example": "GOOD"
+              }
             }
-        },
-        "/api/alerts/register": {
-            "post": {
-                "tags": [
-                    "Alerts API"
-                ],
-                "operationId": "Register Alert",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/RegisterAlert"
-                            }
-                        }
-                    },
-                    "required": true
+          },
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/api/federation/report": {
+      "get": {
+        "tags": [
+          "Federation Tester API"
+        ],
+        "operationId": "Get Federation Report as JSON",
+        "parameters": [
+          {
+            "name": "server_name",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stats_opt_in",
+            "in": "query",
+            "description": "When true/1 this request consents to counting anonymized statistics.",
+            "required": false,
+            "schema": {
+              "type": [
+                "boolean",
+                "null"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "JSON report of the federation test",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Root"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {}
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {}
+            }
+          }
+        }
+      }
+    },
+    "/healthz": {
+      "get": {
+        "tags": [
+          "Miscellaneous"
+        ],
+        "operationId": "Health Check",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
                 },
-                "responses": {
-                    "200": {
-                        "description": "Verification email sent",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "status": "verification email sent"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
+                "example": "ok"
+              }
             }
-        },
-        "/api/alerts/verify": {
-            "get": {
-                "tags": [
-                    "Alerts API"
-                ],
-                "operationId": "Verify Alert Email",
-                "parameters": [
-                    {
-                        "name": "token",
-                        "in": "query",
-                        "description": "JWT token for email verification",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "123e4567-e89b-12d3-a456-426"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "List of alerts for the email",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/AlertsList"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid or expired token",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
-            }
-        },
-        "/api/alerts/{id}": {
-            "delete": {
-                "tags": [
-                    "Alerts API"
-                ],
-                "operationId": "Delete Alert",
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID of the alert to delete",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        },
-                        "example": "123e4567-e89b-12d3-a456-426"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Alert deletion verification flow has been started",
-                        "content": {
-                            "application/json": {
-                                "example": {
-                                    "status": "verification email sent"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Alert not found",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
-            }
-        },
-        "/api/federation/federation-ok": {
-            "get": {
-                "tags": [
-                    "Federation Tester API"
-                ],
-                "operationId": "Check Federation Status",
-                "parameters": [
-                    {
-                        "name": "server_name",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "no_cache",
-                        "in": "query",
-                        "description": "Skip cache and force fresh requests - useful for debugging",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Returns 'GOOD' if federation is ok, 'BAD' otherwise",
-                        "content": {
-                            "text/plain": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "example": "GOOD"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters"
-                    },
-                    "500": {
-                        "description": "Internal server error"
-                    }
-                }
-            }
-        },
-        "/api/federation/report": {
-            "get": {
-                "tags": [
-                    "Federation Tester API"
-                ],
-                "operationId": "Get Federation Report as JSON",
-                "parameters": [
-                    {
-                        "name": "server_name",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "no_cache",
-                        "in": "query",
-                        "description": "Skip cache and force fresh requests - useful for debugging",
-                        "required": false,
-                        "schema": {
-                            "type": "boolean"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "JSON report of the federation test",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/Root"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request parameters",
-                        "content": {
-                            "application/json": {}
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "content": {
-                            "application/json": {}
-                        }
-                    }
-                }
-            }
-        },
-        "/healthz": {
-            "get": {
-                "tags": [
-                    "Miscellaneous"
-                ],
-                "operationId": "Health Check",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "text/plain": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "example": "ok"
-                            }
-                        }
-                    }
-                }
-            },
-            "head": {
-                "tags": [
-                    "Miscellaneous"
-                ],
-                "operationId": "Health Check",
-                "responses": {
-                    "200": {
-                        "description": "Ok",
-                        "content": {
-                            "text/plain": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "example": "ok"
-                            }
-                        }
-                    }
-                }
-            }
+          }
         }
+      },
+      "head": {
+        "tags": [
+          "Miscellaneous"
+        ],
+        "operationId": "Health Check",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "ok"
+              }
+            }
+          }
+        }
+      }
     },
-    "components": {
-        "schemas": {
-            "AlertsList": {
-                "type": "object",
-                "required": [
-                    "alerts"
-                ],
-                "properties": {
-                    "alerts": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Model"
-                        }
-                    }
+    "/metrics": {
+      "get": {
+        "tags": [
+          "Miscellaneous"
+        ],
+        "operationId": "Prometheus Metrics",
+        "responses": {
+          "200": {
+            "description": "Prometheus metrics in text exposition format",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
                 }
-            },
-            "Certificate": {
-                "type": "object",
-                "required": [
-                    "SubjectCommonName",
-                    "IssuerCommonName",
-                    "SHA256Fingerprint"
-                ],
-                "properties": {
-                    "DNSNames": {
-                        "type": [
-                            "array",
-                            "null"
-                        ],
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "IssuerCommonName": {
-                        "type": "string"
-                    },
-                    "SHA256Fingerprint": {
-                        "type": "string"
-                    },
-                    "SubjectCommonName": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Checks": {
-                "type": "object",
-                "required": [
-                    "AllChecksOK",
-                    "MatchingServerName",
-                    "FutureValidUntilTS",
-                    "HasEd25519Key",
-                    "AllEd25519ChecksOK",
-                    "ValidCertificates",
-                    "ServerVersionParses"
-                ],
-                "properties": {
-                    "AllChecksOK": {
-                        "type": "boolean"
-                    },
-                    "AllEd25519ChecksOK": {
-                        "type": "boolean"
-                    },
-                    "Ed25519Checks": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/Ed25519Check"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "FutureValidUntilTS": {
-                        "type": "boolean"
-                    },
-                    "HasEd25519Key": {
-                        "type": "boolean"
-                    },
-                    "MatchingServerName": {
-                        "type": "boolean"
-                    },
-                    "ServerVersionParses": {
-                        "type": "boolean"
-                    },
-                    "ValidCertificates": {
-                        "type": "boolean"
-                    }
-                }
-            },
-            "Cipher": {
-                "type": "object",
-                "required": [
-                    "Version",
-                    "CipherSuite"
-                ],
-                "properties": {
-                    "CipherSuite": {
-                        "type": "string"
-                    },
-                    "Version": {
-                        "type": "string"
-                    }
-                }
-            },
-            "ConnectionReportData": {
-                "type": "object",
-                "required": [
-                    "Cipher",
-                    "Checks",
-                    "Ed25519VerifyKeys",
-                    "Keys",
-                    "Version"
-                ],
-                "properties": {
-                    "Certificates": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/Certificate"
-                        }
-                    },
-                    "Checks": {
-                        "$ref": "#/components/schemas/Checks"
-                    },
-                    "Cipher": {
-                        "$ref": "#/components/schemas/Cipher"
-                    },
-                    "Ed25519VerifyKeys": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "string"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "Error": {
-                        "oneOf": [
-                            {
-                                "type": "null"
-                            },
-                            {
-                                "$ref": "#/components/schemas/Error"
-                            }
-                        ]
-                    },
-                    "Keys": {
-                        "$ref": "#/components/schemas/Keys"
-                    },
-                    "Version": {
-                        "$ref": "#/components/schemas/Version"
-                    }
-                }
-            },
-            "Dnsresult": {
-                "type": "object",
-                "required": [
-                    "SRVSkipped"
-                ],
-                "properties": {
-                    "Addrs": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "SRVSkipped": {
-                        "type": "boolean"
-                    },
-                    "SrvTargets": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/components/schemas/SRVData"
-                            }
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "Ed25519Check": {
-                "type": "object",
-                "required": [
-                    "ValidEd25519",
-                    "MatchingSignature"
-                ],
-                "properties": {
-                    "MatchingSignature": {
-                        "type": "boolean"
-                    },
-                    "ValidEd25519": {
-                        "type": "boolean"
-                    }
-                }
-            },
-            "Ed25519VerifyKey": {
-                "type": "object",
-                "required": [
-                    "key"
-                ],
-                "properties": {
-                    "expired_ts": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
-                        "format": "int64"
-                    },
-                    "key": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Error": {
-                "type": "object",
-                "required": [
-                    "Error",
-                    "ErrorCode"
-                ],
-                "properties": {
-                    "Error": {
-                        "type": "string"
-                    },
-                    "ErrorCode": {
-                        "$ref": "#/components/schemas/ErrorCode"
-                    }
-                }
-            },
-            "ErrorCode": {
-                "oneOf": [
-                    {
-                        "type": "string",
-                        "enum": [
-                            "Unknown"
-                        ]
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "NoAddressesFound"
-                        ]
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "SRVPointsToCNAME"
-                        ]
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "DNSLookupTimeout"
-                        ]
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "SRVLookupTimeout"
-                        ]
-                    },
-                    {
-                        "type": "object",
-                        "required": [
-                            "InvalidServerName"
-                        ],
-                        "properties": {
-                            "InvalidServerName": {
-                                "$ref": "#/components/schemas/InvalidServerNameErrorCode"
-                            }
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "NoRecordsFound"
-                        ]
-                    },
-                    {
-                        "type": "object",
-                        "required": [
-                            "UnexpectedContentType"
-                        ],
-                        "properties": {
-                            "UnexpectedContentType": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "MissingContentType"
-                        ]
-                    },
-                    {
-                        "type": "object",
-                        "required": [
-                            "InvalidJson"
-                        ],
-                        "properties": {
-                            "InvalidJson": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    {
-                        "type": "object",
-                        "required": [
-                            "NotOk"
-                        ],
-                        "properties": {
-                            "NotOk": {
-                                "type": "string"
-                            }
-                        }
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "NoResponse"
-                        ]
-                    },
-                    {
-                        "type": "string",
-                        "enum": [
-                            "Timeout"
-                        ]
-                    }
-                ]
-            },
-            "InvalidServerNameErrorCode": {
-                "type": "string",
-                "enum": [
-                    "Unknown",
-                    "EmptyString",
-                    "EmptyHostname",
-                    "NotValidDNS",
-                    "InvalidCharacter"
-                ]
-            },
-            "Keys": {
-                "type": "object",
-                "required": [
-                    "server_name",
-                    "valid_until_ts"
-                ],
-                "properties": {
-                    "old_verify_keys": {
-                        "type": [
-                            "object",
-                            "null"
-                        ],
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/Ed25519VerifyKey"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "server_name": {
-                        "type": "string"
-                    },
-                    "signatures": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "object",
-                            "additionalProperties": {
-                                "type": "string"
-                            },
-                            "propertyNames": {
-                                "type": "string"
-                            }
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "valid_until_ts": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "verify_keys": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/Ed25519VerifyKey"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "ListAlerts": {
-                "type": "object",
-                "required": [
-                    "email"
-                ],
-                "properties": {
-                    "email": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Model": {
-                "type": "object",
-                "required": [
-                    "id",
-                    "email",
-                    "server_name",
-                    "verified",
-                    "magic_token",
-                    "created_at"
-                ],
-                "properties": {
-                    "created_at": {
-                        "type": "string",
-                        "format": "date-time"
-                    },
-                    "email": {
-                        "type": "string"
-                    },
-                    "id": {
-                        "type": "integer",
-                        "format": "int32"
-                    },
-                    "magic_token": {
-                        "type": "string"
-                    },
-                    "server_name": {
-                        "type": "string"
-                    },
-                    "verified": {
-                        "type": "boolean"
-                    }
-                }
-            },
-            "RegisterAlert": {
-                "type": "object",
-                "required": [
-                    "email",
-                    "server_name"
-                ],
-                "properties": {
-                    "email": {
-                        "type": "string"
-                    },
-                    "server_name": {
-                        "type": "string"
-                    }
-                }
-            },
-            "Root": {
-                "type": "object",
-                "required": [
-                    "WellKnownResult",
-                    "DNSResult",
-                    "Version",
-                    "FederationOK"
-                ],
-                "properties": {
-                    "ConnectionErrors": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/Error"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "ConnectionReports": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/ConnectionReportData"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    },
-                    "DNSResult": {
-                        "$ref": "#/components/schemas/Dnsresult"
-                    },
-                    "Error": {
-                        "oneOf": [
-                            {
-                                "type": "null"
-                            },
-                            {
-                                "$ref": "#/components/schemas/Error"
-                            }
-                        ]
-                    },
-                    "FederationOK": {
-                        "type": "boolean"
-                    },
-                    "Version": {
-                        "$ref": "#/components/schemas/Version"
-                    },
-                    "WellKnownResult": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "$ref": "#/components/schemas/WellKnownResult"
-                        },
-                        "propertyNames": {
-                            "type": "string"
-                        }
-                    }
-                }
-            },
-            "SRVData": {
-                "type": "object",
-                "required": [
-                    "Target",
-                    "Port"
-                ],
-                "properties": {
-                    "Addrs": {
-                        "type": "array",
-                        "items": {
-                            "type": "string"
-                        }
-                    },
-                    "Error": {
-                        "oneOf": [
-                            {
-                                "type": "null"
-                            },
-                            {
-                                "$ref": "#/components/schemas/Error"
-                            }
-                        ]
-                    },
-                    "Port": {
-                        "type": "integer",
-                        "format": "int32",
-                        "minimum": 0
-                    },
-                    "Priority": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
-                        "format": "int32",
-                        "minimum": 0
-                    },
-                    "SrvPrefix": {
-                        "type": [
-                            "string",
-                            "null"
-                        ]
-                    },
-                    "Target": {
-                        "type": "string"
-                    },
-                    "Weight": {
-                        "type": [
-                            "integer",
-                            "null"
-                        ],
-                        "format": "int32",
-                        "minimum": 0
-                    }
-                }
-            },
-            "VerificatonResponseData": {
-                "type": "object",
-                "required": [
-                    "status"
-                ],
-                "properties": {
-                    "status": {
-                        "type": "string",
-                        "description": "The result status of the verification"
-                    }
-                }
-            },
-            "Version": {
-                "type": "object",
-                "required": [
-                    "name",
-                    "version"
-                ],
-                "properties": {
-                    "name": {
-                        "type": "string"
-                    },
-                    "version": {
-                        "type": "string"
-                    }
-                }
-            },
-            "WellKnownResult": {
-                "type": "object",
-                "required": [
-                    "m.server",
-                    "CacheExpiresAt"
-                ],
-                "properties": {
-                    "CacheExpiresAt": {
-                        "type": "integer",
-                        "format": "int64"
-                    },
-                    "Error": {
-                        "oneOf": [
-                            {
-                                "type": "null"
-                            },
-                            {
-                                "$ref": "#/components/schemas/Error"
-                            }
-                        ]
-                    },
-                    "m.server": {
-                        "type": "string"
-                    }
-                }
+              }
             }
-        },
-        "securitySchemes": {
-            "Authorization": {
-                "type": "http",
-                "scheme": "bearer",
-                "bearerFormat": "JWT",
-                "description": "Use the JWT token obtained from the `/api/alerts/register` endpoint to authenticate."
-            }
+          },
+          "404": {
+            "description": "Metrics disabled via configuration"
+          }
         }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AlertsList": {
+        "type": "object",
+        "required": [
+          "alerts"
+        ],
+        "properties": {
+          "alerts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Model"
+            }
+          }
+        }
+      },
+      "Certificate": {
+        "type": "object",
+        "required": [
+          "SubjectCommonName",
+          "IssuerCommonName",
+          "SHA256Fingerprint"
+        ],
+        "properties": {
+          "DNSNames": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "IssuerCommonName": {
+            "type": "string"
+          },
+          "SHA256Fingerprint": {
+            "type": "string"
+          },
+          "SubjectCommonName": {
+            "type": "string"
+          }
+        }
+      },
+      "Checks": {
+        "type": "object",
+        "required": [
+          "AllChecksOK",
+          "MatchingServerName",
+          "FutureValidUntilTS",
+          "HasEd25519Key",
+          "AllEd25519ChecksOK",
+          "ValidCertificates",
+          "ServerVersionParses"
+        ],
+        "properties": {
+          "AllChecksOK": {
+            "type": "boolean"
+          },
+          "AllEd25519ChecksOK": {
+            "type": "boolean"
+          },
+          "Ed25519Checks": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Ed25519Check"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "FutureValidUntilTS": {
+            "type": "boolean"
+          },
+          "HasEd25519Key": {
+            "type": "boolean"
+          },
+          "MatchingServerName": {
+            "type": "boolean"
+          },
+          "ServerVersionParses": {
+            "type": "boolean"
+          },
+          "ValidCertificates": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Cipher": {
+        "type": "object",
+        "required": [
+          "Version",
+          "CipherSuite"
+        ],
+        "properties": {
+          "CipherSuite": {
+            "type": "string"
+          },
+          "Version": {
+            "type": "string"
+          }
+        }
+      },
+      "ConnectionReportData": {
+        "type": "object",
+        "required": [
+          "Cipher",
+          "Checks",
+          "Ed25519VerifyKeys",
+          "Keys",
+          "Version"
+        ],
+        "properties": {
+          "Certificates": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Certificate"
+            }
+          },
+          "Checks": {
+            "$ref": "#/components/schemas/Checks"
+          },
+          "Cipher": {
+            "$ref": "#/components/schemas/Cipher"
+          },
+          "Ed25519VerifyKeys": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "Error": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Error"
+              }
+            ]
+          },
+          "Keys": {
+            "$ref": "#/components/schemas/Keys"
+          },
+          "Version": {
+            "$ref": "#/components/schemas/Version"
+          }
+        }
+      },
+      "Dnsresult": {
+        "type": "object",
+        "required": [
+          "SRVSkipped"
+        ],
+        "properties": {
+          "Addrs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "SRVSkipped": {
+            "type": "boolean"
+          },
+          "SrvTargets": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/SRVData"
+              }
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "Ed25519Check": {
+        "type": "object",
+        "required": [
+          "ValidEd25519",
+          "MatchingSignature"
+        ],
+        "properties": {
+          "MatchingSignature": {
+            "type": "boolean"
+          },
+          "ValidEd25519": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Ed25519VerifyKey": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "expired_ts": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64"
+          },
+          "key": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "Error",
+          "ErrorCode"
+        ],
+        "properties": {
+          "Error": {
+            "type": "string"
+          },
+          "ErrorCode": {
+            "$ref": "#/components/schemas/ErrorCode"
+          }
+        }
+      },
+      "ErrorCode": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "Unknown"
+            ]
+          },
+          {
+            "type": "string",
+            "enum": [
+              "NoAddressesFound"
+            ]
+          },
+          {
+            "type": "string",
+            "enum": [
+              "SRVPointsToCNAME"
+            ]
+          },
+          {
+            "type": "string",
+            "enum": [
+              "DNSLookupTimeout"
+            ]
+          },
+          {
+            "type": "string",
+            "enum": [
+              "SRVLookupTimeout"
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "InvalidServerName"
+            ],
+            "properties": {
+              "InvalidServerName": {
+                "$ref": "#/components/schemas/InvalidServerNameErrorCode"
+              }
+            }
+          },
+          {
+            "type": "string",
+            "enum": [
+              "NoRecordsFound"
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "UnexpectedContentType"
+            ],
+            "properties": {
+              "UnexpectedContentType": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "string",
+            "enum": [
+              "MissingContentType"
+            ]
+          },
+          {
+            "type": "object",
+            "required": [
+              "InvalidJson"
+            ],
+            "properties": {
+              "InvalidJson": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "required": [
+              "NotOk"
+            ],
+            "properties": {
+              "NotOk": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "type": "string",
+            "enum": [
+              "NoResponse"
+            ]
+          },
+          {
+            "type": "string",
+            "enum": [
+              "Timeout"
+            ]
+          }
+        ]
+      },
+      "InvalidServerNameErrorCode": {
+        "type": "string",
+        "enum": [
+          "Unknown",
+          "EmptyString",
+          "EmptyHostname",
+          "NotValidDNS",
+          "InvalidCharacter"
+        ]
+      },
+      "Keys": {
+        "type": "object",
+        "required": [
+          "server_name",
+          "valid_until_ts"
+        ],
+        "properties": {
+          "old_verify_keys": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Ed25519VerifyKey"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "server_name": {
+            "type": "string"
+          },
+          "signatures": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "propertyNames": {
+                "type": "string"
+              }
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "valid_until_ts": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "verify_keys": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Ed25519VerifyKey"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "ListAlerts": {
+        "type": "object",
+        "required": [
+          "email"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          }
+        }
+      },
+      "Model": {
+        "type": "object",
+        "required": [
+          "id",
+          "email",
+          "server_name",
+          "verified",
+          "magic_token",
+          "created_at"
+        ],
+        "properties": {
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "email": {
+            "type": "string"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "magic_token": {
+            "type": "string"
+          },
+          "server_name": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          }
+        }
+      },
+      "RegisterAlert": {
+        "type": "object",
+        "required": [
+          "email",
+          "server_name"
+        ],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "server_name": {
+            "type": "string"
+          }
+        }
+      },
+      "Root": {
+        "type": "object",
+        "required": [
+          "WellKnownResult",
+          "DNSResult",
+          "Version",
+          "FederationOK"
+        ],
+        "properties": {
+          "ConnectionErrors": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "ConnectionReports": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ConnectionReportData"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          },
+          "DNSResult": {
+            "$ref": "#/components/schemas/Dnsresult"
+          },
+          "Error": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Error"
+              }
+            ]
+          },
+          "FederationOK": {
+            "type": "boolean"
+          },
+          "Version": {
+            "$ref": "#/components/schemas/Version"
+          },
+          "WellKnownResult": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/WellKnownResult"
+            },
+            "propertyNames": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SRVData": {
+        "type": "object",
+        "required": [
+          "Target",
+          "Port"
+        ],
+        "properties": {
+          "Addrs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "Error": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Error"
+              }
+            ]
+          },
+          "Port": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0
+          },
+          "Priority": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
+          },
+          "SrvPrefix": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "Target": {
+            "type": "string"
+          },
+          "Weight": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int32",
+            "minimum": 0
+          }
+        }
+      },
+      "VerificatonResponseData": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "The result status of the verification"
+          }
+        }
+      },
+      "Version": {
+        "type": "object",
+        "required": [
+          "name",
+          "version"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          }
+        }
+      },
+      "WellKnownResult": {
+        "type": "object",
+        "required": [
+          "m.server",
+          "CacheExpiresAt"
+        ],
+        "properties": {
+          "CacheExpiresAt": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "Error": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/Error"
+              }
+            ]
+          },
+          "m.server": {
+            "type": "string"
+          }
+        }
+      }
     },
-    "tags": [
-        {
-            "name": "Miscellaneous",
-            "description": "Miscellaneous endpoints"
-        },
-        {
-            "name": "Federation Tester API",
-            "description": "Federation Tester API endpoints"
-        },
-        {
-            "name": "Alerts API",
-            "description": "Alerts API endpoints"
-        }
-    ]
+    "securitySchemes": {
+      "Authorization": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Use the JWT token obtained from the `/api/alerts/register` endpoint to authenticate."
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Miscellaneous",
+      "description": "Miscellaneous endpoints"
+    },
+    {
+      "name": "Federation Tester API",
+      "description": "Federation Tester API endpoints"
+    },
+    {
+      "name": "Alerts API",
+      "description": "Alerts API endpoints"
+    }
+  ]
 }

@@ -62,6 +62,10 @@
       "ariaLabel": "Server Name",
       "goButton": "Go"
     },
+    "stats": {
+      "optInLabel": "Include this query in anonymized network statistics",
+      "optInHint": "If checked, this query will be counted in anonymized statistics about the Matrix network. No personally identifiable data is stored."
+    },
     "errors": {
       "uiFailedToLoad": "The UI failed to load",
       "componentFailedToLoad": "The component failed to load. Please contact the page admin"

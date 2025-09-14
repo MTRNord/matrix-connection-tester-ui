@@ -16,7 +16,7 @@ import {
 import type { components } from "../../api/api";
 import React from "react";
 
-function ServerInfoResults({ serverName }: { serverName: string }) {
+function ServerInfoResults({ serverName, statsOptIn }: { serverName: string; statsOptIn?: boolean }) {
     // Get initial tab from URL hash or default to "overview"
     const getInitialTab = () => {
         const hash = window.location.hash.slice(1); // Remove the #
@@ -58,8 +58,8 @@ function ServerInfoResults({ serverName }: { serverName: string }) {
     const { t } = useTranslation();
 
     const { data, error, isLoading, isValidating } = useSWR<components["schemas"]["Root"]>(
-        serverName ? ['federation', serverName] : null,
-        () => fetchData(serverName),
+        serverName ? ['federation', serverName, statsOptIn ? 'optin' : 'noopt'] : null,
+        () => fetchData(serverName, statsOptIn),
         { keepPreviousData: false }
     );
 

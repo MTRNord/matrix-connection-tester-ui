@@ -10,7 +10,7 @@ export async function getConfig(): Promise<ConfigType> {
     return ConfigSchema.parse(config);
 }
 
-export const fetchData = async (serverName: string): Promise<components["schemas"]["Root"]> => {
+export const fetchData = async (serverName: string, statsOptIn?: boolean): Promise<components["schemas"]["Root"]> => {
     if (!serverName) {
         throw new ApiError("EMPTY_SERVER_NAME", "Server name cannot be empty");
     }
@@ -23,12 +23,17 @@ export const fetchData = async (serverName: string): Promise<components["schemas
         baseUrl: API_SERVER_URL,
     });
 
+    const query: { server_name: string; no_cache: boolean; stats_opt_in?: boolean } = {
+        server_name: serverName,
+        no_cache: true,
+    };
+    if (statsOptIn) {
+        query.stats_opt_in = true;
+    }
+
     const { data, error } = await client.GET("/api/federation/report", {
         params: {
-            query: {
-                server_name: serverName,
-                no_cache: true
-            }
+            query
         }
     });
 

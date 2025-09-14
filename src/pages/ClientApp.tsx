@@ -1,4 +1,4 @@
-import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak } from "govuk-react";
+import { Button, ErrorSummary, FormGroup, H1, HintText, Input, InsetText, Label, LabelText, LeadParagraph, SectionBreak, Checkbox } from "govuk-react";
 import React, { useEffect, useState } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Trans, useTranslation } from "react-i18next";
@@ -11,6 +11,7 @@ function ClientApp() {
     const [inputValue, setInputValue] = useState<string>('');
     const [submittedServerName, setSubmittedServerName] = useState<string>('');
     const { t } = useTranslation();
+    const [statsOptIn, setStatsOptIn] = useState<boolean>(false);
 
     // Sync state with serverName param
     useEffect(() => {
@@ -64,6 +65,13 @@ function ClientApp() {
                                 style={{ maxWidth: 300 }}
                             />
                         </Label>
+                    </FormGroup>
+                    <FormGroup>
+                        <Checkbox
+                            hint={t('app.stats.optInHint')}
+                            checked={statsOptIn}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setStatsOptIn(e.target.checked)}
+                        >{t('app.stats.optInLabel')}</Checkbox>
                     </FormGroup>
                     <Button start type="submit">{t('app.form.goButton')}</Button>
                 </form>

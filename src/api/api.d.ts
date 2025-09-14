@@ -116,6 +116,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["Prometheus Metrics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -404,7 +420,7 @@ export interface operations {
                  * @description ID of the alert to delete
                  * @example 123e4567-e89b-12d3-a456-426
                  */
-                id: string;
+                id: number;
             };
             cookie?: never;
         };
@@ -446,8 +462,8 @@ export interface operations {
         parameters: {
             query: {
                 server_name: string;
-                /** @description Skip cache and force fresh requests - useful for debugging */
-                no_cache?: boolean;
+                /** @description When true/1 this request consents to counting anonymized statistics. */
+                stats_opt_in?: boolean | null;
             };
             header?: never;
             path?: never;
@@ -485,8 +501,8 @@ export interface operations {
         parameters: {
             query: {
                 server_name: string;
-                /** @description Skip cache and force fresh requests - useful for debugging */
-                no_cache?: boolean;
+                /** @description When true/1 this request consents to counting anonymized statistics. */
+                stats_opt_in?: boolean | null;
             };
             header?: never;
             path?: never;
@@ -562,6 +578,33 @@ export interface operations {
                     /** @example ok */
                     "text/plain": string;
                 };
+            };
+        };
+    };
+    "Prometheus Metrics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Prometheus metrics in text exposition format */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "text/plain": string;
+                };
+            };
+            /** @description Metrics disabled via configuration */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };
