@@ -87,7 +87,8 @@
       "wellKnown": "Well-Known",
       "reports": "Verbindungsberichte",
       "errors": "Verbindungsfehler",
-      "raw": "Rohe API"
+      "raw": "Rohe API",
+      "statistics": "Statistiken"
     },
     "overview": {
       "title": "Federation Übersicht",
@@ -201,6 +202,18 @@
         "title": "Client Server Versionen (/_matrix/client/versions)",
         "showRaw": "Rohe Client Server Versions-Daten anzeigen"
       }
+    },
+    "statistics": {
+      "title": "Netzwerk-Statistiken",
+      "description": "Anonymisierte, zugestimmte Federation-Testanfragen aggregiert nach Software-Familie.",
+      "familyChartTitle": "Federation-Testanfragen pro Software-Familie",
+      "family": "Software-Familie",
+      "count": "Anfragen",
+      "noData": "Noch keine zugestimmten Statistiken verfügbar.",
+      "updated": "Zuletzt aktualisiert",
+      "versionShareTitle": "Versionsverteilung für Top-Familien",
+      "versionFamilyHeading": "Versionsverteilung für {{family}}",
+      "versionNoData": "Keine Versionsdaten für diese Familie verfügbar"
     },
     "loading": "⌛ Informationen von der API abrufen…",
     "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"

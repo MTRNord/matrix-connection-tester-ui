@@ -314,3 +314,16 @@ export const fetchClientServerVersions = async (
         throw new ApiError("SERVER_VERSION_UNKNOWN_VALIDATION_ERROR", `Unexpected error during client versions validation: ${zodError instanceof Error ? zodError.message : String(zodError)}\n\nReceived data: ${JSON.stringify(jsonData, null, 2)}`);
     }
 }
+
+// Fetch raw Prometheus metrics from the API server
+export const getMetrics = async (): Promise<string> => {
+    const API_SERVER_URL = (await getConfig()).api_server_url;
+    if (!API_SERVER_URL) {
+        throw new ApiError("API_SERVER_NOT_CONFIGURED", "API server URL is not configured");
+    }
+    const resp = await fetch(`${API_SERVER_URL}/metrics`);
+    if (!resp.ok) {
+        throw new ApiError("API_HTTP_ERROR", `Failed to fetch metrics: ${resp.status}`);
+    }
+    return await resp.text();
+};

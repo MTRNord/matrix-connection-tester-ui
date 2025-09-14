@@ -8,6 +8,7 @@ import { lazy, Suspense } from "react";
 const App = lazy(() => import("./pages/Main"));
 const ClientApp = lazy(() => import("./pages/ClientApp"));
 const Alerts = lazy(() => import("./pages/Alerts"));
+const Stats = lazy(() => import("./pages/Stats"));
 const AlertVerify = lazy(() => import("./pages/AlertVerify"));
 
 const APP_VERSION = typeof __APP_VERSION__ !== "undefined" ? __APP_VERSION__ : "dev";
@@ -29,6 +30,9 @@ export default function Main() {
                     <TopNav.NavLink href="/alerts">
                         Alerts
                     </TopNav.NavLink>
+                    <TopNav.NavLink href="/statistics">
+                        Statistics
+                    </TopNav.NavLink>
                 </TopNav>
             </header>
             <Page.WidthContainer>
@@ -49,6 +53,7 @@ export default function Main() {
                                         <ClientApp />
                                     } />
                                     <Route path="/alerts" element={<Alerts />} />
+                                    <Route path="/statistics" element={<Stats />} />
                                     <Route path="/verify" element={<AlertVerify />} />
                                 </Routes>
                             </BrowserRouter>

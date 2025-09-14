@@ -92,7 +92,8 @@
       "wellKnown": "Well-Known",
       "reports": "Connection Reports",
       "errors": "Connection Errors",
-      "raw": "Raw API"
+      "raw": "Raw API",
+      "statistics": "Statistics"
     },
     "overview": {
       "title": "Federation Overview",
@@ -206,6 +207,18 @@
         "title": "Client Server Versions (/_matrix/client/versions)",
         "showRaw": "Show raw client server versions data"
       }
+    },
+    "statistics": {
+      "title": "Network Statistics",
+      "description": "Anonymized opted-in federation test request counts aggregated by software family.",
+      "familyChartTitle": "Federation Test Requests per Software Family",
+      "family": "Software Family",
+      "count": "Requests",
+      "noData": "No opted-in statistics available yet.",
+      "updated": "Last updated",
+      "versionShareTitle": "Version distribution for top families",
+      "versionFamilyHeading": "Version distribution for {{family}}",
+      "versionNoData": "No version data available for this family"
     },
     "loading": "⌛ Getting info from API…",
     "apiError": "⚠️ Something went wrong talking to the API"
