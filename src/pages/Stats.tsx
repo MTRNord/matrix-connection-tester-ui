@@ -54,8 +54,16 @@ function StatsPage() {
             acc[family] = acc[family] || {};
             acc[family][version] = (acc[family][version] || 0) + sample.value;
         }
-        return Object.entries(acc).map(([family, versions]) => ({ family, versions }));
-    }, [topFamilies, versionMetrics]);
+        // Sort versionDistributions by the same order as familyMetric (by count desc, then name asc)
+        const distributions = Object.entries(acc).map(([family, versions]) => ({ family, versions }));
+        // Build a map of family to its index in familyMetric for stable sorting
+        const familyOrder: Record<string, number> = {};
+        familyMetric.forEach((s, idx) => {
+            familyOrder[s.labels.software_family || 'unknown'] = idx;
+        });
+        distributions.sort((a, b) => (familyOrder[a.family] ?? 999) - (familyOrder[b.family] ?? 999));
+        return distributions;
+    }, [topFamilies, versionMetrics, familyMetric]);
 
     const chartData: Data[] | null = useMemo(() => {
         if (!familyMetric.length) return null;
