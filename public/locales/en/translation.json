@@ -210,15 +210,14 @@
     },
     "statistics": {
       "title": "Network Statistics",
-      "description": "Anonymized opted-in federation test request counts aggregated by software family.",
-      "familyChartTitle": "Federation Test Requests per Software Family",
-      "family": "Software Family",
-      "count": "Requests",
+      "description": "Count by server types",
+      "family": "Server Type",
+      "count": "Count",
       "noData": "No opted-in statistics available yet.",
       "updated": "Last updated",
-      "versionShareTitle": "Version distribution for top families",
-      "versionFamilyHeading": "Version distribution for {{family}}",
-      "versionNoData": "No version data available for this family"
+      "versionShareTitle": "Version distribution for the top 3 server types",
+      "versionFamilyHeading": "{{family}}",
+      "versionNoData": "No version data available for this server type"
     },
     "loading": "⌛ Getting info from API…",
     "apiError": "⚠️ Something went wrong talking to the API"

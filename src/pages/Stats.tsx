@@ -19,7 +19,17 @@ function StatsPage() {
     const { t } = useTranslation();
     const { data, error, isLoading } = useSWR('metrics', fetcher, { refreshInterval: 60_000 });
 
-    const familyMetric = useMemo(() => data ? getMetricSamples(data, 'federation_request_family_total') : [], [data]);
+    // Stable sort: value desc, then family name asc
+    const familyMetric = useMemo(() => {
+        if (!data) return [];
+        const arr = getMetricSamples(data, 'federation_request_family_total');
+        return arr.slice().sort((a, b) => {
+            const va = b.value - a.value;
+            if (va !== 0) return va;
+            const fa = (a.labels.software_family || 'unknown').localeCompare(b.labels.software_family || 'unknown');
+            return fa;
+        });
+    }, [data]);
 
     // Build a map of family -> versions counts using per-server metrics (success + failure aggregated)
     const versionMetrics = useMemo(() => data ? getMetricSamples(data, 'federation_request_total') : [], [data]);
@@ -72,8 +82,8 @@ function StatsPage() {
     return (
         <div>
             <H1>{t('federation.statistics.title')}</H1>
-            <Paragraph>{t('federation.statistics.description')}</Paragraph>
-            <SectionBreak level="SMALL" visible />
+            <SectionBreak visible />
+            <H2>{t('federation.statistics.description')}</H2>
             {!chartData && (
                 <Paragraph>{t('federation.statistics.noData')}</Paragraph>
             )}
@@ -81,7 +91,6 @@ function StatsPage() {
                 <Plot
                     data={chartData}
                     layout={{
-                        title: t('federation.statistics.familyChartTitle'),
                         xaxis: { title: t('federation.statistics.family'), automargin: true },
                         yaxis: { title: t('federation.statistics.count'), dtick: 1, tickformat: 'd', automargin: true },
                         margin: { t: 50, l: 60, r: 10, b: 60 },
@@ -91,15 +100,20 @@ function StatsPage() {
                     } as Partial<Layout>}
                     style={{ width: '100%', height: '420px' }}
                     useResizeHandler
-                    config={{ displaylogo: false, responsive: true }}
+                    config={{ displaylogo: true, responsive: true }}
                 />
             )}
-            <SectionBreak level="SMALL" visible />
+            <SectionBreak visible />
             {versionDistributions.length > 0 && (
                 <>
                     <H2 style={{ fontWeight: 'bold', marginTop: '1rem' }}>{t('federation.statistics.versionShareTitle')}</H2>
                     {versionDistributions.map(dist => {
-                        const versions = Object.keys(dist.versions).sort((a, b) => dist.versions[b] - dist.versions[a]);
+                        // Stable sort: count desc, then version asc
+                        const versions = Object.keys(dist.versions).sort((a, b) => {
+                            const v = dist.versions[b] - dist.versions[a];
+                            if (v !== 0) return v;
+                            return a.localeCompare(b);
+                        });
                         const values = versions.map(v => dist.versions[v]);
                         const barColors = versions.map((_, i) => PALETTE[i % PALETTE.length]);
                         const dataTrace: Data = {
@@ -128,7 +142,7 @@ function StatsPage() {
                                         } as Partial<Layout>}
                                         style={{ width: '100%', height: '360px' }}
                                         useResizeHandler
-                                        config={{ displaylogo: false, responsive: true }}
+                                        config={{ displaylogo: true, responsive: true }}
                                     />
                                 )}
                             </div>

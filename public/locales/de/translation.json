@@ -205,15 +205,14 @@
     },
     "statistics": {
       "title": "Netzwerk-Statistiken",
-      "description": "Anonymisierte, zugestimmte Federation-Testanfragen aggregiert nach Software-Familie.",
-      "familyChartTitle": "Federation-Testanfragen pro Software-Familie",
-      "family": "Software-Familie",
-      "count": "Anfragen",
+      "description": "Anzahl nach Server-Typen",
+      "family": "Server-Typ",
+      "count": "Anzahl",
       "noData": "Noch keine zugestimmten Statistiken verfügbar.",
       "updated": "Zuletzt aktualisiert",
-      "versionShareTitle": "Versionsverteilung für Top-Familien",
-      "versionFamilyHeading": "Versionsverteilung für {{family}}",
-      "versionNoData": "Keine Versionsdaten für diese Familie verfügbar"
+      "versionShareTitle": "Versionsverteilung für die 3 Top-Server-Typen",
+      "versionFamilyHeading": "{{family}}",
+      "versionNoData": "Keine Versionsdaten für diesen Server-Typen verfügbar"
     },
     "loading": "⌛ Informationen von der API abrufen…",
     "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"
