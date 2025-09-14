@@ -51,7 +51,7 @@ export default function AlertVerify() {
             const API_SERVER_URL = (await getConfig()).api_server_url;
             const client = createClient<paths>({ baseUrl: API_SERVER_URL });
             const { error } = await client.DELETE("/api/alerts/{id}", {
-                params: { path: { id: String(id) } },
+                params: { path: { id: id } },
             });
             if (!error) {
                 setMessage("A verification email to delete this alert was sent. Please check your inbox to confirm deletion.");
