@@ -27,6 +27,19 @@ const GOV_UK_ECHARTS_STYLE = {
         borderColor: '#b1b4b6',
         borderWidth: 1
     },
+    xAxis: {
+        nameLocation: 'middle' as "middle",
+        axisLine: { lineStyle: { color: '#b1b4b6' } },
+        axisTick: { lineStyle: { color: '#b1b4b6' } },
+        splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
+    },
+    yAxis: {
+        axisLine: { lineStyle: { color: '#b1b4b6' } },
+        axisTick: { lineStyle: { color: '#b1b4b6' } },
+        axisLabel: {
+            formatter: (value: string) => value.length > 25 ? value.substring(0, 22) + '...' : value
+        }
+    }
 };
 
 // Type for unstable feature info
@@ -147,18 +160,14 @@ function StatsEChartsPage() {
         return {
             ...GOV_UK_ECHARTS_STYLE,
             xAxis: {
+                ...GOV_UK_ECHARTS_STYLE.xAxis,
                 type: 'value',
                 name: t('federation.statistics.count'),
-                nameLocation: 'middle',
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
             },
             yAxis: {
+                ...GOV_UK_ECHARTS_STYLE.yAxis,
                 type: 'category',
-                data: families.reverse(), // Reverse to show highest values at top
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } }
+                data: families.reverse(),
             },
             series: [{
                 type: 'bar',
@@ -179,18 +188,14 @@ function StatsEChartsPage() {
         return {
             ...GOV_UK_ECHARTS_STYLE,
             xAxis: {
+                ...GOV_UK_ECHARTS_STYLE.xAxis,
                 type: 'value',
                 name: t('federation.statistics.count'),
-                nameLocation: 'middle',
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
             },
             yAxis: {
+                ...GOV_UK_ECHARTS_STYLE.yAxis,
                 type: 'category',
                 data: [t('federation.statistics.featuresAnnounced'), t('federation.statistics.featuresEnabled')],
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } }
             },
             series: [{
                 type: 'bar',
@@ -213,25 +218,18 @@ function StatsEChartsPage() {
         return {
             ...GOV_UK_ECHARTS_STYLE,
             xAxis: {
+                ...GOV_UK_ECHARTS_STYLE.xAxis,
                 type: 'value',
                 name: t('federation.statistics.serverCount'),
-                nameLocation: 'middle',
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
             },
             yAxis: {
+                ...GOV_UK_ECHARTS_STYLE.yAxis,
                 type: 'category',
-                data: allEnabledFeatures.map(f => f.displayName),
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                axisLabel: {
-                    formatter: (value: string) => value.length > 25 ? value.substring(0, 22) + '...' : value
-                }
+                data: allEnabledFeatures.reverse().map(f => f.displayName),
             },
             series: [{
                 type: 'bar',
-                data: allEnabledFeatures.map((f, index) => ({
+                data: allEnabledFeatures.reverse().map((f, index) => ({
                     value: f.count,
                     itemStyle: { color: PALETTE[index % PALETTE.length] }
                 }))
@@ -239,7 +237,7 @@ function StatsEChartsPage() {
             tooltip: {
                 trigger: 'item',
                 formatter: (params: { dataIndex: number; value: number }) => {
-                    const feature = allEnabledFeatures[params.dataIndex];
+                    const feature = allEnabledFeatures.reverse()[params.dataIndex];
                     return feature.displayName !== feature.feature
                         ? `<b>${feature.displayName}</b><br/>${feature.feature}<br/>Servers: ${params.value}`
                         : `<b>${feature.displayName}</b><br/>Servers: ${params.value}`;
@@ -255,25 +253,18 @@ function StatsEChartsPage() {
         return {
             ...GOV_UK_ECHARTS_STYLE,
             xAxis: {
+                ...GOV_UK_ECHARTS_STYLE.xAxis,
                 type: 'value',
                 name: t('federation.statistics.serverCount'),
-                nameLocation: 'middle',
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
             },
             yAxis: {
+                ...GOV_UK_ECHARTS_STYLE.yAxis,
                 type: 'category',
-                data: allAnnouncedFeatures.map(f => f.displayName),
-                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                axisLabel: {
-                    formatter: (value: string) => value.length > 32 ? value.substring(0, 31) + '...' : value
-                }
+                data: allAnnouncedFeatures.reverse().map(f => f.displayName),
             },
             series: [{
                 type: 'bar',
-                data: allAnnouncedFeatures.map((f, index) => ({
+                data: allAnnouncedFeatures.reverse().map((f, index) => ({
                     value: f.count,
                     itemStyle: { color: PALETTE[index % PALETTE.length] }
                 })),
@@ -281,7 +272,7 @@ function StatsEChartsPage() {
             tooltip: {
                 trigger: 'item',
                 formatter: (params: { dataIndex: number; value: number }) => {
-                    const feature = allAnnouncedFeatures[params.dataIndex];
+                    const feature = allAnnouncedFeatures.reverse()[params.dataIndex];
                     return feature.displayName !== feature.feature
                         ? `<b>${feature.displayName}</b><br/>${feature.feature}<br/>Servers: ${params.value}`
                         : `<b>${feature.displayName}</b><br/>Servers: ${params.value}`;
@@ -361,29 +352,30 @@ function StatsEChartsPage() {
                         const versionChartOption: EChartsOption = {
                             ...GOV_UK_ECHARTS_STYLE,
                             xAxis: {
+                                ...GOV_UK_ECHARTS_STYLE.xAxis,
                                 type: 'value',
                                 name: t('federation.statistics.count'),
-                                nameLocation: 'middle',
-                                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                                axisTick: { lineStyle: { color: '#b1b4b6' } },
-                                splitLine: { lineStyle: { color: '#b1b4b6', width: 1 } }
                             },
                             yAxis: {
+                                ...GOV_UK_ECHARTS_STYLE.yAxis,
                                 type: 'category',
-                                data: versions.reverse(),
-                                axisLine: { lineStyle: { color: '#b1b4b6' } },
-                                axisTick: { lineStyle: { color: '#b1b4b6' } }
+                                data: versions,
                             },
                             series: [{
                                 type: 'bar',
-                                data: values.reverse().map((value, index) => ({
+                                data: values.map((value, index) => ({
                                     value,
                                     itemStyle: { color: PALETTE[index % PALETTE.length] }
                                 })),
                             }],
+                            // @ts-expect-error -- Typescript confused
                             tooltip: {
                                 trigger: 'item',
-                                formatter: '{b}: {c}'
+                                formatter: (params: { dataIndex: number; value: unknown }) => {
+                                    const dataIndex = versions[params.dataIndex];
+                                    const value = params.value;
+                                    return `<b>${dataIndex}</b><br/>Servers: ${value}`;
+                                }
                             }
                         };
 
