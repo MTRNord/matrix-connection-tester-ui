@@ -16,6 +16,16 @@ const fetcher = async () => {
 // Accessible colour palette (WCAG friendly high contrast) – sourced from GOV.UK and ColorBrewer-like sets
 const PALETTE = ['#1d70b8', '#00703c', '#d4351c', '#6f72af', '#ffdd00', '#b58840', '#912b88'];
 
+// GOV.UK design system styling for Plotly charts
+const GOV_UK_CHART_LAYOUT = {
+    font: { family: '"GDS Transport", arial, sans-serif', size: 14, color: '#0b0c0c' },
+    plot_bgcolor: '#ffffff',
+    paper_bgcolor: '#ffffff',
+    gridcolor: '#b1b4b6',
+    linecolor: '#b1b4b6',
+    tickcolor: '#b1b4b6'
+};
+
 // Type for unstable feature info
 type UnstableFeatureInfo = {
     msc?: string;
@@ -163,8 +173,27 @@ function StatsPage() {
                 <Plot
                     data={chartData}
                     layout={{
-                        xaxis: { title: t('federation.statistics.family'), automargin: true },
-                        yaxis: { title: t('federation.statistics.count'), dtick: 1, tickformat: 'd', automargin: true },
+                        font: GOV_UK_CHART_LAYOUT.font,
+                        plot_bgcolor: GOV_UK_CHART_LAYOUT.plot_bgcolor,
+                        paper_bgcolor: GOV_UK_CHART_LAYOUT.paper_bgcolor,
+                        xaxis: {
+                            title: t('federation.statistics.family'),
+                            automargin: true,
+                            gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                            linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                            tickcolor: GOV_UK_CHART_LAYOUT.tickcolor
+                        },
+                        yaxis: {
+                            title: t('federation.statistics.count'),
+                            dtick: 1,
+                            tickformat: 'd',
+                            automargin: true,
+                            gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                            linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                            tickcolor: GOV_UK_CHART_LAYOUT.tickcolor,
+                            showgrid: true,
+                            gridwidth: 1
+                        },
                         margin: { t: 50, l: 60, r: 10, b: 60 },
                         autosize: true,
                         bargap: 0.2,
@@ -193,8 +222,26 @@ function StatsPage() {
                         }
                     ]}
                     layout={{
-                        xaxis: { title: t('federation.statistics.featureType'), automargin: true },
-                        yaxis: { title: t('federation.statistics.count'), tickformat: 'd', automargin: true },
+                        font: GOV_UK_CHART_LAYOUT.font,
+                        plot_bgcolor: GOV_UK_CHART_LAYOUT.plot_bgcolor,
+                        paper_bgcolor: GOV_UK_CHART_LAYOUT.paper_bgcolor,
+                        xaxis: {
+                            title: t('federation.statistics.featureType'),
+                            automargin: true,
+                            gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                            linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                            tickcolor: GOV_UK_CHART_LAYOUT.tickcolor
+                        },
+                        yaxis: {
+                            title: t('federation.statistics.count'),
+                            tickformat: 'd',
+                            automargin: true,
+                            gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                            linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                            tickcolor: GOV_UK_CHART_LAYOUT.tickcolor,
+                            showgrid: true,
+                            gridwidth: 1
+                        },
                         margin: { t: 20, l: 60, r: 10, b: 80 },
                         autosize: true,
                         bargap: 0.2,
@@ -225,11 +272,26 @@ function StatsPage() {
                             }
                         ]}
                         layout={{
-                            xaxis: { title: t('federation.statistics.featureName'), automargin: true, tickangle: -45 },
+                            font: GOV_UK_CHART_LAYOUT.font,
+                            plot_bgcolor: GOV_UK_CHART_LAYOUT.plot_bgcolor,
+                            paper_bgcolor: GOV_UK_CHART_LAYOUT.paper_bgcolor,
+                            xaxis: {
+                                title: t('federation.statistics.featureName'),
+                                automargin: true,
+                                tickangle: -45,
+                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor
+                            },
                             yaxis: {
                                 title: t('federation.statistics.serverCount'),
                                 tickformat: 'd',
                                 automargin: true,
+                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor,
+                                showgrid: true,
+                                gridwidth: 1
                                 // Smart y-axis: no forced dtick, let Plotly decide optimal spacing
                             },
                             margin: { t: 30, l: 60, r: 20, b: 180 },
@@ -263,11 +325,26 @@ function StatsPage() {
                             }
                         ]}
                         layout={{
-                            xaxis: { title: t('federation.statistics.featureName'), automargin: true, tickangle: -45 },
+                            font: GOV_UK_CHART_LAYOUT.font,
+                            plot_bgcolor: GOV_UK_CHART_LAYOUT.plot_bgcolor,
+                            paper_bgcolor: GOV_UK_CHART_LAYOUT.paper_bgcolor,
+                            xaxis: {
+                                title: t('federation.statistics.featureName'),
+                                automargin: true,
+                                tickangle: -45,
+                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor
+                            },
                             yaxis: {
                                 title: t('federation.statistics.serverCount'),
                                 tickformat: 'd',
                                 automargin: true,
+                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor,
+                                showgrid: true,
+                                gridwidth: 1
                                 // Smart y-axis: no forced dtick, let Plotly decide optimal spacing
                             },
                             margin: { t: 30, l: 60, r: 20, b: 180 },
@@ -311,9 +388,28 @@ function StatsPage() {
                                     <Plot
                                         data={[dataTrace]}
                                         layout={{
+                                            font: GOV_UK_CHART_LAYOUT.font,
+                                            plot_bgcolor: GOV_UK_CHART_LAYOUT.plot_bgcolor,
+                                            paper_bgcolor: GOV_UK_CHART_LAYOUT.paper_bgcolor,
                                             title: undefined,
-                                            xaxis: { title: 'Version', automargin: true },
-                                            yaxis: { title: t('federation.statistics.count'), dtick: 1, tickformat: 'd', automargin: true },
+                                            xaxis: {
+                                                title: 'Version',
+                                                automargin: true,
+                                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor
+                                            },
+                                            yaxis: {
+                                                title: t('federation.statistics.count'),
+                                                dtick: 1,
+                                                tickformat: 'd',
+                                                automargin: true,
+                                                gridcolor: GOV_UK_CHART_LAYOUT.gridcolor,
+                                                linecolor: GOV_UK_CHART_LAYOUT.linecolor,
+                                                tickcolor: GOV_UK_CHART_LAYOUT.tickcolor,
+                                                showgrid: true,
+                                                gridwidth: 1
+                                            },
                                             margin: { t: 20, l: 60, r: 10, b: 80 },
                                             autosize: true,
                                             bargap: 0.15,
