@@ -173,5 +173,10 @@
         "msc": "MSC4175",
         "title": "Profile field for user time zone",
         "description": "Adds a profile field for user time zone to allow clients to display time-sensitive information correctly"
+    },
+    "org.matrix.msc4306": {
+        "msc": "MSC4306",
+        "title": "Thread Subscriptions",
+        "description": "Allows users to subscribe or unsubscribe from threads to control notifications"
     }
 }

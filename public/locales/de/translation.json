@@ -212,7 +212,18 @@
       "updated": "Zuletzt aktualisiert",
       "versionShareTitle": "Versionsverteilung für die 3 Top-Server-Typen",
       "versionFamilyHeading": "{{family}}",
-      "versionNoData": "Keine Versionsdaten für diesen Server-Typen verfügbar"
+      "versionNoData": "Keine Versionsdaten für diesen Server-Typen verfügbar",
+      "unstableFeaturesTitle": "Instabile Funktionen",
+      "unstableFeaturesSummary": "Funktionsübersicht",
+      "featuresEnabled": "Aktiviert",
+      "featuresAnnounced": "Angekündigt",
+      "featureType": "Funktionstyp",
+      "topEnabledFeatures": "Meist aktivierte instabile Funktionen",
+      "topAnnouncedFeatures": "Meist angekündigte instabile Funktionen",
+      "allEnabledFeatures": "Aktivierte instabile Funktionen",
+      "allAnnouncedFeatures": "Angekündigte instabile Funktionen",
+      "featureName": "Funktionsname",
+      "serverCount": "Serveranzahl"
     },
     "loading": "⌛ Informationen von der API abrufen…",
     "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"

@@ -217,7 +217,18 @@
       "updated": "Last updated",
       "versionShareTitle": "Version distribution for the top 3 server types",
       "versionFamilyHeading": "{{family}}",
-      "versionNoData": "No version data available for this server type"
+      "versionNoData": "No version data available for this server type",
+      "unstableFeaturesTitle": "Unstable Features",
+      "unstableFeaturesSummary": "Features Summary",
+      "featuresEnabled": "Enabled",
+      "featuresAnnounced": "Announced",
+      "featureType": "Feature Type",
+      "topEnabledFeatures": "Most Enabled Unstable Features",
+      "topAnnouncedFeatures": "Most Announced Unstable Features",
+      "allEnabledFeatures": "Enabled Unstable Features",
+      "allAnnouncedFeatures": "Announced Unstable Features",
+      "featureName": "Feature Name",
+      "serverCount": "Server Count"
     },
     "loading": "⌛ Getting info from API…",
     "apiError": "⚠️ Something went wrong talking to the API"
