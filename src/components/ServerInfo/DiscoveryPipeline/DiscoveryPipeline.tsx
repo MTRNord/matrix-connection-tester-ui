@@ -125,7 +125,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
     // Callback ref to measure and update lines
     const containerRef = useCallback((node: HTMLDivElement | null) => {
         const id = requestAnimationFrame(() => {
-            if (node) {
+            if (node && lines?.length !== flatCards.length - 1) {
                 const containerRect = node.getBoundingClientRect();
                 const pos: Record<string, { x: number; y: number; width: number; height: number }> = {};
                 for (const card of flatCards) {
@@ -144,8 +144,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
             };
         });
         return () => cancelAnimationFrame(id);
-    }, [flatCards]);
-
+    }, [flatCards, lines]);
 
     return (
         <>

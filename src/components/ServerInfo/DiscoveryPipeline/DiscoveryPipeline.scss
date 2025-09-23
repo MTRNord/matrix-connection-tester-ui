@@ -19,14 +19,14 @@
 .stage {
   display: flex;
   justify-content: start;
-
+  width: 100%;
 
   // If the children are an only child, center it.
-  & > * {
+  & > *:only-child {
     margin: auto;
+    justify-content: center;
   }
 
-  width: 100%;
 }
 
 .stage-cards {
@@ -38,8 +38,8 @@
   background: #f3f2f1; // GOV.UK light grey
   border: 1px solid #b1b4b6;
   border-radius: 0;
-  min-width: 200px;
-  max-width: 250px;
+  min-width: 270px;
+  max-width: 300px;
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
