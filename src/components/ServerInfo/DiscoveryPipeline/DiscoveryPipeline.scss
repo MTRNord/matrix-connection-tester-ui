@@ -20,10 +20,10 @@
   display: flex;
   justify-content: start;
 
-  // First and last stage marked element should justify-content center. The rest start.
-  &:nth-of-type(1),
-  &:nth-of-type(5) {
-    justify-content: center;
+
+  // If the children are an only child, center it.
+  & > * {
+    margin: auto;
   }
 
   width: 100%;
