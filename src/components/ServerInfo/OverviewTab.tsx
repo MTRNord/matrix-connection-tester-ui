@@ -14,6 +14,11 @@ const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Exp
     "construct": { maturity: "Experimental", url: "https://github.com/matrix-construct/construct" },
     "continuwuity": { maturity: "Beta", url: "https://continuwuity.org/" },
     "matrix-key-server": { maturity: "Experimental", url: "https://github.com/t2bot/matrix-key-server" },
+    "grapevine": { maturity: "Beta", url: "https://gitlab.computer.surgery/matrix/grapevine/" },
+    "vona": { maturity: "Experimental", url: "" },
+    "conduwuit": { maturity: "Obsolete", url: "" },
+    "catalyst": { maturity: "Beta", url: "" },
+    "tuwunel": { maturity: "Beta", url: "https://github.com/matrix-construct/tuwunel" },
 };
 
 // Type for unstable feature info
