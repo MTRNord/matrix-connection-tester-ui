@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import type { components } from "../../../api/api";
 import { flattenCards } from "./utils";
 import { PipelineStage } from "./PipelineStage";
@@ -49,10 +49,7 @@ const calculateLines = (allCards: CardData[], containerRef?: HTMLDivElement): Li
 }
 
 export default function DiscoveryPipeline({ data }: { data: Root }) {
-
     const [lines, setLines] = useState<Line[] | undefined>(undefined);
-
-
 
     // === Build tree ===
     const federationCard: CardData = { id: "federation", label: "Federation Result", status: data.FederationOK ? "ok" : "fail", children: [] };
@@ -116,25 +113,29 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
     const flatCards = flattenCards(rootCard);
 
     // Callback ref to measure and update lines
-    const containerRef = (node: HTMLDivElement | null) => {
-        if (node) {
-            const containerRect = node.getBoundingClientRect();
-            const pos: Record<string, { x: number; y: number; width: number; height: number }> = {};
-            flatCards.forEach((card: CardData) => {
-                const el = document.getElementById(card.id);
-                if (el) {
-                    const rect = el.getBoundingClientRect();
-                    pos[card.id] = {
-                        x: rect.left + rect.width / 2 - containerRect.left,
-                        y: rect.top + rect.height / 2 - containerRect.top,
-                        width: rect.width,
-                        height: rect.height,
-                    };
-                }
-            });
-            setLines(calculateLines(flatCards, node));
-        };
-    }
+    const containerRef = useCallback((node: HTMLDivElement | null) => {
+        const id = requestAnimationFrame(() => {
+            if (node) {
+                const containerRect = node.getBoundingClientRect();
+                const pos: Record<string, { x: number; y: number; width: number; height: number }> = {};
+                flatCards.forEach((card: CardData) => {
+                    const el = document.getElementById(card.id);
+                    if (el) {
+                        const rect = el.getBoundingClientRect();
+                        pos[card.id] = {
+                            x: rect.left + rect.width / 2 - containerRect.left,
+                            y: rect.top + rect.height / 2 - containerRect.top,
+                            width: rect.width,
+                            height: rect.height,
+                        };
+                    }
+                });
+                setLines(calculateLines(flatCards, node));
+            };
+        });
+        return () => cancelAnimationFrame(id);
+    }, [flatCards]);
+
 
     return (
         <div className="pipeline-wrapper">
