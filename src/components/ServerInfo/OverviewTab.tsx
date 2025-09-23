@@ -7,7 +7,7 @@ import type { components } from "../../api/api";
 import React from "react";
 
 // Example lookup table for known server software
-const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental", url: string }> = {
+const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Experimental" | "Obsolete", url?: string }> = {
     "synapse": { maturity: "Stable", url: "https://github.com/matrix-org/synapse" },
     "dendrite": { maturity: "Beta", url: "https://github.com/matrix-org/dendrite" },
     "conduit": { maturity: "Experimental", url: "https://gitlab.com/famedly/conduit" },
@@ -15,9 +15,9 @@ const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Exp
     "continuwuity": { maturity: "Beta", url: "https://continuwuity.org/" },
     "matrix-key-server": { maturity: "Experimental", url: "https://github.com/t2bot/matrix-key-server" },
     "grapevine": { maturity: "Beta", url: "https://gitlab.computer.surgery/matrix/grapevine/" },
-    "vona": { maturity: "Experimental", url: "" },
-    "conduwuit": { maturity: "Obsolete", url: "" },
-    "catalyst": { maturity: "Beta", url: "" },
+    "vona": { maturity: "Experimental" },
+    "conduwuit": { maturity: "Obsolete" },
+    "catalyst": { maturity: "Beta" },
     "tuwunel": { maturity: "Beta", url: "https://github.com/matrix-construct/tuwunel" },
 };
 
@@ -117,16 +117,19 @@ function OverviewTab({
                                 const softwareInfo = getServerSoftwareInfo(versionName);
                                 return softwareInfo ? (
                                     <>
-                                        <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
-                                            {versionName}
-                                        </Link>
+                                        {softwareInfo.url ? (
+                                            <Link href={softwareInfo.url} target="_blank" rel="noopener noreferrer">
+                                                {versionName}
+                                            </Link>) : versionName}
                                         {" "}
                                         <Tag
                                             tint={softwareInfo.maturity === "Stable"
                                                 ? "GREEN"
                                                 : softwareInfo.maturity === "Beta"
                                                     ? "BLUE"
-                                                    : "ORANGE"}
+                                                    : softwareInfo.maturity === "Experimental"
+                                                        ? "ORANGE"
+                                                        : "GREY"}
                                             color="black"
                                             style={{ paddingRight: 8 }}
                                         >
