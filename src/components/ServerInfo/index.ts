@@ -4,3 +4,4 @@ export { default as WellKnownTab } from './WellKnownTab';
 export { default as ReportsTab } from './ReportsTab';
 export { default as ErrorsTab } from './ErrorsTab';
 export { default as RawDataTab } from './RawDataTab';
+export { default as StagePanel } from './DiscoveryPipeline/DiscoveryPipeline';

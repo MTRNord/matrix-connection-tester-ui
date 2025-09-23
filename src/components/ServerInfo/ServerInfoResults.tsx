@@ -15,12 +15,14 @@ import {
 } from ".";
 import type { components } from "../../api/api";
 import React from "react";
+import DiscoveryPipeline from "./DiscoveryPipeline/DiscoveryPipeline";
+
+const validTabs = ["overview", "dns", "server-wellknown", "reports", "errors", "raw", "pipeline"];
 
 function ServerInfoResults({ serverName, statsOptIn }: { serverName: string; statsOptIn?: boolean }) {
     // Get initial tab from URL hash or default to "overview"
     const getInitialTab = () => {
         const hash = window.location.hash.slice(1); // Remove the #
-        const validTabs = ["overview", "dns", "server-wellknown", "reports", "errors", "raw"];
         return validTabs.includes(hash) ? hash : "overview";
     };
 
@@ -30,7 +32,6 @@ function ServerInfoResults({ serverName, statsOptIn }: { serverName: string; sta
     useEffect(() => {
         const handleHashChange = () => {
             const hash = window.location.hash.slice(1);
-            const validTabs = ["overview", "dns", "server-wellknown", "reports", "errors", "raw"];
             if (validTabs.includes(hash)) {
                 setSelectedTab(hash);
             }
@@ -138,6 +139,11 @@ function ServerInfoResults({ serverName, statsOptIn }: { serverName: string; sta
                     selected={selectedTab === "raw"}
                     onClick={handleTabClick("raw")}
                 >{t('federation.tabs.raw')}</Tabs.Tab>
+                <Tabs.Tab
+                    href="#pipeline"
+                    selected={selectedTab === "pipeline"}
+                    onClick={handleTabClick("pipeline")}
+                >{t('federation.tabs.pipeline', "Pipeline")}</Tabs.Tab>
             </Tabs.List>
 
             <Tabs.Panel id="overview" selected={selectedTab === "overview"}>
@@ -181,6 +187,10 @@ function ServerInfoResults({ serverName, statsOptIn }: { serverName: string; sta
                     clientServerVersionsData={clientServerVersionsData}
                     clientServerVersionsError={clientServerVersionsError}
                 />
+            </Tabs.Panel>
+
+            <Tabs.Panel id="pipeline" selected={selectedTab === "pipeline"}>
+                <DiscoveryPipeline data={data} />
             </Tabs.Panel>
         </Tabs>
     );
