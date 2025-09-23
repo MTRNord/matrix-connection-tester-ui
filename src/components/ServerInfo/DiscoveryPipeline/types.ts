@@ -6,4 +6,5 @@ export interface CardData {
     status: Status;
     content?: string;
     children?: CardData[];
+    metadata?: Record<string, string>;
 }

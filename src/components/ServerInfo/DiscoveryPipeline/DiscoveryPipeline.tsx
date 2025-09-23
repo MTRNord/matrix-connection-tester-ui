@@ -4,6 +4,8 @@ import { flattenCards } from "./utils";
 import { PipelineStage } from "./PipelineStage";
 import "./DiscoveryPipeline.scss";
 import type { CardData } from "./types";
+import { useTranslation } from "react-i18next";
+import { H1, LeadParagraph } from "govuk-react";
 
 type Root = components["schemas"]["Root"];
 
@@ -50,28 +52,35 @@ const calculateLines = (allCards: CardData[], containerRef?: HTMLDivElement): Li
 
 export default function DiscoveryPipeline({ data }: { data: Root }) {
     const [lines, setLines] = useState<Line[] | undefined>(undefined);
+    const { t } = useTranslation();
 
     // === Build tree ===
-    const federationCard: CardData = { id: "federation", label: "Federation Result", status: data.FederationOK ? "ok" : "fail", children: [] };
+    const federationCard: CardData = { id: "federation", label: t("federation.discoverypipeline.federation_result", "Federation Result"), status: data.FederationOK ? "ok" : "fail", children: [] };
     const rootCard: CardData = {
         id: "input",
-        label: "Input Validation",
+        label: t("federation.discoverypipeline.input_validation", "Input validation"),
         status: data.Error ? "fail" : "ok",
         content: data.Version.name,
         children: []
     };
 
 
-    const dnsCards: CardData[] = data.DNSResult?.Addrs?.map((addr) => ({ id: `dns-${addr}`, label: addr, status: "ok", children: [] })) || [];
+    const dnsCards: CardData[] = data.DNSResult?.Addrs?.map((addr) => ({
+        id: `dns-${addr}`,
+        label: t("federation.discoverypipeline.dns_result", "DNS Result for {{addr}}", { addr }),
+        status: "ok",
+        children: [],
+        metadata: { addr },
+    })) || [];
     rootCard.children = dnsCards;
 
     for (const dns of dnsCards) {
-        const host = dns.label;
+        const host = dns.metadata!.addr;
         const wk = data.WellKnownResult?.[host];
 
         const wkCard: CardData = {
             id: `wk-${host}`,
-            label: host,
+            label: t("federation.discoverypipeline.wellknown_result", "Well-Known Result for {{host}}", { host }),
             status: wk?.Error ? "fail" : "ok",
             content: wk?.Error ? wk.Error.Error : wk?.["m.server"],
             children: [],
@@ -85,7 +94,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
         if (report || error) {
             const connCard: CardData = {
                 id: `conn-${host}`,
-                label: host,
+                label: t("federation.discoverypipeline.connection_result", "Connection Result for {{host}}", { host }),
                 status: report
                     ? report.Checks.AllChecksOK ? "ok" : "fail"
                     : "fail",
@@ -139,32 +148,40 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
 
 
     return (
-        <div className="pipeline-vertical" ref={containerRef}>
-            <svg className="pipeline-arrows">
-                <defs>
-                    <marker
-                        id="arrowhead"
-                        markerWidth="6"
-                        markerHeight="6"
-                        refX="5"
-                        refY="3"
-                        orient="auto"
-                    >
-                        <polygon points="0 0, 6 3, 0 6" fill="#505a5f" />
-                    </marker>
-                </defs>
-                {lines?.map((line) => (
-                    <polyline
-                        key={line.key}
-                        points={`${line.x1},${line.y1} ${line.x1},${(line.y1 + line.y2) / 2} ${line.x2},${(line.y1 + line.y2) / 2} ${line.x2},${line.y2}`}
-                        stroke="#505a5f"
-                        strokeWidth={1.5}
-                        fill="none"
-                        markerEnd="url(#arrowhead)"
-                    />
-                ))}
-            </svg>
-            {stages.map((stage, i) => <PipelineStage key={i} stage={stage} />)}
-        </div>
+        <>
+            <H1>{t('federation.discoverypipeline.title', "Discovery Pipeline")}</H1>
+
+            <LeadParagraph>
+                {t('federation.discoverypipeline.description', "Shows the steps taken to discover and connect to the server, along with their results. (This currently only works for the well-known path)")}
+            </LeadParagraph>
+
+            <div className="pipeline-vertical" ref={containerRef}>
+                <svg className="pipeline-arrows">
+                    <defs>
+                        <marker
+                            id="arrowhead"
+                            markerWidth="6"
+                            markerHeight="6"
+                            refX="5"
+                            refY="3"
+                            orient="auto"
+                        >
+                            <polygon points="0 0, 6 3, 0 6" fill="#505a5f" />
+                        </marker>
+                    </defs>
+                    {lines?.map((line) => (
+                        <polyline
+                            key={line.key}
+                            points={`${line.x1},${line.y1} ${line.x1},${(line.y1 + line.y2) / 2} ${line.x2},${(line.y1 + line.y2) / 2} ${line.x2},${line.y2}`}
+                            stroke="#505a5f"
+                            strokeWidth={1.5}
+                            fill="none"
+                            markerEnd="url(#arrowhead)"
+                        />
+                    ))}
+                </svg>
+                {stages.map((stage, i) => <PipelineStage key={i} stage={stage} />)}
+            </div>
+        </>
     );
 }

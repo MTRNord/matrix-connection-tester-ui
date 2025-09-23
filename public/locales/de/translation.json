@@ -226,7 +226,16 @@
       "serverCount": "Serveranzahl"
     },
     "loading": "⌛ Informationen von der API abrufen…",
-    "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen"
+    "apiError": "⚠️ Etwas ist beim Kommunizieren mit der API schiefgelaufen",
+    "discoverypipeline": {
+      "title": "Server-Discovery-Pipeline",
+      "description": "Die Server-Discovery-Pipeline zeigt die Schritte, die unternommen wurden, um den Server zu entdecken und eine Verbindung herzustellen. Jeder Schritt zeigt an, ob er erfolgreich war oder fehlgeschlagen ist, zusammen mit relevanten Informationen. (Aktuell wird nur well-known unterstützt)",
+      "connection_result": "Verbindungsergebnis für {{host}}",
+      "wellknown_result": "Well-Known Ergebnis für {{host}}",
+      "dns_result": "DNS-Ergebnis für {{host}}",
+      "input_validation": "Input Validierung",
+      "federation_result": "Federation Ergebnis"
+    }
   },
   "serverInfo": {
     "clientServerApi": {

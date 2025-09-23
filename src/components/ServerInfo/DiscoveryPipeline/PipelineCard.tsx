@@ -1,11 +1,13 @@
 import { Tag } from "govuk-react";
 import type { CardData, Status } from "./types";
+import { useTranslation } from "react-i18next";
 
 export function StatusTag({ status }: { status: Status }) {
+    const { t } = useTranslation();
     switch (status) {
-        case "ok": return <Tag tint="GREEN">OK</Tag>;
-        case "fail": return <Tag tint="RED">Fail</Tag>;
-        case "warn": return <Tag tint="YELLOW">Warn</Tag>;
+        case "ok": return <Tag tint="GREEN">{t("common.ok")}</Tag>;
+        case "fail": return <Tag tint="RED">{t("common.error")}</Tag>;
+        case "warn": return <Tag tint="YELLOW">{t("common.warning")}</Tag>;
     }
 }
 

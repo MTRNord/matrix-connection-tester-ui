@@ -231,7 +231,16 @@
       "serverCount": "Server Count"
     },
     "loading": "⌛ Getting info from API…",
-    "apiError": "⚠️ Something went wrong talking to the API"
+    "apiError": "⚠️ Something went wrong talking to the API",
+    "discoverypipeline": {
+      "title": "Server-Discovery-Pipeline",
+      "description": "The Server-Discovery-Pipeline shows the steps taken to discover and connect to the server, along with their results. (This currently only works for the well-known path)",
+      "connection_result": "Connection result for {{host}}",
+      "wellknown_result": "Well-Known result for {{host}}",
+      "dns_result": "DNS result for {{host}}",
+      "input_validation": "Input Validation",
+      "federation_result": "Federation Result"
+    }
   },
   "serverInfo": {
     "clientServerApi": {
