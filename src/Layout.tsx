@@ -33,9 +33,6 @@ export default function Main() {
                     <TopNav.NavLink href="/statistics">
                         Statistics
                     </TopNav.NavLink>
-                    {/*<TopNav.NavLink href="/statistics-echarts">
-                        Statistics (ECharts)
-                    </TopNav.NavLink>*/}
                 </TopNav>
             </header>
             <Page.WidthContainer>
@@ -56,8 +53,6 @@ export default function Main() {
                                         <ClientApp />
                                     } />
                                     <Route path="/alerts" element={<Alerts />} />
-                                    {/*<Route path="/statistics" element={<Stats />} />
-                                    <Route path="/statistics-echarts" element={<StatsECharts />} />*/}
                                     <Route path="/statistics" element={<StatsECharts />} />
                                     <Route path="/verify" element={<AlertVerify />} />
                                 </Routes>

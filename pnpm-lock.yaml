@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       babel-plugin-react-compiler:
-        specifier: 19.1.0-rc.2
-        version: 19.1.0-rc.2
+        specifier: 19.1.0-rc.3
+        version: 19.1.0-rc.3
       echarts:
         specifier: ^6.0.0
         version: 6.0.0
@@ -19,7 +19,7 @@ importers:
         version: 3.0.4(echarts@6.0.0)(react@19.1.1)
       govuk-react:
         specifier: ^0.10.7
-        version: 0.10.7(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+        version: 0.10.7(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       i18next:
         specifier: ^25.5.2
         version: 25.5.2(typescript@5.9.2)
@@ -58,7 +58,7 @@ importers:
         version: 1.92.1
       styled-components:
         specifier: ^5.3.0
-        version: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+        version: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
       swr:
         specifier: ^2.3.6
         version: 2.3.6(react@19.1.1)
@@ -86,7 +86,7 @@ importers:
         version: 5.1.34
       '@vitejs/plugin-react':
         specifier: ^5.0.2
-        version: 5.0.2(vite@7.1.5(@types/node@24.4.0)(sass@1.92.1))
+        version: 5.0.2(vite@7.1.5(@types/node@24.4.0)(lightningcss@1.30.1)(sass@1.92.1)(tsx@4.20.5))
       eslint:
         specifier: ^9.35.0
         version: 9.35.0
@@ -94,8 +94,8 @@ importers:
         specifier: ^6.10.2
         version: 6.10.2(eslint@9.35.0)
       eslint-plugin-react-hooks:
-        specifier: 6.0.0-rc1
-        version: 6.0.0-rc1(eslint@9.35.0)
+        specifier: 6.0.0-rc.2
+        version: 6.0.0-rc.2(eslint@9.35.0)
       eslint-plugin-react-refresh:
         specifier: ^0.4.20
         version: 0.4.20(eslint@9.35.0)
@@ -116,13 +116,9 @@ importers:
         version: 8.43.0(eslint@9.35.0)(typescript@5.9.2)
       vite:
         specifier: ^7.1.5
-        version: 7.1.5(@types/node@24.4.0)(sass@1.92.1)
+        version: 7.1.5(@types/node@24.4.0)(lightningcss@1.30.1)(sass@1.92.1)(tsx@4.20.5)
 
 packages:
-
-  '@ampproject/remapping@2.3.0':
-    resolution: {integrity: sha512-30iZtAPgz+LTIYoeivqYo853f02jBYSd5uGnGpkFV0M3xOt9aN73erkgYAmZU43x4VfqcnLxW9Kpg3R5LC4YYw==}
-    engines: {node: '>=6.0.0'}
 
   '@babel/code-frame@7.27.1':
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
@@ -130,10 +126,6 @@ packages:
 
   '@babel/compat-data@7.27.5':
     resolution: {integrity: sha512-KiRAp/VoJaWkkte84TvUd9qjdbZAdiqyvMxrGl1N6vzFogKmaLgoM3L1kgtLicp2HP5fBJS8JrZKLVIZGVJAVg==}
-    engines: {node: '>=6.9.0'}
-
-  '@babel/core@7.27.4':
-    resolution: {integrity: sha512-bXYxrXFubeYdvB0NhD/NBB3Qi6aZeV20GOWVI47t2dkecCEoneR4NPVcb7abpXDEvejgrUfFtG6vG/zxAKmg+g==}
     engines: {node: '>=6.9.0'}
 
   '@babel/core@7.28.4':
@@ -174,12 +166,6 @@ packages:
     resolution: {integrity: sha512-0gSFWUPNXNopqtIPQvlD5WgXYI5GY2kP2cCvoT8kczjbfcfuIljTbcWrulD1CIPIX2gt1wghbDy08yE1p+/r3w==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/helper-module-transforms@7.27.3':
-    resolution: {integrity: sha512-dSOvYwvyLsWBeIRyOeHXp5vPj5l1I011r52FM1+r1jCERv+aFXYk4whgQccYEGYxK2H3ZAIA8nuPkQ0HaUo3qg==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0
-
   '@babel/helper-module-transforms@7.28.3':
     resolution: {integrity: sha512-gytXUbs8k2sXS9PnQptz5o0QnpLL51SwASIORY6XaBKF88nsOT0Zw9szLqlSGQDP/4TljBAD5y98p2U1fqkdsw==}
     engines: {node: '>=6.9.0'}
@@ -216,10 +202,6 @@ packages:
     resolution: {integrity: sha512-YvjJow9FxbhFFKDSuFnVCe2WxXk1zWc22fFePVNEaWJEu8IrZVlda6N0uHwzZrUM1il7NC9Mlp4MaJYbYd9JSg==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/helpers@7.27.6':
-    resolution: {integrity: sha512-muE8Tt8M22638HU31A3CgfSUciwz1fhATfoVai05aPXGor//CdWDCbnlY1yvBPo07njuVOCNGCSp/GTt12lIug==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/helpers@7.28.4':
     resolution: {integrity: sha512-HFN59MmQXGHVyYadKLVumYsA9dBFun/ldYxipEjzA4196jpLZd8UjEEBLkbEkvfYreDqJhZxYAWFPtrfhNpj4w==}
     engines: {node: '>=6.9.0'}
@@ -239,14 +221,15 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/plugin-syntax-jsx@7.27.1':
-    resolution: {integrity: sha512-y8YTNIeKoyhGd9O0Jiyzyyqk8gdjnumGTQPsz0xOZOQ2RmkVJeZ1vmmfIvFEKqucBG6axJGBZDE/7iI5suUI/w==}
+  '@babel/plugin-proposal-private-methods@7.18.6':
+    resolution: {integrity: sha512-nutsvktDItsNn4rpGItSNV2sz1XwS+nfU0Rg8aCx3W3NOKVzdMjJRu0O5OkgDp3ZGICSTbgRpxZoWsxoKRvbeA==}
     engines: {node: '>=6.9.0'}
+    deprecated: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
     peerDependencies:
       '@babel/core': ^7.0.0-0
 
-  '@babel/plugin-transform-private-methods@7.27.1':
-    resolution: {integrity: sha512-10FVt+X55AjRAYI9BrdISN9/AQWHqldOeZDUoLyif1Kn05a56xVBXb8ZouL8pZ9jem8QpXaOt8TS7RHUIS+GPA==}
+  '@babel/plugin-syntax-jsx@7.27.1':
+    resolution: {integrity: sha512-y8YTNIeKoyhGd9O0Jiyzyyqk8gdjnumGTQPsz0xOZOQ2RmkVJeZ1vmmfIvFEKqucBG6axJGBZDE/7iI5suUI/w==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -1385,8 +1368,8 @@ packages:
   b4a@1.6.7:
     resolution: {integrity: sha512-OnAYlL5b7LEkALw87fUVafQw5rVR9RjwGd4KUwNQ6DrrNmaVaUCgLipfVlzrPQ4tWOR9P0IXGNOx50jYCCdSJg==}
 
-  babel-plugin-react-compiler@19.1.0-rc.2:
-    resolution: {integrity: sha512-kSNA//p5fMO6ypG8EkEVPIqAjwIXm5tMjfD1XRPL/sRjYSbJ6UsvORfaeolNWnZ9n310aM0xJP7peW26BuCVzA==}
+  babel-plugin-react-compiler@19.1.0-rc.3:
+    resolution: {integrity: sha512-mjRn69WuTz4adL0bXGx8Rsyk1086zFJeKmes6aK0xPuK3aaXmDJdLHqwKKMrpm6KAI1MCoUK72d2VeqQbu8YIA==}
 
   babel-plugin-styled-components@2.1.4:
     resolution: {integrity: sha512-Xgp9g+A/cG47sUyRwwYxGM4bR/jDRg5N6it/8+HxCnbT5XNKSKDT9xm4oag/osgqjC2It/vH0yXsomOG6k558g==}
@@ -1757,6 +1740,10 @@ packages:
     engines: {node: '>=0.10'}
     hasBin: true
 
+  detect-libc@2.1.0:
+    resolution: {integrity: sha512-vEtk+OcP7VBRtQZ1EJ3bdgzSfBjgnEalLTp5zjJrS+2Z1w2KZly4SBdac/WDU3hhsNAZ9E8SC96ME4Ey8MZ7cg==}
+    engines: {node: '>=8'}
+
   dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
 
@@ -1903,8 +1890,8 @@ packages:
     peerDependencies:
       eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9
 
-  eslint-plugin-react-hooks@6.0.0-rc1:
-    resolution: {integrity: sha512-I4ntWyjqgGemGtOU85FUdVo00h0i0Y5xvQ7a8EVxyzjOZsxXaxvkKBcYoXbP97QDvDjMzY/nGIvfdB/WRLTGxQ==}
+  eslint-plugin-react-hooks@6.0.0-rc.2:
+    resolution: {integrity: sha512-2cnFkQl2xld2BgKDtxLSd/JqkpZHBXZKcz+ZurfiQ7GECzMckIddJN5PZyWach3MN4h/CjwfqPigAtYxInXtuw==}
     engines: {node: '>=18'}
     peerDependencies:
       eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0 || ^9.0.0
@@ -2113,6 +2100,9 @@ packages:
   get-symbol-description@1.1.0:
     resolution: {integrity: sha512-w9UMqWwJxHNOvoNzSJ2oPF5wvYcvP7jUvYzhp67yEhTi17ZDBBC1z9pTdGuzjD+EFIqLSYRweZjqfiPzQ06Ebg==}
     engines: {node: '>= 0.4'}
+
+  get-tsconfig@4.10.1:
+    resolution: {integrity: sha512-auHyJ4AgMz7vgS8Hp3N6HXSmlMdUyhSUrfBF16w153rxtLIEOE+HGqaBppczZvnHLqQJfiHotCYpNhl0lUROFQ==}
 
   gl-mat4@1.2.0:
     resolution: {integrity: sha512-sT5C0pwB1/e9G9AvAoLsoaJtbMGjfd/jfxo8jMCKqYYEnjZuFvqV5rehqar0538EmssjdDeiEWnKyBSTw7quoA==}
@@ -2643,6 +2633,70 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
+  lightningcss-darwin-arm64@1.30.1:
+    resolution: {integrity: sha512-c8JK7hyE65X1MHMN+Viq9n11RRC7hgin3HhYKhrMyaXflk5GVplZ60IxyoVtzILeKr+xAJwg6zK6sjTBJ0FKYQ==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [darwin]
+
+  lightningcss-darwin-x64@1.30.1:
+    resolution: {integrity: sha512-k1EvjakfumAQoTfcXUcHQZhSpLlkAuEkdMBsI/ivWw9hL+7FtilQc0Cy3hrx0AAQrVtQAbMI7YjCgYgvn37PzA==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [darwin]
+
+  lightningcss-freebsd-x64@1.30.1:
+    resolution: {integrity: sha512-kmW6UGCGg2PcyUE59K5r0kWfKPAVy4SltVeut+umLCFoJ53RdCUWxcRDzO1eTaxf/7Q2H7LTquFHPL5R+Gjyig==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [freebsd]
+
+  lightningcss-linux-arm-gnueabihf@1.30.1:
+    resolution: {integrity: sha512-MjxUShl1v8pit+6D/zSPq9S9dQ2NPFSQwGvxBCYaBYLPlCWuPh9/t1MRS8iUaR8i+a6w7aps+B4N0S1TYP/R+Q==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm]
+    os: [linux]
+
+  lightningcss-linux-arm64-gnu@1.30.1:
+    resolution: {integrity: sha512-gB72maP8rmrKsnKYy8XUuXi/4OctJiuQjcuqWNlJQ6jZiWqtPvqFziskH3hnajfvKB27ynbVCucKSm2rkQp4Bw==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  lightningcss-linux-arm64-musl@1.30.1:
+    resolution: {integrity: sha512-jmUQVx4331m6LIX+0wUhBbmMX7TCfjF5FoOH6SD1CttzuYlGNVpA7QnrmLxrsub43ClTINfGSYyHe2HWeLl5CQ==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [linux]
+
+  lightningcss-linux-x64-gnu@1.30.1:
+    resolution: {integrity: sha512-piWx3z4wN8J8z3+O5kO74+yr6ze/dKmPnI7vLqfSqI8bccaTGY5xiSGVIJBDd5K5BHlvVLpUB3S2YCfelyJ1bw==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  lightningcss-linux-x64-musl@1.30.1:
+    resolution: {integrity: sha512-rRomAK7eIkL+tHY0YPxbc5Dra2gXlI63HL+v1Pdi1a3sC+tJTcFrHX+E86sulgAXeI7rSzDYhPSeHHjqFhqfeQ==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [linux]
+
+  lightningcss-win32-arm64-msvc@1.30.1:
+    resolution: {integrity: sha512-mSL4rqPi4iXq5YVqzSsJgMVFENoa4nGTT/GjO2c0Yl9OuQfPsIfncvLrEW6RbbB24WtZ3xP/2CCmI3tNkNV4oA==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [arm64]
+    os: [win32]
+
+  lightningcss-win32-x64-msvc@1.30.1:
+    resolution: {integrity: sha512-PVqXh48wh4T53F/1CCu8PIPCxLzWyCnn/9T5W1Jpmdy5h9Cwd+0YQS6/LwhHXSafuc61/xg9Lv5OrCby6a++jg==}
+    engines: {node: '>= 12.0.0'}
+    cpu: [x64]
+    os: [win32]
+
+  lightningcss@1.30.1:
+    resolution: {integrity: sha512-xi6IyHML+c9+Q3W0S4fCQJOym42pyurFiJUHEcEyHS0CeKzia4yZDEsLlqOFykxOdHpNy0NmvVO31vcSqAxJCg==}
+    engines: {node: '>= 12.0.0'}
+
   lilconfig@3.1.3:
     resolution: {integrity: sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw==}
     engines: {node: '>=14'}
@@ -3125,6 +3179,9 @@ packages:
     resolution: {integrity: sha512-/FopbmmFOQCfsCx77BRFdKOniglTiHumLgwvd6IDPihy1GKkadZbgQJBcTb2lMzSR1pndzd96b1nZrreZ7+9/A==}
     engines: {node: '>= 10.13.0'}
 
+  resolve-pkg-maps@1.0.0:
+    resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
+
   resolve-protobuf-schema@2.1.0:
     resolution: {integrity: sha512-kI5ffTiZWmJaS/huM8wZfEMer1eRd7oJQhDuxeCLe3t7N7mX3z94CN0xPxBQxFYQTSNz9T0i+v6inKqSdK8xrQ==}
 
@@ -3453,6 +3510,11 @@ packages:
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
 
+  tsx@4.20.5:
+    resolution: {integrity: sha512-+wKjMNU9w/EaQayHXb7WA7ZaHY6hN8WgfvHNQ3t1PnU91/7O8TcTnIhCDYTZwnt8JsO9IBqZ30Ln1r7pPF52Aw==}
+    engines: {node: '>=18.0.0'}
+    hasBin: true
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -3730,11 +3792,6 @@ packages:
 
 snapshots:
 
-  '@ampproject/remapping@2.3.0':
-    dependencies:
-      '@jridgewell/gen-mapping': 0.3.8
-      '@jridgewell/trace-mapping': 0.3.25
-
   '@babel/code-frame@7.27.1':
     dependencies:
       '@babel/helper-validator-identifier': 7.27.1
@@ -3742,26 +3799,6 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/compat-data@7.27.5': {}
-
-  '@babel/core@7.27.4':
-    dependencies:
-      '@ampproject/remapping': 2.3.0
-      '@babel/code-frame': 7.27.1
-      '@babel/generator': 7.27.5
-      '@babel/helper-compilation-targets': 7.27.2
-      '@babel/helper-module-transforms': 7.27.3(@babel/core@7.27.4)
-      '@babel/helpers': 7.27.6
-      '@babel/parser': 7.27.5
-      '@babel/template': 7.27.2
-      '@babel/traverse': 7.27.4
-      '@babel/types': 7.27.6
-      convert-source-map: 2.0.0
-      debug: 4.4.1
-      gensync: 1.0.0-beta.2
-      json5: 2.2.3
-      semver: 6.3.1
-    transitivePeerDependencies:
-      - supports-color
 
   '@babel/core@7.28.4':
     dependencies:
@@ -3811,15 +3848,15 @@ snapshots:
       lru-cache: 5.1.1
       semver: 6.3.1
 
-  '@babel/helper-create-class-features-plugin@7.27.1(@babel/core@7.27.4)':
+  '@babel/helper-create-class-features-plugin@7.27.1(@babel/core@7.28.4)':
     dependencies:
-      '@babel/core': 7.27.4
+      '@babel/core': 7.28.4
       '@babel/helper-annotate-as-pure': 7.27.3
       '@babel/helper-member-expression-to-functions': 7.27.1
       '@babel/helper-optimise-call-expression': 7.27.1
-      '@babel/helper-replace-supers': 7.27.1(@babel/core@7.27.4)
+      '@babel/helper-replace-supers': 7.27.1(@babel/core@7.28.4)
       '@babel/helper-skip-transparent-expression-wrappers': 7.27.1
-      '@babel/traverse': 7.27.4
+      '@babel/traverse': 7.28.4
       semver: 6.3.1
     transitivePeerDependencies:
       - supports-color
@@ -3828,8 +3865,8 @@ snapshots:
 
   '@babel/helper-member-expression-to-functions@7.27.1':
     dependencies:
-      '@babel/traverse': 7.27.4
-      '@babel/types': 7.27.6
+      '@babel/traverse': 7.28.4
+      '@babel/types': 7.28.4
     transitivePeerDependencies:
       - supports-color
 
@@ -3847,15 +3884,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/helper-module-transforms@7.27.3(@babel/core@7.27.4)':
-    dependencies:
-      '@babel/core': 7.27.4
-      '@babel/helper-module-imports': 7.27.1
-      '@babel/helper-validator-identifier': 7.27.1
-      '@babel/traverse': 7.27.4
-    transitivePeerDependencies:
-      - supports-color
-
   '@babel/helper-module-transforms@7.28.3(@babel/core@7.28.4)':
     dependencies:
       '@babel/core': 7.28.4
@@ -3867,23 +3895,23 @@ snapshots:
 
   '@babel/helper-optimise-call-expression@7.27.1':
     dependencies:
-      '@babel/types': 7.27.6
+      '@babel/types': 7.28.4
 
   '@babel/helper-plugin-utils@7.27.1': {}
 
-  '@babel/helper-replace-supers@7.27.1(@babel/core@7.27.4)':
+  '@babel/helper-replace-supers@7.27.1(@babel/core@7.28.4)':
     dependencies:
-      '@babel/core': 7.27.4
+      '@babel/core': 7.28.4
       '@babel/helper-member-expression-to-functions': 7.27.1
       '@babel/helper-optimise-call-expression': 7.27.1
-      '@babel/traverse': 7.27.4
+      '@babel/traverse': 7.28.4
     transitivePeerDependencies:
       - supports-color
 
   '@babel/helper-skip-transparent-expression-wrappers@7.27.1':
     dependencies:
-      '@babel/traverse': 7.27.4
-      '@babel/types': 7.27.6
+      '@babel/traverse': 7.28.4
+      '@babel/types': 7.28.4
     transitivePeerDependencies:
       - supports-color
 
@@ -3892,11 +3920,6 @@ snapshots:
   '@babel/helper-validator-identifier@7.27.1': {}
 
   '@babel/helper-validator-option@7.27.1': {}
-
-  '@babel/helpers@7.27.6':
-    dependencies:
-      '@babel/template': 7.27.2
-      '@babel/types': 7.27.6
 
   '@babel/helpers@7.28.4':
     dependencies:
@@ -3915,18 +3938,18 @@ snapshots:
     dependencies:
       '@babel/types': 7.28.4
 
-  '@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.27.4)':
+  '@babel/plugin-proposal-private-methods@7.18.6(@babel/core@7.28.4)':
     dependencies:
-      '@babel/core': 7.27.4
-      '@babel/helper-plugin-utils': 7.27.1
-
-  '@babel/plugin-transform-private-methods@7.27.1(@babel/core@7.27.4)':
-    dependencies:
-      '@babel/core': 7.27.4
-      '@babel/helper-create-class-features-plugin': 7.27.1(@babel/core@7.27.4)
+      '@babel/core': 7.28.4
+      '@babel/helper-create-class-features-plugin': 7.27.1(@babel/core@7.28.4)
       '@babel/helper-plugin-utils': 7.27.1
     transitivePeerDependencies:
       - supports-color
+
+  '@babel/plugin-syntax-jsx@7.27.1(@babel/core@7.28.4)':
+    dependencies:
+      '@babel/core': 7.28.4
+      '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/plugin-transform-react-jsx-self@7.27.1(@babel/core@7.28.4)':
     dependencies:
@@ -4135,462 +4158,462 @@ snapshots:
       '@eslint/core': 0.15.2
       levn: 0.4.1
 
-  '@govuk-react/back-link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/back-link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/breadcrumbs@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/breadcrumbs@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/button@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/button@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       polished: 4.3.1
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/caption@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/caption@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/checkbox@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/checkbox@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
   '@govuk-react/constants@0.10.7':
     dependencies:
       govuk-colours: 1.1.0
 
-  '@govuk-react/date-field@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/date-field@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       multi-input-input: 0.0.3
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/details@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/details@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       polished: 4.3.1
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/document-footer-metadata@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/document-footer-metadata@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/error-summary@0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/error-summary@0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/input-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/input-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/paragraph': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/text-area': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/paragraph': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/text-area': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
 
-  '@govuk-react/error-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/error-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/fieldset@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/fieldset@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/file-upload@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/file-upload@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/footer@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/footer@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/visually-hidden': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/visually-hidden': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/form-group@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/global-style@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/grid-col@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/grid-row@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/heading@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/hint-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/form-group@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/global-style@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/grid-col@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/grid-row@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/heading@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/hint-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
   '@govuk-react/icon-crown@0.1.0(react@19.1.1)':
     dependencies:
       react: 19.1.1
 
-  '@govuk-react/icons@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/icons@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/input-field@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/input-field@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/input@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/inset-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/input@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/label-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/lib': 0.10.7
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/label@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/inset-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/lead-paragraph@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/label-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/lib': 0.10.7
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/label@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/lead-paragraph@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/lib': 0.10.7
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
   '@govuk-react/lib@0.10.7':
     dependencies:
       '@govuk-react/constants': 0.10.7
       govuk-colours: 1.1.0
 
-  '@govuk-react/link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/list-item@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/list-item@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/loading-box@0.10.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/loading-box@0.10.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       hex-rgb: 4.3.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
       react-transition-group: 4.4.5(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/main@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/main@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/multi-choice@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/multi-choice@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/ordered-list@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/ordered-list@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/page@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/page@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/skip-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/top-nav': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/skip-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/top-nav': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/pagination@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/pagination@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/panel@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/panel@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       polished: 4.3.1
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/paragraph@0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/paragraph@0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
       react-markdown: 5.0.3(@types/react@19.1.13)(react@19.1.1)
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
 
-  '@govuk-react/phase-banner@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/phase-banner@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/tag': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/tag': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/radio@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/radio@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/related-items@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/search-box@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/section-break@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/select@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
-    dependencies:
-      '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/lib': 0.10.7
-      govuk-colours: 1.1.0
-      react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
-
-  '@govuk-react/skip-link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/related-items@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/table@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/search-box@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/section-break@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/select@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/skip-link@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/tabs@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/table@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/tag@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/tabs@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+    dependencies:
+      '@govuk-react/constants': 0.10.7
+      '@govuk-react/lib': 0.10.7
+      govuk-colours: 1.1.0
+      react: 19.1.1
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+
+  '@govuk-react/tag@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/text-area@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/text-area@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/top-nav@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/top-nav@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
-      '@govuk-react/button': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/button': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/constants': 0.10.7
       '@govuk-react/icon-crown': 0.1.0(react@19.1.1)
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
-      '@govuk-react/search-box': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/search-box': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/unordered-list@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/unordered-list@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
-      '@govuk-react/ordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/ordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/visually-hidden@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/visually-hidden@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
-  '@govuk-react/warning-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
+  '@govuk-react/warning-text@0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))':
     dependencies:
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/lib': 0.10.7
       govuk-colours: 1.1.0
       react: 19.1.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
 
   '@gulpjs/to-absolute-glob@4.0.0':
     dependencies:
@@ -5097,7 +5120,7 @@ snapshots:
       '@typescript-eslint/types': 8.43.0
       eslint-visitor-keys: 4.2.1
 
-  '@vitejs/plugin-react@5.0.2(vite@7.1.5(@types/node@24.4.0)(sass@1.92.1))':
+  '@vitejs/plugin-react@5.0.2(vite@7.1.5(@types/node@24.4.0)(lightningcss@1.30.1)(sass@1.92.1)(tsx@4.20.5))':
     dependencies:
       '@babel/core': 7.28.4
       '@babel/plugin-transform-react-jsx-self': 7.27.1(@babel/core@7.28.4)
@@ -5105,7 +5128,7 @@ snapshots:
       '@rolldown/pluginutils': 1.0.0-beta.34
       '@types/babel__core': 7.20.5
       react-refresh: 0.17.0
-      vite: 7.1.5(@types/node@24.4.0)(sass@1.92.1)
+      vite: 7.1.5(@types/node@24.4.0)(lightningcss@1.30.1)(sass@1.92.1)(tsx@4.20.5)
     transitivePeerDependencies:
       - supports-color
 
@@ -5209,18 +5232,18 @@ snapshots:
 
   b4a@1.6.7: {}
 
-  babel-plugin-react-compiler@19.1.0-rc.2:
+  babel-plugin-react-compiler@19.1.0-rc.3:
     dependencies:
-      '@babel/types': 7.27.6
+      '@babel/types': 7.28.4
 
-  babel-plugin-styled-components@2.1.4(@babel/core@7.27.4)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))(supports-color@5.5.0):
+  babel-plugin-styled-components@2.1.4(@babel/core@7.28.4)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))(supports-color@5.5.0):
     dependencies:
       '@babel/helper-annotate-as-pure': 7.27.3
       '@babel/helper-module-imports': 7.27.1(supports-color@5.5.0)
-      '@babel/plugin-syntax-jsx': 7.27.1(@babel/core@7.27.4)
+      '@babel/plugin-syntax-jsx': 7.27.1(@babel/core@7.28.4)
       lodash: 4.17.21
       picomatch: 2.3.1
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
     transitivePeerDependencies:
       - '@babel/core'
       - supports-color
@@ -5620,6 +5643,9 @@ snapshots:
   detect-libc@1.0.3:
     optional: true
 
+  detect-libc@2.1.0:
+    optional: true
+
   dom-helpers@5.2.1:
     dependencies:
       '@babel/runtime': 7.27.6
@@ -5874,11 +5900,11 @@ snapshots:
       safe-regex-test: 1.1.0
       string.prototype.includes: 2.0.1
 
-  eslint-plugin-react-hooks@6.0.0-rc1(eslint@9.35.0):
+  eslint-plugin-react-hooks@6.0.0-rc.2(eslint@9.35.0):
     dependencies:
-      '@babel/core': 7.27.4
-      '@babel/parser': 7.27.5
-      '@babel/plugin-transform-private-methods': 7.27.1(@babel/core@7.27.4)
+      '@babel/core': 7.28.4
+      '@babel/parser': 7.28.4
+      '@babel/plugin-proposal-private-methods': 7.18.6(@babel/core@7.28.4)
       eslint: 9.35.0
       hermes-parser: 0.25.1
       zod: 3.25.67
@@ -6142,6 +6168,11 @@ snapshots:
       es-errors: 1.3.0
       get-intrinsic: 1.3.0
 
+  get-tsconfig@4.10.1:
+    dependencies:
+      resolve-pkg-maps: 1.0.0
+    optional: true
+
   gl-mat4@1.2.0: {}
 
   gl-matrix@3.4.4: {}
@@ -6307,64 +6338,64 @@ snapshots:
 
   govuk-colours@1.1.0: {}
 
-  govuk-react@0.10.7(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)):
+  govuk-react@0.10.7(@types/react@19.1.13)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)):
     dependencies:
-      '@govuk-react/back-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/breadcrumbs': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/button': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/caption': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/checkbox': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/back-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/breadcrumbs': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/button': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/caption': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/checkbox': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       '@govuk-react/constants': 0.10.7
-      '@govuk-react/date-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/details': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/document-footer-metadata': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/error-summary': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/fieldset': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/file-upload': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/footer': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/form-group': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/global-style': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/grid-col': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/grid-row': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/input-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/inset-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/lead-paragraph': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/loading-box': 0.10.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/main': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/multi-choice': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/ordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/page': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/pagination': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/panel': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/paragraph': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/phase-banner': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/radio': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/related-items': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/search-box': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/section-break': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/select': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/skip-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/table': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/tabs': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/tag': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/text-area': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/top-nav': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/visually-hidden': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
-      '@govuk-react/warning-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/date-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/details': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/document-footer-metadata': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-summary': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/error-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/fieldset': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/file-upload': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/footer': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/form-group': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/global-style': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/grid-col': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/grid-row': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/heading': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/hint-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/icons': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/input': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/input-field': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/inset-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/label-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/lead-paragraph': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/list-item': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/loading-box': 0.10.7(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/main': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/multi-choice': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/ordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/page': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/pagination': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/panel': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/paragraph': 0.10.7(@types/react@19.1.13)(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/phase-banner': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/radio': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/related-items': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/search-box': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/section-break': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/select': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/skip-link': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/table': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/tabs': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/tag': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/text-area': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/top-nav': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/unordered-list': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/visually-hidden': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
+      '@govuk-react/warning-text': 0.10.7(react@19.1.1)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))
       govuk-colours: 1.1.0
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
-      styled-components: 5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
+      styled-components: 5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1)
     transitivePeerDependencies:
       - '@types/react'
       - supports-color
@@ -6765,6 +6796,52 @@ snapshots:
     dependencies:
       prelude-ls: 1.2.1
       type-check: 0.4.0
+
+  lightningcss-darwin-arm64@1.30.1:
+    optional: true
+
+  lightningcss-darwin-x64@1.30.1:
+    optional: true
+
+  lightningcss-freebsd-x64@1.30.1:
+    optional: true
+
+  lightningcss-linux-arm-gnueabihf@1.30.1:
+    optional: true
+
+  lightningcss-linux-arm64-gnu@1.30.1:
+    optional: true
+
+  lightningcss-linux-arm64-musl@1.30.1:
+    optional: true
+
+  lightningcss-linux-x64-gnu@1.30.1:
+    optional: true
+
+  lightningcss-linux-x64-musl@1.30.1:
+    optional: true
+
+  lightningcss-win32-arm64-msvc@1.30.1:
+    optional: true
+
+  lightningcss-win32-x64-msvc@1.30.1:
+    optional: true
+
+  lightningcss@1.30.1:
+    dependencies:
+      detect-libc: 2.1.0
+    optionalDependencies:
+      lightningcss-darwin-arm64: 1.30.1
+      lightningcss-darwin-x64: 1.30.1
+      lightningcss-freebsd-x64: 1.30.1
+      lightningcss-linux-arm-gnueabihf: 1.30.1
+      lightningcss-linux-arm64-gnu: 1.30.1
+      lightningcss-linux-arm64-musl: 1.30.1
+      lightningcss-linux-x64-gnu: 1.30.1
+      lightningcss-linux-x64-musl: 1.30.1
+      lightningcss-win32-arm64-msvc: 1.30.1
+      lightningcss-win32-x64-msvc: 1.30.1
+    optional: true
 
   lilconfig@3.1.3: {}
 
@@ -7409,6 +7486,9 @@ snapshots:
     dependencies:
       value-or-function: 4.0.0
 
+  resolve-pkg-maps@1.0.0:
+    optional: true
+
   resolve-protobuf-schema@2.1.0:
     dependencies:
       protocol-buffers-schema: 3.6.0
@@ -7664,14 +7744,14 @@ snapshots:
 
   strongly-connected-components@1.0.1: {}
 
-  styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1):
+  styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1):
     dependencies:
       '@babel/helper-module-imports': 7.27.1(supports-color@5.5.0)
       '@babel/traverse': 7.27.4(supports-color@5.5.0)
       '@emotion/is-prop-valid': 1.2.2
       '@emotion/stylis': 0.8.5
       '@emotion/unitless': 0.7.5
-      babel-plugin-styled-components: 2.1.4(@babel/core@7.27.4)(styled-components@5.3.11(@babel/core@7.27.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))(supports-color@5.5.0)
+      babel-plugin-styled-components: 2.1.4(@babel/core@7.28.4)(styled-components@5.3.11(@babel/core@7.28.4)(react-dom@19.1.1(react@19.1.1))(react-is@16.13.1)(react@19.1.1))(supports-color@5.5.0)
       css-to-react-native: 3.2.0
       hoist-non-react-statics: 3.3.2
       react: 19.1.1
@@ -7795,6 +7875,14 @@ snapshots:
   tslib@2.3.0: {}
 
   tslib@2.8.1: {}
+
+  tsx@4.20.5:
+    dependencies:
+      esbuild: 0.25.5
+      get-tsconfig: 4.10.1
+    optionalDependencies:
+      fsevents: 2.3.3
+    optional: true
 
   type-check@0.4.0:
     dependencies:
@@ -7980,7 +8068,7 @@ snapshots:
       replace-ext: 2.0.0
       teex: 1.0.1
 
-  vite@7.1.5(@types/node@24.4.0)(sass@1.92.1):
+  vite@7.1.5(@types/node@24.4.0)(lightningcss@1.30.1)(sass@1.92.1)(tsx@4.20.5):
     dependencies:
       esbuild: 0.25.5
       fdir: 6.5.0(picomatch@4.0.3)
@@ -7991,7 +8079,9 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.4.0
       fsevents: 2.3.3
+      lightningcss: 1.30.1
       sass: 1.92.1
+      tsx: 4.20.5
 
   void-elements@3.1.0: {}
 

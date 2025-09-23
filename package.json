@@ -11,7 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "babel-plugin-react-compiler": "19.1.0-rc.2",
+    "babel-plugin-react-compiler": "19.1.0-rc.3",
     "echarts": "^6.0.0",
     "echarts-for-react": "^3.0.4",
     "govuk-react": "^0.10.7",
@@ -41,7 +41,7 @@
     "@vitejs/plugin-react": "^5.0.2",
     "eslint": "^9.35.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
-    "eslint-plugin-react-hooks": "6.0.0-rc1",
+    "eslint-plugin-react-hooks": "6.0.0-rc.2",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.4.0",
     "i18next-parser": "^9.3.0",
