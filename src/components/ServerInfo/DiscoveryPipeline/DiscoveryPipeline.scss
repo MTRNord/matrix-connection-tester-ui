@@ -2,15 +2,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 2rem;
   overflow: auto;
-  padding-left: 80px;  /* keep scroll area correct */
-}
-
-.pipeline-wrapper {
-  overflow: auto;
-  position: relative;
 }
 
 .pipeline-arrows {
@@ -25,8 +18,15 @@
 
 .stage {
   display: flex;
-  justify-content: center;
-  width: 100%;
+  justify-content: start;
+
+  // First and last stage marked element should justify-content center. The rest start.
+  &:nth-of-type(1),
+  &:nth-of-type(5) {
+    justify-content: center;
+  }
+
+  width: 100vw;
 }
 
 .stage-cards {

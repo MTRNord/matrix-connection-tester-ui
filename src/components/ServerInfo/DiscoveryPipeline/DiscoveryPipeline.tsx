@@ -65,7 +65,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
     const dnsCards: CardData[] = data.DNSResult?.Addrs?.map((addr) => ({ id: `dns-${addr}`, label: addr, status: "ok", children: [] })) || [];
     rootCard.children = dnsCards;
 
-    dnsCards.forEach((dns) => {
+    for (const dns of dnsCards) {
         const host = dns.label;
         const wk = data.WellKnownResult?.[host];
 
@@ -99,14 +99,15 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
             // if neither exists, still attach federationCard
             wkCard.children!.push(federationCard);
         }
-    });
-
+    }
 
     const stages: CardData[][] = [];
     const assignLevel = (card: CardData, depth: number) => {
         if (!stages[depth]) stages[depth] = [];
         if (!stages[depth].includes(card)) stages[depth].push(card);
-        card.children?.forEach((child: CardData) => assignLevel(child, depth + 1));
+        for (const child of card.children || []) {
+            assignLevel(child, depth + 1);
+        }
     };
     assignLevel(rootCard, 0);
 
@@ -118,7 +119,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
             if (node) {
                 const containerRect = node.getBoundingClientRect();
                 const pos: Record<string, { x: number; y: number; width: number; height: number }> = {};
-                flatCards.forEach((card: CardData) => {
+                for (const card of flatCards) {
                     const el = document.getElementById(card.id);
                     if (el) {
                         const rect = el.getBoundingClientRect();
@@ -129,7 +130,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
                             height: rect.height,
                         };
                     }
-                });
+                }
                 setLines(calculateLines(flatCards, node));
             };
         });
@@ -138,34 +139,32 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
 
 
     return (
-        <div className="pipeline-wrapper">
-            <div className="pipeline-vertical" ref={containerRef}>
-                <svg className="pipeline-arrows" style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none" }}>
-                    <defs>
-                        <marker
-                            id="arrowhead"
-                            markerWidth="6"
-                            markerHeight="6"
-                            refX="5"
-                            refY="3"
-                            orient="auto"
-                        >
-                            <polygon points="0 0, 6 3, 0 6" fill="#505a5f" />
-                        </marker>
-                    </defs>
-                    {lines?.map((line) => (
-                        <polyline
-                            key={line.key}
-                            points={`${line.x1},${line.y1} ${line.x1},${(line.y1 + line.y2) / 2} ${line.x2},${(line.y1 + line.y2) / 2} ${line.x2},${line.y2}`}
-                            stroke="#505a5f"
-                            strokeWidth={1.5}
-                            fill="none"
-                            markerEnd="url(#arrowhead)"
-                        />
-                    ))}
-                </svg>
-                {stages.map((stage, i) => <PipelineStage key={i} stage={stage} />)}
-            </div>
+        <div className="pipeline-vertical" ref={containerRef}>
+            <svg className="pipeline-arrows">
+                <defs>
+                    <marker
+                        id="arrowhead"
+                        markerWidth="6"
+                        markerHeight="6"
+                        refX="5"
+                        refY="3"
+                        orient="auto"
+                    >
+                        <polygon points="0 0, 6 3, 0 6" fill="#505a5f" />
+                    </marker>
+                </defs>
+                {lines?.map((line) => (
+                    <polyline
+                        key={line.key}
+                        points={`${line.x1},${line.y1} ${line.x1},${(line.y1 + line.y2) / 2} ${line.x2},${(line.y1 + line.y2) / 2} ${line.x2},${line.y2}`}
+                        stroke="#505a5f"
+                        strokeWidth={1.5}
+                        fill="none"
+                        markerEnd="url(#arrowhead)"
+                    />
+                ))}
+            </svg>
+            {stages.map((stage, i) => <PipelineStage key={i} stage={stage} />)}
         </div>
     );
 }
