@@ -22,11 +22,13 @@ const calculateLines = (allCards: CardData[], containerRef?: HTMLDivElement): Li
 
     const containerRect = containerRef.getBoundingClientRect();
     const newLines: Line[] = [];
+    console.log("Calculating lines for", allCards.length, "cards", { allCards });
 
     for (const from of allCards) {
         for (const to of from.children || []) {
             const fromEl = document.getElementById(from.id);
             const toEl = document.getElementById(to.id);
+            console.log("From", from.id, fromEl, "to", to.id, toEl);
             if (!fromEl || !toEl) return;
 
             const fromRect = fromEl.getBoundingClientRect();
@@ -54,61 +56,54 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
     const [lines, setLines] = useState<Line[] | undefined>(undefined);
     const { t } = useTranslation();
 
-    // === Build tree ===
-    const federationCard: CardData = { id: "federation", label: t("federation.discoverypipeline.federation_result", "Federation Result"), status: data.FederationOK ? "ok" : "fail", children: [] };
     const rootCard: CardData = {
-        id: "input",
+        id: "input-card",
         label: t("federation.discoverypipeline.input_validation", "Input validation"),
+        subtitle: t("federation.discoverypipeline.input_description", "This checks validity of the given server_name"),
         status: data.Error ? "fail" : "ok",
-        content: data.Version.name,
         children: []
     };
 
-
-    const dnsCards: CardData[] = data.DNSResult?.Addrs?.map((addr) => ({
-        id: `dns-${addr}`,
-        label: t("federation.discoverypipeline.dns_result", "DNS Result for {{addr}}", { addr }),
-        status: "ok",
+    const wkCard: CardData = {
+        id: "wellknown-card",
+        label: t("federation.discoverypipeline.wellknown_results", "Well-Known Results"),
+        subtitle: t("federation.discoverypipeline.wellknown_description", "This is Step 3.1 of the Matrix Spec"),
         children: [],
-        metadata: { addr },
-    })) || [];
-    rootCard.children = dnsCards;
-
-    for (const dns of dnsCards) {
-        const host = dns.metadata!.addr;
-        const wk = data.WellKnownResult?.[host];
-
-        const wkCard: CardData = {
-            id: `wk-${host}`,
-            label: t("federation.discoverypipeline.wellknown_result", "Well-Known Result for {{host}}", { host }),
-            status: wk?.Error ? "fail" : "ok",
-            content: wk?.Error ? wk.Error.Error : wk?.["m.server"],
-            children: [],
-        };
-        dns.children!.push(wkCard);
-
-        // Always create a connection card if either report or error exists
-        const report = data.ConnectionReports?.[host];
-        const error = data.ConnectionErrors?.[host];
-
-        if (report || error) {
-            const connCard: CardData = {
-                id: `conn-${host}`,
-                label: t("federation.discoverypipeline.connection_result", "Connection Result for {{host}}", { host }),
-                status: report
-                    ? report.Checks.AllChecksOK ? "ok" : "fail"
-                    : "fail",
-                content: report
-                    ? `${report.Version.name} ${report.Version.version}`
-                    : error?.Error,
-                children: [federationCard], // attach federation at the end
-            };
-            wkCard.children!.push(connCard);
-        } else {
-            // if neither exists, still attach federationCard
-            wkCard.children!.push(federationCard);
-        }
+        content: Object.keys(data.WellKnownResult)?.map((host) => {
+            const wk = data.WellKnownResult?.[host];
+            return {
+                name: host,
+                status: wk?.Error ? "fail" : "ok",
+            }
+        }) || [],
     }
+    const srvCard: CardData = {
+        id: "srv-card",
+        label: t("federation.discoverypipeline.srv_results", "SRV Results"),
+        status: data.DNSResult?.SRVSkipped ? "ok" : (data.DNSResult?.SrvTargets && Object.keys(data.DNSResult?.SrvTargets).length > 0) ? (data.FederationOK ? "ok" : "warn") : "warn",
+        subtitle: t("federation.discoverypipeline.dns_description", "These are steps 3.2 to 3.5 of the Matrix Spec"),
+        children: [],
+        content: Object.keys(data.DNSResult?.SrvTargets || []).flatMap((host) => {
+            const srv = data.DNSResult?.SrvTargets?.[host];
+            return srv?.map((target) => {
+                return {
+                    name: (target.Priority !== undefined && target.Weight !== undefined) ? `${target.Target}:${target.Port} (priority ${target.Priority}, weight ${target.Weight})` : `${target.Target}:${target.Port}`,
+                }
+            }) || [];
+        }) || [],
+    }
+
+    const federationCard: CardData = {
+        id: "federation-card",
+        label: t("federation.discoverypipeline.federation_result", "Federation Result"),
+        subtitle: t("federation.discoverypipeline.federation_description", "This checks validity of the versions endpoint and the server keys"),
+        status: data.FederationOK ? "ok" : "fail",
+        children: []
+    };
+    rootCard.children = [wkCard];
+    wkCard.children = [srvCard];
+    srvCard.children = [federationCard];
+
 
     const stages: CardData[][] = [];
     const assignLevel = (card: CardData, depth: number) => {

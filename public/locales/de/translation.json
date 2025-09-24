@@ -230,11 +230,15 @@
     "discoverypipeline": {
       "title": "Server-Discovery-Pipeline",
       "description": "Die Server-Discovery-Pipeline zeigt die Schritte, die unternommen wurden, um den Server zu entdecken und eine Verbindung herzustellen. Jeder Schritt zeigt an, ob er erfolgreich war oder fehlgeschlagen ist, zusammen mit relevanten Informationen. (Aktuell wird nur well-known unterstützt)",
-      "connection_result": "Verbindungsergebnis für {{host}}",
-      "wellknown_result": "Well-Known Ergebnis für {{host}}",
-      "dns_result": "DNS-Ergebnis für {{addr}}",
+      "wellknown_results": "Well-Known Ergebnisse",
+      "dns_results": "DNS-Ergebnisse",
       "input_validation": "Input Validierung",
-      "federation_result": "Federation Ergebnis"
+      "federation_result": "Federation Ergebnis",
+      "srv_result": "SRV Ergebnisse",
+      "wellknown_description": "Dies ist Schritt 3.1 der Matrix-Spezifikation",
+      "dns_description": "Dies sind die Schritte 3.2 bis 3.5 der Matrix-Spezifikation",
+      "federation_description": "Dies überprüft die Gültigkeit des Versions-Endpunkts und der Server-Schlüssel",
+      "input_description": "Dies überprüft die Gültigkeit des angegebenen server_name"
     }
   },
   "serverInfo": {

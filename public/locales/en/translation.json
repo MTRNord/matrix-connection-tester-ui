@@ -234,12 +234,16 @@
     "apiError": "⚠️ Something went wrong talking to the API",
     "discoverypipeline": {
       "title": "Server-Discovery-Pipeline",
-      "description": "The Server-Discovery-Pipeline shows the steps taken to discover and connect to the server, along with their results. (This currently only works for the well-known path)",
-      "connection_result": "Connection result for {{host}}",
-      "wellknown_result": "Well-Known result for {{host}}",
-      "dns_result": "DNS result for {{addr}}",
+      "description": "The Server-Discovery-Pipeline shows the steps taken to discover and connect to the server, along with their results.",
+      "wellknown_results": "Well-Known results",
+      "dns_results": "DNS results",
       "input_validation": "Input Validation",
-      "federation_result": "Federation Result"
+      "federation_result": "Federation Result",
+      "srv_result": "SRV Result",
+      "wellknown_description": "This is Step 3.1 of the Matrix Spec",
+      "dns_description": "These are steps 3.2 to 3.5 of the Matrix Spec",
+      "federation_description": "This checks validity of the versions endpoint and the server keys",
+      "input_description": "This checks validity of the given server_name"
     }
   },
   "serverInfo": {

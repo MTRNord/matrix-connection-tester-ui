@@ -39,7 +39,6 @@
   border: 1px solid #b1b4b6;
   border-radius: 0;
   min-width: 270px;
-  max-width: 300px;
   padding: 0.75rem 1rem;
   display: flex;
   flex-direction: column;
@@ -55,6 +54,13 @@
   gap: 0.5rem;
 }
 
+.stage-card-subtitle {
+  font-size: 0.875rem;
+  color: #605e5c; // GOV.UK dark grey
+}
+
 .stage-card-body {
-  font-size: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
