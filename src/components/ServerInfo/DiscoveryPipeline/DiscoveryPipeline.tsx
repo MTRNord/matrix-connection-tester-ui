@@ -1,60 +1,18 @@
-import { useCallback, useState } from "react";
+import { useRef, useState } from "react";
 import type { components } from "../../../api/api";
 import { flattenCards } from "./utils";
 import { PipelineStage } from "./PipelineStage";
 import "./DiscoveryPipeline.scss";
-import type { CardData } from "./types";
+import type { CardData, Line } from "./types";
 import { useTranslation } from "react-i18next";
 import { H1, LeadParagraph } from "govuk-react";
 
 type Root = components["schemas"]["Root"];
 
-interface Line {
-    x1: number;
-    y1: number;
-    x2: number;
-    y2: number;
-    key: string;
-}
-
-const calculateLines = (allCards: CardData[], containerRef?: HTMLDivElement): Line[] | undefined => {
-    if (!containerRef) return;
-
-    const containerRect = containerRef.getBoundingClientRect();
-    const newLines: Line[] = [];
-    console.log("Calculating lines for", allCards.length, "cards", { allCards });
-
-    for (const from of allCards) {
-        for (const to of from.children || []) {
-            const fromEl = document.getElementById(from.id);
-            const toEl = document.getElementById(to.id);
-            console.log("From", from.id, fromEl, "to", to.id, toEl);
-            if (!fromEl || !toEl) return;
-
-            const fromRect = fromEl.getBoundingClientRect();
-            const toRect = toEl.getBoundingClientRect();
-
-            // compute start/end at bottom/top edges
-            const x1 = fromRect.left + fromRect.width / 2 - containerRect.left;
-            const y1 = fromRect.bottom - containerRect.top;
-            const x2 = toRect.left + toRect.width / 2 - containerRect.left;
-            const y2 = toRect.top - containerRect.top;
-
-            newLines.push({
-                key: `${from.id}-${to.id}`,
-                x1,
-                y1,
-                x2,
-                y2,
-            });
-        }
-    }
-    return newLines;
-}
-
 export default function DiscoveryPipeline({ data }: { data: Root }) {
     const [lines, setLines] = useState<Line[] | undefined>(undefined);
     const { t } = useTranslation();
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const rootCard: CardData = {
         id: "input-card",
@@ -77,20 +35,26 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
             }
         }) || [],
     }
+
+    const srvCardContent = Object.keys(data.DNSResult?.SrvTargets || []).flatMap((host) => {
+        const srv = data.DNSResult?.SrvTargets?.[host];
+        return srv?.map((target) => {
+            return {
+                name: (target.Priority !== undefined && target.Weight !== undefined) ? `${target.Target}:${target.Port} (priority ${target.Priority}, weight ${target.Weight})` : `${target.Target}:${target.Port}`,
+            }
+        }) ?? [];
+    });
+
     const srvCard: CardData = {
         id: "srv-card",
         label: t("federation.discoverypipeline.srv_results", "SRV Results"),
-        status: data.DNSResult?.SRVSkipped ? "ok" : (data.DNSResult?.SrvTargets && Object.keys(data.DNSResult?.SrvTargets).length > 0) ? (data.FederationOK ? "ok" : "warn") : "warn",
+        status: data.DNSResult?.SRVSkipped ? (Object.keys(data.WellKnownResult).some((host) => {
+            const wk = data.WellKnownResult?.[host];
+            return wk?.Error;
+        }) ? "fail" : "ok") : (data.DNSResult?.SrvTargets && Object.keys(data.DNSResult?.SrvTargets).length > 0) ? (data.FederationOK ? "ok" : "warn") : "warn",
         subtitle: t("federation.discoverypipeline.dns_description", "These are steps 3.2 to 3.5 of the Matrix Spec"),
         children: [],
-        content: Object.keys(data.DNSResult?.SrvTargets || []).flatMap((host) => {
-            const srv = data.DNSResult?.SrvTargets?.[host];
-            return srv?.map((target) => {
-                return {
-                    name: (target.Priority !== undefined && target.Weight !== undefined) ? `${target.Target}:${target.Port} (priority ${target.Priority}, weight ${target.Weight})` : `${target.Target}:${target.Port}`,
-                }
-            }) || [];
-        }) || [],
+        content: srvCardContent.length > 0 ? srvCardContent : undefined,
     }
 
     const federationCard: CardData = {
@@ -116,30 +80,6 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
     assignLevel(rootCard, 0);
 
     const flatCards = flattenCards(rootCard);
-
-    // Callback ref to measure and update lines
-    const containerRef = useCallback((node: HTMLDivElement | null) => {
-        const id = requestAnimationFrame(() => {
-            if (node && lines?.length !== flatCards.length - 1) {
-                const containerRect = node.getBoundingClientRect();
-                const pos: Record<string, { x: number; y: number; width: number; height: number }> = {};
-                for (const card of flatCards) {
-                    const el = document.getElementById(card.id);
-                    if (el) {
-                        const rect = el.getBoundingClientRect();
-                        pos[card.id] = {
-                            x: rect.left + rect.width / 2 - containerRect.left,
-                            y: rect.top + rect.height / 2 - containerRect.top,
-                            width: rect.width,
-                            height: rect.height,
-                        };
-                    }
-                }
-                setLines(calculateLines(flatCards, node));
-            };
-        });
-        return () => cancelAnimationFrame(id);
-    }, [flatCards, lines]);
 
     return (
         <>
@@ -174,7 +114,7 @@ export default function DiscoveryPipeline({ data }: { data: Root }) {
                         />
                     ))}
                 </svg>
-                {stages.map((stage, i) => <PipelineStage key={i} stage={stage} />)}
+                {stages.map((stage, i) => <PipelineStage key={i} stage={stage} flatCards={flatCards} setLines={setLines} containerRef={containerRef} />)}
             </div>
         </>
     );

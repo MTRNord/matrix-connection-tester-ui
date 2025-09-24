@@ -1,4 +1,4 @@
-import { SectionBreak, Tag } from "govuk-react";
+import { ListItem, SectionBreak, Tag, UnorderedList } from "govuk-react";
 import type { CardData, Status } from "./types";
 import { useTranslation } from "react-i18next";
 
@@ -29,16 +29,16 @@ export function PipelineCard({ card }: { card: CardData }) {
                         level="LARGE"
                         visible
                     />
-                    <div className="stage-card-body">
+                    <UnorderedList>
                         {card.content?.map((thing) => {
                             return (
-                                <div key={thing.name} className="stage-card-body-item">
-                                    <div>&#8226; {thing.name}</div>
+                                <ListItem key={thing.name}>
+                                    <span>{thing.name}</span>&nbsp;
                                     {thing.status && <StatusTag status={thing.status} />}
-                                </div>
+                                </ListItem>
                             )
                         })}
-                    </div>
+                    </UnorderedList>
                 </>
             )}
         </div>

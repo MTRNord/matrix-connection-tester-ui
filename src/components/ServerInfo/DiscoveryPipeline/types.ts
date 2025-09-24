@@ -12,3 +12,11 @@ export interface CardData {
     children?: CardData[];
     metadata?: Record<string, string>;
 }
+
+export interface Line {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    key: string;
+}
