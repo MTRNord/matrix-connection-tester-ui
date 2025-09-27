@@ -15,6 +15,7 @@ const KNOWN_SERVER_SOFTWARE: Record<string, { maturity: "Stable" | "Beta" | "Exp
     "continuwuity": { maturity: "Beta", url: "https://continuwuity.org/" },
     "matrix-key-server": { maturity: "Experimental", url: "https://github.com/t2bot/matrix-key-server" },
     "grapevine": { maturity: "Beta", url: "https://gitlab.computer.surgery/matrix/grapevine/" },
+    "hammerhead": { maturity: "Experimental", url: "https://git.nexy7574.co.uk/nex/hammerhead" },
     "vona": { maturity: "Experimental" },
     "conduwuit": { maturity: "Obsolete" },
     "catalyst": { maturity: "Beta" },
