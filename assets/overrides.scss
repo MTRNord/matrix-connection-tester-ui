@@ -1,0 +1,241 @@
+.govuk-header__link--homepage {
+    word-spacing: unset !important;
+}
+
+.run-tests-button {
+    margin-top: 20px !important;
+}
+
+.language-selector {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.govuk-header__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.govuk-panel__title--error {
+    color: #d4351c !important;
+}
+
+.govuk-section-break--visible--blue {
+    border-color: #1d70b8 !important;
+}
+
+.govuk-panel--error {
+    color: #fff;
+    background: #d4351c;
+}
+
+@media print {
+    .govuk-panel--error {
+        border-color: currentcolor;
+        color: #000000;
+        background: none;
+    }
+}
+
+code {
+    white-space: preserve;
+}
+
+#table-wrapper {
+    position: relative;
+}
+
+#table-scroll {
+    overflow: auto;
+}
+
+#table-wrapper table {
+    width: 100%;
+}
+
+.language-selector-form {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.language-selector-button {
+    margin: 0 !important;
+    font-size: 16px !important;
+    min-width: auto !important;
+}
+
+.support-contact-role {
+    display: inline-block;
+}
+
+.support-contact-details {
+    display: inline-block;
+    vertical-align: top;
+}
+
+/* Loading spinner animation */
+.loading-spinner {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: #1d70b8;
+    animation: spin 1s ease-in-out infinite;
+    vertical-align: middle;
+    margin-left: 0.5rem;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.loading-container p {
+    margin: 0;
+}
+
+/* Progress bar styling for GovUK */
+progress.govuk-progress {
+    width: 100%;
+    height: 30px;
+    border: 2px solid #b1b4b6;
+    background-color: #f3f2f1;
+    border-radius: 0;
+}
+
+progress.govuk-progress::-webkit-progress-bar {
+    background-color: #f3f2f1;
+}
+
+progress.govuk-progress::-webkit-progress-value {
+    background-color: #1d70b8;
+}
+
+progress.govuk-progress::-moz-progress-bar {
+    background-color: #1d70b8;
+}
+
+/* Technical details pre styling */
+.technical-details-pre {
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-size: 0.875rem;
+    background: #f3f2f1;
+    padding: 1rem;
+}
+
+/* Raw data pre styling */
+.raw-data-pre {
+    background-color: #f3f2f1;
+    padding: 20px;
+    overflow-x: auto;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Table wrapper with margin */
+.table-wrapper-with-margin {
+    margin-top: 2rem;
+}
+
+/* Panel with top margin */
+.panel-with-margin {
+    margin-top: 2rem;
+}
+
+/* Success notification banner */
+.govuk-notification-banner--success {
+    border-color: #00703c;
+}
+
+.govuk-notification-banner--success .govuk-notification-banner__header {
+    background-color: #00703c;
+}
+
+.govuk-notification-banner--error {
+    border-color: #d4351c;
+}
+
+.govuk-notification-banner--error .govuk-notification-banner__header {
+    background-color: #d4351c;
+}
+
+/* Ensure delete button fits nicely in table */
+.govuk-table__cell form {
+    margin: 0;
+}
+
+.govuk-table__cell button {
+    margin: 0;
+}
+
+/* Modal overlay and positioning */
+.alert-delete-modal {
+    position: relative;
+}
+
+/* Overlay background */
+.alert-delete-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+}
+
+/* Make notification banner in modal look like a dialog */
+.alert-delete-modal .govuk-notification-banner {
+    background-color: #ffffff;
+}
+
+/* Modal dialog notification banner headers need proper styling */
+.alert-delete-modal-dialog .govuk-notification-banner__header {
+    background-color: #1d70b8;
+}
+
+.alert-delete-modal-dialog.govuk-notification-banner--success
+    .govuk-notification-banner__header {
+    background-color: #00703c;
+}
+
+.alert-delete-modal-dialog .govuk-notification-banner__title {
+    color: #ffffff;
+}
+
+/* Button group spacing for alerts */
+.govuk-button-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Modal dialog styles */
+.alert-delete-modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    max-width: 500px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+}
+
+/* Inset text in modals */
+.modal-inset-text {
+    margin-top: 1rem;
+}

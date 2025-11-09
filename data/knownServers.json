@@ -1,0 +1,38 @@
+{
+  "synapse": {
+    "maturity": "Stable",
+    "url": "https://github.com/matrix-org/synapse"
+  },
+  "dendrite": {
+    "maturity": "Beta",
+    "url": "https://github.com/matrix-org/dendrite"
+  },
+  "conduit": {
+    "maturity": "Experimental",
+    "url": "https://gitlab.com/famedly/conduit"
+  },
+  "construct": {
+    "maturity": "Experimental",
+    "url": "https://github.com/matrix-construct/construct"
+  },
+  "continuwuity": { "maturity": "Beta", "url": "https://continuwuity.org/" },
+  "matrix-key-server": {
+    "maturity": "Experimental",
+    "url": "https://github.com/t2bot/matrix-key-server"
+  },
+  "grapevine": {
+    "maturity": "Beta",
+    "url": "https://gitlab.computer.surgery/matrix/grapevine/"
+  },
+  "hammerhead": {
+    "maturity": "Experimental",
+    "url": "https://codeberg.org/timedout/hammerhead"
+  },
+  "vona": { "maturity": "Experimental" },
+  "conduwuit": { "maturity": "Obsolete" },
+  "catalyst": { "maturity": "Beta" },
+  "tuwunel": {
+    "maturity": "Beta",
+    "url": "https://github.com/matrix-construct/tuwunel"
+  }
+}

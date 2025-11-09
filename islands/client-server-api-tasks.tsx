@@ -1,0 +1,278 @@
+import { useEffect, useMemo } from "preact/hooks";
+import { I18n, type Locale } from "../lib/i18n.ts";
+import { ClientServerStatusPanel } from "../components/client-server-api/panel.tsx";
+import {
+  clientServerState,
+  fetchClientServerInfo,
+} from "../lib/client-server-state.ts";
+
+interface ClientWellKnownResp {
+  "m.homeserver"?: {
+    base_url: string;
+  };
+  "m.identity_server"?: {
+    base_url: string;
+  };
+  [key: string]: unknown;
+}
+
+interface VersionsResponse {
+  versions: string[];
+  unstable_features?: Record<string, boolean>;
+}
+
+interface ClientServerAPITasksProps {
+  serverName: string;
+  locale: Locale;
+  unstableFeatures: Record<string, {
+    title: string;
+    description?: string;
+    msc?: string;
+  }>;
+  baseUrl?: string;
+}
+
+export default function ClientServerApiTasks({
+  serverName,
+  locale,
+  unstableFeatures,
+}: ClientServerAPITasksProps) {
+  const i18n = useMemo(() => new I18n(locale), [locale]);
+  const state = clientServerState.value;
+
+  useEffect(() => {
+    fetchClientServerInfo(serverName);
+  }, [serverName]);
+
+  const { clientWellKnown, versions, discoveredEndpoint, errors, loading } =
+    state;
+
+  if (loading) {
+    return (
+      <div
+        class="govuk-body loading-container"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      >
+        <p>{i18n.t("results.loading")}</p>
+      </div>
+    );
+  }
+
+  // Determine if client-server API is successful
+  const successful = !errors.clientWellKnown && !errors.versions &&
+    clientWellKnown !== null && versions !== null;
+
+  // If there are errors, don't show anything here - errors are shown in Problems section
+  if (!successful) {
+    return (
+      <div class="govuk-body">
+        <p>{i18n.t("results.client_server_api_see_problems")}</p>
+      </div>
+    );
+  }
+
+  // Calculate latest version
+  const latestVersion = versions?.versions
+    ? getLatestVersion(versions.versions)
+    : null;
+
+  // Get enabled experimental features
+  const enabledExperimentalFeatures = versions?.unstable_features
+    ? Object.entries(versions.unstable_features)
+      .filter(([_, enabled]) => enabled)
+      .map(([feature, _]) => feature)
+    : [];
+
+  return (
+    <>
+      <ClientServerStatusPanel i18n={i18n} successful={successful} />
+
+      <dl class="govuk-summary-list">
+        {latestVersion && (
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {i18n.t("results.client_server_api_latest_version")}
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {latestVersion}
+            </dd>
+          </div>
+        )}
+        {discoveredEndpoint && (
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              {i18n.t("results.client_server_api_endpoint")}
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {discoveredEndpoint}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      {enabledExperimentalFeatures.length > 0 && (
+        <div id="table-wrapper">
+          <div id="table-scroll">
+            <table class="govuk-table">
+              <caption class="govuk-table__caption govuk-table__caption--m">
+                {i18n.t("results.experimental_features_title")}
+              </caption>
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">
+                    {i18n.t("results.experimental_features_feature")}
+                  </th>
+                  <th scope="col" class="govuk-table__header">
+                    {i18n.t("results.experimental_features_description")}
+                  </th>
+                  <th scope="col" class="govuk-table__header">
+                    {i18n.t("results.experimental_features_msc")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                {enabledExperimentalFeatures.map((featureName) => {
+                  const featureInfo = unstableFeatures[featureName];
+                  if (!featureInfo) {
+                    return (
+                      <tr class="govuk-table__row">
+                        <th scope="row" class="govuk-table__header">
+                          <code aria-label="Feature flag name">
+                            {featureName}
+                          </code>
+                        </th>
+                        <td class="govuk-table__cell">
+                          {i18n.t(
+                            "results.experimental_features_no_description",
+                          )}
+                        </td>
+                        <td class="govuk-table__cell">
+                          {i18n.t("results.experimental_features_unknown")}
+                        </td>
+                      </tr>
+                    );
+                  }
+
+                  return (
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">
+                        {featureInfo.title}
+                        <div class="govuk-hint">
+                          <code aria-label="Feature flag name">
+                            {featureName}
+                          </code>
+                        </div>
+                      </th>
+                      <td class="govuk-table__cell">
+                        {featureInfo.description ||
+                          i18n.t(
+                            "results.experimental_features_no_description",
+                          )}
+                      </td>
+                      <td class="govuk-table__cell">
+                        {featureInfo.msc
+                          ? (
+                            <a
+                              class="govuk-link"
+                              href={`https://github.com/matrix-org/matrix-spec-proposals/pull/${featureInfo.msc}`}
+                              rel="noopener noreferrer"
+                            >
+                              {featureInfo.msc}
+                            </a>
+                          )
+                          : i18n.t("results.experimental_features_unknown")}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {clientWellKnown && (
+        <div id="table-wrapper" class="table-wrapper-with-margin">
+          <div id="table-scroll">
+            <table class="govuk-table">
+              <caption class="govuk-table__caption govuk-table__caption--m">
+                {i18n.t("results.client_discovery_title")}
+              </caption>
+              <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                  <th scope="col" class="govuk-table__header">
+                    {i18n.t("results.client_discovery_property")}
+                  </th>
+                  <th scope="col" class="govuk-table__header">
+                    {i18n.t("results.client_discovery_value")}
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="govuk-table__body">
+                {Object.entries(clientWellKnown).map(([key, value]) => (
+                  <tr class="govuk-table__row">
+                    <th scope="row" class="govuk-table__header">
+                      <code>{key}</code>
+                    </th>
+                    <td class="govuk-table__cell">
+                      {typeof value === "object" && value !== null
+                        ? (
+                          Object.prototype.hasOwnProperty.call(
+                              value,
+                              "base_url",
+                            )
+                            ? (value as { base_url: string }).base_url
+                            : <code>{JSON.stringify(value, null, 2)}</code>
+                        )
+                        : String(value)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
+
+function getLatestVersion(versions: string[]): string {
+  return versions.reduce((latest, current) => {
+    // Handle r0.x.x versions
+    const latestParts = latest.startsWith("r0")
+      ? latest.slice(2).split(".").map(Number)
+      : latest.slice(1).split(".").map(Number);
+
+    const currentParts = current.startsWith("r0")
+      ? current.slice(2).split(".").map(Number)
+      : current.slice(1).split(".").map(Number);
+
+    // v1.x comes after r0.x
+    if (latest.startsWith("r0") && current.startsWith("v")) {
+      return current;
+    }
+    if (latest.startsWith("v") && current.startsWith("r0")) {
+      return latest;
+    }
+
+    // Compare version numbers
+    for (
+      let i = 0;
+      i < Math.max(latestParts.length, currentParts.length);
+      i++
+    ) {
+      const latestPart = latestParts[i] || 0;
+      const currentPart = currentParts[i] || 0;
+
+      if (currentPart > latestPart) {
+        return current;
+      } else if (currentPart < latestPart) {
+        return latest;
+      }
+    }
+    return latest;
+  }, versions[0]);
+}
