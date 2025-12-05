@@ -20,11 +20,12 @@ const defaultLocale: Locale = "en";
 /**
  * Get nested value from object using dot notation
  * e.g., "home.title" => translations.home.title
+ * Returns string, array, or undefined
  */
 function getNestedValue(
   obj: Record<string, unknown>,
   path: string,
-): string | undefined {
+): string | string[] | undefined {
   const keys = path.split(".");
   let current: unknown = obj;
 
@@ -38,7 +39,17 @@ function getNestedValue(
     }
   }
 
-  return typeof current === "string" ? current : undefined;
+  // Return strings and arrays, filter out other types
+  if (typeof current === "string") {
+    return current;
+  } else if (Array.isArray(current)) {
+    // Ensure all array elements are strings
+    return current.every((item) => typeof item === "string")
+      ? (current as string[])
+      : undefined;
+  }
+
+  return undefined;
 }
 
 /**
@@ -106,9 +117,12 @@ export class I18n {
    * Translate a key with optional interpolation variables
    * @param key - Translation key in dot notation (e.g., "home.title")
    * @param variables - Object with variables to interpolate
-   * @returns Translated string
+   * @returns Translated string or array of strings
    */
-  t(key: string, variables?: Record<string, string | number>): string {
+  t(
+    key: string,
+    variables?: Record<string, string | number>,
+  ): string | string[] {
     // Try current locale
     const translation = getNestedValue(
       translations[this.locale] as unknown as Record<string, unknown>,
@@ -116,6 +130,13 @@ export class I18n {
     );
 
     if (translation) {
+      // Handle arrays
+      if (Array.isArray(translation)) {
+        return variables
+          ? translation.map((item) => interpolate(item, variables))
+          : translation;
+      }
+      // Handle strings
       return interpolate(translation, variables);
     }
 
@@ -127,6 +148,13 @@ export class I18n {
       );
 
       if (fallbackTranslation) {
+        // Handle arrays
+        if (Array.isArray(fallbackTranslation)) {
+          return variables
+            ? fallbackTranslation.map((item) => interpolate(item, variables))
+            : fallbackTranslation;
+        }
+        // Handle strings
         return interpolate(fallbackTranslation, variables);
       }
     }

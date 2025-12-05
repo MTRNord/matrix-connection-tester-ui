@@ -247,177 +247,231 @@
     "note": "Hinweis",
     "docs_coming_soon": "Eine ausführliche Dokumentation zu diesem Problem ist in Vorbereitung.",
     "cors_federation": {
+      "_context": "This error solution explains when the connectivity tester tool itself (not the user's server) has a CORS configuration problem during federation checks.",
       "title": "Konnektivitätstester-API-Fehler",
       "description": "Dieser Fehler deutet auf ein Problem mit dem Konnektivitätstester-Tool selbst hin, nicht mit Ihrem Homeserver. Die Backend-API, die Federation-Prüfungen durchführt, ist falsch konfiguriert oder nicht verfügbar.",
-      "step1": "Dies ist kein Problem mit Ihrem Matrix-Homeserver - Ihre Serverkonfiguration ist in Ordnung.",
-      "step2": "Bitte melden Sie dieses Problem den Administratoren dieses Konnektivitätstest-Tools. Das Problem liegt beim Testdienst, nicht bei Ihrem Server.",
       "technical_note": "CORS-Fehler im Federation-Kontext bedeuten, dass die Backend-Federation-Tester-API nicht ordnungsgemäß konfiguriert ist. Federation-Prüfungen sollten serverseitig durchgeführt werden, nicht clientseitig.",
-      "learn_more": "Erfahren Sie mehr über die Architektur des Konnektivitätstesters"
+      "learn_more": "Erfahren Sie mehr über die Architektur des Konnektivitätstesters",
+      "steps": [
+        "Dies ist kein Problem mit Ihrem Matrix-Homeserver - Ihre Serverkonfiguration ist in Ordnung.",
+        "Bitte melden Sie dieses Problem den Administratoren dieses Konnektivitätstest-Tools. Das Problem liegt beim Testdienst, nicht bei Ihrem Server."
+      ]
     },
     "cors": {
+      "_context": "This error solution helps users fix CORS (Cross-Origin Resource Sharing) configuration issues preventing web browsers from accessing their Matrix server. All steps together guide from initial contact through configuration to testing.",
       "title": "CORS-Konfigurationsproblem",
       "description": "Ihr Server ist nicht so konfiguriert, dass er Anfragen von Webbrowsern zulässt. Dies ist eine gängige Sicherheitseinstellung, die für Matrix-Homeserver angepasst werden muss, damit sie ordnungsgemäß mit webbasierten Tools und Clients funktionieren.",
-      "step1": "Kontaktieren Sie Ihren Serveradministrator oder Hosting-Anbieter, wenn Sie den Server nicht selbst verwalten.",
-      "step2": "Wenn Sie den Server verwalten, müssen Sie CORS-Header (Cross-Origin Resource Sharing) konfigurieren. Dies teilt Browsern mit, dass Ihr Server Anfragen von anderen Websites zulässt.",
-      "step3": "Fügen Sie den 'Access-Control-Allow-Origin'-Header zu Ihrer Serverkonfiguration hinzu. Für Matrix möchten Sie normalerweise alle Ursprünge zulassen, indem Sie ihn für öffentliche Endpunkte auf '*' setzen.",
-      "step4": "Starten Sie Ihren Webserver nach den Änderungen neu und testen Sie erneut.",
       "technical_note": "CORS-Header müssen auf Ihrem Reverse-Proxy (wie nginx oder Apache) oder direkt in Ihrer Matrix-Homeserver-Konfiguration konfiguriert werden. Die spezifische Konfiguration hängt von Ihrer Server-Software ab.",
-      "learn_more": "Erfahren Sie mehr über CORS-Konfiguration"
+      "learn_more": "Erfahren Sie mehr über CORS-Konfiguration",
+      "steps": [
+        "Kontaktieren Sie Ihren Serveradministrator oder Hosting-Anbieter, wenn Sie den Server nicht selbst verwalten.",
+        "Wenn Sie den Server verwalten, müssen Sie CORS-Header (Cross-Origin Resource Sharing) konfigurieren. Dies teilt Browsern mit, dass Ihr Server Anfragen von anderen Websites zulässt.",
+        "Fügen Sie den 'Access-Control-Allow-Origin'-Header zu Ihrer Serverkonfiguration hinzu. Für Matrix möchten Sie normalerweise alle Ursprünge zulassen, indem Sie ihn für öffentliche Endpunkte auf '*' setzen.",
+        "Starten Sie Ihren Webserver nach den Änderungen neu und testen Sie erneut."
+      ]
     },
     "cors_preflight": {
+      "_context": "This error solution provides detailed configuration steps for enabling CORS preflight (OPTIONS request handling) on web servers. Steps progress from general configuration through specific examples for nginx and Apache, ending with testing instructions. Keep technical terms, header names, code snippets, and URLs in original language/format.",
       "title": "CORS-Preflight nicht konfiguriert",
       "description": "Ihr Server ist nicht ordnungsgemäß konfiguriert, um CORS-Preflight-Anfragen (OPTIONS) zu verarbeiten. Dies verhindert, dass browserbasierte Matrix-Clients wie Element Web eine Verbindung zu Ihrem Homeserver herstellen können.",
-      "step1": "Konfigurieren Sie Ihren Webserver oder Reverse-Proxy so, dass er auf OPTIONS-Anfragen an Matrix-API-Endpunkte (/_matrix/client/* und /_matrix/media/*) antwortet.",
-      "step2": "Stellen Sie sicher, dass OPTIONS-Anfragen die folgenden Header zurückgeben: Access-Control-Allow-Origin (auf * oder spezifische Ursprünge gesetzt), Access-Control-Allow-Methods (muss GET, POST, PUT, DELETE enthalten) und Access-Control-Allow-Headers (muss content-type, authorization enthalten).",
-      "step3": "Für nginx fügen Sie hinzu: 'if ($request_method = OPTIONS) { add_header Access-Control-Allow-Origin *; add_header Access-Control-Allow-Methods \"GET, POST, PUT, DELETE, OPTIONS\"; add_header Access-Control-Allow-Headers \"Content-Type, Authorization\"; return 204; }'",
-      "step4": "Für Apache mit mod_headers verwenden Sie: 'Header always set Access-Control-Allow-Origin \"*\"' und 'Header always set Access-Control-Allow-Methods \"GET, POST, PUT, DELETE, OPTIONS\"' in Ihrer VirtualHost-Konfiguration.",
-      "step5": "Starten Sie nach den Änderungen Ihren Webserver neu und testen Sie erneut. Sie können CORS-Preflight manuell testen mit: curl -X OPTIONS -H \"Origin: https://example.com\" -H \"Access-Control-Request-Method: GET\" -v https://ihredomain.de/_matrix/client/versions",
       "technical_note": "CORS-Preflight-Anfragen werden von Browsern gesendet, bevor tatsächliche Anfragen gestellt werden, um zu überprüfen, ob der Server Cross-Origin-Anfragen zulässt. Ohne ordnungsgemäße Preflight-Unterstützung können browserbasierte Matrix-Clients keine Verbindung herstellen. Dies betrifft nur die Client-Server-API, nicht die Föderation (die Server-zu-Server ist und kein CORS verwendet).",
-      "learn_more": "Erfahren Sie mehr über CORS-Preflight-Konfiguration"
+      "learn_more": "Erfahren Sie mehr über CORS-Preflight-Konfiguration",
+      "steps": [
+        "Konfigurieren Sie Ihren Webserver oder Reverse-Proxy so, dass er auf OPTIONS-Anfragen an Matrix-API-Endpunkte (/_matrix/client/* und /_matrix/media/*) antwortet.",
+        "Stellen Sie sicher, dass OPTIONS-Anfragen die folgenden Header zurückgeben: Access-Control-Allow-Origin (auf * oder spezifische Ursprünge gesetzt), Access-Control-Allow-Methods (muss GET, POST, PUT, DELETE enthalten) und Access-Control-Allow-Headers (muss content-type, authorization enthalten).",
+        "Für nginx fügen Sie hinzu: 'if ($request_method = OPTIONS) { add_header Access-Control-Allow-Origin *; add_header Access-Control-Allow-Methods \"GET, POST, PUT, DELETE, OPTIONS\"; add_header Access-Control-Allow-Headers \"Content-Type, Authorization\"; return 204; }'",
+        "Für Apache mit mod_headers verwenden Sie: 'Header always set Access-Control-Allow-Origin \"*\"' und 'Header always set Access-Control-Allow-Methods \"GET, POST, PUT, DELETE, OPTIONS\"' in Ihrer VirtualHost-Konfiguration.",
+        "Starten Sie nach den Änderungen Ihren Webserver neu und testen Sie erneut. Sie können CORS-Preflight manuell testen mit: curl -X OPTIONS -H \"Origin: https://example.com\" -H \"Access-Control-Request-Method: GET\" -v https://ihredomain.de/_matrix/client/versions"
+      ]
     },
     "not_found_support": {
+      "_context": "This error solution explains the optional support information endpoint. Steps flow from acknowledging it's non-critical, through explaining its benefits, to implementation details. Keep file paths and technical references like 'MSC1929' untranslated.",
       "title": "Support-Informationen nicht verfügbar",
       "description": "Ihr Server hat keinen Support-Informations-Endpunkt konfiguriert. Dies ist zwar optional, wird aber empfohlen, damit Benutzer Hilfe finden können, wenn sie diese benötigen.",
-      "step1": "Dies ist kein kritisches Problem - Ihr Server kann auch ohne diese Informationen gut funktionieren. Support-Informationen helfen Benutzern jedoch, Sie zu kontaktieren, wenn sie Probleme haben.",
-      "step2": "Wenn Sie Support-Informationen hinzufügen möchten, müssen Sie eine Datei unter /.well-known/matrix/support auf Ihrem Server erstellen.",
-      "step3": "Diese Datei sollte JSON mit Kontaktinformationen wie E-Mail-Adressen oder Matrix-IDs für Ihr Support-Team enthalten.",
       "technical_note": "Der Support-Endpunkt ist Teil von MSC1929. Es ist eine einfache JSON-Datei, die Kontakte und Support-Ressourcen auflistet.",
-      "learn_more": "Erfahren Sie, wie Sie den Support-Endpunkt einrichten"
+      "learn_more": "Erfahren Sie, wie Sie den Support-Endpunkt einrichten",
+      "steps": [
+        "Dies ist kein kritisches Problem - Ihr Server kann auch ohne diese Informationen gut funktionieren. Support-Informationen helfen Benutzern jedoch, Sie zu kontaktieren, wenn sie Probleme haben.",
+        "Wenn Sie Support-Informationen hinzufügen möchten, müssen Sie eine Datei unter /.well-known/matrix/support auf Ihrem Server erstellen.",
+        "Diese Datei sollte JSON mit Kontaktinformationen wie E-Mail-Adressen oder Matrix-IDs für Ihr Support-Team enthalten."
+      ]
     },
     "not_found_client": {
+      "_context": "This error solution guides users through setting up the required client discovery endpoint. Steps progress from creating the file, ensuring accessibility, configuring content, to proper headers. Keep paths, URLs, and technical terms like 'Content-Type' untranslated.",
       "title": "Client-Discovery-Endpunkt nicht gefunden",
       "description": "Auf Ihrem Server fehlt der Client-Discovery-Endpunkt. Dieser wird benötigt, damit Matrix-Clients Ihren Homeserver finden können.",
-      "step1": "Sie müssen eine Datei /.well-known/matrix/client auf Ihrem Webserver erstellen.",
-      "step2": "Diese Datei muss unter https://ihredomain.de/.well-known/matrix/client zugänglich sein (ersetzen Sie 'ihredomain.de' durch Ihre tatsächliche Domain).",
-      "step3": "Die Datei sollte JSON enthalten, das Clients mitteilt, wo sich Ihr Matrix-Homeserver befindet.",
-      "step4": "Stellen Sie sicher, dass Ihr Webserver so konfiguriert ist, dass er diese Datei mit dem richtigen Content-Type-Header (application/json) bereitstellt.",
       "technical_note": "Dieser Endpunkt ist entscheidend für die Client-Erkennung. Ohne ihn können Matrix-Clients Ihren Homeserver nicht automatisch finden.",
-      "learn_more": "Erfahren Sie mehr über die Client-Discovery-Einrichtung"
+      "learn_more": "Erfahren Sie mehr über die Client-Discovery-Einrichtung",
+      "steps": [
+        "Sie müssen eine Datei /.well-known/matrix/client auf Ihrem Webserver erstellen.",
+        "Diese Datei muss unter https://ihredomain.de/.well-known/matrix/client zugänglich sein (ersetzen Sie 'ihredomain.de' durch Ihre tatsächliche Domain).",
+        "Die Datei sollte JSON enthalten, das Clients mitteilt, wo sich Ihr Matrix-Homeserver befindet.",
+        "Stellen Sie sicher, dass Ihr Webserver so konfiguriert ist, dass er diese Datei mit dem richtigen Content-Type-Header (application/json) bereitstellt."
+      ]
     },
     "not_found_federation": {
+      "_context": "This error solution helps diagnose why federation endpoints are unreachable. Steps move from basic server verification, through configuration checks, to network connectivity. Keep paths, port numbers, and technical terms untranslated.",
       "title": "Federation-Endpunkt nicht gefunden",
       "description": "Die Federation-Endpunkte Ihres Servers können nicht gefunden werden. Dies verhindert, dass andere Matrix-Server mit Ihrem kommunizieren können.",
-      "step1": "Überprüfen Sie, ob Ihr Matrix-Homeserver tatsächlich läuft und erreichbar ist.",
-      "step2": "Prüfen Sie, ob Ihre Datei /.well-known/matrix/server existiert und auf den richtigen Serverstandort verweist.",
-      "step3": "Stellen Sie sicher, dass Ihre Firewall und Netzwerkkonfiguration eingehende Verbindungen auf dem Matrix-Federation-Port (normalerweise 8448) zulassen.",
-      "learn_more": "Erfahren Sie mehr über die Federation-Einrichtung"
+      "learn_more": "Erfahren Sie mehr über die Federation-Einrichtung",
+      "steps": [
+        "Überprüfen Sie, ob Ihr Matrix-Homeserver tatsächlich läuft und erreichbar ist.",
+        "Prüfen Sie, ob Ihre Datei /.well-known/matrix/server existiert und auf den richtigen Serverstandort verweist.",
+        "Stellen Sie sicher, dass Ihre Firewall und Netzwerkkonfiguration eingehende Verbindungen auf dem Matrix-Federation-Port (normalerweise 8448) zulassen."
+      ]
     },
     "content_type": {
+      "_context": "This error solution addresses incorrect Content-Type headers for JSON responses. Steps progress from identifying the cause, through checking and fixing configuration, to applying changes. Includes nginx-specific configuration example. Keep technical terms, header names like 'Content-Type: application/json', and configuration syntax untranslated.",
       "title": "Falscher Content-Type-Header",
       "description": "Ihr Server sendet Antworten mit dem falschen Content-Type-Header. Matrix erfordert, dass alle JSON-Antworten 'application/json' als Content-Type haben.",
-      "step1": "Dies wird normalerweise durch die Konfiguration Ihres Webservers oder Reverse-Proxys (wie nginx oder Apache) verursacht.",
-      "step2": "Überprüfen Sie Ihre Webserver-Konfigurationsdateien und stellen Sie sicher, dass sie so eingestellt sind, dass .json-Dateien und Matrix-Endpunkte mit 'Content-Type: application/json' bereitgestellt werden.",
-      "step3": "Wenn Sie nginx verwenden, müssen Sie möglicherweise 'types { application/json json; }' zu Ihrer Konfiguration hinzufügen.",
-      "step4": "Starten Sie nach den Änderungen Ihren Webserver neu und testen Sie erneut.",
       "technical_note": "Der Content-Type-Header teilt Browsern und Clients mit, welche Art von Daten sie empfangen. Matrix erfordert 'application/json' für alle JSON-Endpunkte.",
-      "learn_more": "Erfahren Sie mehr über die Content-Type-Konfiguration"
+      "learn_more": "Erfahren Sie mehr über die Content-Type-Konfiguration",
+      "steps": [
+        "Dies wird normalerweise durch die Konfiguration Ihres Webservers oder Reverse-Proxys (wie nginx oder Apache) verursacht.",
+        "Überprüfen Sie Ihre Webserver-Konfigurationsdateien und stellen Sie sicher, dass sie so eingestellt sind, dass .json-Dateien und Matrix-Endpunkte mit 'Content-Type: application/json' bereitgestellt werden.",
+        "Wenn Sie nginx verwenden, müssen Sie möglicherweise 'types { application/json json; }' zu Ihrer Konfiguration hinzufügen.",
+        "Starten Sie nach den Änderungen Ihren Webserver neu und testen Sie erneut."
+      ]
     },
     "json_parse": {
+      "_context": "This error solution helps debug invalid or corrupted JSON responses. Steps progress through checking logs, validating files, checking for interference, and direct testing. Keep file paths and technical terms untranslated.",
       "title": "Ungültige JSON-Antwort",
       "description": "Ihr Server sendet Daten, die kein gültiges JSON sind oder beschädigt sind. Dies bedeutet normalerweise, dass es ein Problem mit der Konfiguration Ihres Servers gibt.",
-      "step1": "Überprüfen Sie Ihre Server-Logs, um zu sehen, ob es Fehlermeldungen über den fehlgeschlagenen Endpunkt gibt.",
-      "step2": "Überprüfen Sie, ob die Dateien (wie /.well-known/matrix/client oder /.well-known/matrix/support) gültiges JSON enthalten. Sie können die JSON-Gültigkeit mit Online-JSON-Validatoren testen.",
-      "step3": "Stellen Sie sicher, dass Ihr Reverse-Proxy (falls vorhanden) die Antworten nicht verändert oder beschädigt.",
-      "step4": "Wenn das Problem weiterhin besteht, versuchen Sie, direkt auf den Endpunkt zuzugreifen (nicht über dieses Tool), um zu sehen, was tatsächlich zurückgegeben wird.",
       "technical_note": "Häufige Ursachen sind: HTML-Fehlerseiten werden anstelle von JSON zurückgegeben, Komprimierungsprobleme oder ungültige JSON-Syntax in Konfigurationsdateien.",
-      "learn_more": "Erfahren Sie mehr über JSON-Fehlerbehebung"
+      "learn_more": "Erfahren Sie mehr über JSON-Fehlerbehebung",
+      "steps": [
+        "Überprüfen Sie Ihre Server-Logs, um zu sehen, ob es Fehlermeldungen über den fehlgeschlagenen Endpunkt gibt.",
+        "Überprüfen Sie, ob die Dateien (wie /.well-known/matrix/client oder /.well-known/matrix/support) gültiges JSON enthalten. Sie können die JSON-Gültigkeit mit Online-JSON-Validatoren testen.",
+        "Stellen Sie sicher, dass Ihr Reverse-Proxy (falls vorhanden) die Antworten nicht verändert oder beschädigt.",
+        "Wenn das Problem weiterhin besteht, versuchen Sie, direkt auf den Endpunkt zuzugreifen (nicht über dieses Tool), um zu sehen, was tatsächlich zurückgegeben wird."
+      ]
     },
     "server_error": {
+      "_context": "This error solution helps diagnose and fix internal server errors. Steps move from checking logs, through basic troubleshooting (restart, resources), to seeking help if needed. Keep software names like 'Synapse, Dendrite' untranslated.",
       "title": "Serverfehler",
       "description": "Ihr Server hat beim Verarbeiten der Anfrage einen internen Fehler festgestellt. Dies deutet normalerweise auf ein Problem mit Ihrer Homeserver-Software oder -Konfiguration hin.",
-      "step1": "Überprüfen Sie Ihre Matrix-Homeserver-Logs auf Fehlermeldungen. Diese enthalten normalerweise Details darüber, was schief gelaufen ist.",
-      "step2": "Versuchen Sie, Ihren Matrix-Homeserver-Dienst neu zu starten.",
-      "step3": "Überprüfen Sie, ob Ihr Homeserver über ausreichend Systemressourcen (Speicher, Festplattenspeicher usw.) verfügt.",
-      "step4": "Wenn der Fehler weiterhin besteht, erwägen Sie, den Issue-Tracker für Ihre Homeserver-Software (Synapse, Dendrite usw.) zu überprüfen oder in deren Support-Kanälen um Hilfe zu bitten.",
-      "learn_more": "Erfahren Sie mehr über Server-Log-Analyse"
+      "learn_more": "Erfahren Sie mehr über Server-Log-Analyse",
+      "steps": [
+        "Überprüfen Sie Ihre Matrix-Homeserver-Logs auf Fehlermeldungen. Diese enthalten normalerweise Details darüber, was schief gelaufen ist.",
+        "Versuchen Sie, Ihren Matrix-Homeserver-Dienst neu zu starten.",
+        "Überprüfen Sie, ob Ihr Homeserver über ausreichend Systemressourcen (Speicher, Festplattenspeicher usw.) verfügt.",
+        "Wenn der Fehler weiterhin besteht, erwägen Sie, den Issue-Tracker für Ihre Homeserver-Software (Synapse, Dendrite usw.) zu überprüfen oder in deren Support-Kanälen um Hilfe zu bitten."
+      ]
     },
     "timeout": {
+      "_context": "This error solution addresses timeout issues that can have various causes. Steps systematically check from server availability, through resources and network, to logs and proxy configuration.",
       "title": "Zeitüberschreitung der Anfrage",
       "description": "Die Anfrage hat zu lange gedauert und ist abgelaufen. Dies könnte bedeuten, dass Ihr Server sehr langsam oder überlastet ist oder es ein Problem mit der Netzwerkverbindung gibt.",
-      "step1": "Überprüfen Sie, ob Ihr Server online und zugänglich ist. Versuchen Sie, direkt in einem Browser darauf zuzugreifen.",
-      "step2": "Überprüfen Sie, ob Ihr Server über ausreichende Ressourcen (CPU, RAM, Festplatten-I/O) verfügt. Server-Performance-Probleme verursachen oft Zeitüberschreitungen.",
-      "step3": "Überprüfen Sie Ihre Netzwerkverbindung und Firewall-Einstellungen. Stellen Sie sicher, dass Anfragen nicht blockiert oder verzögert werden.",
-      "step4": "Sehen Sie sich Ihre Server-Logs an, um zu prüfen, ob die Anfrage empfangen wurde und ob es Fehler bei der Verarbeitung gab.",
-      "step5": "Wenn sich Ihr Server hinter einem Reverse-Proxy oder CDN befindet, überprüfen Sie auch deren Logs und Konfiguration.",
-      "learn_more": "Erfahren Sie mehr über Performance-Optimierung"
+      "learn_more": "Erfahren Sie mehr über Performance-Optimierung",
+      "steps": [
+        "Überprüfen Sie, ob Ihr Server online und zugänglich ist. Versuchen Sie, direkt in einem Browser darauf zuzugreifen.",
+        "Überprüfen Sie, ob Ihr Server über ausreichende Ressourcen (CPU, RAM, Festplatten-I/O) verfügt. Server-Performance-Probleme verursachen oft Zeitüberschreitungen.",
+        "Überprüfen Sie Ihre Netzwerkverbindung und Firewall-Einstellungen. Stellen Sie sicher, dass Anfragen nicht blockiert oder verzögert werden.",
+        "Sehen Sie sich Ihre Server-Logs an, um zu prüfen, ob die Anfrage empfangen wurde und ob es Fehler bei der Verarbeitung gab.",
+        "Wenn sich Ihr Server hinter einem Reverse-Proxy oder CDN befindet, überprüfen Sie auch deren Logs und Konfiguration."
+      ]
     },
     "network": {
+      "_context": "This error solution helps diagnose general network connectivity problems. Steps progress from basic connectivity checks, through DNS and firewall, to understanding DNS propagation delays. Keep port numbers untranslated.",
       "title": "Netzwerkfehler",
       "description": "Es gab ein Problem beim Verbinden mit Ihrem Server. Dies könnte auf Netzwerkprobleme, DNS-Probleme oder einen Offline-Server zurückzuführen sein.",
-      "step1": "Überprüfen Sie, ob Ihr Server online ist, indem Sie versuchen, in einem Webbrowser darauf zuzugreifen.",
-      "step2": "Überprüfen Sie, ob die DNS-Einträge Ihres Domainnamens korrekt konfiguriert sind und auf Ihren Server verweisen.",
-      "step3": "Stellen Sie sicher, dass Ihre Firewall eingehende Verbindungen auf den erforderlichen Ports zulässt (443 für HTTPS, 8448 für Matrix-Federation).",
-      "step4": "Wenn Sie kürzlich DNS-Änderungen vorgenommen haben, sind diese möglicherweise noch nicht verbreitet. DNS-Änderungen können bis zu 48 Stunden dauern, um weltweit verbreitet zu werden.",
-      "learn_more": "Erfahren Sie mehr über Netzwerk-Fehlerbehebung"
+      "learn_more": "Erfahren Sie mehr über Netzwerk-Fehlerbehebung",
+      "steps": [
+        "Überprüfen Sie, ob Ihr Server online ist, indem Sie versuchen, in einem Webbrowser darauf zuzugreifen.",
+        "Überprüfen Sie, ob die DNS-Einträge Ihres Domainnamens korrekt konfiguriert sind und auf Ihren Server verweisen.",
+        "Stellen Sie sicher, dass Ihre Firewall eingehende Verbindungen auf den erforderlichen Ports zulässt (443 für HTTPS, 8448 für Matrix-Federation).",
+        "Wenn Sie kürzlich DNS-Änderungen vorgenommen haben, sind diese möglicherweise noch nicht verbreitet. DNS-Änderungen können bis zu 48 Stunden dauern, um weltweit verbreitet zu werden."
+      ]
     },
     "network_federation": {
+      "_context": "This error solution addresses federation-specific network connectivity issues, emphasizing proper server name configuration and delegation. Steps progress from validating server name, through recommended .well-known setup, proxy configuration, verification, and alternative methods. Important: Emphasizes server name should be base domain, not subdomain. Keep example domains, paths, technical terms, and DNS record names untranslated.",
       "title": "Federation-Netzwerkfehler",
       "description": "Der Federation-Tester konnte keine Verbindung zu Ihrem Server herstellen. Dies bedeutet, dass Ihr Server für Federation nicht erreichbar ist oder die Servernamen-Konfiguration falsch ist.",
-      "step1": "Überprüfen Sie Ihren Servernamen - er sollte Ihre Basis-Domain sein (z.B. 'beispiel.de'), NICHT eine Subdomain wie 'matrix.beispiel.de'. Der Servername ist das, was Benutzer nach dem ':' in ihrer Matrix-ID verwenden (@benutzer:beispiel.de).",
-      "step2": "Konfigurieren Sie /.well-known/matrix/server-Delegation (empfohlen): Erstellen Sie eine Datei unter https://ihredomain.de/.well-known/matrix/server, die auf Ihren tatsächlichen Matrix-Server-Standort verweist (der auf einem anderen Port oder einer Subdomain sein kann).",
-      "step3": "Wenn Sie einen Reverse-Proxy verwenden, stellen Sie sicher, dass er Federation-Traffic von Ihrer Domain ordnungsgemäß an Ihren Homeserver weiterleitet.",
-      "step4": "Überprüfen Sie, ob Ihr Matrix-Homeserver läuft und erreichbar ist. Überprüfen Sie die Homeserver-Logs auf Start- oder Konnektivitätsfehler.",
-      "step5": "Als letzten Ausweg, wenn Sie keine .well-known-Delegation verwenden, konfigurieren Sie DNS-SRV-Einträge (_matrix._tcp.ihredomain.de) oder stellen Sie sicher, dass Ihr Homeserver direkt auf Port 8448 erreichbar ist.",
-      "learn_more": "Erfahren Sie mehr über Federation-Netzwerk-Setup"
+      "learn_more": "Erfahren Sie mehr über Federation-Netzwerk-Setup",
+      "steps": [
+        "Überprüfen Sie Ihren Servernamen - er sollte Ihre Basis-Domain sein (z.B. 'beispiel.de'), NICHT eine Subdomain wie 'matrix.beispiel.de'. Der Servername ist das, was Benutzer nach dem ':' in ihrer Matrix-ID verwenden (@benutzer:beispiel.de).",
+        "Konfigurieren Sie /.well-known/matrix/server-Delegation (empfohlen): Erstellen Sie eine Datei unter https://ihredomain.de/.well-known/matrix/server, die auf Ihren tatsächlichen Matrix-Server-Standort verweist (der auf einem anderen Port oder einer Subdomain sein kann).",
+        "Wenn Sie einen Reverse-Proxy verwenden, stellen Sie sicher, dass er Federation-Traffic von Ihrer Domain ordnungsgemäß an Ihren Homeserver weiterleitet.",
+        "Überprüfen Sie, ob Ihr Matrix-Homeserver läuft und erreichbar ist. Überprüfen Sie die Homeserver-Logs auf Start- oder Konnektivitätsfehler.",
+        "Als letzten Ausweg, wenn Sie keine .well-known-Delegation verwenden, konfigurieren Sie DNS-SRV-Einträge (_matrix._tcp.ihredomain.de) oder stellen Sie sicher, dass Ihr Homeserver direkt auf Port 8448 erreichbar ist."
+      ]
     },
     "tls": {
+      "_context": "This error solution addresses TLS/SSL certificate problems for general Matrix connectivity. Steps guide from getting proper certificates, through configuration and restart, to validation and chain verification. Mentions Let's Encrypt and explains certificate chain. Keep service names like 'Let's Encrypt' and technical terms like 'certificate chain', 'intermediate certificates' untranslated.",
       "title": "TLS-Zertifikatsfehler",
       "description": "Das TLS/SSL-Zertifikat Ihres Servers hat ein Problem. Sichere Verbindungen erfordern gültige, vertrauenswürdige Zertifikate, die von einer anerkannten Zertifizierungsstelle ausgestellt wurden.",
-      "step1": "Wenn Sie ein selbstsigniertes Zertifikat verwenden, benötigen Sie ein Zertifikat von einer vertrauenswürdigen Zertifizierungsstelle. Let's Encrypt bietet kostenlose, automatisierte Zertifikate. Hinweis: Selbstsignierte Zertifikate können in geschlossenen Föderationen funktionieren, bei denen alle Server derselben CA vertrauen.",
-      "step2": "Wenn Sie kürzlich ein Zertifikat installiert haben, stellen Sie sicher, dass Ihr Reverse-Proxy oder Webserver so konfiguriert ist, dass er es korrekt verwendet, und neu gestartet wurde.",
-      "step3": "Überprüfen Sie, ob Ihr Zertifikat für Ihren Domainnamen gültig ist und nicht abgelaufen ist. Sie können dies mit Online-SSL-Checker-Tools überprüfen.",
-      "step4": "Stellen Sie sicher, dass die gesamte Zertifikatskette ordnungsgemäß installiert ist, einschließlich aller Zwischenzertifikate, die von Ihrer Zertifizierungsstelle bereitgestellt wurden.",
       "technical_note": "Matrix erfordert gültige TLS-Zertifikate für sichere Kommunikation. Selbstsignierte Zertifikate und Zertifikate mit unbekannten Ausstellern werden von den meisten Matrix-Servern und -Clients abgelehnt, es sei denn, sie vertrauen explizit Ihrer Zertifizierungsstelle.",
-      "learn_more": "Erfahren Sie mehr über TLS-Zertifikate für Matrix"
+      "learn_more": "Erfahren Sie mehr über TLS-Zertifikate für Matrix",
+      "steps": [
+        "Wenn Sie ein selbstsigniertes Zertifikat verwenden, benötigen Sie ein Zertifikat von einer vertrauenswürdigen Zertifizierungsstelle. Let's Encrypt bietet kostenlose, automatisierte Zertifikate. Hinweis: Selbstsignierte Zertifikate können in geschlossenen Föderationen funktionieren, bei denen alle Server derselben CA vertrauen.",
+        "Wenn Sie kürzlich ein Zertifikat installiert haben, stellen Sie sicher, dass Ihr Reverse-Proxy oder Webserver so konfiguriert ist, dass er es korrekt verwendet, und neu gestartet wurde.",
+        "Überprüfen Sie, ob Ihr Zertifikat für Ihren Domainnamen gültig ist und nicht abgelaufen ist. Sie können dies mit Online-SSL-Checker-Tools überprüfen.",
+        "Stellen Sie sicher, dass die gesamte Zertifikatskette ordnungsgemäß installiert ist, einschließlich aller Zwischenzertifikate, die von Ihrer Zertifizierungsstelle bereitgestellt wurden."
+      ]
     },
     "tls_federation": {
+      "_context": "This error solution specifically addresses TLS certificate validation failures preventing federation. Steps emphasize using trusted CAs, explain local testing limitations, and guide through validation, expiration checks, and service restarts. More detailed than general TLS errors due to federation's stricter requirements. Includes information about Let's Encrypt and certificate validation details. Keep service names, technical terms like 'Common Name', 'Subject Alternative Name', IP addresses, and software names untranslated.",
       "title": "TLS-Zertifikatsfehler",
       "description": "Das TLS-Zertifikat Ihres Matrix-Servers kann nicht validiert werden. Dies blockiert die Föderation mit anderen Matrix-Servern. Häufige Ursachen sind selbstsignierte Zertifikate, abgelaufene Zertifikate oder Zertifikate von einer unbekannten/nicht vertrauenswürdigen Zertifizierungsstelle.",
-      "step1": "Verwenden Sie ein Zertifikat von einer öffentlich vertrauenswürdigen Zertifizierungsstelle. Let's Encrypt ist kostenlos und wird für Matrix-Server empfohlen. Hinweis: Selbstsignierte Zertifikate funktionieren nur in geschlossenen Föderationen, bei denen alle teilnehmenden Server Ihrer Zertifizierungsstelle vertrauen.",
-      "step2": "Wenn Sie lokal testen (127.0.0.1 oder localhost), beachten Sie, dass Sie die Föderation nicht mit einem lokalen Server testen können. Föderation erfordert einen öffentlich zugänglichen Server mit einem gültigen Domainnamen und Zertifikat.",
-      "step3": "Überprüfen Sie, ob Ihr Zertifikat für den Domainnamen Ihres Servers gültig ist. Der Common Name oder Subject Alternative Name des Zertifikats muss mit dem Hostnamen Ihres Servers übereinstimmen.",
-      "step4": "Überprüfen Sie, ob Ihr Zertifikat nicht abgelaufen ist und dass die vollständige Zertifikatskette ordnungsgemäß installiert ist, einschließlich Zwischenzertifikate.",
-      "step5": "Wenn Sie kürzlich Ihr Zertifikat aktualisiert haben und einen Reverse-Proxy verwenden (nginx, Apache, Caddy usw.), starten Sie den Reverse-Proxy-Dienst neu. Wenn TLS am Homeserver endet, starten Sie stattdessen diesen neu.",
       "technical_note": "Das Matrix-Föderationsprotokoll erfordert gültige TLS-Zertifikate von vertrauenswürdigen Zertifizierungsstellen. Dieser Fehler zeigt typischerweise 'UnknownIssuer' oder ähnliche Meldungen. Für Entwicklung/Tests sollten Sie eine Staging-Umgebung mit einer echten Domain und einem Let's Encrypt-Zertifikat verwenden, anstatt lokal zu testen.",
-      "learn_more": "Erfahren Sie mehr über Federation-TLS-Anforderungen"
+      "learn_more": "Erfahren Sie mehr über Federation-TLS-Anforderungen",
+      "steps": [
+        "Verwenden Sie ein Zertifikat von einer öffentlich vertrauenswürdigen Zertifizierungsstelle. Let's Encrypt ist kostenlos und wird für Matrix-Server empfohlen. Hinweis: Selbstsignierte Zertifikate funktionieren nur in geschlossenen Föderationen, bei denen alle teilnehmenden Server Ihrer Zertifizierungsstelle vertrauen.",
+        "Wenn Sie lokal testen (127.0.0.1 oder localhost), beachten Sie, dass Sie die Föderation nicht mit einem lokalen Server testen können. Föderation erfordert einen öffentlich zugänglichen Server mit einem gültigen Domainnamen und Zertifikat.",
+        "Überprüfen Sie, ob Ihr Zertifikat für den Domainnamen Ihres Servers gültig ist. Der Common Name oder Subject Alternative Name des Zertifikats muss mit dem Hostnamen Ihres Servers übereinstimmen.",
+        "Überprüfen Sie, ob Ihr Zertifikat nicht abgelaufen ist und dass die vollständige Zertifikatskette ordnungsgemäß installiert ist, einschließlich Zwischenzertifikate.",
+        "Wenn Sie kürzlich Ihr Zertifikat aktualisiert haben und einen Reverse-Proxy verwenden (nginx, Apache, Caddy usw.), starten Sie den Reverse-Proxy-Dienst neu. Wenn TLS am Homeserver endet, starten Sie stattdessen diesen neu."
+      ]
     },
     "invalid_response": {
+      "_context": "This error solution addresses Matrix specification compliance issues with response format. Steps progress from identifying it as a software/configuration issue, through updating software, to checking configuration. Keep software names like 'Synapse, Dendrite, Conduit' untranslated.",
       "title": "Ungültiges Antwortformat",
       "description": "Ihr Server hat Daten in einem Format zurückgegeben, das nicht dem entspricht, was Matrix erwartet. Dies bedeutet, dass Ihr Server die Matrix-Spezifikation nicht korrekt befolgt.",
-      "step1": "Dies deutet normalerweise auf ein Problem mit Ihrer Homeserver-Software oder -Konfiguration hin.",
-      "step2": "Stellen Sie sicher, dass Sie eine aktuelle Version Ihrer Homeserver-Software (Synapse, Dendrite, Conduit usw.) verwenden.",
-      "step3": "Überprüfen Sie, ob Ihre Konfigurationsdateien korrekt sind und der Dokumentation für Ihre Homeserver-Software folgen.",
       "technical_note": "Matrix hat spezifische Anforderungen an Datenstrukturen. Die Antworten Ihres Servers müssen bestimmte Felder enthalten und spezifische Formate befolgen, wie in der Matrix-Spezifikation definiert.",
-      "learn_more": "Erfahren Sie mehr über Matrix-Spezifikations-Konformität"
+      "learn_more": "Erfahren Sie mehr über Matrix-Spezifikations-Konformität",
+      "steps": [
+        "Dies deutet normalerweise auf ein Problem mit Ihrer Homeserver-Software oder -Konfiguration hin.",
+        "Stellen Sie sicher, dass Sie eine aktuelle Version Ihrer Homeserver-Software (Synapse, Dendrite, Conduit usw.) verwenden.",
+        "Überprüfen Sie, ob Ihre Konfigurationsdateien korrekt sind und der Dokumentation für Ihre Homeserver-Software folgen."
+      ]
     },
     "missing_field": {
+      "_context": "This error solution helps fix missing required fields in Matrix responses. Steps move through reviewing configuration, updating software, and verifying against documentation.",
       "title": "Erforderliche Informationen fehlen",
       "description": "In der Antwort Ihres Servers fehlen Informationen, die Matrix benötigt. Dies deutet auf eine unvollständige Konfiguration oder einen Fehler in Ihrer Homeserver-Software hin.",
-      "step1": "Überprüfen Sie Ihre Server-Konfigurationsdateien, um sicherzustellen, dass alle erforderlichen Einstellungen vorhanden sind.",
-      "step2": "Stellen Sie sicher, dass Sie eine aktuelle Version Ihrer Homeserver-Software verwenden.",
-      "step3": "Überprüfen Sie die Dokumentation Ihres Homeservers, um zu überprüfen, dass alle erforderlichen Konfigurationsoptionen gesetzt sind.",
       "technical_note": "Die Matrix-Spezifikation erfordert, dass bestimmte Felder in Antworten vorhanden sind. Fehlende Felder deuten normalerweise auf unvollständige Konfiguration oder veraltete Server-Software hin.",
-      "learn_more": "Erfahren Sie mehr über erforderliche Matrix-Konfiguration"
+      "learn_more": "Erfahren Sie mehr über erforderliche Matrix-Konfiguration",
+      "steps": [
+        "Überprüfen Sie Ihre Server-Konfigurationsdateien, um sicherzustellen, dass alle erforderlichen Einstellungen vorhanden sind.",
+        "Stellen Sie sicher, dass Sie eine aktuelle Version Ihrer Homeserver-Software verwenden.",
+        "Überprüfen Sie die Dokumentation Ihres Homeservers, um zu überprüfen, dass alle erforderlichen Konfigurationsoptionen gesetzt sind."
+      ]
     },
     "unknown": {
+      "_context": "This error solution provides general troubleshooting steps for unidentified errors. Steps progress from retry (for transient issues), through investigation, verification, to seeking community help.",
       "title": "Unerwarteter Fehler",
       "description": "Etwas ist schief gelaufen, aber wir sind uns nicht sicher, was genau. Dies könnte ein vorübergehendes Problem oder etwas Ungewöhnliches mit Ihrer Konfiguration sein.",
-      "step1": "Versuchen Sie, den Test erneut auszuführen - manchmal können vorübergehende Netzwerkprobleme oder Server-Aussetzer einmalige Fehler verursachen.",
-      "step2": "Überprüfen Sie Ihre Server-Logs auf Fehlermeldungen, die möglicherweise weitere Details liefern.",
-      "step3": "Stellen Sie sicher, dass Ihr Server läuft und vom öffentlichen Internet aus erreichbar ist.",
-      "step4": "Falls das Problem weiterhin besteht, bitten Sie um Hilfe in Matrix-Community-Kanälen oder im Support-Forum Ihres Homeservers.",
-      "learn_more": "Erfahren Sie mehr über Hilfe erhalten"
+      "learn_more": "Erfahren Sie mehr über Hilfe erhalten",
+      "steps": [
+        "Versuchen Sie, den Test erneut auszuführen - manchmal können vorübergehende Netzwerkprobleme oder Server-Aussetzer einmalige Fehler verursachen.",
+        "Überprüfen Sie Ihre Server-Logs auf Fehlermeldungen, die möglicherweise weitere Details liefern.",
+        "Stellen Sie sicher, dass Ihr Server läuft und vom öffentlichen Internet aus erreichbar ist.",
+        "Falls das Problem weiterhin besteht, bitten Sie um Hilfe in Matrix-Community-Kanälen oder im Support-Forum Ihres Homeservers."
+      ]
     },
     "wellknown_error": {
+      "_context": "This error solution addresses HTTP errors (like 400 Bad Request) from the .well-known/matrix/server endpoint, which is the preferred server discovery method. Steps systematically check configuration expectations, diagnose rejection causes, validate JSON content, verify headers, and provide testing commands. Keep paths, HTTP status codes like '400 Bad Request', JSON examples, URLs, and command examples untranslated.",
       "title": "Well-Known-Endpunkt-Fehler",
       "description": "Ihr .well-known/matrix/server-Endpunkt gibt einen Fehler zurück (z.B. 400 Bad Request). Obwohl Ihre Föderation derzeit möglicherweise über SRV-Einträge oder direkte Verbindung funktioniert, sollte diese Fehlkonfiguration behoben werden, da sie Probleme mit einigen Matrix-Clients und -Servern verursachen kann.",
-      "step1": "Überprüfen Sie Ihre Webserver-Konfiguration für den /.well-known/matrix/server-Endpunkt. Er sollte entweder gültiges JSON mit einem 'm.server'-Feld zurückgeben oder 404 zurückgeben, wenn Sie keine Well-Known-Delegation verwenden.",
-      "step2": "Ein 400 Bad Request bedeutet normalerweise, dass Ihr Webserver die Anfrage aufgrund einer Fehlkonfiguration ablehnt. Prüfen Sie, ob es Anfrage-Filterregeln, Sicherheitsmodule (wie ModSecurity) oder fehlerhafte Rewrite-Regeln gibt, die den .well-known-Pfad beeinflussen.",
-      "step3": "Stellen Sie sicher, dass die Datei .well-known/matrix/server (falls vorhanden) gültiges JSON enthält. Die Datei sollte so aussehen: {\"m.server\": \"matrix.ihredomain.de:8448\"}",
-      "step4": "Überprüfen Sie, dass Ihr Webserver so konfiguriert ist, dass .well-known-Dateien mit dem korrekten Content-Type-Header (application/json) ausgeliefert werden.",
-      "step5": "Testen Sie den Endpunkt direkt in Ihrem Browser oder mit curl: curl -v https://ihredomain.de/.well-known/matrix/server",
       "technical_note": "Der .well-known/matrix/server-Endpunkt ist die bevorzugte Methode zur Server-Erkennung gemäß der Matrix-Spezifikation. Während SRV-Einträge und direkte Verbindungen auf Port 8448 als Fallback funktionieren, wird es nicht empfohlen, sich ausschließlich darauf zu verlassen. Ein 400-Fehler deutet auf eine Webserver-Fehlkonfiguration hin und nicht auf eine fehlende Datei.",
-      "learn_more": "Erfahren Sie mehr über Well-Known-Server-Delegation"
+      "learn_more": "Erfahren Sie mehr über Well-Known-Server-Delegation",
+      "steps": [
+        "Überprüfen Sie Ihre Webserver-Konfiguration für den /.well-known/matrix/server-Endpunkt. Er sollte entweder gültiges JSON mit einem 'm.server'-Feld zurückgeben oder 404 zurückgeben, wenn Sie keine Well-Known-Delegation verwenden.",
+        "Ein 400 Bad Request bedeutet normalerweise, dass Ihr Webserver die Anfrage aufgrund einer Fehlkonfiguration ablehnt. Prüfen Sie, ob es Anfrage-Filterregeln, Sicherheitsmodule (wie ModSecurity) oder fehlerhafte Rewrite-Regeln gibt, die den .well-known-Pfad beeinflussen.",
+        "Stellen Sie sicher, dass die Datei .well-known/matrix/server (falls vorhanden) gültiges JSON enthält. Die Datei sollte so aussehen: {\"m.server\": \"matrix.ihredomain.de:8448\"}",
+        "Überprüfen Sie, dass Ihr Webserver so konfiguriert ist, dass .well-known-Dateien mit dem korrekten Content-Type-Header (application/json) ausgeliefert werden.",
+        "Testen Sie den Endpunkt direkt in Ihrem Browser oder mit curl: curl -v https://ihredomain.de/.well-known/matrix/server"
+      ]
     }
   },
   "alerts": {

@@ -8,7 +8,7 @@ import { ErrorType, type MatrixError } from "./errors.ts";
 export interface ErrorSolution {
   title: string;
   description: string;
-  steps: string[];
+  steps: string; // Translation key that resolves to an array
   technicalNote?: string;
   docsLink?: string;
   learnMoreKey?: string;
@@ -74,10 +74,7 @@ function getCORSSolution(
     return {
       title: "error_solutions.cors_federation.title",
       description: "error_solutions.cors_federation.description",
-      steps: [
-        "error_solutions.cors_federation.step1",
-        "error_solutions.cors_federation.step2",
-      ],
+      steps: "error_solutions.cors_federation.steps",
       technicalNote: "error_solutions.cors_federation.technical_note",
       learnMoreKey: "error_solutions.cors_federation.learn_more",
     };
@@ -86,12 +83,7 @@ function getCORSSolution(
   return {
     title: "error_solutions.cors.title",
     description: "error_solutions.cors.description",
-    steps: [
-      "error_solutions.cors.step1",
-      "error_solutions.cors.step2",
-      "error_solutions.cors.step3",
-      "error_solutions.cors.step4",
-    ],
+    steps: "error_solutions.cors.steps",
     technicalNote: "error_solutions.cors.technical_note",
     docsLink: "/docs/cors-configuration",
     learnMoreKey: "error_solutions.cors.learn_more",
@@ -104,13 +96,7 @@ function getCORSPreflightSolution(
   return {
     title: "error_solutions.cors_preflight.title",
     description: "error_solutions.cors_preflight.description",
-    steps: [
-      "error_solutions.cors_preflight.step1",
-      "error_solutions.cors_preflight.step2",
-      "error_solutions.cors_preflight.step3",
-      "error_solutions.cors_preflight.step4",
-      "error_solutions.cors_preflight.step5",
-    ],
+    steps: "error_solutions.cors_preflight.steps",
     technicalNote: "error_solutions.cors_preflight.technical_note",
     docsLink: "/docs/cors-preflight",
     learnMoreKey: "error_solutions.cors_preflight.learn_more",
@@ -124,11 +110,7 @@ function getNotFoundSolution(
     return {
       title: "error_solutions.not_found_support.title",
       description: "error_solutions.not_found_support.description",
-      steps: [
-        "error_solutions.not_found_support.step1",
-        "error_solutions.not_found_support.step2",
-        "error_solutions.not_found_support.step3",
-      ],
+      steps: "error_solutions.not_found_support.steps",
       technicalNote: "error_solutions.not_found_support.technical_note",
       docsLink: "/docs/support-endpoint",
       learnMoreKey: "error_solutions.not_found_support.learn_more",
@@ -137,12 +119,7 @@ function getNotFoundSolution(
     return {
       title: "error_solutions.not_found_client.title",
       description: "error_solutions.not_found_client.description",
-      steps: [
-        "error_solutions.not_found_client.step1",
-        "error_solutions.not_found_client.step2",
-        "error_solutions.not_found_client.step3",
-        "error_solutions.not_found_client.step4",
-      ],
+      steps: "error_solutions.not_found_client.steps",
       technicalNote: "error_solutions.not_found_client.technical_note",
       docsLink: "/docs/client-server-api",
       learnMoreKey: "error_solutions.not_found_client.learn_more",
@@ -151,11 +128,7 @@ function getNotFoundSolution(
     return {
       title: "error_solutions.not_found_federation.title",
       description: "error_solutions.not_found_federation.description",
-      steps: [
-        "error_solutions.not_found_federation.step1",
-        "error_solutions.not_found_federation.step2",
-        "error_solutions.not_found_federation.step3",
-      ],
+      steps: "error_solutions.not_found_federation.steps",
       docsLink: "/docs/federation-setup",
       learnMoreKey: "error_solutions.not_found_federation.learn_more",
     };
@@ -168,12 +141,7 @@ function getContentTypeSolution(
   return {
     title: "error_solutions.content_type.title",
     description: "error_solutions.content_type.description",
-    steps: [
-      "error_solutions.content_type.step1",
-      "error_solutions.content_type.step2",
-      "error_solutions.content_type.step3",
-      "error_solutions.content_type.step4",
-    ],
+    steps: "error_solutions.content_type.steps",
     technicalNote: "error_solutions.content_type.technical_note",
     docsLink: "/docs/server-configuration",
     learnMoreKey: "error_solutions.content_type.learn_more",
@@ -186,12 +154,7 @@ function getJSONParseSolution(
   return {
     title: "error_solutions.json_parse.title",
     description: "error_solutions.json_parse.description",
-    steps: [
-      "error_solutions.json_parse.step1",
-      "error_solutions.json_parse.step2",
-      "error_solutions.json_parse.step3",
-      "error_solutions.json_parse.step4",
-    ],
+    steps: "error_solutions.json_parse.steps",
     technicalNote: "error_solutions.json_parse.technical_note",
     docsLink: "/docs/troubleshooting",
     learnMoreKey: "error_solutions.json_parse.learn_more",
@@ -204,12 +167,7 @@ function getServerErrorSolution(
   return {
     title: "error_solutions.server_error.title",
     description: "error_solutions.server_error.description",
-    steps: [
-      "error_solutions.server_error.step1",
-      "error_solutions.server_error.step2",
-      "error_solutions.server_error.step3",
-      "error_solutions.server_error.step4",
-    ],
+    steps: "error_solutions.server_error.steps",
     docsLink: "/docs/server-logs",
     learnMoreKey: "error_solutions.server_error.learn_more",
   };
@@ -221,13 +179,7 @@ function getTimeoutSolution(
   return {
     title: "error_solutions.timeout.title",
     description: "error_solutions.timeout.description",
-    steps: [
-      "error_solutions.timeout.step1",
-      "error_solutions.timeout.step2",
-      "error_solutions.timeout.step3",
-      "error_solutions.timeout.step4",
-      "error_solutions.timeout.step5",
-    ],
+    steps: "error_solutions.timeout.steps",
     docsLink: "/docs/performance",
     learnMoreKey: "error_solutions.timeout.learn_more",
   };
@@ -240,13 +192,7 @@ function getTLSErrorSolution(
     return {
       title: "error_solutions.tls_federation.title",
       description: "error_solutions.tls_federation.description",
-      steps: [
-        "error_solutions.tls_federation.step1",
-        "error_solutions.tls_federation.step2",
-        "error_solutions.tls_federation.step3",
-        "error_solutions.tls_federation.step4",
-        "error_solutions.tls_federation.step5",
-      ],
+      steps: "error_solutions.tls_federation.steps",
       technicalNote: "error_solutions.tls_federation.technical_note",
       docsLink: "/docs/federation-tls",
       learnMoreKey: "error_solutions.tls_federation.learn_more",
@@ -256,12 +202,7 @@ function getTLSErrorSolution(
   return {
     title: "error_solutions.tls.title",
     description: "error_solutions.tls.description",
-    steps: [
-      "error_solutions.tls.step1",
-      "error_solutions.tls.step2",
-      "error_solutions.tls.step3",
-      "error_solutions.tls.step4",
-    ],
+    steps: "error_solutions.tls.steps",
     technicalNote: "error_solutions.tls.technical_note",
     docsLink: "/docs/tls-certificates",
     learnMoreKey: "error_solutions.tls.learn_more",
@@ -275,13 +216,7 @@ function getNetworkErrorSolution(
     return {
       title: "error_solutions.network_federation.title",
       description: "error_solutions.network_federation.description",
-      steps: [
-        "error_solutions.network_federation.step1",
-        "error_solutions.network_federation.step2",
-        "error_solutions.network_federation.step3",
-        "error_solutions.network_federation.step4",
-        "error_solutions.network_federation.step5",
-      ],
+      steps: "error_solutions.network_federation.steps",
       docsLink: "/docs/federation-network",
       learnMoreKey: "error_solutions.network_federation.learn_more",
     };
@@ -290,12 +225,7 @@ function getNetworkErrorSolution(
   return {
     title: "error_solutions.network.title",
     description: "error_solutions.network.description",
-    steps: [
-      "error_solutions.network.step1",
-      "error_solutions.network.step2",
-      "error_solutions.network.step3",
-      "error_solutions.network.step4",
-    ],
+    steps: "error_solutions.network.steps",
     docsLink: "/docs/network-troubleshooting",
     learnMoreKey: "error_solutions.network.learn_more",
   };
@@ -307,11 +237,7 @@ function getInvalidResponseSolution(
   return {
     title: "error_solutions.invalid_response.title",
     description: "error_solutions.invalid_response.description",
-    steps: [
-      "error_solutions.invalid_response.step1",
-      "error_solutions.invalid_response.step2",
-      "error_solutions.invalid_response.step3",
-    ],
+    steps: "error_solutions.invalid_response.steps",
     technicalNote: "error_solutions.invalid_response.technical_note",
     docsLink: "/docs/matrix-spec-compliance",
     learnMoreKey: "error_solutions.invalid_response.learn_more",
@@ -324,11 +250,7 @@ function getMissingFieldSolution(
   return {
     title: "error_solutions.missing_field.title",
     description: "error_solutions.missing_field.description",
-    steps: [
-      "error_solutions.missing_field.step1",
-      "error_solutions.missing_field.step2",
-      "error_solutions.missing_field.step3",
-    ],
+    steps: "error_solutions.missing_field.steps",
     technicalNote: "error_solutions.missing_field.technical_note",
     docsLink: "/docs/matrix-spec-compliance",
     learnMoreKey: "error_solutions.missing_field.learn_more",
@@ -339,13 +261,7 @@ function getWellKnownErrorSolution(): ErrorSolution {
   return {
     title: "error_solutions.wellknown_error.title",
     description: "error_solutions.wellknown_error.description",
-    steps: [
-      "error_solutions.wellknown_error.step1",
-      "error_solutions.wellknown_error.step2",
-      "error_solutions.wellknown_error.step3",
-      "error_solutions.wellknown_error.step4",
-      "error_solutions.wellknown_error.step5",
-    ],
+    steps: "error_solutions.wellknown_error.steps",
     technicalNote: "error_solutions.wellknown_error.technical_note",
     docsLink: "/docs/wellknown-delegation",
     learnMoreKey: "error_solutions.wellknown_error.learn_more",
@@ -358,12 +274,7 @@ function getUnknownErrorSolution(
   return {
     title: "error_solutions.unknown.title",
     description: "error_solutions.unknown.description",
-    steps: [
-      "error_solutions.unknown.step1",
-      "error_solutions.unknown.step2",
-      "error_solutions.unknown.step3",
-      "error_solutions.unknown.step4",
-    ],
+    steps: "error_solutions.unknown.steps",
     docsLink: "/docs/getting-help",
     learnMoreKey: "error_solutions.unknown.learn_more",
   };

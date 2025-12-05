@@ -19,6 +19,11 @@ export function ErrorWithSolution(
     ? `${baseUrl}${solution.docsLink}`
     : null;
 
+  // Get steps array from translation
+  // The solution.steps is a translation key that resolves to an array
+  const steps = i18n.t(solution.steps);
+  const stepsArray = Array.isArray(steps) ? steps : [String(steps)];
+
   return (
     <div class="govuk-error-summary" data-module="govuk-error-summary">
       <div role="alert">
@@ -32,9 +37,7 @@ export function ErrorWithSolution(
             {i18n.t("error_solutions.what_to_do")}
           </h3>
           <ol class="govuk-list govuk-list--number govuk-error-summary__list">
-            {solution.steps.map((step, index) => (
-              <li key={index}>{i18n.t(step)}</li>
-            ))}
+            {stepsArray.map((step, index) => <li key={index}>{step}</li>)}
           </ol>
 
           {solution.technicalNote && (
