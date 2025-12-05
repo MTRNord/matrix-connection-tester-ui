@@ -12,7 +12,7 @@ It requires <https://github.com/MTRNord/rust-federation-tester> as a backend API
 - **Federation Check:** See if a Matrix server federates successfully.
 - **Server Software Detection:** Identifies common Matrix server implementations and their maturity.
 - **Debug Information:** View DNS, well-known, and connection reports.
-- **Accessible UI:** Built with [govuk-react](https://github.com/govuk-react/govuk-react) for clarity and accessibility.
+- **Accessible UI:** Built with the [govuk design-system](https://design-system.service.gov.uk) for clarity and accessibility.
 - **Raw API Output:** Inspect the full API response for troubleshooting.
 
 ---
