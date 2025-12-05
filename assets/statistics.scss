@@ -1,0 +1,208 @@
+// Statistics page styling inspired by GOV.UK Pay performance page
+// https://www.payments.service.gov.uk/performance/
+
+@use "govuk-frontend";
+
+.stat-card {
+    background-color: govuk-frontend.govuk-colour("white");
+    border: 1px solid govuk-frontend.govuk-colour("mid-grey");
+    padding: govuk-frontend.govuk-spacing(4);
+    margin-bottom: govuk-frontend.govuk-spacing(4);
+    position: relative;
+
+    @include govuk-frontend.govuk-media-query($from: tablet) {
+        padding: govuk-frontend.govuk-spacing(5);
+    }
+}
+
+.stat-card__content {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-card__title {
+    margin-top: 0;
+    margin-bottom: govuk-frontend.govuk-spacing(2);
+    font-weight: normal;
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+.stat-card__value {
+    margin: 0;
+    margin-bottom: govuk-frontend.govuk-spacing(2);
+    line-height: 1;
+}
+
+.stat-card__number {
+    @include govuk-frontend.govuk-font($size: 80, $weight: bold);
+    display: inline-block;
+    color: govuk-frontend.govuk-colour("black");
+
+    @include govuk-frontend.govuk-media-query($from: tablet) {
+        font-size: 96px;
+    }
+}
+
+.stat-card__suffix {
+    @include govuk-frontend.govuk-font($size: 36, $weight: bold);
+    color: govuk-frontend.govuk-colour("dark-grey");
+    margin-left: govuk-frontend.govuk-spacing(2);
+    display: inline-block;
+    vertical-align: baseline;
+}
+
+.stat-card__description {
+    margin-top: govuk-frontend.govuk-spacing(1);
+    margin-bottom: govuk-frontend.govuk-spacing(2);
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+.stat-card__trend {
+    @include govuk-frontend.govuk-font($size: 19);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: govuk-frontend.govuk-spacing(1);
+}
+
+.stat-card__trend-symbol {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.stat-card__trend-value {
+    font-weight: bold;
+}
+
+.stat-card__trend-period {
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+.stat-card__trend--positive {
+    color: govuk-frontend.govuk-colour("green");
+}
+
+.stat-card__trend--negative {
+    color: govuk-frontend.govuk-colour("red");
+}
+
+.stat-card__trend--neutral {
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+// Statistics grid layout
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: govuk-frontend.govuk-spacing(4);
+
+    @include govuk-frontend.govuk-media-query($from: tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @include govuk-frontend.govuk-media-query($from: desktop) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.stats-grid--two-col {
+    @include govuk-frontend.govuk-media-query($from: tablet) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+// Full width stat card
+.stat-card--full {
+    @include govuk-frontend.govuk-media-query($from: tablet) {
+        grid-column: 1 / -1;
+    }
+}
+
+// Highlight stat card (featured)
+.stat-card--highlight {
+    border: 3px solid govuk-frontend.govuk-colour("blue");
+    background-color: govuk-frontend.govuk-colour("light-grey");
+}
+
+// Statistics section headings
+.stats-section {
+    margin-top: govuk-frontend.govuk-spacing(8);
+    margin-bottom: govuk-frontend.govuk-spacing(6);
+}
+
+.stats-section__title {
+    margin-bottom: govuk-frontend.govuk-spacing(2);
+}
+
+.stats-section__description {
+    color: govuk-frontend.govuk-colour("dark-grey");
+    margin-bottom: govuk-frontend.govuk-spacing(4);
+}
+
+// Loading state
+.stats-loading {
+    text-align: center;
+    padding: govuk-frontend.govuk-spacing(8) 0;
+}
+
+// Error state
+.stats-error {
+    padding: govuk-frontend.govuk-spacing(4);
+    background-color: govuk-frontend.govuk-colour("light-grey");
+    border-left: 5px solid govuk-frontend.govuk-colour("red");
+}
+
+// Small stats for inline metrics
+.stat-inline {
+    display: inline-flex;
+    align-items: baseline;
+    gap: govuk-frontend.govuk-spacing(1);
+}
+
+.stat-inline__value {
+    @include govuk-frontend.govuk-font($size: 24, $weight: bold);
+    color: govuk-frontend.govuk-colour("black");
+}
+
+.stat-inline__label {
+    @include govuk-frontend.govuk-font($size: 19);
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+// Stat list for grouped metrics
+.stat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.stat-list__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: govuk-frontend.govuk-spacing(2) 0;
+    border-bottom: 1px solid govuk-frontend.govuk-colour("mid-grey");
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.stat-list__label {
+    @include govuk-frontend.govuk-font($size: 19);
+    color: govuk-frontend.govuk-colour("dark-grey");
+}
+
+.stat-list__value {
+    @include govuk-frontend.govuk-font($size: 24, $weight: bold);
+    color: govuk-frontend.govuk-colour("black");
+}
+
+// Last updated timestamp
+.stats-updated {
+    @include govuk-frontend.govuk-font($size: 16);
+    color: govuk-frontend.govuk-colour("dark-grey");
+    margin-top: govuk-frontend.govuk-spacing(2);
+    font-style: italic;
+}

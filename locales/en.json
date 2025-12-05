@@ -733,5 +733,34 @@
       "note_2": "Advanced features significantly improve the user experience and are strongly recommended for production deployments.",
       "note_3": "Optional features can be added based on your specific requirements and user needs."
     }
+  },
+  "statistics": {
+    "title": "Statistics",
+    "description": "Usage statistics for the Matrix Connectivity Tester service",
+    "error_title": "Unable to load statistics",
+    "error_message": "Statistics are currently unavailable. Please try again later.",
+    "overview_title": "Overview",
+    "overview_description": "High-level statistics about connectivity tests performed using this service",
+    "total_tests": "Total Tests",
+    "total_tests_description": "Total number of connectivity tests run",
+    "unique_servers": "Unique Servers",
+    "unique_servers_description": "Number of unique Matrix servers successfully tested",
+    "success_rate": "Success Rate",
+    "success_rate_description": "Percentage of tests that completed successfully",
+    "successful_tests": "Successful Tests",
+    "successful_tests_description": "Number of tests that completed successfully",
+    "failed_tests": "Failed Tests",
+    "failed_tests_description": "Number of tests that failed",
+    "server_distribution_title": "Server Software Distribution",
+    "server_distribution_description": "Distribution of Matrix server implementations based on successful tests",
+    "version_distribution_title": "Top Server Versions",
+    "version_distribution_description": "Most common server software versions (top 15)",
+    "server_software": "Server Software",
+    "version": "Version",
+    "test_count": "Test Count",
+    "percentage": "Percentage",
+    "other": "Other",
+    "privacy_note": "Only statistics from users who explicitly opted in to data collection are shown here. Server names are stored as anonymized hashes. These statistics display only successful tests; however, failed tests are included in the total test counts. Server software with only a single test is grouped as 'Other' to prevent potential identification.",
+    "last_updated": "Last updated"
   }
 }
