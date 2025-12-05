@@ -10,7 +10,7 @@ export default define.page(function App({ Component, url, state }) {
 
   // Create translations map for language selector
   const languageTranslations = availableLocales.reduce((acc, lang) => {
-    acc[lang] = i18n.t(`language.${lang}`);
+    acc[lang] = i18n.tString(`language.${lang}`);
     return acc;
   }, {} as Record<Locale, string>);
 
@@ -24,6 +24,19 @@ export default define.page(function App({ Component, url, state }) {
     if (currentPath === "/verify") return "/alerts";
     // Default to home for other pages
     return "/";
+  };
+
+  // Check if current path is a docs sub-page
+  const isDocsSubPage = currentPath.startsWith("/docs/");
+
+  // Get the docs page title from the path
+  const getDocsPageTitle = (path: string): string => {
+    const pageName = path.replace("/docs/", "").replace(/\//g, "_").replace(
+      /-/g,
+      "_",
+    );
+    const titleKey = `docs.${pageName}.title`;
+    return i18n.tString(titleKey);
   };
 
   return (
@@ -68,8 +81,8 @@ export default define.page(function App({ Component, url, state }) {
                 currentLocale={locale}
                 availableLocales={availableLocales}
                 translations={languageTranslations}
-                label={i18n.t("language.select")}
-                changeButtonText={i18n.t("language.change")}
+                label={i18n.tString("language.select")}
+                changeButtonText={i18n.tString("language.change")}
               />
             </div>
           </div>
@@ -180,7 +193,7 @@ export default define.page(function App({ Component, url, state }) {
           </div>
           {(currentPath === "/results" || currentPath === "/alerts" ||
             currentPath === "/docs" || currentPath === "/statistics" ||
-            currentPath === "/verify") && (
+            currentPath === "/verify" || isDocsSubPage) && (
             <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
               <ol class="govuk-breadcrumbs__list">
                 <li class="govuk-breadcrumbs__list-item">
@@ -195,19 +208,28 @@ export default define.page(function App({ Component, url, state }) {
                     </a>
                   </li>
                 )}
+                {isDocsSubPage && (
+                  <li class="govuk-breadcrumbs__list-item">
+                    <a class="govuk-breadcrumbs__link" href="/docs">
+                      {i18n.t("nav.documentation")}
+                    </a>
+                  </li>
+                )}
                 <li class="govuk-breadcrumbs__list-item">
                   {currentPath === "/results" && i18n.t("results.title")}
                   {currentPath === "/alerts" && i18n.t("nav.alerts")}
                   {currentPath === "/docs" && i18n.t("nav.documentation")}
                   {currentPath === "/statistics" && i18n.t("nav.statistics")}
                   {currentPath === "/verify" && i18n.t("alerts.verify_title")}
+                  {isDocsSubPage && getDocsPageTitle(currentPath)}
                 </li>
               </ol>
             </nav>
           )}
           {showBackLink && currentPath !== "/results" &&
             currentPath !== "/alerts" && currentPath !== "/docs" &&
-            currentPath !== "/statistics" && currentPath !== "/verify" && (
+            currentPath !== "/statistics" && currentPath !== "/verify" &&
+            !isDocsSubPage && (
             <a href={getBackLink()} class="govuk-back-link">
               {i18n.t("common.back")}
             </a>

@@ -517,5 +517,221 @@
     "no_alerts": "You don't have any alerts set up yet.",
     "deletion_confirmed": "Alert successfully deleted! The alert has been removed from your account.",
     "alert_verified": "Alert successfully verified! You will now receive notifications when your server experiences connectivity issues."
+  },
+  "docs": {
+    "common": {
+      "warning": "Warning",
+      "important": "Important",
+      "required": "Required",
+      "recommended": "Recommended",
+      "optional": "Optional",
+      "coming_soon": "Coming Soon",
+      "placeholder_message": "This documentation page is under development and will be available soon.",
+      "overview": "Overview",
+      "related_documentation": "Related Documentation",
+      "wip_warning": "This documentation is currently a work in progress and should not be fully trusted yet. Information may be incomplete, outdated, or subject to change."
+    },
+    "nav": {
+      "getting_started": "Getting Started",
+      "overview": "Overview",
+      "federation_setup": "Federation Setup",
+      "getting_help": "Getting Help",
+      "configuration": "Configuration",
+      "cors_configuration": "CORS Configuration",
+      "cors_preflight": "CORS Preflight",
+      "server_configuration": "Server Configuration",
+      "tls_certificates": "TLS Certificates",
+      "federation_tls": "Federation TLS",
+      "api_endpoints": "API Endpoints",
+      "support_endpoint": "Support Endpoint",
+      "client_server_api": "Client-Server API",
+      "wellknown_delegation": "Well-Known Delegation",
+      "troubleshooting": "Troubleshooting",
+      "general_troubleshooting": "General Troubleshooting",
+      "network_troubleshooting": "Network Issues",
+      "federation_network": "Federation Network",
+      "server_logs": "Server Logs",
+      "performance": "Performance",
+      "compliance": "Compliance",
+      "matrix_spec_compliance": "Matrix Spec Compliance",
+      "compliance_suites": "Compliance Suites"
+    },
+    "index": {
+      "title": "Documentation",
+      "description": "Comprehensive guides and references for Matrix server connectivity and configuration",
+      "sections_title": "Documentation Sections",
+      "getting_started_description": "Learn how to set up and configure your Matrix server for federation and connectivity testing.",
+      "configuration_description": "Configure CORS, TLS certificates, and server settings for optimal Matrix server operation.",
+      "api_endpoints_description": "Understand the various API endpoints required for Matrix server operation and client connectivity.",
+      "troubleshooting_description": "Diagnose and resolve common connectivity issues, network problems, and configuration errors.",
+      "compliance_description": "Learn about Matrix specification compliance requirements and recommended feature sets.",
+      "quick_links_title": "Quick Links"
+    },
+    "federation_setup": {
+      "title": "Matrix Federation Setup",
+      "description": "Learn how to configure your Matrix homeserver for federation with other servers",
+      "what_is_federation_title": "What is Matrix Federation?",
+      "what_is_federation_text": "Matrix federation allows different Matrix servers to communicate with each other, enabling users on different servers to participate in the same conversations and rooms. This distributed architecture is fundamental to Matrix's design.",
+      "warning_text": "Your Matrix server must be accessible from the public internet for federation to work properly. Ensure your firewall and network configuration allow incoming connections.",
+      "requirements_title": "Federation Requirements",
+      "requirements_caption": "Technical requirements for Matrix federation",
+      "table": {
+        "requirement": "Requirement",
+        "description": "Description",
+        "required": "Status",
+        "valid_tls": "Valid TLS Certificate",
+        "valid_tls_desc": "A trusted TLS/SSL certificate from a recognized certificate authority",
+        "wellknown": "Well-Known Delegation (Port 443)",
+        "wellknown_desc": "Serve /.well-known/matrix/server on port 443 to delegate to your federation endpoint (Recommended)",
+        "srv_record": "SRV Record",
+        "srv_record_desc": "DNS SRV record for _matrix._tcp pointing to your server (Alternative)",
+        "port_8448": "Port 8448 Direct",
+        "port_8448_desc": "Expose federation API directly on port 8448 (Fallback option)"
+      },
+      "setup_steps_title": "Setup Steps",
+      "step_1_title": "Configure your server name",
+      "step_1_text": "Set your server's domain name in your homeserver configuration. This is the domain users will see in their Matrix IDs (e.g., @user:example.com).",
+      "step_1_example": "Example configuration",
+      "step_2_title": "Obtain a valid TLS certificate",
+      "step_2_text": "Use Let's Encrypt or another certificate authority to obtain a valid TLS certificate for your domain. Matrix requires valid certificates for federation.",
+      "step_3_title": "Configure federation discovery",
+      "step_3_text": "Choose how other servers will discover your federation endpoint. The recommended approach is to use well-known delegation on port 443.",
+      "step_3_options": "Federation discovery options (in order of preference)",
+      "option_443_title": "Port 443 with Well-Known Delegation (Recommended)",
+      "option_443_text": "Serve a .well-known/matrix/server file on port 443 that points to your federation endpoint. This is the most flexible and firewall-friendly option.",
+      "option_srv_title": "SRV Record (Alternative)",
+      "option_srv_text": "Create a DNS SRV record (_matrix._tcp.yourdomain.com) pointing to your server. This is useful when you cannot serve well-known files.",
+      "option_8448_title": "Port 8448 Direct (Fallback)",
+      "option_8448_text": "Expose your federation API directly on port 8448. This is the simplest but least flexible option and may have firewall issues.",
+      "step_4_title": "Test your configuration",
+      "step_4_text": "Use this connectivity tester to verify that your server is properly configured and reachable by other Matrix servers.",
+      "important_note": "The preferred federation setup uses port 443 with well-known delegation. This approach works better with firewalls, proxies, and is more flexible for complex deployments. Port 8448 should only be used as a fallback when well-known delegation or SRV records are not feasible.",
+      "testing_title": "Testing Your Setup",
+      "testing_text": "Once you've completed the setup steps, use this tool to test your server's federation connectivity and identify any configuration issues.",
+      "test_button": "Test My Server",
+      "troubleshooting_link": "View troubleshooting guide"
+    },
+    "cors_configuration": {
+      "title": "CORS Configuration",
+      "description": "Configure Cross-Origin Resource Sharing for your Matrix server",
+      "overview": "Cross-Origin Resource Sharing (CORS) allows web applications from different origins to access your Matrix server's APIs. Proper CORS configuration is essential for browser-based Matrix clients."
+    },
+    "cors_preflight": {
+      "title": "CORS Preflight Requests",
+      "description": "Understanding and configuring CORS preflight OPTIONS requests",
+      "overview": "CORS preflight requests are OPTIONS requests sent by browsers before making actual API calls. Learn how to configure your server to handle these correctly."
+    },
+    "support_endpoint": {
+      "title": "Support Endpoint Configuration",
+      "description": "Configure the Matrix support endpoint for contact information",
+      "overview": "The support endpoint provides contact information for your Matrix server, allowing users and administrators to find help and report issues."
+    },
+    "client_server_api": {
+      "title": "Client-Server API",
+      "description": "Understanding the Matrix Client-Server API",
+      "overview": "The Client-Server API is the primary interface between Matrix clients and your homeserver. Learn about versioning, endpoints, and configuration requirements."
+    },
+    "server_configuration": {
+      "title": "Server Configuration",
+      "description": "General Matrix server configuration guide",
+      "overview": "Configure your Matrix homeserver for optimal performance, security, and compatibility with the Matrix ecosystem."
+    },
+    "troubleshooting": {
+      "title": "General Troubleshooting",
+      "description": "Diagnose and resolve common Matrix server issues",
+      "overview": "Learn how to identify and fix common problems with Matrix server connectivity, federation, and client communication."
+    },
+    "server_logs": {
+      "title": "Server Logs",
+      "description": "Understanding and using Matrix server logs for troubleshooting",
+      "overview": "Server logs contain valuable information for diagnosing issues. Learn how to read and interpret your Matrix server's log output."
+    },
+    "performance": {
+      "title": "Performance Optimization",
+      "description": "Optimize your Matrix server for better performance",
+      "overview": "Learn about performance tuning, caching strategies, and scaling considerations for Matrix homeservers."
+    },
+    "federation_tls": {
+      "title": "Federation TLS Configuration",
+      "description": "Configure TLS certificates for Matrix federation",
+      "overview": "Matrix federation requires valid TLS certificates. Learn about certificate requirements, renewal, and troubleshooting TLS issues."
+    },
+    "tls_certificates": {
+      "title": "TLS Certificates",
+      "description": "Managing TLS/SSL certificates for your Matrix server",
+      "overview": "Proper TLS certificate configuration is essential for Matrix operation. Learn about obtaining, installing, and maintaining certificates."
+    },
+    "federation_network": {
+      "title": "Federation Network Configuration",
+      "description": "Network setup for Matrix federation",
+      "overview": "Configure your network, firewall, and DNS settings to support Matrix federation with other servers."
+    },
+    "network_troubleshooting": {
+      "title": "Network Troubleshooting",
+      "description": "Diagnose network connectivity issues",
+      "overview": "Learn how to troubleshoot network problems that prevent your Matrix server from communicating with clients and other servers."
+    },
+    "matrix_spec_compliance": {
+      "title": "Matrix Specification Compliance",
+      "description": "Understanding Matrix spec compliance requirements",
+      "overview": "Learn about the Matrix specification and what compliance means for your homeserver implementation."
+    },
+    "wellknown_delegation": {
+      "title": "Well-Known Delegation",
+      "description": "Configure .well-known files for server delegation",
+      "overview": "Well-known delegation allows you to separate your Matrix server's location from your domain name. Learn how to configure delegation files."
+    },
+    "getting_help": {
+      "title": "Getting Help",
+      "description": "Resources for Matrix server administrators",
+      "overview": "Find community resources, documentation, and support channels for Matrix server administration and troubleshooting."
+    },
+    "compliance_suites": {
+      "title": "Matrix Compliance Suites 2024",
+      "description": "Compliance requirements and feature categories for Matrix homeservers",
+      "intro_text": "This document defines the compliance suites for Matrix homeserver implementations. Similar to XMPP Compliance Suites (XEP-0479), these suites categorize features into required, recommended, and optional tiers to help administrators understand what functionality their server should support.",
+      "version_info": "Current Version: 2024.1 - Last Updated: January 2024",
+      "suite_2024_title": "Matrix Homeserver Compliance Suite 2024",
+      "suite_2024_caption": "Overview of the 2024 compliance suite",
+      "suite_2024_name": "Matrix Homeserver Compliance Suite 2024",
+      "field_suite": "Compliance Suite",
+      "field_status": "Status",
+      "field_version": "Version",
+      "field_last_updated": "Last Updated",
+      "status_active": "Active",
+      "core_features_title": "Core Features",
+      "core_features_description": "These features are required for basic Matrix homeserver functionality and federation interoperability.",
+      "table": {
+        "feature": "Feature",
+        "requirement": "Requirement Level",
+        "spec_version": "Spec Version"
+      },
+      "core": {
+        "server_discovery": "Server Discovery (.well-known)",
+        "federation_api": "Federation API",
+        "client_server_api": "Client-Server API",
+        "room_versions": "Room Version Support (v1-v10)"
+      },
+      "advanced_features_title": "Advanced Features",
+      "advanced_features_description": "These features enhance the user experience and are recommended for production deployments.",
+      "advanced": {
+        "e2ee": "End-to-End Encryption (E2EE)",
+        "spaces": "Spaces Support",
+        "threading": "Threading Support"
+      },
+      "optional_features_title": "Optional Features",
+      "optional_features_description": "These features provide additional functionality but are not required for basic operation.",
+      "optional_features_category": "Optional Features List",
+      "optional": {
+        "voice_video": "Voice/Video Calling",
+        "presence": "Presence Information",
+        "read_receipts": "Read Receipts"
+      },
+      "implementation_notes_title": "Implementation Notes",
+      "implementation_notes_text": "When implementing a Matrix homeserver, prioritize core features first, then add advanced and optional features based on your use case and user requirements.",
+      "note_1": "Core features are essential for federation and must be implemented for your server to communicate with the Matrix network.",
+      "note_2": "Advanced features significantly improve the user experience and are strongly recommended for production deployments.",
+      "note_3": "Optional features can be added based on your specific requirements and user needs."
+    }
   }
 }

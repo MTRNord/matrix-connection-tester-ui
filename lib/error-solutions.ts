@@ -239,7 +239,7 @@ function getInvalidResponseSolution(
     description: "error_solutions.invalid_response.description",
     steps: "error_solutions.invalid_response.steps",
     technicalNote: "error_solutions.invalid_response.technical_note",
-    docsLink: "/docs/matrix-spec-compliance",
+    docsLink: undefined,
     learnMoreKey: "error_solutions.invalid_response.learn_more",
   };
 }
@@ -252,7 +252,7 @@ function getMissingFieldSolution(
     description: "error_solutions.missing_field.description",
     steps: "error_solutions.missing_field.steps",
     technicalNote: "error_solutions.missing_field.technical_note",
-    docsLink: "/docs/matrix-spec-compliance",
+    docsLink: "/docs/compliance-suites",
     learnMoreKey: "error_solutions.missing_field.learn_more",
   };
 }
@@ -281,12 +281,33 @@ function getUnknownErrorSolution(
 }
 
 /**
- * Check if documentation link exists (for future use)
+ * Check if documentation link exists
  */
-export function hasDocumentation(_docsLink?: string): boolean {
-  // For now, return false as docs aren't written yet
-  // In the future, this could check if the page exists
-  return false;
+export function hasDocumentation(docsLink?: string): boolean {
+  if (!docsLink) return false;
+
+  // List of documentation pages that exist
+  const existingDocs = [
+    "/docs",
+    "/docs/federation-setup",
+    "/docs/compliance-suites",
+    "/docs/cors-configuration",
+    "/docs/cors-preflight",
+    "/docs/support-endpoint",
+    "/docs/client-server-api",
+    "/docs/server-configuration",
+    "/docs/troubleshooting",
+    "/docs/server-logs",
+    "/docs/performance",
+    "/docs/federation-tls",
+    "/docs/tls-certificates",
+    "/docs/federation-network",
+    "/docs/network-troubleshooting",
+    "/docs/wellknown-delegation",
+    "/docs/getting-help",
+  ];
+
+  return existingDocs.includes(docsLink);
 }
 
 /**
