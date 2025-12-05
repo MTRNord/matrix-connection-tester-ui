@@ -164,6 +164,21 @@ export class I18n {
   }
 
   /**
+   * Translate a key and always return a string (for backwards compatibility)
+   * If the translation is an array, returns the first element or the key
+   * @param key - Translation key in dot notation (e.g., "home.title")
+   * @param variables - Object with variables to interpolate
+   * @returns Translated string
+   */
+  tString(key: string, variables?: Record<string, string | number>): string {
+    const result = this.t(key, variables);
+    if (Array.isArray(result)) {
+      return result[0] || key;
+    }
+    return result;
+  }
+
+  /**
    * Check if a translation key exists
    */
   exists(key: string): boolean {

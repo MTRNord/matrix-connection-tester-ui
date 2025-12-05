@@ -107,7 +107,7 @@ export const handler = define.handlers({
       return page({ error: null, success: null });
     } catch (e) {
       console.error("Error in alerts handler:", e);
-      return new Response(ctx.state.i18n.t("errors.missing_api_config"), {
+      return new Response(ctx.state.i18n.tString("errors.missing_api_config"), {
         status: 500,
       });
     }

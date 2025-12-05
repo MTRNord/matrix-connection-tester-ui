@@ -122,19 +122,25 @@ export const handler = define.handlers({
           });
         } catch (e) {
           console.error("Error parsing API response JSON:", e);
-          return new Response(ctx.state.i18n.t("errors.missing_api_config"), {
-            status: 500,
-          });
+          return new Response(
+            ctx.state.i18n.tString("errors.missing_api_config"),
+            {
+              status: 500,
+            },
+          );
         }
       } catch (e) {
         console.error("Error fetching API data:", e);
-        return new Response(ctx.state.i18n.t("errors.missing_api_config"), {
-          status: 500,
-        });
+        return new Response(
+          ctx.state.i18n.tString("errors.missing_api_config"),
+          {
+            status: 500,
+          },
+        );
       }
     } catch (e) {
       console.error("Error fetching API config:", e);
-      return new Response(ctx.state.i18n.t("errors.missing_api_config"), {
+      return new Response(ctx.state.i18n.tString("errors.missing_api_config"), {
         status: 500,
       });
     }
