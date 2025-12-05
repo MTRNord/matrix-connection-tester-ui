@@ -164,10 +164,10 @@ export default define.page(function SupportEndpoint(ctx) {
         server configuration.
       </p>
 
-      <h3 class="govuk-heading-m">Conduwuit Server</h3>
+      <h3 class="govuk-heading-m">Continuwuity Server</h3>
       <p class="govuk-body">
-        If you're using Conduwuit, you can configure the support endpoint
-        directly in your <code class="code-inline">conduwuit.toml</code>{" "}
+        If you're using Continuwuity, you can configure the support endpoint
+        directly in your <code class="code-inline">continuwuity.toml</code>{" "}
         configuration file:
       </p>
 
@@ -202,13 +202,13 @@ export default define.page(function SupportEndpoint(ctx) {
       </CodeBlock>
 
       <p class="govuk-body">
-        Uncomment and configure the relevant fields. Conduwuit will
+        Uncomment and configure the relevant fields. Continuwuity will
         automatically serve this information at the correct endpoint.
       </p>
 
       <div class="govuk-inset-text">
         <strong>Note:</strong>{" "}
-        If you configure the support endpoint in Conduwuit, you don't need to
+        If you configure the support endpoint in Continuwuity, you don't need to
         create a separate{" "}
         <code class="code-inline">.well-known/matrix/support</code>{" "}
         file or configure CORS separately—the server handles this automatically.
