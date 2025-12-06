@@ -1,24 +1,14 @@
-import { useEffect, useMemo, useState } from "preact/hooks";
-import type { MatrixError } from "../lib/errors.ts";
-import {
-  createHTTPError,
-  createJSONParseError,
-  ErrorType,
-  fetchWithTimeout,
-  validateContentType,
-} from "../lib/errors.ts";
+import { useEffect, useMemo } from "preact/hooks";
 import { I18n, type Locale } from "../lib/i18n.ts";
-
-interface SupportContact {
-  matrix_id?: string;
-  email_address?: string;
-  role: string;
-}
-
-interface SupportInfo {
-  contacts?: SupportContact[];
-  support_page?: string;
-}
+import {
+  fetchSupportInfo,
+  supportError,
+  supportHasAnyInfo,
+  supportHasContacts,
+  supportHasSupportPage,
+  supportInfo,
+  supportLoading,
+} from "../lib/support-state.ts";
 
 interface SupportInfoProps {
   serverName: string;
@@ -29,84 +19,12 @@ export default function SupportInfo(
   { serverName, locale }: SupportInfoProps,
 ) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
-  const [supportInfo, setSupportInfo] = useState<SupportInfo | null>(null);
-  const [error, setError] = useState<MatrixError | null>(null);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchSupportInfo();
+    fetchSupportInfo(serverName);
   }, [serverName]);
 
-  const fetchSupportInfo = async () => {
-    setLoading(true);
-    setError(null);
-
-    const url = `https://${serverName}/.well-known/matrix/support`;
-
-    // Fetch with timeout
-    const { response, error: fetchError } = await fetchWithTimeout(url, 10000);
-
-    if (fetchError) {
-      setError(fetchError);
-      setLoading(false);
-      return;
-    }
-
-    if (!response) {
-      setError({
-        type: ErrorType.UNKNOWN,
-        message: "errors.unknown_error",
-        endpoint: url,
-      });
-      setLoading(false);
-      return;
-    }
-
-    // Check HTTP status
-    if (!response.ok) {
-      const text = await response.text().catch(() => "");
-      setError(createHTTPError(response, url, text));
-      setLoading(false);
-      return;
-    }
-
-    // Validate Content-Type
-    const contentTypeError = validateContentType(response);
-    if (contentTypeError) {
-      contentTypeError.endpoint = url;
-      setError(contentTypeError);
-      setLoading(false);
-      return;
-    }
-
-    // Parse JSON
-    let data: unknown;
-    const responseText = await response.text();
-    try {
-      data = JSON.parse(responseText);
-    } catch (e) {
-      setError(createJSONParseError(e, url, responseText));
-      setLoading(false);
-      return;
-    }
-
-    // Validate structure (support info can be empty, but should be an object)
-    if (!data || typeof data !== "object") {
-      setError({
-        type: ErrorType.INVALID_RESPONSE,
-        message: "errors.invalid_response",
-        technicalDetails: "Response is not a valid JSON object",
-        endpoint: url,
-      });
-      setLoading(false);
-      return;
-    }
-
-    setSupportInfo(data as SupportInfo);
-    setLoading(false);
-  };
-
-  if (loading) {
+  if (supportLoading.value) {
     return (
       <div
         class="govuk-body loading-container"
@@ -121,15 +39,11 @@ export default function SupportInfo(
   }
 
   // Don't show errors inline - they appear in the Problems section
-  if (error) {
+  if (supportError.value) {
     return null;
   }
 
-  const hasContacts = supportInfo?.contacts && supportInfo.contacts.length > 0;
-  const hasSupportPage = supportInfo?.support_page &&
-    supportInfo.support_page.length > 0;
-
-  if (!hasContacts && !hasSupportPage) {
+  if (!supportHasAnyInfo.value) {
     return (
       <div class="govuk-body">
         <p>{i18n.t("results.no_support_contacts")}</p>
@@ -142,9 +56,9 @@ export default function SupportInfo(
       <h2 class="govuk-heading-m">{i18n.t("results.support_info_title")}</h2>
       <p class="govuk-body">{i18n.t("results.support_info_description")}</p>
 
-      {hasContacts && (
+      {supportHasContacts.value && supportInfo.value && (
         <ul class="govuk-list govuk-list--bullet">
-          {supportInfo!.contacts!.map((contact, index) => (
+          {supportInfo.value.contacts!.map((contact, index) => (
             <li key={index}>
               <span class="support-contact-role">
                 {getRoleLabel(contact.role, i18n)}:&nbsp;
@@ -181,12 +95,12 @@ export default function SupportInfo(
         </ul>
       )}
 
-      {hasSupportPage && (
+      {supportHasSupportPage.value && supportInfo.value && (
         <p class="govuk-body">
           {i18n.t("results.support_page_link")}{" "}
           <a
             class="govuk-link"
-            href={supportInfo!.support_page}
+            href={supportInfo.value.support_page}
             rel="noopener noreferrer"
           >
             {i18n.t("results.support_page")}
@@ -205,11 +119,11 @@ function getRoleLabel(
   const roleLower = role.toLowerCase();
 
   if (roleLower.includes("admin")) {
-    return i18n.t("results.role_admin");
+    return i18n.tString("results.role_admin");
   } else if (roleLower.includes("security")) {
-    return i18n.t("results.role_security");
+    return i18n.tString("results.role_security");
   } else if (roleLower.includes("support")) {
-    return i18n.t("results.role_support");
+    return i18n.tString("results.role_support");
   }
 
   return role;
