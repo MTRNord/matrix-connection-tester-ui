@@ -2,7 +2,9 @@ import { useEffect, useMemo } from "preact/hooks";
 import { ErrorWithSolution } from "../components/ErrorWithSolution.tsx";
 import { I18n, type Locale } from "../lib/i18n.ts";
 import {
-  clientServerState,
+  clientServerErrors,
+  clientServerHasErrors,
+  clientServerLoading,
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
@@ -16,22 +18,21 @@ export default function ClientServerProblems(
   { serverName, locale, baseUrl }: ClientServerProblemsProps,
 ) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
-  const state = clientServerState.value;
 
   useEffect(() => {
     fetchClientServerInfo(serverName);
   }, [serverName]);
 
-  const { errors, loading } = state;
-
-  if (loading) {
+  if (clientServerLoading.value) {
     return null;
   }
 
   // If no errors, don't render anything
-  if (!errors.clientWellKnown && !errors.versions) {
+  if (!clientServerHasErrors.value) {
     return null;
   }
+
+  const errors = clientServerErrors.value;
 
   return (
     <div>

@@ -1,8 +1,11 @@
 import { useEffect, useMemo } from "preact/hooks";
+import { useComputed } from "@preact/signals";
 import { I18n, type Locale } from "../lib/i18n.ts";
 import { ClientServerStatusPanel } from "../components/client-server-api/panel.tsx";
 import {
+  clientServerLoading,
   clientServerState,
+  clientServerSuccessful,
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
@@ -38,16 +41,27 @@ export default function ClientServerApiTasks({
   unstableFeatures,
 }: ClientServerAPITasksProps) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
-  const state = clientServerState.value;
 
   useEffect(() => {
     fetchClientServerInfo(serverName);
   }, [serverName]);
 
-  const { clientWellKnown, versions, discoveredEndpoint, errors, loading } =
-    state;
+  // Computed signals for derived state
+  const state = useComputed(() => clientServerState.value);
+  const latestVersion = useComputed(() => {
+    const versions = state.value.versions;
+    return versions?.versions ? getLatestVersion(versions.versions) : null;
+  });
+  const enabledExperimentalFeatures = useComputed(() => {
+    const versions = state.value.versions;
+    return versions?.unstable_features
+      ? Object.entries(versions.unstable_features)
+        .filter(([_, enabled]) => enabled)
+        .map(([feature, _]) => feature)
+      : [];
+  });
 
-  if (loading) {
+  if (clientServerLoading.value) {
     return (
       <div
         class="govuk-body loading-container"
@@ -60,12 +74,8 @@ export default function ClientServerApiTasks({
     );
   }
 
-  // Determine if client-server API is successful
-  const successful = !errors.clientWellKnown && !errors.versions &&
-    clientWellKnown !== null && versions !== null;
-
   // If there are errors, don't show anything here - errors are shown in Problems section
-  if (!successful) {
+  if (!clientServerSuccessful.value) {
     return (
       <div class="govuk-body">
         <p>{i18n.t("results.client_server_api_see_problems")}</p>
@@ -73,24 +83,17 @@ export default function ClientServerApiTasks({
     );
   }
 
-  // Calculate latest version
-  const latestVersion = versions?.versions
-    ? getLatestVersion(versions.versions)
-    : null;
-
-  // Get enabled experimental features
-  const enabledExperimentalFeatures = versions?.unstable_features
-    ? Object.entries(versions.unstable_features)
-      .filter(([_, enabled]) => enabled)
-      .map(([feature, _]) => feature)
-    : [];
+  const { clientWellKnown, discoveredEndpoint } = state.value;
 
   return (
     <>
-      <ClientServerStatusPanel i18n={i18n} successful={successful} />
+      <ClientServerStatusPanel
+        i18n={i18n}
+        successful={clientServerSuccessful.value}
+      />
 
       <dl class="govuk-summary-list">
-        {latestVersion && (
+        {latestVersion.value && (
           <div class="govuk-summary-list__row">
             <dt class="govuk-summary-list__key">
               {i18n.t("results.client_server_api_latest_version")}
@@ -112,7 +115,7 @@ export default function ClientServerApiTasks({
         )}
       </dl>
 
-      {enabledExperimentalFeatures.length > 0 && (
+      {enabledExperimentalFeatures.value.length > 0 && (
         <div id="table-wrapper">
           <div id="table-scroll">
             <table class="govuk-table">
@@ -133,7 +136,7 @@ export default function ClientServerApiTasks({
                 </tr>
               </thead>
               <tbody class="govuk-table__body">
-                {enabledExperimentalFeatures.map((featureName) => {
+                {enabledExperimentalFeatures.value.map((featureName) => {
                   const featureInfo = unstableFeatures[featureName];
                   if (!featureInfo) {
                     return (

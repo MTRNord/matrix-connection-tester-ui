@@ -3,7 +3,7 @@
  * This allows multiple islands to share the same data without duplicate fetches
  */
 
-import { signal } from "@preact/signals";
+import { computed, signal } from "@preact/signals";
 import type { MatrixError } from "./errors.ts";
 import {
   createHTTPError,
@@ -50,6 +50,35 @@ const initialState: ClientServerState = {
 };
 
 export const clientServerState = signal<ClientServerState>(initialState);
+
+// Computed signals for common derived state
+export const clientServerLoading = computed(() =>
+  clientServerState.value.loading
+);
+
+export const clientServerErrors = computed(() =>
+  clientServerState.value.errors
+);
+
+export const clientServerHasErrors = computed(() =>
+  !!(clientServerState.value.errors.clientWellKnown ||
+    clientServerState.value.errors.versions)
+);
+
+export const clientServerStatus = computed<"loading" | "success" | "error">(
+  () => {
+    const state = clientServerState.value;
+    if (state.loading) return "loading";
+    if (!state.errors.clientWellKnown && !state.errors.versions) {
+      return "success";
+    }
+    return "error";
+  },
+);
+
+export const clientServerSuccessful = computed(() =>
+  clientServerStatus.value === "success"
+);
 
 // Track in-flight requests to prevent duplicate fetches
 let currentFetchPromise: Promise<void> | null = null;

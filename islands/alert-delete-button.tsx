@@ -1,4 +1,4 @@
-import { useSignal } from "@preact/signals";
+import { useComputed, useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
 
 interface AlertDeleteButtonProps {
@@ -58,6 +58,14 @@ export default function AlertDeleteButton(
 
   const t = translations[locale as keyof typeof translations] ||
     translations.en;
+
+  // Computed signal for button text
+  const buttonText = useComputed(() => {
+    if (isDeletionPending.value) {
+      return t.pending_deletion;
+    }
+    return isDeleting.value ? t.deleting : t.delete;
+  });
 
   const handleDelete = async () => {
     isDeleting.value = true;
@@ -180,9 +188,7 @@ export default function AlertDeleteButton(
         onClick={() => showConfirm.value = true}
         disabled={isDeleting.value || isDeletionPending.value}
       >
-        {isDeletionPending.value
-          ? t.pending_deletion
-          : (isDeleting.value ? t.deleting : t.delete)}
+        {buttonText}
       </button>
 
       {showConfirm.value && (

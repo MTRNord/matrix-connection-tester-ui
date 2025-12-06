@@ -1,7 +1,8 @@
 import { useEffect, useMemo } from "preact/hooks";
+import { useComputed } from "@preact/signals";
 import { I18n, type Locale } from "../lib/i18n.ts";
 import {
-  clientServerState,
+  clientServerStatus,
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
@@ -15,20 +16,21 @@ export default function CombinedStatusBanner(
   { serverName, locale, federationSuccess }: CombinedStatusBannerProps,
 ) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
-  const state = clientServerState.value;
 
   useEffect(() => {
     fetchClientServerInfo(serverName);
   }, [serverName]);
 
-  const clientServerStatus: "loading" | "success" | "error" = state.loading
-    ? "loading"
-    : (!state.errors.clientWellKnown && !state.errors.versions)
-    ? "success"
-    : "error";
+  // Computed signals for UI state
+  const clientServerSuccess = useComputed(() =>
+    clientServerStatus.value === "success"
+  );
+  const bothSuccess = useComputed(() =>
+    federationSuccess && clientServerSuccess.value
+  );
 
   // While loading client-server API, show only federation banner
-  if (clientServerStatus === "loading") {
+  if (clientServerStatus.value === "loading") {
     return (
       <div
         class={`govuk-panel ${
@@ -56,8 +58,7 @@ export default function CombinedStatusBanner(
   }
 
   // If both succeed, show combined banner
-  const bothSuccess = federationSuccess && clientServerStatus === "success";
-  if (bothSuccess) {
+  if (bothSuccess.value) {
     return (
       <div
         class="govuk-panel govuk-panel--confirmation"
@@ -75,8 +76,6 @@ export default function CombinedStatusBanner(
   }
 
   // Otherwise, show both individual banners
-  const clientServerSuccess = clientServerStatus === "success";
-
   return (
     <>
       {/* Federation status banner */}
@@ -106,23 +105,23 @@ export default function CombinedStatusBanner(
       {/* Client-Server API status banner */}
       <div
         class={`govuk-panel panel-with-margin ${
-          clientServerSuccess
+          clientServerSuccess.value
             ? "govuk-panel--confirmation"
             : "govuk-panel--error"
         }`}
-        role={clientServerSuccess ? "status" : "alert"}
+        role={clientServerSuccess.value ? "status" : "alert"}
         aria-live="polite"
       >
         <h1 class="govuk-panel__title">
           {i18n.t(
-            clientServerSuccess
+            clientServerSuccess.value
               ? "results.client_server_api_working"
               : "results.client_server_api_not_working",
           )}
         </h1>
         <div class="govuk-panel__body">
           {i18n.t(
-            clientServerSuccess
+            clientServerSuccess.value
               ? "results.client_server_api_success_message"
               : "results.client_server_api_failure_message",
           )}

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "preact/hooks";
+import { useEffect } from "preact/hooks";
+import { useComputed, useSignal } from "@preact/signals";
 
 interface RawDataSectionProps {
   serverName: string;
@@ -24,12 +25,25 @@ interface SupportResponse {
 
 export default function RawDataSection(props: RawDataSectionProps) {
   const { serverName, federationData } = props;
-  const [clientServerData, setClientServerData] = useState<unknown>(null);
-  const [wellKnownData, setWellKnownData] = useState<unknown>(null);
-  const [supportData, setSupportData] = useState<unknown>(null);
-  const [loadingClientServer, setLoadingClientServer] = useState(true);
-  const [loadingWellKnown, setLoadingWellKnown] = useState(true);
-  const [loadingSupport, setLoadingSupport] = useState(true);
+  const clientServerData = useSignal<unknown>(null);
+  const wellKnownData = useSignal<unknown>(null);
+  const supportData = useSignal<unknown>(null);
+  const loadingClientServer = useSignal(true);
+  const loadingWellKnown = useSignal(true);
+  const loadingSupport = useSignal(true);
+
+  // Computed signals for JSON stringification
+  const wellKnownJSON = useComputed(() =>
+    wellKnownData.value ? JSON.stringify(wellKnownData.value, null, 2) : ""
+  );
+  const clientServerJSON = useComputed(() =>
+    clientServerData.value
+      ? JSON.stringify(clientServerData.value, null, 2)
+      : ""
+  );
+  const supportJSON = useComputed(() =>
+    supportData.value ? JSON.stringify(supportData.value, null, 2) : ""
+  );
 
   useEffect(() => {
     async function fetchWellKnownAndClientServer() {
@@ -39,8 +53,8 @@ export default function RawDataSection(props: RawDataSectionProps) {
 
         if (versionsResponse.ok) {
           const wellKnown: WellKnownResponse = await versionsResponse.json();
-          setWellKnownData(wellKnown);
-          setLoadingWellKnown(false);
+          wellKnownData.value = wellKnown;
+          loadingWellKnown.value = false;
 
           // Try to fetch versions from discovered homeserver
           let homeserverBaseUrl = wellKnown["m.homeserver"]?.base_url;
@@ -54,7 +68,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
               );
               if (versionsResp.ok) {
                 const versions = await versionsResp.json();
-                setClientServerData(versions);
+                clientServerData.value = versions;
               }
             } catch (_e) {
               // Error fetching versions - don't set client server data
@@ -64,8 +78,8 @@ export default function RawDataSection(props: RawDataSectionProps) {
       } catch (_e) {
         console.error("Error fetching client-server data:", _e);
       } finally {
-        setLoadingWellKnown(false);
-        setLoadingClientServer(false);
+        loadingWellKnown.value = false;
+        loadingClientServer.value = false;
       }
     }
 
@@ -76,12 +90,12 @@ export default function RawDataSection(props: RawDataSectionProps) {
 
         if (supportResponse.ok) {
           const support: SupportResponse = await supportResponse.json();
-          setSupportData(support);
+          supportData.value = support;
         }
       } catch (_e) {
         console.error("Error fetching support data:", _e);
       } finally {
-        setLoadingSupport(false);
+        loadingSupport.value = false;
       }
     }
 
@@ -119,13 +133,13 @@ export default function RawDataSection(props: RawDataSectionProps) {
       <p class="govuk-body">
         Response from <code>/.well-known/matrix/client</code>
       </p>
-      {loadingWellKnown
+      {loadingWellKnown.value
         ? (
           <p class="govuk-body">
             <em>Loading well-known data...</em>
           </p>
         )
-        : wellKnownData
+        : wellKnownData.value
         ? (
           <details class="govuk-details">
             <summary class="govuk-details__summary">
@@ -135,7 +149,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
             </summary>
             <div class="govuk-details__text">
               <pre class="govuk-body raw-data-pre">
-                <code>{JSON.stringify(wellKnownData, null, 2)}</code>
+                <code>{wellKnownJSON}</code>
               </pre>
             </div>
           </details>
@@ -151,13 +165,13 @@ export default function RawDataSection(props: RawDataSectionProps) {
       <p class="govuk-body">
         Response from <code>/_matrix/client/versions</code>
       </p>
-      {loadingClientServer
+      {loadingClientServer.value
         ? (
           <p class="govuk-body">
             <em>Loading client-server API data...</em>
           </p>
         )
-        : clientServerData
+        : clientServerData.value
         ? (
           <details class="govuk-details">
             <summary class="govuk-details__summary">
@@ -167,7 +181,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
             </summary>
             <div class="govuk-details__text">
               <pre class="govuk-body raw-data-pre">
-                <code>{JSON.stringify(clientServerData, null, 2)}</code>
+                <code>{clientServerJSON}</code>
               </pre>
             </div>
           </details>
@@ -183,13 +197,13 @@ export default function RawDataSection(props: RawDataSectionProps) {
       <p class="govuk-body">
         Response from <code>/.well-known/matrix/support</code>
       </p>
-      {loadingSupport
+      {loadingSupport.value
         ? (
           <p class="govuk-body">
             <em>Loading support data...</em>
           </p>
         )
-        : supportData
+        : supportData.value
         ? (
           <details class="govuk-details">
             <summary class="govuk-details__summary">
@@ -199,7 +213,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
             </summary>
             <div class="govuk-details__text">
               <pre class="govuk-body raw-data-pre">
-                <code>{JSON.stringify(supportData, null, 2)}</code>
+                <code>{supportJSON}</code>
               </pre>
             </div>
           </details>
