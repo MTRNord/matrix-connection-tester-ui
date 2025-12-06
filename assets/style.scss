@@ -1,5 +1,13 @@
 @use "sass:map";
-@use "govuk-frontend";
+@use "./fonts.scss";
+@use "govuk-frontend" with (
+    $govuk-font-family: (
+        InterVariable,
+        arial,
+        sans-serif,
+    ),
+    $govuk-font-family-print: "sans-serif"
+);
 @use "./overrides.scss";
 @use "./statistics.scss";
 @use "./code-highlighting.scss";

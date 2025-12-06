@@ -12,6 +12,5 @@ node_modules/
 vendor/
 
 static/assets/images/
-static/assets/fonts/
 static/assets/manifest.json
 static/js/govuk-frontend.min.js

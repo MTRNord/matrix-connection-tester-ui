@@ -2,8 +2,8 @@
   "nodeModulesDir": "manual",
   "tasks": {
     "check": "deno fmt --check . && deno lint . && deno check",
-    "dev": "mkdir -p static/assets/images static/assets/fonts static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp -r node_modules/govuk-frontend/dist/govuk/assets/fonts/* static/assets/fonts/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite",
-    "build": "mkdir -p static/assets/images static/assets/fonts static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp -r node_modules/govuk-frontend/dist/govuk/assets/fonts/* static/assets/fonts/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite build",
+    "dev": "mkdir -p static/assets/images static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite",
+    "build": "mkdir -p static/assets/images static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite build",
     "start": "deno serve -A _fresh/server.js",
     "update": "deno run -A -r jsr:@fresh/update ."
   },
@@ -13,8 +13,8 @@
     "@/": "./",
     "fresh": "jsr:@fresh/core@^2.2.0",
     "govuk-frontend": "npm:govuk-frontend@^5.13.0",
-    "preact": "npm:preact@^10.27.2",
-    "@preact/signals": "npm:@preact/signals@^2.5.0",
+    "preact": "npm:preact@^10.28.0",
+    "@preact/signals": "npm:@preact/signals@^2.5.1",
     "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.7",
     "sass": "npm:sass@^1.94.0",
     "vite": "npm:vite@^7.2.2"
