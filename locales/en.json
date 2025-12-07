@@ -552,9 +552,9 @@
       "federation_network": "Federation Network",
       "server_logs": "Server Logs",
       "performance": "Performance",
-      "compliance": "Compliance",
+      "compliance": "Compliance (Unofficial)",
       "matrix_spec_compliance": "Matrix Spec Compliance",
-      "compliance_suites": "Compliance Suites"
+      "compliance_suites": "Unofficial Compliance Suites 2025"
     },
     "index": {
       "title": "Documentation",
@@ -564,7 +564,7 @@
       "configuration_description": "Configure CORS, TLS certificates, and server settings for optimal Matrix server operation.",
       "api_endpoints_description": "Understand the various API endpoints required for Matrix server operation and client connectivity.",
       "troubleshooting_description": "Diagnose and resolve common connectivity issues, network problems, and configuration errors.",
-      "compliance_description": "Learn about Matrix specification compliance requirements and recommended feature sets.",
+      "compliance_description": "Unofficial compliance suites for Matrix applications (not vetted by SCT).",
       "quick_links_title": "Quick Links"
     },
     "federation_setup": {
@@ -687,8 +687,8 @@
       "overview": "Find community resources, documentation, and support channels for Matrix server administration and troubleshooting."
     },
     "compliance_suites": {
-      "title": "Matrix Compliance Suites 2024",
-      "description": "Compliance requirements and feature categories for Matrix homeservers",
+      "title": "Unofficial Compliance Suites 2025",
+      "description": "Unofficial compliance requirements and feature categories for Matrix applications (not vetted by SCT)",
       "intro_text": "This document defines the compliance suites for Matrix homeserver implementations. Similar to XMPP Compliance Suites (XEP-0479), these suites categorize features into required, recommended, and optional tiers to help administrators understand what functionality their server should support.",
       "version_info": "Current Version: 2024.1 - Last Updated: January 2024",
       "suite_2024_title": "Matrix Homeserver Compliance Suite 2024",

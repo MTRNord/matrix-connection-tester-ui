@@ -9,15 +9,72 @@ export default define.page(function ComplianceSuites(ctx) {
     <DocsLayout
       currentPath={currentPath}
       i18n={i18n}
-      title={i18n.tString("docs.compliance_suites.title")}
-      description={i18n.tString("docs.compliance_suites.description")}
+      title="Unofficial Compliance Suites 2025"
+      description="Matrix application compliance categories and requirements for different use cases"
     >
+      {/* Document Metadata */}
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table class="govuk-table">
+            <caption class="govuk-visually-hidden">
+              Document Metadata
+            </caption>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header" style="width: 20%">
+                  Abstract
+                </th>
+                <td class="govuk-table__cell">
+                  This document defines Matrix application categories for
+                  different use cases (Core, IM, Social, ...), and specifies the
+                  required spec and MSCs that client and server software needs
+                  to implement for compliance with the use cases.
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  Author
+                </th>
+                <td class="govuk-table__cell">MTRNord</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  Copyright
+                </th>
+                <td class="govuk-table__cell">CC-BY-SA 4.0</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  Status
+                </th>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">Draft</strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  Version
+                </th>
+                <td class="govuk-table__cell">0.1.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* Introduction */}
+      <h2 class="govuk-heading-l">Introduction</h2>
+
       <p class="govuk-body">
-        {i18n.t("docs.compliance_suites.intro_text")}
+        With growing interest in the Matrix protocol, there is a need for a
+        clear understanding of what is required to implement specific features
+        and use cases. This document aims to provide a comprehensive overview of
+        the requirements for different Matrix application categories, including
+        the necessary specifications and MSCs (Matrix Specification Changes)
+        that client and server software must implement for compliance.
       </p>
 
-      {/* Version Info */}
+      {/* Important Notice */}
       <div
         class="govuk-notification-banner"
         role="region"
@@ -28,339 +85,744 @@ export default define.page(function ComplianceSuites(ctx) {
             class="govuk-notification-banner__title"
             id="govuk-notification-banner-title"
           >
-            {i18n.t("docs.common.important")}
+            Important
           </h2>
         </div>
         <div class="govuk-notification-banner__content">
           <p class="govuk-notification-banner__heading">
-            {i18n.t("docs.compliance_suites.version_info")}
+            Note that this document is an{" "}
+            <strong>unofficial compliance suite</strong> and is{" "}
+            <strong>
+              not maintained by the Matrix.org team or the Matrix Foundation
+            </strong>. This has{" "}
+            <strong>not been vetted by the Spec Core Team (SCT)</strong>. It is
+            based on the experience of building and designing multiple Matrix
+            applications in various contexts, including the public sector and
+            the TI-Messenger context.
           </p>
         </div>
       </div>
 
-      {/* Matrix Homeserver Compliance Suite 2024 */}
-      <h2 class="govuk-heading-l" id="suite-2024">
-        {i18n.t("docs.compliance_suites.suite_2024_title")}
+      {/* Warning about incomplete status */}
+      <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+          <span class="govuk-visually-hidden">Warning</span>
+          This document is currently{" "}
+          <strong>incomplete</strong>. Several compliance suites (Audio/Video,
+          Bot, Bridge) are still under development and do not yet have defined
+          requirements. The Widget Compliance Suite is also in draft status.
+        </strong>
+      </div>
+
+      <p class="govuk-body">
+        This document defines Matrix application <strong>Categories</strong>
+        {" "}
+        based on typical use cases (Core, IM, ...) and <strong>Levels</strong>
+        {" "}
+        (Core, Advanced, Privacy) based on the functionality in the respective
+        category. For each combination of those, the required spec and MSCs are
+        listed. As the protocol evolves, we plan to publish new versions of this
+        document to keep it up to date with the latest developments in the
+        Matrix ecosystem.
+      </p>
+
+      <div class="govuk-inset-text">
+        <strong>Privacy:</strong>{" "}
+        In this context refers to implementors that require a higher level of
+        privacy and security for their users, such as in the public sector or in
+        the context of sensitive data. This includes features like end-to-end
+        encryption, data minimization, and other privacy-preserving measures. At
+        the time of writing this document, this information is mainly based upon
+        experiences with VS-NfD concepts in Germany.
+      </div>
+
+      <h3 class="govuk-heading-m">Intended Audience</h3>
+
+      <p class="govuk-body">
+        <strong>For developers:</strong>{" "}
+        This document provides guidance on which specifications and MSCs they
+        need to consider when implementing an application of a certain kind. At
+        this time however we do not provide a test suite or any other means of
+        testing compliance with this document.
+      </p>
+
+      <p class="govuk-body">
+        <strong>For users:</strong>{" "}
+        This provides an easy way to compare implementations based on their
+        respective advertised compliance levels and year. However since we do
+        not provide a test suite, the compliance level is not guaranteed to be
+        correct. We recommend to check the implementation against the
+        requirements in this document before using it in production at this
+        time.
+      </p>
+
+      <p class="govuk-body">
+        <strong>For integrators:</strong>{" "}
+        This document provides a starting point for understanding the
+        implications of implementing specific features and MSCs. It also serves
+        as a reference for evaluating the compliance of different Matrix
+        implementations with the requirements outlined in this document.
+      </p>
+
+      <p class="govuk-body">
+        Unless explicitly noted, support for the listed specifications is{" "}
+        <strong>REQUIRED</strong>{" "}
+        for compliance purposes. A feature is considered supported if all comma
+        separated feature providers listed in the "Providers" column are
+        implemented (unless otherwise noted).
+      </p>
+
+      <div class="govuk-inset-text">
+        <strong>RFC 2119 Keywords:</strong>{" "}
+        The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+        "OPTIONAL" in this document are to be interpreted as described in BCP 14
+        {" "}
+        <a
+          href="https://www.rfc-editor.org/info/rfc2119"
+          class="govuk-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          RFC2119
+        </a>{" "}
+        and{" "}
+        <a
+          href="https://www.rfc-editor.org/info/rfc8174"
+          class="govuk-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          RFC8174
+        </a>{" "}
+        when, and only when, they appear in all capitals, as shown here.
+        <br />
+        <br />
+        The word "can" (not "may") is used to refer to a possible circumstance
+        or situation, as opposed to an optional facility of the protocol.
+      </div>
+
+      {/* Compliance Categories */}
+      <h2 class="govuk-heading-l" id="compliance-categories">
+        Compliance Categories
       </h2>
+
+      {/* Core Compliance Suite */}
+      <h3 class="govuk-heading-m" id="core-compliance">
+        Core Compliance Suite
+      </h3>
+
       <div class="table-wrapper">
         <div class="table-scroll">
           <table class="govuk-table">
             <caption class="govuk-visually-hidden">
-              {i18n.t("docs.compliance_suites.suite_2024_caption")}
+              Core Compliance Suite Requirements
             </caption>
-            <tbody class="govuk-table__body">
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header" style="width: 30%">
-                  {i18n.t("docs.compliance_suites.field_suite")}
-                </th>
-                <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.suite_2024_name")}
-                  </strong>
-                </td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.field_status")}
-                </th>
-                <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--green">
-                    {i18n.t("docs.compliance_suites.status_active")}
-                  </strong>
-                </td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.field_version")}
-                </th>
-                <td class="govuk-table__cell">1.0</td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.field_last_updated")}
-                </th>
-                <td class="govuk-table__cell">2024-01-15</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* Core Features */}
-      <h3 class="govuk-heading-m">
-        {i18n.t("docs.compliance_suites.core_features_title")}
-      </h3>
-      <p class="govuk-body">
-        {i18n.t("docs.compliance_suites.core_features_description")}
-      </p>
-
-      <div class="table-wrapper">
-        <div class="table-scroll">
-          <table class="govuk-table">
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.feature")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.requirement")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.spec_version")}
-                </th>
+                <th scope="col" class="govuk-table__header">Feature</th>
+                <th scope="col" class="govuk-table__header">Server</th>
+                <th scope="col" class="govuk-table__header">Client</th>
+                <th scope="col" class="govuk-table__header">Advanced Server</th>
+                <th scope="col" class="govuk-table__header">Advanced Client</th>
+                <th scope="col" class="govuk-table__header">Privacy Server</th>
+                <th scope="col" class="govuk-table__header">Privacy Client</th>
+                <th scope="col" class="govuk-table__header">Providers</th>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.core.server_discovery")}
-                  </strong>
+                  <strong>Well-Known Client-Server Discovery</strong>
                 </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--red">
-                    {i18n.t("docs.common.required")}
-                  </strong>
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#server-discovery"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Server Discovery
+                  </a>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.core.federation_api")}
-                  </strong>
+                  <strong>Well-Known Server-Server Discovery</strong>
                 </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--red">
-                    {i18n.t("docs.common.required")}
-                  </strong>
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#server-discovery"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Server Discovery
+                  </a>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.core.client_server_api")}
-                  </strong>
+                  <strong>Password UIA Authentication</strong>
+                </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
                 </td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--red">
-                    {i18n.t("docs.common.required")}
-                  </strong>
+                  ✕<sup>1</sup>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#login"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Login API
+                  </a>{" "}
+                  and Password UIA
+                </td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.core.room_versions")}
-                  </strong>
+                  <strong>SSO Authentication</strong>
+                </td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#sso-client-loginauthentication"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    SSO Authentication API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>User Registration</strong>
+                </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
                 </td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--red">
-                    {i18n.t("docs.common.required")}
-                  </strong>
+                  ✕<sup>1</sup>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#post_matrixclientv3register"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Registration API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Terms of service at registration</strong>
+                </td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
+                </td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
+                </td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#terms-of-service-at-registration"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Terms of service at registration API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Token-authenticated registration</strong>
+                </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
+                </td>
+                <td class="govuk-table__cell">
+                  ✕<sup>1</sup>
+                </td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#token-authenticated-registration"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Token-authenticated API
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Advanced Features */}
-      <h3 class="govuk-heading-m">
-        {i18n.t("docs.compliance_suites.advanced_features_title")}
+      <p class="govuk-body govuk-body-s">
+        <sup>1</sup>{" "}
+        We expect privacy category to implement no registration and instead rely
+        on an external identity provider.
+      </p>
+
+      {/* Instant Messaging Compliance Suite */}
+      <h3 class="govuk-heading-m" id="im-compliance">
+        Instant Messaging Compliance Suite
       </h3>
+
       <p class="govuk-body">
-        {i18n.t("docs.compliance_suites.advanced_features_description")}
+        To be considered instant messaging compliant, all features from the core
+        compliance category must be met, as well as all features in this suite.
+      </p>
+
+      <p class="govuk-body">
+        See also the{" "}
+        <a
+          href="https://spec.matrix.org/v1.14/client-server-api/#instant-messaging"
+          class="govuk-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Instant Messaging module
+        </a>{" "}
+        of the specification for further things to consider.
       </p>
 
       <div class="table-wrapper">
         <div class="table-scroll">
           <table class="govuk-table">
+            <caption class="govuk-visually-hidden">
+              Instant Messaging Compliance Suite Requirements
+            </caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.feature")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.requirement")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("docs.compliance_suites.table.spec_version")}
-                </th>
+                <th scope="col" class="govuk-table__header">Feature</th>
+                <th scope="col" class="govuk-table__header">Server</th>
+                <th scope="col" class="govuk-table__header">Client</th>
+                <th scope="col" class="govuk-table__header">Advanced Server</th>
+                <th scope="col" class="govuk-table__header">Advanced Client</th>
+                <th scope="col" class="govuk-table__header">Privacy Server</th>
+                <th scope="col" class="govuk-table__header">Privacy Client</th>
+                <th scope="col" class="govuk-table__header">Providers</th>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.advanced.e2ee")}
-                  </strong>
+                  <strong>Content Repository (Media)</strong>
                 </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--yellow">
-                    {i18n.t("docs.common.recommended")}
-                  </strong>
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#content-repository"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Media Repository
+                  </a>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.advanced.spaces")}
-                  </strong>
+                  <strong>Sync</strong>
                 </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--yellow">
-                    {i18n.t("docs.common.recommended")}
-                  </strong>
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#get_matrixclientv3sync"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Sync API
+                  </a>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>
-                    {i18n.t("docs.compliance_suites.advanced.threading")}
-                  </strong>
+                  <strong>Room Messages</strong>
                 </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--yellow">
-                    {i18n.t("docs.common.recommended")}
-                  </strong>
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroommessage"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Room Message type
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroommessage-msgtypes"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    message types
+                  </a>
                 </td>
-                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Location Messages</strong>
+                </td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mlocation"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Location Message type
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Mathematical Messages (LaTeX)</strong>
+                </td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mathematical-messages"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Mathematical Message type
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Rich Replies</strong>
+                </td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#rich-replies"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Rich Replies API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Mentioning Users</strong>
+                </td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#user-and-room-mentions"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Mentions API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Mentioning Rooms</strong>
+                </td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">N/A</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#user-and-room-mentions"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Mentions API
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Core Room State Events</strong>
+                </td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroomname"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Room Name
+                  </a>,{" "}
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroomtopic"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Room Topic
+                  </a>,{" "}
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroomavatar"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Room Avatar
+                  </a>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>Pinned Events</strong>
+                </td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✕</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">✓</td>
+                <td class="govuk-table__cell">
+                  <a
+                    href="https://spec.matrix.org/v1.14/client-server-api/#mroompinned_events"
+                    class="govuk-link"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pinned Events API
+                  </a>
+                </td>
               </tr>
             </tbody>
           </table>
         </div>
       </div>
 
-      {/* Optional Features */}
-      <h3 class="govuk-heading-m">
-        {i18n.t("docs.compliance_suites.optional_features_title")}
-      </h3>
+      {/* Other Compliance Suites */}
+      <h3 class="govuk-heading-m" id="other-suites">Other Compliance Suites</h3>
+
       <p class="govuk-body">
-        {i18n.t("docs.compliance_suites.optional_features_description")}
+        The following compliance suites are defined but requirements are still
+        being developed:
       </p>
-
-      <div class="govuk-accordion" data-module="govuk-accordion">
-        <div class="govuk-accordion__section">
-          <div class="govuk-accordion__section-header">
-            <h4 class="govuk-accordion__section-heading">
-              <button
-                type="button"
-                class="govuk-accordion__section-button"
-                aria-controls="accordion-optional-features"
-                aria-expanded="false"
-              >
-                {i18n.t("docs.compliance_suites.optional_features_category")}
-              </button>
-            </h4>
-          </div>
-          <div
-            id="accordion-optional-features"
-            class="govuk-accordion__section-content"
-          >
-            <div class="table-wrapper">
-              <div class="table-scroll">
-                <table class="govuk-table">
-                  <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.t("docs.compliance_suites.table.feature")}
-                      </th>
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.t("docs.compliance_suites.table.requirement")}
-                      </th>
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.t("docs.compliance_suites.table.spec_version")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="govuk-table__body">
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">
-                        <strong>
-                          {i18n.t(
-                            "docs.compliance_suites.optional.voice_video",
-                          )}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">
-                        <strong class="govuk-tag govuk-tag--grey">
-                          {i18n.t("docs.common.optional")}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">v1.11</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">
-                        <strong>
-                          {i18n.t("docs.compliance_suites.optional.presence")}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">
-                        <strong class="govuk-tag govuk-tag--grey">
-                          {i18n.t("docs.common.optional")}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">v1.11</td>
-                    </tr>
-                    <tr class="govuk-table__row">
-                      <td class="govuk-table__cell">
-                        <strong>
-                          {i18n.t(
-                            "docs.compliance_suites.optional.read_receipts",
-                          )}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">
-                        <strong class="govuk-tag govuk-tag--grey">
-                          {i18n.t("docs.common.optional")}
-                        </strong>
-                      </td>
-                      <td class="govuk-table__cell">v1.11</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Implementation Notes */}
-      <h2 class="govuk-heading-l">
-        {i18n.t("docs.compliance_suites.implementation_notes_title")}
-      </h2>
-
-      <div class="govuk-inset-text">
-        {i18n.t("docs.compliance_suites.implementation_notes_text")}
-      </div>
 
       <ul class="govuk-list govuk-list--bullet">
-        <li>{i18n.t("docs.compliance_suites.note_1")}</li>
-        <li>{i18n.t("docs.compliance_suites.note_2")}</li>
-        <li>{i18n.t("docs.compliance_suites.note_3")}</li>
+        <li>
+          <strong>Audio/Video Compliance Suite</strong>{" "}
+          - Requirements to be defined
+        </li>
+        <li>
+          <strong>Bot Compliance Suite</strong> - Requirements to be defined
+        </li>
+        <li>
+          <strong>Bridge Compliance Suite</strong> - Requirements to be defined
+        </li>
       </ul>
+
+      <p class="govuk-body">
+        To be considered compliant with any of these suites, all features from
+        the core compliance category must be met, as well as all features in the
+        respective suite once defined.
+      </p>
+
+      {/* Future Development */}
+      <h2 class="govuk-heading-l" id="future-development">
+        Future Development
+      </h2>
+
+      <p class="govuk-body">
+        This section outlines the protocol specifications that are relevant for
+        developers, but are not ready yet to be required for Compliance.
+        Developers are encouraged to implement those and to share their
+        experience and feedback on the respective MSCs. This will help to
+        improve the specifications and to make them ready for compliance in the
+        future.
+      </p>
+
+      <h3 class="govuk-heading-m" id="widget-compliance">
+        Widget Compliance Suite
+      </h3>
+
+      <p class="govuk-body">
+        While widgets are already used by Element-Web, Element-Call and
+        companies like Nordeck, the MSCs haven't yet been finalized and accepted
+        by the SCT. Therefore, we do not require them for compliance at this
+        time. However, we still provide guidance on what we think is required
+        for a widget compliance suite.
+      </p>
+
+      <div class="govuk-inset-text">
+        <p class="govuk-body">
+          <strong>Note:</strong>{" "}
+          Since the widget MSCs are generally not fully up to date we will
+          partially refer to implementations of clients and SDKs instead of the
+          MSCs. This is to provide a more accurate overview of what is required
+          for compliance.
+        </p>
+        <p class="govuk-body">
+          The widget API is fully client side. Hence, we do not provide a server
+          compliance suite for this usecase but instead a widget compliance
+          type. Clients are considered a widget host in this context.
+        </p>
+      </div>
+
+      <p class="govuk-body">
+        Widget compliance requirements are under active development. Check back
+        for updates as the MSCs progress through the specification process.
+      </p>
+
+      {/* Implementation Notes */}
+      <h2 class="govuk-heading-l" id="implementation-notes">
+        Implementation Notes
+      </h2>
+
+      <p class="govuk-body">
+        Some of the protocol specifications referenced herein have their own
+        dependencies; developers need to consult the relevant specifications for
+        further information.
+      </p>
+
+      {/* Security Considerations */}
+      <h2 class="govuk-heading-l" id="security">Security Considerations</h2>
+
+      <p class="govuk-body">
+        This document introduces no additional security considerations above and
+        beyond those defined in the documents on which it depends.
+      </p>
+
+      {/* Acknowledgements */}
+      <h2 class="govuk-heading-l" id="acknowledgements">Acknowledgements</h2>
+
+      <p class="govuk-body">
+        This document is heavily leaning on the work of the XMPP community in
+        {" "}
+        <a
+          href="https://xmpp.org/extensions/xep-0479.html"
+          class="govuk-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          XEP-0479
+        </a>{" "}
+        and prior work on compliance suites. The idea of having a compliance
+        suite for the Matrix protocol was inspired by their work and we thank
+        them for their efforts in this area.
+      </p>
 
       {/* Related Documentation */}
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
-      <h2 class="govuk-heading-m">
-        {i18n.t("docs.common.related_documentation")}
-      </h2>
+      <h2 class="govuk-heading-m">Related Documentation</h2>
       <ul class="govuk-list">
         <li>
           <a href="/docs/federation-setup" class="govuk-link">
-            {i18n.t("docs.nav.federation_setup")}
+            Federation Setup
           </a>
         </li>
         <li>
           <a href="/docs/client-server-api" class="govuk-link">
-            {i18n.t("docs.nav.client_server_api")}
+            Client-Server API
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://spec.matrix.org/v1.14/"
+            class="govuk-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Matrix Specification v1.14
           </a>
         </li>
       </ul>
