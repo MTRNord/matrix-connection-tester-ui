@@ -34,8 +34,8 @@ export function ServerResolutionResultsSection(props: {
             {i18n.t("server-resolution.srv_found_description_suffix")}
           </p>
 
-          <div id="table-wrapper">
-            <div id="table-scroll">
+          <div class="table-wrapper">
+            <div class="table-scroll">
               <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">
                   {i18n.t("server-resolution.srv_records_caption")}
@@ -103,8 +103,8 @@ export function ServerResolutionResultsSection(props: {
             {i18n.t("server-resolution.wellknown_description_suffix")}
           </p>
 
-          <div id="table-wrapper">
-            <div id="table-scroll">
+          <div class="table-wrapper">
+            <div class="table-scroll">
               <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">
                   {i18n.t("server-resolution.wellknown_caption")}

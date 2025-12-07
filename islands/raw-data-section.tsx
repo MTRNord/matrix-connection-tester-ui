@@ -122,7 +122,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
           </span>
         </summary>
         <div class="govuk-details__text">
-          <pre class="govuk-body raw-data-pre">
+          <pre class="govuk-body">
             <code>{JSON.stringify(federationData, null, 2)}</code>
           </pre>
         </div>
@@ -148,7 +148,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
               </span>
             </summary>
             <div class="govuk-details__text">
-              <pre class="govuk-body raw-data-pre">
+              <pre class="govuk-body">
                 <code>{wellKnownJSON}</code>
               </pre>
             </div>
@@ -180,7 +180,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
               </span>
             </summary>
             <div class="govuk-details__text">
-              <pre class="govuk-body raw-data-pre">
+              <pre class="govuk-body">
                 <code>{clientServerJSON}</code>
               </pre>
             </div>
@@ -212,7 +212,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
               </span>
             </summary>
             <div class="govuk-details__text">
-              <pre class="govuk-body raw-data-pre">
+              <pre class="govuk-body">
                 <code>{supportJSON}</code>
               </pre>
             </div>

@@ -193,58 +193,62 @@ export default define.page<typeof handler>(function Verify(ctx) {
             {i18n.t("alerts.alerts_list_description")}
           </p>
 
-          <table class="govuk-table">
-            <caption class="govuk-table__caption govuk-table__caption--m">
-              {i18n.t("alerts.alerts_table_caption")}
-            </caption>
-            <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("alerts.server_name")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("alerts.email")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("alerts.status")}
-                </th>
-                <th scope="col" class="govuk-table__header">
-                  {i18n.t("alerts.actions")}
-                </th>
-              </tr>
-            </thead>
-            <tbody class="govuk-table__body">
-              {alerts.map((alert) => (
-                <tr class="govuk-table__row" key={alert.id}>
-                  <td class="govuk-table__cell">
-                    <code>{alert.server_name}</code>
-                  </td>
-                  <td class="govuk-table__cell">{alert.email}</td>
-                  <td class="govuk-table__cell">
-                    {alert.verified
-                      ? (
-                        <strong class="govuk-tag govuk-tag--green">
-                          {i18n.t("alerts.verified")}
-                        </strong>
-                      )
-                      : (
-                        <strong class="govuk-tag govuk-tag--yellow">
-                          {i18n.t("alerts.unverified")}
-                        </strong>
-                      )}
-                  </td>
-                  <td class="govuk-table__cell">
-                    <AlertDeleteButton
-                      alertId={alert.id}
-                      serverName={alert.server_name}
-                      locale={i18n.getLocale()}
-                      apiBaseUrl={apiBaseUrl || ""}
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div class="table-wrapper">
+            <div class="table-scroll">
+              <table class="govuk-table">
+                <caption class="govuk-table__caption govuk-table__caption--m">
+                  {i18n.t("alerts.alerts_table_caption")}
+                </caption>
+                <thead class="govuk-table__head">
+                  <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">
+                      {i18n.t("alerts.server_name")}
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                      {i18n.t("alerts.email")}
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                      {i18n.t("alerts.status")}
+                    </th>
+                    <th scope="col" class="govuk-table__header">
+                      {i18n.t("alerts.actions")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                  {alerts.map((alert) => (
+                    <tr class="govuk-table__row" key={alert.id}>
+                      <td class="govuk-table__cell">
+                        <code>{alert.server_name}</code>
+                      </td>
+                      <td class="govuk-table__cell">{alert.email}</td>
+                      <td class="govuk-table__cell">
+                        {alert.verified
+                          ? (
+                            <strong class="govuk-tag govuk-tag--green">
+                              {i18n.t("alerts.verified")}
+                            </strong>
+                          )
+                          : (
+                            <strong class="govuk-tag govuk-tag--yellow">
+                              {i18n.t("alerts.unverified")}
+                            </strong>
+                          )}
+                      </td>
+                      <td class="govuk-table__cell">
+                        <AlertDeleteButton
+                          alertId={alert.id}
+                          serverName={alert.server_name}
+                          locale={i18n.getLocale()}
+                          apiBaseUrl={apiBaseUrl || ""}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </>
       )}
 

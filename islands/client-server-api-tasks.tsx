@@ -116,8 +116,8 @@ export default function ClientServerApiTasks({
       </dl>
 
       {enabledExperimentalFeatures.value.length > 0 && (
-        <div id="table-wrapper">
-          <div id="table-scroll">
+        <div class="table-wrapper">
+          <div class="table-scroll">
             <table class="govuk-table">
               <caption class="govuk-table__caption govuk-table__caption--m">
                 {i18n.t("results.experimental_features_title")}
@@ -197,8 +197,8 @@ export default function ClientServerApiTasks({
       )}
 
       {clientWellKnown && (
-        <div id="table-wrapper" class="table-wrapper-with-margin">
-          <div id="table-scroll">
+        <div class="table-wrapper table-wrapper-with-margin">
+          <div class="table-scroll">
             <table class="govuk-table">
               <caption class="govuk-table__caption govuk-table__caption--m">
                 {i18n.t("results.client_discovery_title")}

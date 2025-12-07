@@ -17,8 +17,8 @@ export function ConnectivityReportsSection(props: {
     <>
       {Object.entries(reports).map(([ip, report]) => (
         <>
-          <div id="table-wrapper">
-            <div id="table-scroll">
+          <div class="table-wrapper">
+            <div class="table-scroll">
               <table class="govuk-table">
                 <caption class="govuk-table__caption govuk-table__caption--m">
                   {i18n.t("connectivity-reports.report_for")}{" "}
@@ -68,8 +68,8 @@ export function ConnectivityReportsSection(props: {
               </span>
             </summary>
             <div class="govuk-details__text">
-              <div id="table-wrapper">
-                <div id="table-scroll">
+              <div class="table-wrapper">
+                <div class="table-scroll">
                   <table class="govuk-table">
                     <caption class="govuk-table__caption govuk-table__caption--m">
                       {i18n.t("connectivity-reports.keys_caption")}
@@ -102,8 +102,8 @@ export function ConnectivityReportsSection(props: {
                 </div>
               </div>
 
-              <div id="table-wrapper">
-                <div id="table-scroll">
+              <div class="table-wrapper">
+                <div class="table-scroll">
                   <table class="govuk-table">
                     <caption class="govuk-table__caption govuk-table__caption--m">
                       {i18n.t("connectivity-reports.certificates_caption")}

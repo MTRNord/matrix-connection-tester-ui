@@ -42,46 +42,49 @@ export default define.page(function ComplianceSuites(ctx) {
       <h2 class="govuk-heading-l" id="suite-2024">
         {i18n.t("docs.compliance_suites.suite_2024_title")}
       </h2>
-
-      <table class="govuk-table">
-        <caption class="govuk-visually-hidden">
-          {i18n.t("docs.compliance_suites.suite_2024_caption")}
-        </caption>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header" style="width: 30%">
-              {i18n.t("docs.compliance_suites.field_suite")}
-            </th>
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.suite_2024_name")}
-              </strong>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.field_status")}
-            </th>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--green">
-                {i18n.t("docs.compliance_suites.status_active")}
-              </strong>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.field_version")}
-            </th>
-            <td class="govuk-table__cell">1.0</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.field_last_updated")}
-            </th>
-            <td class="govuk-table__cell">2024-01-15</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table class="govuk-table">
+            <caption class="govuk-visually-hidden">
+              {i18n.t("docs.compliance_suites.suite_2024_caption")}
+            </caption>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header" style="width: 30%">
+                  {i18n.t("docs.compliance_suites.field_suite")}
+                </th>
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.suite_2024_name")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.field_status")}
+                </th>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--green">
+                    {i18n.t("docs.compliance_suites.status_active")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.field_version")}
+                </th>
+                <td class="govuk-table__cell">1.0</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.field_last_updated")}
+                </th>
+                <td class="govuk-table__cell">2024-01-15</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Core Features */}
       <h3 class="govuk-heading-m">
@@ -91,75 +94,79 @@ export default define.page(function ComplianceSuites(ctx) {
         {i18n.t("docs.compliance_suites.core_features_description")}
       </p>
 
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.feature")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.requirement")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.spec_version")}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.core.server_discovery")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--red">
-                {i18n.t("docs.common.required")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.core.federation_api")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--red">
-                {i18n.t("docs.common.required")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.core.client_server_api")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--red">
-                {i18n.t("docs.common.required")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.core.room_versions")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--red">
-                {i18n.t("docs.common.required")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.feature")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.requirement")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.spec_version")}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.server_discovery")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--red">
+                    {i18n.t("docs.common.required")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.federation_api")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--red">
+                    {i18n.t("docs.common.required")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.client_server_api")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--red">
+                    {i18n.t("docs.common.required")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.room_versions")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--red">
+                    {i18n.t("docs.common.required")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Advanced Features */}
       <h3 class="govuk-heading-m">
@@ -169,60 +176,66 @@ export default define.page(function ComplianceSuites(ctx) {
         {i18n.t("docs.compliance_suites.advanced_features_description")}
       </p>
 
-      <table class="govuk-table">
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.feature")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.requirement")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.compliance_suites.table.spec_version")}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>{i18n.t("docs.compliance_suites.advanced.e2ee")}</strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--yellow">
-                {i18n.t("docs.common.recommended")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.advanced.spaces")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--yellow">
-                {i18n.t("docs.common.recommended")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">
-              <strong>
-                {i18n.t("docs.compliance_suites.advanced.threading")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--yellow">
-                {i18n.t("docs.common.recommended")}
-              </strong>
-            </td>
-            <td class="govuk-table__cell">v1.11</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table class="govuk-table">
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.feature")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.requirement")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.spec_version")}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.advanced.e2ee")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">
+                    {i18n.t("docs.common.recommended")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.advanced.spaces")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">
+                    {i18n.t("docs.common.recommended")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+              <tr class="govuk-table__row">
+                <td class="govuk-table__cell">
+                  <strong>
+                    {i18n.t("docs.compliance_suites.advanced.threading")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">
+                    {i18n.t("docs.common.recommended")}
+                  </strong>
+                </td>
+                <td class="govuk-table__cell">v1.11</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Optional Features */}
       <h3 class="govuk-heading-m">
@@ -250,62 +263,70 @@ export default define.page(function ComplianceSuites(ctx) {
             id="accordion-optional-features"
             class="govuk-accordion__section-content"
           >
-            <table class="govuk-table">
-              <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                  <th scope="col" class="govuk-table__header">
-                    {i18n.t("docs.compliance_suites.table.feature")}
-                  </th>
-                  <th scope="col" class="govuk-table__header">
-                    {i18n.t("docs.compliance_suites.table.requirement")}
-                  </th>
-                  <th scope="col" class="govuk-table__header">
-                    {i18n.t("docs.compliance_suites.table.spec_version")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    <strong>
-                      {i18n.t("docs.compliance_suites.optional.voice_video")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">
-                    <strong class="govuk-tag govuk-tag--grey">
-                      {i18n.t("docs.common.optional")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">v1.11</td>
-                </tr>
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    <strong>
-                      {i18n.t("docs.compliance_suites.optional.presence")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">
-                    <strong class="govuk-tag govuk-tag--grey">
-                      {i18n.t("docs.common.optional")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">v1.11</td>
-                </tr>
-                <tr class="govuk-table__row">
-                  <td class="govuk-table__cell">
-                    <strong>
-                      {i18n.t("docs.compliance_suites.optional.read_receipts")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">
-                    <strong class="govuk-tag govuk-tag--grey">
-                      {i18n.t("docs.common.optional")}
-                    </strong>
-                  </td>
-                  <td class="govuk-table__cell">v1.11</td>
-                </tr>
-              </tbody>
-            </table>
+            <div class="table-wrapper">
+              <div class="table-scroll">
+                <table class="govuk-table">
+                  <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                      <th scope="col" class="govuk-table__header">
+                        {i18n.t("docs.compliance_suites.table.feature")}
+                      </th>
+                      <th scope="col" class="govuk-table__header">
+                        {i18n.t("docs.compliance_suites.table.requirement")}
+                      </th>
+                      <th scope="col" class="govuk-table__header">
+                        {i18n.t("docs.compliance_suites.table.spec_version")}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody class="govuk-table__body">
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">
+                        <strong>
+                          {i18n.t(
+                            "docs.compliance_suites.optional.voice_video",
+                          )}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--grey">
+                          {i18n.t("docs.common.optional")}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">v1.11</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">
+                        <strong>
+                          {i18n.t("docs.compliance_suites.optional.presence")}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--grey">
+                          {i18n.t("docs.common.optional")}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">v1.11</td>
+                    </tr>
+                    <tr class="govuk-table__row">
+                      <td class="govuk-table__cell">
+                        <strong>
+                          {i18n.t(
+                            "docs.compliance_suites.optional.read_receipts",
+                          )}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">
+                        <strong class="govuk-tag govuk-tag--grey">
+                          {i18n.t("docs.common.optional")}
+                        </strong>
+                      </td>
+                      <td class="govuk-table__cell">v1.11</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>

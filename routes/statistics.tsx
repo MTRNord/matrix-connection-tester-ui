@@ -318,47 +318,51 @@ export default define.page<typeof handler>(function Statistics(ctx) {
                   {i18n.tString("statistics.server_distribution_description")}
                 </p>
 
-                <table class="govuk-table">
-                  <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
-                    {i18n.tString("statistics.server_distribution_title")}
-                  </caption>
-                  <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.tString("statistics.server_software")}
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header govuk-table__header--numeric"
-                      >
-                        {i18n.tString("statistics.test_count")}
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header govuk-table__header--numeric"
-                      >
-                        {i18n.tString("statistics.percentage")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="govuk-table__body">
-                    {stats.serverDistribution.map((item) => (
-                      <tr class="govuk-table__row" key={item.software}>
-                        <th scope="row" class="govuk-table__header">
-                          {item.software === "Other"
-                            ? i18n.tString("statistics.other")
-                            : item.software}
-                        </th>
-                        <td class="govuk-table__cell govuk-table__cell--numeric">
-                          {item.count.toLocaleString("en-GB")}
-                        </td>
-                        <td class="govuk-table__cell govuk-table__cell--numeric">
-                          {item.percentage.toFixed(1)}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div class="table-wrapper">
+                  <div class="table-scroll">
+                    <table class="govuk-table">
+                      <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
+                        {i18n.tString("statistics.server_distribution_title")}
+                      </caption>
+                      <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header">
+                            {i18n.tString("statistics.server_software")}
+                          </th>
+                          <th
+                            scope="col"
+                            class="govuk-table__header govuk-table__header--numeric"
+                          >
+                            {i18n.tString("statistics.test_count")}
+                          </th>
+                          <th
+                            scope="col"
+                            class="govuk-table__header govuk-table__header--numeric"
+                          >
+                            {i18n.tString("statistics.percentage")}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+                        {stats.serverDistribution.map((item) => (
+                          <tr class="govuk-table__row" key={item.software}>
+                            <th scope="row" class="govuk-table__header">
+                              {item.software === "Other"
+                                ? i18n.tString("statistics.other")
+                                : item.software}
+                            </th>
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
+                              {item.count.toLocaleString("en-GB")}
+                            </td>
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
+                              {item.percentage.toFixed(1)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             )}
 
@@ -372,56 +376,60 @@ export default define.page<typeof handler>(function Statistics(ctx) {
                   {i18n.tString("statistics.version_distribution_description")}
                 </p>
 
-                <table class="govuk-table">
-                  <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
-                    {i18n.tString("statistics.version_distribution_title")}
-                  </caption>
-                  <thead class="govuk-table__head">
-                    <tr class="govuk-table__row">
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.tString("statistics.server_software")}
-                      </th>
-                      <th scope="col" class="govuk-table__header">
-                        {i18n.tString("statistics.version")}
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header govuk-table__header--numeric"
-                      >
-                        {i18n.tString("statistics.test_count")}
-                      </th>
-                      <th
-                        scope="col"
-                        class="govuk-table__header govuk-table__header--numeric"
-                      >
-                        {i18n.tString("statistics.percentage")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody class="govuk-table__body">
-                    {stats.versionDistribution.map((item) => (
-                      <tr
-                        class="govuk-table__row"
-                        key={`${item.software}-${item.version}`}
-                      >
-                        <th scope="row" class="govuk-table__header">
-                          {item.software === "Other"
-                            ? i18n.tString("statistics.other")
-                            : item.software}
-                        </th>
-                        <td class="govuk-table__cell">
-                          {item.version}
-                        </td>
-                        <td class="govuk-table__cell govuk-table__cell--numeric">
-                          {item.count.toLocaleString("en-GB")}
-                        </td>
-                        <td class="govuk-table__cell govuk-table__cell--numeric">
-                          {item.percentage.toFixed(1)}%
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                <div class="table-wrapper">
+                  <div class="table-scroll">
+                    <table class="govuk-table">
+                      <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
+                        {i18n.tString("statistics.version_distribution_title")}
+                      </caption>
+                      <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header">
+                            {i18n.tString("statistics.server_software")}
+                          </th>
+                          <th scope="col" class="govuk-table__header">
+                            {i18n.tString("statistics.version")}
+                          </th>
+                          <th
+                            scope="col"
+                            class="govuk-table__header govuk-table__header--numeric"
+                          >
+                            {i18n.tString("statistics.test_count")}
+                          </th>
+                          <th
+                            scope="col"
+                            class="govuk-table__header govuk-table__header--numeric"
+                          >
+                            {i18n.tString("statistics.percentage")}
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+                        {stats.versionDistribution.map((item) => (
+                          <tr
+                            class="govuk-table__row"
+                            key={`${item.software}-${item.version}`}
+                          >
+                            <th scope="row" class="govuk-table__header">
+                              {item.software === "Other"
+                                ? i18n.tString("statistics.other")
+                                : item.software}
+                            </th>
+                            <td class="govuk-table__cell">
+                              {item.version}
+                            </td>
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
+                              {item.count.toLocaleString("en-GB")}
+                            </td>
+                            <td class="govuk-table__cell govuk-table__cell--numeric">
+                              {item.percentage.toFixed(1)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
               </div>
             )}
 

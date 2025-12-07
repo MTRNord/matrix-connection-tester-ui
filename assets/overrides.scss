@@ -42,15 +42,15 @@ code {
     white-space: preserve;
 }
 
-#table-wrapper {
+.table-wrapper {
     position: relative;
 }
 
-#table-scroll {
+.table-scroll {
     overflow: auto;
 }
 
-#table-wrapper table {
+.table-wrapper table {
     width: 100%;
 }
 
@@ -136,7 +136,7 @@ progress.govuk-progress::-moz-progress-bar {
 }
 
 /* Raw data pre styling */
-.raw-data-pre {
+pre {
     background-color: #f3f2f1;
     padding: 20px;
     overflow-x: auto;

@@ -36,78 +36,82 @@ export default define.page(function FederationSetup(ctx) {
         {i18n.t("docs.federation_setup.requirements_title")}
       </h2>
 
-      <table class="govuk-table">
-        <caption class="govuk-table__caption govuk-table__caption--m">
-          {i18n.t("docs.federation_setup.requirements_caption")}
-        </caption>
-        <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.requirement")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.description")}
-            </th>
-            <th scope="col" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.required")}
-            </th>
-          </tr>
-        </thead>
-        <tbody class="govuk-table__body">
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.valid_tls")}
-            </th>
-            <td class="govuk-table__cell">
-              {i18n.t("docs.federation_setup.table.valid_tls_desc")}
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--red">
-                {i18n.t("docs.common.required")}
-              </strong>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.wellknown")}
-            </th>
-            <td class="govuk-table__cell">
-              {i18n.t("docs.federation_setup.table.wellknown_desc")}
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--yellow">
-                {i18n.t("docs.common.recommended")}
-              </strong>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.srv_record")}
-            </th>
-            <td class="govuk-table__cell">
-              {i18n.t("docs.federation_setup.table.srv_record_desc")}
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--grey">
-                {i18n.t("docs.common.optional")}
-              </strong>
-            </td>
-          </tr>
-          <tr class="govuk-table__row">
-            <th scope="row" class="govuk-table__header">
-              {i18n.t("docs.federation_setup.table.port_8448")}
-            </th>
-            <td class="govuk-table__cell">
-              {i18n.t("docs.federation_setup.table.port_8448_desc")}
-            </td>
-            <td class="govuk-table__cell">
-              <strong class="govuk-tag govuk-tag--grey">
-                {i18n.t("docs.common.optional")}
-              </strong>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <div class="table-scroll">
+          <table class="govuk-table">
+            <caption class="govuk-table__caption govuk-table__caption--m">
+              {i18n.t("docs.federation_setup.requirements_caption")}
+            </caption>
+            <thead class="govuk-table__head">
+              <tr class="govuk-table__row">
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.requirement")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.description")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.required")}
+                </th>
+              </tr>
+            </thead>
+            <tbody class="govuk-table__body">
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.valid_tls")}
+                </th>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.federation_setup.table.valid_tls_desc")}
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--red">
+                    {i18n.t("docs.common.required")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.wellknown")}
+                </th>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.federation_setup.table.wellknown_desc")}
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">
+                    {i18n.t("docs.common.recommended")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.srv_record")}
+                </th>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.federation_setup.table.srv_record_desc")}
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--grey">
+                    {i18n.t("docs.common.optional")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.federation_setup.table.port_8448")}
+                </th>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.federation_setup.table.port_8448_desc")}
+                </td>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--grey">
+                    {i18n.t("docs.common.optional")}
+                  </strong>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       {/* Setup Steps */}
       <h2 class="govuk-heading-l">
