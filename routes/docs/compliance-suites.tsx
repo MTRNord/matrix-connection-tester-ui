@@ -9,53 +9,58 @@ export default define.page(function ComplianceSuites(ctx) {
     <DocsLayout
       currentPath={currentPath}
       i18n={i18n}
-      title="Unofficial Compliance Suites 2025"
-      description="Matrix application compliance categories and requirements for different use cases"
+      title={i18n.tString("docs.compliance_suites.title")}
+      description={i18n.tString("docs.compliance_suites.description")}
     >
       {/* Document Metadata */}
       <div class="table-wrapper">
         <div class="table-scroll">
           <table class="govuk-table">
             <caption class="govuk-visually-hidden">
-              Document Metadata
+              {i18n.t("docs.compliance_suites.metadata.abstract_label")}
             </caption>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header" style="width: 20%">
-                  Abstract
+                  {i18n.t("docs.compliance_suites.metadata.abstract_label")}
                 </th>
                 <td class="govuk-table__cell">
-                  This document defines Matrix application categories for
-                  different use cases (Core, IM, Social, ...), and specifies the
-                  required spec and MSCs that client and server software needs
-                  to implement for compliance with the use cases.
+                  {i18n.t("docs.compliance_suites.metadata.abstract_text")}
                 </td>
               </tr>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  Author
-                </th>
-                <td class="govuk-table__cell">MTRNord</td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  Copyright
-                </th>
-                <td class="govuk-table__cell">CC-BY-SA 4.0</td>
-              </tr>
-              <tr class="govuk-table__row">
-                <th scope="row" class="govuk-table__header">
-                  Status
+                  {i18n.t("docs.compliance_suites.metadata.author_label")}
                 </th>
                 <td class="govuk-table__cell">
-                  <strong class="govuk-tag govuk-tag--yellow">Draft</strong>
+                  {i18n.t("docs.compliance_suites.metadata.author_name")}
                 </td>
               </tr>
               <tr class="govuk-table__row">
                 <th scope="row" class="govuk-table__header">
-                  Version
+                  {i18n.t("docs.compliance_suites.metadata.copyright_label")}
                 </th>
-                <td class="govuk-table__cell">0.1.0</td>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.compliance_suites.metadata.copyright_text")}
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.metadata.status_label")}
+                </th>
+                <td class="govuk-table__cell">
+                  <strong class="govuk-tag govuk-tag--yellow">
+                    {i18n.t("docs.compliance_suites.metadata.status_draft")}
+                  </strong>
+                </td>
+              </tr>
+              <tr class="govuk-table__row">
+                <th scope="row" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.metadata.version_label")}
+                </th>
+                <td class="govuk-table__cell">
+                  {i18n.t("docs.compliance_suites.metadata.version_number")}
+                </td>
               </tr>
             </tbody>
           </table>
@@ -63,15 +68,12 @@ export default define.page(function ComplianceSuites(ctx) {
       </div>
 
       {/* Introduction */}
-      <h2 class="govuk-heading-l">Introduction</h2>
+      <h2 class="govuk-heading-l">
+        {i18n.t("docs.compliance_suites.intro.heading")}
+      </h2>
 
       <p class="govuk-body">
-        With growing interest in the Matrix protocol, there is a need for a
-        clear understanding of what is required to implement specific features
-        and use cases. This document aims to provide a comprehensive overview of
-        the requirements for different Matrix application categories, including
-        the necessary specifications and MSCs (Matrix Specification Changes)
-        that client and server software must implement for compliance.
+        {i18n.t("docs.compliance_suites.intro.para1")}
       </p>
 
       {/* Important Notice */}
@@ -85,21 +87,18 @@ export default define.page(function ComplianceSuites(ctx) {
             class="govuk-notification-banner__title"
             id="govuk-notification-banner-title"
           >
-            Important
+            {i18n.t("docs.compliance_suites.warning.important_heading")}
           </h2>
         </div>
         <div class="govuk-notification-banner__content">
-          <p class="govuk-notification-banner__heading">
-            Note that this document is an{" "}
-            <strong>unofficial compliance suite</strong> and is{" "}
-            <strong>
-              not maintained by the Matrix.org team or the Matrix Foundation
-            </strong>. This has{" "}
-            <strong>not been vetted by the Spec Core Team (SCT)</strong>. It is
-            based on the experience of building and designing multiple Matrix
-            applications in various contexts, including the public sector and
-            the TI-Messenger context.
-          </p>
+          <p
+            class="govuk-notification-banner__heading"
+            dangerouslySetInnerHTML={{
+              __html: i18n.tString(
+                "docs.compliance_suites.warning.unofficial_notice",
+              ),
+            }}
+          />
         </div>
       </div>
 
@@ -107,78 +106,68 @@ export default define.page(function ComplianceSuites(ctx) {
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
-          <span class="govuk-visually-hidden">Warning</span>
-          This document is currently{" "}
-          <strong>incomplete</strong>. Several compliance suites (Audio/Video,
-          Bot, Bridge) are still under development and do not yet have defined
-          requirements. The Widget Compliance Suite is also in draft status.
+          <span class="govuk-visually-hidden">
+            {i18n.t("docs.common.warning")}
+          </span>
+          <span
+            dangerouslySetInnerHTML={{
+              __html: i18n.tString(
+                "docs.compliance_suites.warning.incomplete_text",
+              ),
+            }}
+          />
         </strong>
       </div>
 
-      <p class="govuk-body">
-        This document defines Matrix application <strong>Categories</strong>
-        {" "}
-        based on typical use cases (Core, IM, ...) and <strong>Levels</strong>
-        {" "}
-        (Core, Advanced, Privacy) based on the functionality in the respective
-        category. For each combination of those, the required spec and MSCs are
-        listed. As the protocol evolves, we plan to publish new versions of this
-        document to keep it up to date with the latest developments in the
-        Matrix ecosystem.
-      </p>
+      <p
+        class="govuk-body"
+        dangerouslySetInnerHTML={{
+          __html: i18n.tString("docs.compliance_suites.intro.para2"),
+        }}
+      />
 
       <div class="govuk-inset-text">
-        <strong>Privacy:</strong>{" "}
-        In this context refers to implementors that require a higher level of
-        privacy and security for their users, such as in the public sector or in
-        the context of sensitive data. This includes features like end-to-end
-        encryption, data minimization, and other privacy-preserving measures. At
-        the time of writing this document, this information is mainly based upon
-        experiences with VS-NfD concepts in Germany.
+        <strong>
+          {i18n.t("docs.compliance_suites.privacy_note.heading")}
+        </strong>{" "}
+        {i18n.t("docs.compliance_suites.privacy_note.text")}
       </div>
 
-      <h3 class="govuk-heading-m">Intended Audience</h3>
+      <h3 class="govuk-heading-m">
+        {i18n.t("docs.compliance_suites.audience.heading")}
+      </h3>
 
       <p class="govuk-body">
-        <strong>For developers:</strong>{" "}
-        This document provides guidance on which specifications and MSCs they
-        need to consider when implementing an application of a certain kind. At
-        this time however we do not provide a test suite or any other means of
-        testing compliance with this document.
+        <strong>
+          {i18n.t("docs.compliance_suites.audience.developers_label")}
+        </strong>{" "}
+        {i18n.t("docs.compliance_suites.audience.developers_text")}
       </p>
 
       <p class="govuk-body">
-        <strong>For users:</strong>{" "}
-        This provides an easy way to compare implementations based on their
-        respective advertised compliance levels and year. However since we do
-        not provide a test suite, the compliance level is not guaranteed to be
-        correct. We recommend to check the implementation against the
-        requirements in this document before using it in production at this
-        time.
+        <strong>
+          {i18n.t("docs.compliance_suites.audience.users_label")}
+        </strong>{" "}
+        {i18n.t("docs.compliance_suites.audience.users_text")}
       </p>
 
       <p class="govuk-body">
-        <strong>For integrators:</strong>{" "}
-        This document provides a starting point for understanding the
-        implications of implementing specific features and MSCs. It also serves
-        as a reference for evaluating the compliance of different Matrix
-        implementations with the requirements outlined in this document.
+        <strong>
+          {i18n.t("docs.compliance_suites.audience.integrators_label")}
+        </strong>{" "}
+        {i18n.t("docs.compliance_suites.audience.integrators_text")}
       </p>
 
-      <p class="govuk-body">
-        Unless explicitly noted, support for the listed specifications is{" "}
-        <strong>REQUIRED</strong>{" "}
-        for compliance purposes. A feature is considered supported if all comma
-        separated feature providers listed in the "Providers" column are
-        implemented (unless otherwise noted).
-      </p>
+      <p
+        class="govuk-body"
+        dangerouslySetInnerHTML={{
+          __html: i18n.tString("docs.compliance_suites.audience.general_note"),
+        }}
+      />
 
       <div class="govuk-inset-text">
-        <strong>RFC 2119 Keywords:</strong>{" "}
-        The keywords "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-        "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
-        "OPTIONAL" in this document are to be interpreted as described in BCP 14
-        {" "}
+        <strong>{i18n.t("docs.compliance_suites.rfc2119.heading")}</strong>{" "}
+        {i18n.t("docs.compliance_suites.rfc2119.text")}{" "}
         <a
           href="https://www.rfc-editor.org/info/rfc2119"
           class="govuk-link"
@@ -187,7 +176,7 @@ export default define.page(function ComplianceSuites(ctx) {
         >
           RFC2119
         </a>{" "}
-        and{" "}
+        {i18n.t("docs.common.and")}{" "}
         <a
           href="https://www.rfc-editor.org/info/rfc8174"
           class="govuk-link"
@@ -199,42 +188,59 @@ export default define.page(function ComplianceSuites(ctx) {
         when, and only when, they appear in all capitals, as shown here.
         <br />
         <br />
-        The word "can" (not "may") is used to refer to a possible circumstance
-        or situation, as opposed to an optional facility of the protocol.
+        {i18n.t("docs.compliance_suites.rfc2119.can_note")}
       </div>
 
       {/* Compliance Categories */}
       <h2 class="govuk-heading-l" id="compliance-categories">
-        Compliance Categories
+        {i18n.t("docs.compliance_suites.categories.heading")}
       </h2>
 
       {/* Core Compliance Suite */}
       <h3 class="govuk-heading-m" id="core-compliance">
-        Core Compliance Suite
+        {i18n.t("docs.compliance_suites.core.heading")}
       </h3>
 
       <div class="table-wrapper">
         <div class="table-scroll">
           <table class="govuk-table">
             <caption class="govuk-visually-hidden">
-              Core Compliance Suite Requirements
+              {i18n.t("docs.compliance_suites.core.heading")}
             </caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Feature</th>
-                <th scope="col" class="govuk-table__header">Server</th>
-                <th scope="col" class="govuk-table__header">Client</th>
-                <th scope="col" class="govuk-table__header">Advanced Server</th>
-                <th scope="col" class="govuk-table__header">Advanced Client</th>
-                <th scope="col" class="govuk-table__header">Privacy Server</th>
-                <th scope="col" class="govuk-table__header">Privacy Client</th>
-                <th scope="col" class="govuk-table__header">Providers</th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.feature")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.advanced_server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.advanced_client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.privacy_server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.privacy_client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.providers")}
+                </th>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Well-Known Client-Server Discovery</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_wellknown_cs")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -255,7 +261,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Well-Known Server-Server Discovery</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_wellknown_ss")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -276,7 +284,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Password UIA Authentication</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_password_uia")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -302,7 +312,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>SSO Authentication</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_sso")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✕</td>
                 <td class="govuk-table__cell">✕</td>
@@ -323,7 +335,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>User Registration</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_registration")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -348,7 +362,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Terms of service at registration</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_tos")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✕</td>
                 <td class="govuk-table__cell">✕</td>
@@ -373,7 +389,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Token-authenticated registration</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.core.feature_token_reg")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -403,22 +421,20 @@ export default define.page(function ComplianceSuites(ctx) {
 
       <p class="govuk-body govuk-body-s">
         <sup>1</sup>{" "}
-        We expect privacy category to implement no registration and instead rely
-        on an external identity provider.
+        {i18n.t("docs.compliance_suites.core.footnote_privacy_registration")}
       </p>
 
       {/* Instant Messaging Compliance Suite */}
       <h3 class="govuk-heading-m" id="im-compliance">
-        Instant Messaging Compliance Suite
+        {i18n.t("docs.compliance_suites.im.heading")}
       </h3>
 
       <p class="govuk-body">
-        To be considered instant messaging compliant, all features from the core
-        compliance category must be met, as well as all features in this suite.
+        {i18n.t("docs.compliance_suites.im.intro")}
       </p>
 
       <p class="govuk-body">
-        See also the{" "}
+        {i18n.t("docs.compliance_suites.im.note")}{" "}
         <a
           href="https://spec.matrix.org/v1.14/client-server-api/#instant-messaging"
           class="govuk-link"
@@ -434,24 +450,42 @@ export default define.page(function ComplianceSuites(ctx) {
         <div class="table-scroll">
           <table class="govuk-table">
             <caption class="govuk-visually-hidden">
-              Instant Messaging Compliance Suite Requirements
+              {i18n.t("docs.compliance_suites.im.heading")}
             </caption>
             <thead class="govuk-table__head">
               <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Feature</th>
-                <th scope="col" class="govuk-table__header">Server</th>
-                <th scope="col" class="govuk-table__header">Client</th>
-                <th scope="col" class="govuk-table__header">Advanced Server</th>
-                <th scope="col" class="govuk-table__header">Advanced Client</th>
-                <th scope="col" class="govuk-table__header">Privacy Server</th>
-                <th scope="col" class="govuk-table__header">Privacy Client</th>
-                <th scope="col" class="govuk-table__header">Providers</th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.feature")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.advanced_server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.advanced_client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.privacy_server")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.privacy_client")}
+                </th>
+                <th scope="col" class="govuk-table__header">
+                  {i18n.t("docs.compliance_suites.table.providers")}
+                </th>
               </tr>
             </thead>
             <tbody class="govuk-table__body">
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Content Repository (Media)</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_media")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -472,7 +506,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Sync</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_sync")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -493,7 +529,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Room Messages</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_messages")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -510,7 +548,7 @@ export default define.page(function ComplianceSuites(ctx) {
                   >
                     Room Message type
                   </a>{" "}
-                  and{" "}
+                  {i18n.t("docs.common.and")}{" "}
                   <a
                     href="https://spec.matrix.org/v1.14/client-server-api/#mroommessage-msgtypes"
                     class="govuk-link"
@@ -523,7 +561,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Location Messages</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_location")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">N/A</td>
                 <td class="govuk-table__cell">✕</td>
@@ -544,7 +584,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Mathematical Messages (LaTeX)</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_math")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">N/A</td>
                 <td class="govuk-table__cell">✕</td>
@@ -565,7 +607,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Rich Replies</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_replies")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">N/A</td>
                 <td class="govuk-table__cell">✕</td>
@@ -586,7 +630,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Mentioning Users</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_mentions_users")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">N/A</td>
                 <td class="govuk-table__cell">✕</td>
@@ -607,7 +653,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Mentioning Rooms</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_mentions_rooms")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">N/A</td>
                 <td class="govuk-table__cell">✕</td>
@@ -628,7 +676,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Core Room State Events</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_room_state")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✓</td>
                 <td class="govuk-table__cell">✓</td>
@@ -665,7 +715,9 @@ export default define.page(function ComplianceSuites(ctx) {
               </tr>
               <tr class="govuk-table__row">
                 <td class="govuk-table__cell">
-                  <strong>Pinned Events</strong>
+                  <strong>
+                    {i18n.t("docs.compliance_suites.im.feature_pinned")}
+                  </strong>
                 </td>
                 <td class="govuk-table__cell">✕</td>
                 <td class="govuk-table__cell">✕</td>
@@ -690,103 +742,95 @@ export default define.page(function ComplianceSuites(ctx) {
       </div>
 
       {/* Other Compliance Suites */}
-      <h3 class="govuk-heading-m" id="other-suites">Other Compliance Suites</h3>
+      <h3 class="govuk-heading-m" id="other-suites">
+        {i18n.t("docs.compliance_suites.other_suites.heading")}
+      </h3>
 
       <p class="govuk-body">
-        The following compliance suites are defined but requirements are still
-        being developed:
+        {i18n.t("docs.compliance_suites.other_suites.intro")}
       </p>
 
       <ul class="govuk-list govuk-list--bullet">
         <li>
-          <strong>Audio/Video Compliance Suite</strong>{" "}
-          - Requirements to be defined
+          <strong>
+            {i18n.t("docs.compliance_suites.other_suites.audio_video")}
+          </strong>{" "}
+          - {i18n.t("docs.compliance_suites.other_suites.tbd")}
         </li>
         <li>
-          <strong>Bot Compliance Suite</strong> - Requirements to be defined
+          <strong>
+            {i18n.t("docs.compliance_suites.other_suites.bot")}
+          </strong>{" "}
+          - {i18n.t("docs.compliance_suites.other_suites.tbd")}
         </li>
         <li>
-          <strong>Bridge Compliance Suite</strong> - Requirements to be defined
+          <strong>
+            {i18n.t("docs.compliance_suites.other_suites.bridge")}
+          </strong>{" "}
+          - {i18n.t("docs.compliance_suites.other_suites.tbd")}
         </li>
       </ul>
 
       <p class="govuk-body">
-        To be considered compliant with any of these suites, all features from
-        the core compliance category must be met, as well as all features in the
-        respective suite once defined.
+        {i18n.t("docs.compliance_suites.other_suites.note")}
       </p>
 
       {/* Future Development */}
       <h2 class="govuk-heading-l" id="future-development">
-        Future Development
+        {i18n.t("docs.compliance_suites.future.heading")}
       </h2>
 
       <p class="govuk-body">
-        This section outlines the protocol specifications that are relevant for
-        developers, but are not ready yet to be required for Compliance.
-        Developers are encouraged to implement those and to share their
-        experience and feedback on the respective MSCs. This will help to
-        improve the specifications and to make them ready for compliance in the
-        future.
+        {i18n.t("docs.compliance_suites.future.intro")}
       </p>
 
       <h3 class="govuk-heading-m" id="widget-compliance">
-        Widget Compliance Suite
+        {i18n.t("docs.compliance_suites.future.widget_heading")}
       </h3>
 
       <p class="govuk-body">
-        While widgets are already used by Element-Web, Element-Call and
-        companies like Nordeck, the MSCs haven't yet been finalized and accepted
-        by the SCT. Therefore, we do not require them for compliance at this
-        time. However, we still provide guidance on what we think is required
-        for a widget compliance suite.
+        {i18n.t("docs.compliance_suites.future.widget_intro")}
       </p>
 
       <div class="govuk-inset-text">
         <p class="govuk-body">
-          <strong>Note:</strong>{" "}
-          Since the widget MSCs are generally not fully up to date we will
-          partially refer to implementations of clients and SDKs instead of the
-          MSCs. This is to provide a more accurate overview of what is required
-          for compliance.
+          <strong>{i18n.t("docs.common.note")}</strong>{" "}
+          {i18n.t("docs.compliance_suites.future.widget_note_msc")}
         </p>
         <p class="govuk-body">
-          The widget API is fully client side. Hence, we do not provide a server
-          compliance suite for this usecase but instead a widget compliance
-          type. Clients are considered a widget host in this context.
+          {i18n.t("docs.compliance_suites.future.widget_note_client")}
         </p>
       </div>
 
       <p class="govuk-body">
-        Widget compliance requirements are under active development. Check back
-        for updates as the MSCs progress through the specification process.
+        {i18n.t("docs.compliance_suites.future.widget_status")}
       </p>
 
       {/* Implementation Notes */}
       <h2 class="govuk-heading-l" id="implementation-notes">
-        Implementation Notes
+        {i18n.t("docs.compliance_suites.implementation.heading")}
       </h2>
 
       <p class="govuk-body">
-        Some of the protocol specifications referenced herein have their own
-        dependencies; developers need to consult the relevant specifications for
-        further information.
+        {i18n.t("docs.compliance_suites.implementation.text")}
       </p>
 
       {/* Security Considerations */}
-      <h2 class="govuk-heading-l" id="security">Security Considerations</h2>
+      <h2 class="govuk-heading-l" id="security">
+        {i18n.t("docs.compliance_suites.security.heading")}
+      </h2>
 
       <p class="govuk-body">
-        This document introduces no additional security considerations above and
-        beyond those defined in the documents on which it depends.
+        {i18n.t("docs.compliance_suites.security.text")}
       </p>
 
       {/* Acknowledgements */}
-      <h2 class="govuk-heading-l" id="acknowledgements">Acknowledgements</h2>
+      <h2 class="govuk-heading-l" id="acknowledgements">
+        {i18n.t("docs.compliance_suites.acknowledgements.heading")}
+      </h2>
 
       <p class="govuk-body">
-        This document is heavily leaning on the work of the XMPP community in
-        {" "}
+        {i18n.t("docs.compliance_suites.acknowledgements.text")}{" "}
         <a
           href="https://xmpp.org/extensions/xep-0479.html"
           class="govuk-link"
@@ -803,16 +847,18 @@ export default define.page(function ComplianceSuites(ctx) {
       {/* Related Documentation */}
       <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible" />
 
-      <h2 class="govuk-heading-m">Related Documentation</h2>
+      <h2 class="govuk-heading-m">
+        {i18n.t("docs.compliance_suites.related.heading")}
+      </h2>
       <ul class="govuk-list">
         <li>
           <a href="/docs/federation-setup" class="govuk-link">
-            Federation Setup
+            {i18n.t("docs.compliance_suites.related.federation_setup")}
           </a>
         </li>
         <li>
           <a href="/docs/client-server-api" class="govuk-link">
-            Client-Server API
+            {i18n.t("docs.compliance_suites.related.client_server_api")}
           </a>
         </li>
         <li>
@@ -822,7 +868,7 @@ export default define.page(function ComplianceSuites(ctx) {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Matrix Specification v1.14
+            {i18n.t("docs.compliance_suites.related.matrix_spec")}
           </a>
         </li>
       </ul>

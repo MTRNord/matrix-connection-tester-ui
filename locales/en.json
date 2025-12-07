@@ -3,7 +3,10 @@
     "skip_to_main": "Skip to main content",
     "menu": "Menu",
     "back": "Back",
-    "error": "Error"
+    "error": "Error",
+    "warning": "Warning",
+    "note": "Note:",
+    "and": "and"
   },
   "header": {
     "title": "Connectivity Tester"
@@ -687,51 +690,141 @@
       "overview": "Find community resources, documentation, and support channels for Matrix server administration and troubleshooting."
     },
     "compliance_suites": {
+      "_context": "This section contains translations for the unofficial Matrix Compliance Suites 2025 documentation. This is NOT an official Matrix.org document and has not been vetted by the Spec Core Team (SCT). It defines categories (Core, IM, Audio/Video, Bot, Bridge) and levels (Core, Advanced, Privacy) for Matrix implementations.",
       "title": "Unofficial Compliance Suites 2025",
       "description": "Unofficial compliance requirements and feature categories for Matrix applications (not vetted by SCT)",
-      "intro_text": "This document defines the compliance suites for Matrix homeserver implementations. Similar to XMPP Compliance Suites (XEP-0479), these suites categorize features into required, recommended, and optional tiers to help administrators understand what functionality their server should support.",
-      "version_info": "Current Version: 2024.1 - Last Updated: January 2024",
-      "suite_2024_title": "Matrix Homeserver Compliance Suite 2024",
-      "suite_2024_caption": "Overview of the 2024 compliance suite",
-      "suite_2024_name": "Matrix Homeserver Compliance Suite 2024",
-      "field_suite": "Compliance Suite",
-      "field_status": "Status",
-      "field_version": "Version",
-      "field_last_updated": "Last Updated",
-      "status_active": "Active",
-      "core_features_title": "Core Features",
-      "core_features_description": "These features are required for basic Matrix homeserver functionality and federation interoperability.",
+      "metadata": {
+        "_context": "Document metadata table at the top of the page",
+        "abstract_label": "Abstract",
+        "abstract_text": "This document defines Matrix application categories for different use cases (Core, IM, Social, ...), and specifies the required spec and MSCs that client and server software needs to implement for compliance with the use cases.",
+        "author_label": "Author",
+        "author_name": "MTRNord",
+        "copyright_label": "Copyright",
+        "copyright_text": "CC-BY-SA 4.0",
+        "status_label": "Status",
+        "status_draft": "Draft",
+        "version_label": "Version",
+        "version_number": "0.1.0"
+      },
+      "intro": {
+        "_context": "Introduction section explaining the purpose and scope of the compliance suites",
+        "heading": "Introduction",
+        "para1": "With growing interest in the Matrix protocol, there is a need for a clear understanding of what is required to implement specific features and use cases. This document aims to provide a comprehensive overview of the requirements for different Matrix application categories, including the necessary specifications and MSCs (Matrix Specification Changes) that client and server software must implement for compliance.",
+        "para2": "This document defines Matrix application <strong>Categories</strong> based on typical use cases (Core, IM, ...) and <strong>Levels</strong> (Core, Advanced, Privacy) based on the functionality in the respective category. For each combination of those, the required spec and MSCs are listed. As the protocol evolves, we plan to publish new versions of this document to keep it up to date with the latest developments in the Matrix ecosystem."
+      },
+      "warning": {
+        "_context": "Warning banners about unofficial status and incomplete document",
+        "important_heading": "Important",
+        "unofficial_notice": "Note that this document is an <strong>unofficial compliance suite</strong> and is <strong>not maintained by the Matrix.org team or the Matrix Foundation</strong>. This has <strong>not been vetted by the Spec Core Team (SCT)</strong>. It is based on the experience of building and designing multiple Matrix applications in various contexts, including the public sector and the TI-Messenger context.",
+        "incomplete_text": "This document is currently <strong>incomplete</strong>. Several compliance suites (Audio/Video, Bot, Bridge) are still under development and do not yet have defined requirements. The Widget Compliance Suite is also in draft status pending MSC finalization."
+      },
+      "privacy_note": {
+        "_context": "Explanation of what 'Privacy' means in the context of compliance levels",
+        "heading": "Privacy:",
+        "text": "In this context refers to implementors that require a higher level of privacy and security for their users, such as in the public sector or in the context of sensitive data. This includes features like end-to-end encryption, data minimization, and other privacy-preserving measures. At the time of writing this document, this information is mainly based upon experiences with VS-NfD concepts in Germany."
+      },
+      "audience": {
+        "_context": "Descriptions of who should use this document and how",
+        "heading": "Intended Audience",
+        "developers_label": "For developers:",
+        "developers_text": "This document provides guidance on which specifications and MSCs they need to consider when implementing an application of a certain kind. At this time however we do not provide a test suite or any other means of testing compliance with this document.",
+        "users_label": "For users:",
+        "users_text": "This provides an easy way to compare implementations based on their respective advertised compliance levels and year. However since we do not provide a test suite, the compliance level is not guaranteed to be correct. We recommend to check the implementation against the requirements in this document before using it in production at this time.",
+        "integrators_label": "For integrators:",
+        "integrators_text": "This document provides a starting point for understanding the implications of implementing specific features and MSCs. It also serves as a reference for evaluating the compliance of different Matrix implementations with the requirements outlined in this document.",
+        "general_note": "Unless explicitly noted, support for the listed specifications is <strong>REQUIRED</strong> for compliance purposes. A feature is considered supported if all comma separated feature providers listed in the \"Providers\" column are implemented (unless otherwise noted)."
+      },
+      "rfc2119": {
+        "_context": "RFC 2119 keywords explanation for specification language",
+        "heading": "RFC 2119 Keywords:",
+        "text": "The keywords \"MUST\", \"MUST NOT\", \"REQUIRED\", \"SHALL\", \"SHALL NOT\", \"SHOULD\", \"SHOULD NOT\", \"RECOMMENDED\", \"NOT RECOMMENDED\", \"MAY\", and \"OPTIONAL\" in this document are to be interpreted as described in BCP 14 RFC2119 and RFC8174 when, and only when, they appear in all capitals, as shown here.",
+        "can_note": "The word \"can\" (not \"may\") is used to refer to a possible circumstance or situation, as opposed to an optional facility of the protocol."
+      },
+      "categories": {
+        "_context": "Main compliance categories section",
+        "heading": "Compliance Categories"
+      },
       "table": {
+        "_context": "Table column headers used across multiple compliance tables",
         "feature": "Feature",
-        "requirement": "Requirement Level",
-        "spec_version": "Spec Version"
+        "server": "Server",
+        "client": "Client",
+        "advanced_server": "Advanced Server",
+        "advanced_client": "Advanced Client",
+        "privacy_server": "Privacy Server",
+        "privacy_client": "Privacy Client",
+        "providers": "Providers"
       },
       "core": {
-        "server_discovery": "Server Discovery (.well-known)",
-        "federation_api": "Federation API",
+        "_context": "Core Compliance Suite - basic requirements for all Matrix implementations",
+        "heading": "Core Compliance Suite",
+        "feature_wellknown_cs": "Well-Known Client-Server Discovery",
+        "feature_wellknown_ss": "Well-Known Server-Server Discovery",
+        "feature_password_uia": "Password UIA Authentication",
+        "feature_sso": "SSO Authentication",
+        "feature_registration": "User Registration",
+        "feature_tos": "Terms of service at registration",
+        "feature_token_reg": "Token-authenticated registration",
+        "footnote_privacy_registration": "We expect privacy category to implement no registration and instead rely on an external identity provider."
+      },
+      "im": {
+        "_context": "Instant Messaging Compliance Suite - requirements for IM applications",
+        "heading": "Instant Messaging Compliance Suite",
+        "intro": "To be considered instant messaging compliant, all features from the core compliance category must be met, as well as all features in this suite.",
+        "note": "See also the Instant Messaging module of the specification for further things to consider.",
+        "feature_media": "Content Repository (Media)",
+        "feature_sync": "Sync",
+        "feature_messages": "Room Messages",
+        "feature_location": "Location Messages",
+        "feature_math": "Mathematical Messages (LaTeX)",
+        "feature_replies": "Rich Replies",
+        "feature_mentions_users": "Mentioning Users",
+        "feature_mentions_rooms": "Mentioning Rooms",
+        "feature_room_state": "Core Room State Events",
+        "feature_pinned": "Pinned Events"
+      },
+      "other_suites": {
+        "_context": "Placeholder sections for suites still under development",
+        "heading": "Other Compliance Suites",
+        "intro": "The following compliance suites are defined but requirements are still being developed:",
+        "audio_video": "Audio/Video Compliance Suite",
+        "bot": "Bot Compliance Suite",
+        "bridge": "Bridge Compliance Suite",
+        "tbd": "Requirements to be defined",
+        "note": "To be considered compliant with any of these suites, all features from the core compliance category must be met, as well as all features in the respective suite once defined."
+      },
+      "future": {
+        "_context": "Future Development section for specifications not yet ready for compliance",
+        "heading": "Future Development",
+        "intro": "This section outlines the protocol specifications that are relevant for developers, but are not ready yet to be required for Compliance. Developers are encouraged to implement those and to share their experience and feedback on the respective MSCs. This will help to improve the specifications and to make them ready for compliance in the future.",
+        "widget_heading": "Widget Compliance Suite",
+        "widget_intro": "While widgets are already used by Element-Web, Element-Call and companies like Nordeck, the MSCs haven't yet been finalized and accepted by the SCT. Therefore, we do not require them for compliance at this time. However, we still provide guidance on what we think is required for a widget compliance suite.",
+        "widget_note_msc": "Since the widget MSCs are generally not fully up to date we will partially refer to implementations of clients and SDKs instead of the MSCs. This is to provide a more accurate overview of what is required for compliance.",
+        "widget_note_client": "The widget API is fully client side. Hence, we do not provide a server compliance suite for this usecase but instead a widget compliance type. Clients are considered a widget host in this context.",
+        "widget_status": "Widget compliance requirements are under active development. Check back for updates as the MSCs progress through the specification process."
+      },
+      "implementation": {
+        "_context": "Implementation notes section",
+        "heading": "Implementation Notes",
+        "text": "Some of the protocol specifications referenced herein have their own dependencies; developers need to consult the relevant specifications for further information."
+      },
+      "security": {
+        "_context": "Security considerations section",
+        "heading": "Security Considerations",
+        "text": "This document introduces no additional security considerations above and beyond those defined in the documents on which it depends."
+      },
+      "acknowledgements": {
+        "_context": "Acknowledgements section crediting XMPP community",
+        "heading": "Acknowledgements",
+        "text": "This document is heavily leaning on the work of the XMPP community in XEP-0479 and prior work on compliance suites. The idea of having a compliance suite for the Matrix protocol was inspired by their work and we thank them for their efforts in this area."
+      },
+      "related": {
+        "_context": "Related documentation links",
+        "heading": "Related Documentation",
+        "federation_setup": "Federation Setup",
         "client_server_api": "Client-Server API",
-        "room_versions": "Room Version Support (v1-v10)"
-      },
-      "advanced_features_title": "Advanced Features",
-      "advanced_features_description": "These features enhance the user experience and are recommended for production deployments.",
-      "advanced": {
-        "e2ee": "End-to-End Encryption (E2EE)",
-        "spaces": "Spaces Support",
-        "threading": "Threading Support"
-      },
-      "optional_features_title": "Optional Features",
-      "optional_features_description": "These features provide additional functionality but are not required for basic operation.",
-      "optional_features_category": "Optional Features List",
-      "optional": {
-        "voice_video": "Voice/Video Calling",
-        "presence": "Presence Information",
-        "read_receipts": "Read Receipts"
-      },
-      "implementation_notes_title": "Implementation Notes",
-      "implementation_notes_text": "When implementing a Matrix homeserver, prioritize core features first, then add advanced and optional features based on your use case and user requirements.",
-      "note_1": "Core features are essential for federation and must be implemented for your server to communicate with the Matrix network.",
-      "note_2": "Advanced features significantly improve the user experience and are strongly recommended for production deployments.",
-      "note_3": "Optional features can be added based on your specific requirements and user needs."
+        "matrix_spec": "Matrix Specification v1.14"
+      }
     }
   },
   "statistics": {
