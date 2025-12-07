@@ -12,7 +12,10 @@
     font-size: 16px;
     border: 1px solid govuk-frontend.govuk-colour("mid-grey");
     border-radius: 3px;
-    white-space: nowrap;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    word-break: break-word;
+    overflow-wrap: break-word;
 }
 
 // Code blocks
@@ -107,5 +110,8 @@
 
     .code-inline {
         font-size: 14px;
+        padding: 0 govuk-frontend.govuk-spacing(1);
+        // Ensure long strings break appropriately on mobile
+        max-width: 100%;
     }
 }
