@@ -1,3 +1,5 @@
+@use "govuk-frontend" as govuk;
+
 .govuk-header__link--homepage {
     word-spacing: unset !important;
 }
@@ -36,10 +38,6 @@
         color: #000000;
         background: none;
     }
-}
-
-code {
-    white-space: preserve;
 }
 
 .table-wrapper {
@@ -238,4 +236,13 @@ pre {
 /* Inset text in modals */
 .modal-inset-text {
     margin-top: 1rem;
+}
+
+/* Markdown content styles */
+.markdown-content {
+    /* Table wrapper for horizontal scrolling on mobile */
+    .table-scroll-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }

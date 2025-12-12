@@ -137,7 +137,7 @@ export default define.page(function App({ Component, url, state }) {
                   </li>
                   <li
                     class={`govuk-service-navigation__item${
-                      currentPath === "/docs"
+                      currentPath === "/docs" || isDocsSubPage
                         ? " govuk-service-navigation__item--active"
                         : ""
                     }`}
@@ -145,7 +145,7 @@ export default define.page(function App({ Component, url, state }) {
                     <a
                       class="govuk-service-navigation__link"
                       href="/docs"
-                      {...(currentPath === "/docs" &&
+                      {...((currentPath === "/docs" || isDocsSubPage) &&
                         { "aria-current": "page" })}
                     >
                       {i18n.t("nav.documentation")}

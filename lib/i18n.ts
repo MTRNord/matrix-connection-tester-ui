@@ -8,7 +8,9 @@ import en from "../locales/en.json" with { type: "json" };
 import de from "../locales/de.json" with { type: "json" };
 
 export type Locale = "en" | "de";
-export type TranslationKeys = typeof en;
+export type EnNTranslationKeys = typeof en;
+export type DeNTranslationKeys = typeof de;
+export type TranslationKeys = EnNTranslationKeys | DeNTranslationKeys;
 
 const translations: Record<Locale, TranslationKeys> = {
   en,

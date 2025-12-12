@@ -17,7 +17,9 @@
     "@preact/signals": "npm:@preact/signals@^2.5.1",
     "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.7",
     "sass": "npm:sass@^1.94.0",
-    "vite": "npm:vite@^7.2.2"
+    "vite": "npm:vite@^7.2.2",
+    "marked": "npm:marked@^17.0.1",
+    "he": "npm:he@^1.2.0"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],

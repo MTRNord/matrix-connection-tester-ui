@@ -38,6 +38,8 @@
     "npm:esbuild@0.25.7": "0.25.7",
     "npm:esbuild@~0.25.5": "0.25.7",
     "npm:govuk-frontend@^5.13.0": "5.13.0",
+    "npm:he@^1.2.0": "1.2.0",
+    "npm:marked@^17.0.1": "17.0.1",
     "npm:preact-render-to-string@^6.6.3": "6.6.3_preact@10.28.0",
     "npm:preact@^10.27.0": "10.28.0",
     "npm:preact@^10.27.2": "10.28.0",
@@ -874,6 +876,10 @@
     "govuk-frontend@5.13.0": {
       "integrity": "sha512-6N3pHelWN7wftdM6e4YEzZAfattapa1gnd+Al6d5PUbfTr9D+T2dnphpNpjX75CTEhihlQqlL0RDQ3WIfZ3PSg=="
     },
+    "he@1.2.0": {
+      "integrity": "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==",
+      "bin": true
+    },
     "immutable@5.1.4": {
       "integrity": "sha512-p6u1bG3YSnINT5RQmx/yRZBpenIl30kVxkTLDyHLIMk0gict704Q9n+thfDI7lTRm9vXdDYutVzXhzcThxTnXA=="
     },
@@ -905,6 +911,10 @@
       "dependencies": [
         "yallist"
       ]
+    },
+    "marked@17.0.1": {
+      "integrity": "sha512-boeBdiS0ghpWcSwoNm/jJBwdpFaMnZWRzjA6SkUMYb40SVaN1x7mmfGKp0jvexGcx+7y2La5zRZsYFZI6Qpypg==",
+      "bin": true
     },
     "micromatch@4.0.8": {
       "integrity": "sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==",
@@ -1062,6 +1072,8 @@
       "jsr:@fresh/plugin-vite@^1.0.7",
       "npm:@preact/signals@^2.5.1",
       "npm:govuk-frontend@^5.13.0",
+      "npm:he@^1.2.0",
+      "npm:marked@^17.0.1",
       "npm:preact@^10.28.0",
       "npm:sass@^1.94.0",
       "npm:vite@^7.2.2"

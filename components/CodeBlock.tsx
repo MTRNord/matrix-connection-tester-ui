@@ -1,6 +1,20 @@
 interface CodeBlockProps {
   children: string;
-  language?: "json" | "toml" | "nginx" | "caddy" | "bash" | "text";
+  language?:
+    | "json"
+    | "toml"
+    | "nginx"
+    | "caddy"
+    | "apache"
+    | "bash"
+    | "yaml"
+    | "dns"
+    | "javascript"
+    | "js"
+    | "http"
+    | "sql"
+    | "securitytxt"
+    | "text";
 }
 
 export default function CodeBlock(
@@ -25,8 +39,23 @@ function highlightSyntax(code: string, language: string): string {
       return highlightNginx(code);
     case "caddy":
       return highlightCaddy(code);
+    case "apache":
+      return highlightApache(code);
     case "bash":
       return highlightBash(code);
+    case "yaml":
+      return highlightYAML(code);
+    case "dns":
+      return highlightDNS(code);
+    case "javascript":
+    case "js":
+      return highlightJavaScript(code);
+    case "http":
+      return highlightHTTP(code);
+    case "sql":
+      return highlightSQL(code);
+    case "securitytxt":
+      return highlightSecurityTxt(code);
     default:
       return escapeHtml(code);
   }
@@ -451,4 +480,504 @@ function tokenizeLine(line: string): string[] {
   }
 
   return tokens;
+}
+
+function highlightYAML(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // Full line comment
+    if (/^\s*#/.test(line)) {
+      return `<span class="comment">${escapeHtml(line)}</span>`;
+    }
+
+    let result = "";
+    const colonIndex = line.indexOf(":");
+
+    if (colonIndex !== -1) {
+      // Key: value line
+      const keyPart = line.substring(0, colonIndex);
+      const valuePart = line.substring(colonIndex);
+
+      // Highlight the key
+      const key = keyPart.trim();
+      const leadingSpace = keyPart.substring(0, keyPart.indexOf(key));
+      result += escapeHtml(leadingSpace);
+      result += `<span class="property">${escapeHtml(key)}</span>`;
+      result += escapeHtml(":");
+
+      // Process the value
+      const afterColon = valuePart.substring(1); // Everything after the colon
+      const valueContent = afterColon.trim();
+      const valueStartIndex = afterColon.indexOf(valueContent);
+      const valueLeadingSpace = afterColon.substring(0, valueStartIndex);
+      result += escapeHtml(valueLeadingSpace);
+
+      // String values in quotes
+      if (valueContent.startsWith('"') || valueContent.startsWith("'")) {
+        result += `<span class="string">${escapeHtml(valueContent)}</span>`;
+      } // Boolean values
+      else if (valueContent === "true" || valueContent === "false") {
+        result += `<span class="keyword">${escapeHtml(valueContent)}</span>`;
+      } // Number values
+      else if (/^-?\d+\.?\d*$/.test(valueContent)) {
+        result += `<span class="number">${escapeHtml(valueContent)}</span>`;
+      } // null/~ values
+      else if (
+        valueContent === "null" || valueContent === "~" || valueContent === ""
+      ) {
+        result += `<span class="keyword">${escapeHtml(valueContent)}</span>`;
+      } // Everything else
+      else {
+        result += escapeHtml(valueContent);
+      }
+
+      return result;
+    }
+
+    // List items
+    if (/^\s*-\s/.test(line)) {
+      const dashIndex = line.indexOf("-");
+      const leadingSpace = line.substring(0, dashIndex);
+      const afterDash = line.substring(dashIndex + 1);
+      result += escapeHtml(leadingSpace);
+      result += escapeHtml("-");
+
+      const content = afterDash.trim();
+      const contentLeadingSpace = afterDash.substring(
+        0,
+        afterDash.indexOf(content),
+      );
+      result += escapeHtml(contentLeadingSpace);
+
+      // Highlight list item content
+      if (content.startsWith('"') || content.startsWith("'")) {
+        result += `<span class="string">${escapeHtml(content)}</span>`;
+      } else if (/^-?\d+\.?\d*$/.test(content)) {
+        result += `<span class="number">${escapeHtml(content)}</span>`;
+      } else {
+        result += escapeHtml(content);
+      }
+
+      return result;
+    }
+
+    // Default: just escape
+    return escapeHtml(line);
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightDNS(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // Full line comment
+    if (/^\s*;/.test(line)) {
+      return `<span class="comment">${escapeHtml(line)}</span>`;
+    }
+
+    let result = "";
+    const tokens = line.split(/(\s+)/);
+
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+
+      // Whitespace
+      if (/^\s+$/.test(token)) {
+        result += escapeHtml(token);
+        continue;
+      }
+
+      // Domain names (first token typically)
+      if (i === 0 && /^[a-zA-Z0-9._-]+\.?$/.test(token)) {
+        result += `<span class="property">${escapeHtml(token)}</span>`;
+        continue;
+      }
+
+      // Record types (A, AAAA, CNAME, MX, TXT, SRV, etc.)
+      if (/^(A|AAAA|CNAME|MX|TXT|SRV|NS|PTR|SOA|CAA|IN)$/i.test(token)) {
+        result += `<span class="keyword">${escapeHtml(token)}</span>`;
+        continue;
+      }
+
+      // Numbers (TTL, priority, weight, port)
+      if (/^\d+$/.test(token)) {
+        result += `<span class="number">${escapeHtml(token)}</span>`;
+        continue;
+      }
+
+      // IP addresses
+      if (/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/.test(token)) {
+        result += `<span class="string">${escapeHtml(token)}</span>`;
+        continue;
+      }
+
+      // Quoted strings
+      if (token.startsWith('"') && token.endsWith('"')) {
+        result += `<span class="string">${escapeHtml(token)}</span>`;
+        continue;
+      }
+
+      // Default
+      result += escapeHtml(token);
+    }
+
+    return result;
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightApache(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // Comments
+    if (line.trim().startsWith("#")) {
+      return `<span class="comment">${escapeHtml(line)}</span>`;
+    }
+
+    let result = "";
+
+    // Apache directives (VirtualHost, Directory, Location, etc.)
+    if (/<\/?[A-Za-z]+/.test(line)) {
+      result = line.replace(
+        /(<\/?[A-Za-z]+[^>]*>)/g,
+        (match) => `<span class="keyword">${escapeHtml(match)}</span>`,
+      );
+      return result;
+    }
+
+    // Directives (ServerName, DocumentRoot, etc.)
+    const directiveMatch = line.match(/^(\s*)([A-Z][A-Za-z]+)(\s+)(.+)$/);
+    if (directiveMatch) {
+      const [, indent, directive, space, value] = directiveMatch;
+      result = escapeHtml(indent) +
+        `<span class="keyword">${escapeHtml(directive)}</span>` +
+        escapeHtml(space);
+
+      // Highlight quoted strings in value
+      const valueParts = value.split(/("[^"]*")/);
+      valueParts.forEach((part, i) => {
+        if (i % 2 === 1) {
+          result += `<span class="string">${escapeHtml(part)}</span>`;
+        } else {
+          result += escapeHtml(part);
+        }
+      });
+
+      return result;
+    }
+
+    return escapeHtml(line);
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightJavaScript(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // Comments
+    if (line.trim().startsWith("//")) {
+      return `<span class="comment">${escapeHtml(line)}</span>`;
+    }
+
+    let result = "";
+    let i = 0;
+
+    while (i < line.length) {
+      // Strings
+      if (line[i] === '"' || line[i] === "'" || line[i] === "`") {
+        const quote = line[i];
+        let str = quote;
+        let j = i + 1;
+        while (j < line.length && line[j] !== quote) {
+          if (line[j] === "\\") {
+            str += line[j] + (line[j + 1] || "");
+            j += 2;
+          } else {
+            str += line[j];
+            j++;
+          }
+        }
+        if (j < line.length) str += line[j];
+        result += `<span class="string">${escapeHtml(str)}</span>`;
+        i = j + 1;
+        continue;
+      }
+
+      // Keywords
+      const keywords =
+        /^(import|from|const|let|var|function|return|if|else|for|while|export|default|async|await|class|new|this|try|catch|throw)\b/;
+      const keywordMatch = line.substring(i).match(keywords);
+      if (keywordMatch) {
+        result += `<span class="keyword">${escapeHtml(keywordMatch[0])}</span>`;
+        i += keywordMatch[0].length;
+        continue;
+      }
+
+      // Function calls
+      const funcMatch = line.substring(i).match(
+        /^([a-zA-Z_$][a-zA-Z0-9_$]*)\s*\(/,
+      );
+      if (funcMatch) {
+        result += `<span class="function">${escapeHtml(funcMatch[1])}</span>`;
+        i += funcMatch[1].length;
+        continue;
+      }
+
+      // Numbers
+      const numMatch = line.substring(i).match(/^[0-9]+(\.[0-9]+)?/);
+      if (numMatch) {
+        result += `<span class="number">${escapeHtml(numMatch[0])}</span>`;
+        i += numMatch[0].length;
+        continue;
+      }
+
+      result += escapeHtml(line[i]);
+      i++;
+    }
+
+    return result;
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightHTTP(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // HTTP request/response line (GET, POST, HTTP/1.1, etc.)
+    if (/^(GET|POST|PUT|DELETE|PATCH|HEAD|OPTIONS|HTTP\/\d\.\d)/i.test(line)) {
+      return `<span class="keyword">${escapeHtml(line)}</span>`;
+    }
+
+    // Headers (Key: Value)
+    const colonIndex = line.indexOf(":");
+    if (colonIndex > 0 && colonIndex < line.length - 1) {
+      const key = line.substring(0, colonIndex);
+      const value = line.substring(colonIndex);
+
+      return `<span class="property">${escapeHtml(key)}</span>${
+        escapeHtml(value)
+      }`;
+    }
+
+    // Empty lines or body content
+    return escapeHtml(line);
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightSQL(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    let result = "";
+    let i = 0;
+
+    // Skip leading whitespace
+    while (i < line.length && /\s/.test(line[i])) {
+      result += line[i];
+      i++;
+    }
+
+    // Process the rest of the line
+    while (i < line.length) {
+      const char = line[i];
+
+      // String literals (single quotes)
+      if (char === "'") {
+        let str = "'";
+        i++;
+        while (i < line.length && line[i] !== "'") {
+          if (line[i] === "\\" && i + 1 < line.length) {
+            str += line[i] + line[i + 1];
+            i += 2;
+          } else {
+            str += line[i];
+            i++;
+          }
+        }
+        if (i < line.length) {
+          str += "'";
+          i++;
+        }
+        result += `<span class="string">${escapeHtml(str)}</span>`;
+        continue;
+      }
+
+      // Comments (-- or #)
+      if (
+        (char === "-" && i + 1 < line.length && line[i + 1] === "-") ||
+        char === "#"
+      ) {
+        result += `<span class="comment">${
+          escapeHtml(line.substring(i))
+        }</span>`;
+        break;
+      }
+
+      // SQL keywords
+      const keywords = [
+        "SELECT",
+        "FROM",
+        "WHERE",
+        "INSERT",
+        "INTO",
+        "VALUES",
+        "UPDATE",
+        "SET",
+        "DELETE",
+        "CREATE",
+        "DROP",
+        "ALTER",
+        "TABLE",
+        "DATABASE",
+        "INDEX",
+        "VIEW",
+        "USER",
+        "WITH",
+        "AS",
+        "ON",
+        "AND",
+        "OR",
+        "NOT",
+        "NULL",
+        "PRIMARY",
+        "KEY",
+        "FOREIGN",
+        "REFERENCES",
+        "CONSTRAINT",
+        "UNIQUE",
+        "CHECK",
+        "DEFAULT",
+        "AUTO_INCREMENT",
+        "IDENTITY",
+        "GRANT",
+        "REVOKE",
+        "JOIN",
+        "LEFT",
+        "RIGHT",
+        "INNER",
+        "OUTER",
+        "FULL",
+        "CROSS",
+        "UNION",
+        "INTERSECT",
+        "EXCEPT",
+        "ORDER",
+        "BY",
+        "GROUP",
+        "HAVING",
+        "LIMIT",
+        "OFFSET",
+        "DISTINCT",
+        "ALL",
+        "EXISTS",
+        "IN",
+        "LIKE",
+        "BETWEEN",
+        "IS",
+        "CASE",
+        "WHEN",
+        "THEN",
+        "ELSE",
+        "END",
+        "IF",
+        "BEGIN",
+        "COMMIT",
+        "ROLLBACK",
+        "TRANSACTION",
+        "ENCODING",
+        "LC_COLLATE",
+        "LC_CTYPE",
+        "TEMPLATE",
+        "OWNER",
+        "PASSWORD",
+      ];
+
+      const keywordMatch = keywords.find((kw) =>
+        line.substring(i).toUpperCase().startsWith(kw) &&
+        (i + kw.length >= line.length ||
+          !/[a-zA-Z0-9_]/.test(line[i + kw.length]))
+      );
+
+      if (keywordMatch) {
+        result += `<span class="keyword">${
+          escapeHtml(line.substring(i, i + keywordMatch.length))
+        }</span>`;
+        i += keywordMatch.length;
+        continue;
+      }
+
+      // Numbers
+      if (/\d/.test(char)) {
+        let num = "";
+        while (i < line.length && /[\d.]/.test(line[i])) {
+          num += line[i];
+          i++;
+        }
+        result += `<span class="number">${escapeHtml(num)}</span>`;
+        continue;
+      }
+
+      // Regular characters
+      result += escapeHtml(char);
+      i++;
+    }
+
+    return result;
+  });
+
+  return highlighted.join("\n");
+}
+
+function highlightSecurityTxt(code: string): string {
+  const lines = code.split("\n");
+  const highlighted = lines.map((line) => {
+    // Empty lines
+    if (line.trim() === "") {
+      return "";
+    }
+
+    // Comments (lines starting with #)
+    if (line.trim().startsWith("#")) {
+      return `<span class="comment">${escapeHtml(line)}</span>`;
+    }
+
+    // Field: value format
+    const colonIndex = line.indexOf(":");
+    if (colonIndex > 0) {
+      const field = line.substring(0, colonIndex);
+      const value = line.substring(colonIndex + 1);
+
+      // Known security.txt fields
+      const knownFields = [
+        "Contact",
+        "Expires",
+        "Encryption",
+        "Acknowledgments",
+        "Preferred-Languages",
+        "Canonical",
+        "Policy",
+        "Hiring",
+      ];
+
+      const isKnownField = knownFields.some((f) =>
+        field.trim().toLowerCase() === f.toLowerCase()
+      );
+
+      if (isKnownField) {
+        return `<span class="property">${escapeHtml(field)}</span>:${
+          escapeHtml(value)
+        }`;
+      }
+    }
+
+    // Regular line
+    return escapeHtml(line);
+  });
+
+  return highlighted.join("\n");
 }
