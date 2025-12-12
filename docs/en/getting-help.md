@@ -83,15 +83,7 @@ Before asking for help:
 
 ### Include Relevant Logs
 
-Share the specific error messages from your logs, not the entire log file:
-
-```bash
-# Get recent errors from Synapse
-sudo journalctl -u matrix-synapse -n 100 | grep -i error
-
-# Get federation-related errors
-sudo journalctl -u matrix-synapse | grep -i federation
-```
+Share the specific error messages from your logs, not the entire log file.
 
 :::warning
 Logs may contain sensitive information like user IDs, IP addresses, or domain names. Review and redact sensitive data before sharing publicly.
@@ -117,18 +109,8 @@ Let others know what troubleshooting steps you've already taken:
 
 ### Synapse Commercial Support
 
-- [Element Enterprise](https://element.io/enterprise) - Professional support for Synapse from the core development team
-
-### Consulting Services
-
-Many members of the Matrix community offer paid consulting services for:
-
-- Server setup and configuration
-- Performance optimization
-- Custom integrations
-- Migration assistance
-
-Ask in [#synapse:matrix.org](https://matrix.to/#/#synapse:matrix.org) or [#matrix:matrix.org](https://matrix.to/#/#matrix:matrix.org) if you're looking for professional help.
+Commercial support is offered by a number of organizations.
+For an updated list have a look at the [Hosting page](https://matrix.org/ecosystem/hosting/) on the Matrix.org website.
 
 ## Report Bugs
 
@@ -144,10 +126,6 @@ If you've found a bug in the software:
 
 - [Continuwuity Repository](https://forgejo.ellis.link/continuwuation/continuwuity/issues)
 - Include version information and configuration details
-
-### Connection Tester Bugs
-
-If you find issues with this connection tester tool, please report them through the appropriate channel (check the tool's homepage for issue reporting).
 
 ## Contributing to Documentation
 
@@ -167,8 +145,11 @@ If you discover a security vulnerability:
 
 - **Do not** post publicly
 - Report to security contacts:
-  - Synapse: [security@matrix.org](mailto:security@matrix.org)
-  - Continuwuity: Check the project repository for security policy
+  - Synapse: [security@element.io](mailto:security@element.io)
+  - Matrix Protocol: [security@matrix.org](mailto:security@matrix.org)
+  - Continuwuity: [security@continuwuity.org](mailto:security@continuwuity.org) or contact members via E2EE private messages directly at:
+    - [@jade:ellis.link](https://matrix.to/#/@jade:ellis.link)
+    - [@nex:nexy7574.co.uk](https://matrix.to/#/@nex:nexy7574.co.uk)
 
 ### Server Compromise
 
@@ -182,5 +163,3 @@ If you believe your server has been compromised:
 ## Additional Resources
 
 - [Matrix Community](https://matrix.to/#/#community:matrix.org) - Central hub for Matrix community spaces
-- [Awesome Matrix](https://github.com/jryans/awesome-matrix) - Curated list of Matrix resources
-- [Matrix FAQ](https://matrix.org/faq/) - Frequently asked questions about Matrix
