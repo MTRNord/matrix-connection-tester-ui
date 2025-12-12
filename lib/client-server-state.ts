@@ -124,176 +124,174 @@ async function performFetch(serverName: string): Promise<void> {
     const { response: wellKnownResp, error: wellKnownError } =
       await fetchWithTimeout(wellKnownUrl, 10000);
 
-    if (wellKnownError) {
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { clientWellKnown: wellKnownError },
-        loading: false,
-      };
-      return;
-    }
+    let clientWellKnown: ClientWellKnownResp | null = null;
+    let wellKnownErrorToStore: MatrixError | undefined = undefined;
+    let homeserverBaseUrl: string | null = null;
 
-    if (!wellKnownResp || !wellKnownResp.ok) {
+    // Handle well-known response
+    if (wellKnownError) {
+      wellKnownErrorToStore = wellKnownError;
+    } else if (!wellKnownResp || !wellKnownResp.ok) {
       const text = wellKnownResp
         ? await wellKnownResp.text().catch(() => "")
         : "";
-      const error = wellKnownResp
+      wellKnownErrorToStore = wellKnownResp
         ? createHTTPError(wellKnownResp, wellKnownUrl, text)
         : {
           type: ErrorType.UNKNOWN,
           message: "errors.unknown_error",
           endpoint: wellKnownUrl,
         };
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { clientWellKnown: error },
-        loading: false,
-      };
-      return;
+    } else {
+      // Validate Content-Type for well-known
+      const contentTypeError = validateContentType(wellKnownResp);
+      if (contentTypeError) {
+        contentTypeError.endpoint = wellKnownUrl;
+        wellKnownErrorToStore = contentTypeError;
+      } else {
+        // Parse well-known JSON
+        const wellKnownText = await wellKnownResp.text();
+        try {
+          const parsedWellKnown = JSON.parse(wellKnownText);
+          clientWellKnown = parsedWellKnown;
+
+          // Extract homeserver base URL and remove trailing slash
+          homeserverBaseUrl = parsedWellKnown["m.homeserver"]?.base_url || null;
+          if (!homeserverBaseUrl) {
+            wellKnownErrorToStore = {
+              type: ErrorType.MISSING_FIELD,
+              message: "errors.missing_field",
+              technicalDetails: 'Missing "m.homeserver.base_url" field',
+              endpoint: wellKnownUrl,
+            };
+          } else {
+            // Remove trailing slash from base URL to prevent double slashes
+            homeserverBaseUrl = homeserverBaseUrl.replace(/\/$/, "");
+          }
+        } catch (e) {
+          wellKnownErrorToStore = createJSONParseError(
+            e,
+            wellKnownUrl,
+            wellKnownText,
+          );
+        }
+      }
     }
 
-    // Validate Content-Type for well-known
-    const contentTypeError = validateContentType(wellKnownResp);
-    if (contentTypeError) {
-      contentTypeError.endpoint = wellKnownUrl;
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { clientWellKnown: contentTypeError },
-        loading: false,
-      };
-      return;
+    // Step 2: Fetch versions from the discovered endpoint or fallback to direct server
+    // Try both the discovered endpoint (if available) and the direct server name
+    let versions: VersionsResponse | null = null;
+    let versionsErrorToStore: MatrixError | undefined = undefined;
+    let discoveredEndpoint: string | null = homeserverBaseUrl;
+
+    // First, try the discovered endpoint from well-known
+    if (homeserverBaseUrl) {
+      const versionsUrl = `${homeserverBaseUrl}/_matrix/client/versions`;
+      const result = await tryFetchVersions(versionsUrl);
+
+      if (result.versions) {
+        versions = result.versions;
+      } else {
+        versionsErrorToStore = result.error;
+      }
     }
 
-    // Parse well-known JSON
-    let clientWellKnown: ClientWellKnownResp;
-    const wellKnownText = await wellKnownResp.text();
-    try {
-      clientWellKnown = JSON.parse(wellKnownText);
-    } catch (e) {
-      const error = createJSONParseError(e, wellKnownUrl, wellKnownText);
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { clientWellKnown: error },
-        loading: false,
-      };
-      return;
+    // If well-known failed or versions from discovered endpoint failed, try direct server name
+    if (!versions) {
+      const directVersionsUrl = `https://${serverName}/_matrix/client/versions`;
+      const result = await tryFetchVersions(directVersionsUrl);
+
+      if (result.versions) {
+        versions = result.versions;
+        // If we succeeded with direct endpoint but well-known failed, update discovered endpoint
+        if (!homeserverBaseUrl) {
+          discoveredEndpoint = `https://${serverName}`;
+        }
+        // Clear versions error if direct fetch succeeded
+        versionsErrorToStore = undefined;
+        // Clear well-known error too - if versions works, the client API is functional
+        // even without well-known discovery
+        wellKnownErrorToStore = undefined;
+      } else if (!versionsErrorToStore) {
+        // Only set error if we don't already have one from the discovered endpoint
+        versionsErrorToStore = result.error;
+      }
     }
 
-    // Extract homeserver base URL and remove trailing slash
-    let homeserverBaseUrl = clientWellKnown["m.homeserver"]?.base_url;
-    if (!homeserverBaseUrl) {
-      clientServerState.value = {
-        ...clientServerState.value,
-        clientWellKnown,
-        errors: {
-          clientWellKnown: {
-            type: ErrorType.MISSING_FIELD,
-            message: "errors.missing_field",
-            technicalDetails: 'Missing "m.homeserver.base_url" field',
-            endpoint: wellKnownUrl,
-          },
-        },
-        loading: false,
-      };
-      return;
-    }
-
-    // Remove trailing slash from base URL to prevent double slashes
-    homeserverBaseUrl = homeserverBaseUrl.replace(/\/$/, "");
-
+    // Update state with all results
     clientServerState.value = {
       ...clientServerState.value,
       clientWellKnown,
-      discoveredEndpoint: homeserverBaseUrl,
-    };
-
-    // Step 2: Fetch versions from the discovered endpoint
-    const versionsUrl = `${homeserverBaseUrl}/_matrix/client/versions`;
-    const { response: versionsResp, error: versionsError } =
-      await fetchWithTimeout(versionsUrl, 10000);
-
-    if (versionsError) {
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { ...clientServerState.value.errors, versions: versionsError },
-        loading: false,
-      };
-      return;
-    }
-
-    if (!versionsResp || !versionsResp.ok) {
-      const text = versionsResp
-        ? await versionsResp.text().catch(() => "")
-        : "";
-      const error = versionsResp
-        ? createHTTPError(versionsResp, versionsUrl, text)
-        : {
-          type: ErrorType.UNKNOWN,
-          message: "errors.unknown_error",
-          endpoint: versionsUrl,
-        };
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { ...clientServerState.value.errors, versions: error },
-        loading: false,
-      };
-      return;
-    }
-
-    // Validate Content-Type for versions
-    const versionsContentTypeError = validateContentType(versionsResp);
-    if (versionsContentTypeError) {
-      versionsContentTypeError.endpoint = versionsUrl;
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: {
-          ...clientServerState.value.errors,
-          versions: versionsContentTypeError,
-        },
-        loading: false,
-      };
-      return;
-    }
-
-    // Parse versions JSON
-    let versions: VersionsResponse;
-    const versionsText = await versionsResp.text();
-    try {
-      versions = JSON.parse(versionsText);
-    } catch (e) {
-      const error = createJSONParseError(e, versionsUrl, versionsText);
-      clientServerState.value = {
-        ...clientServerState.value,
-        errors: { ...clientServerState.value.errors, versions: error },
-        loading: false,
-      };
-      return;
-    }
-
-    if (!versions.versions || !Array.isArray(versions.versions)) {
-      clientServerState.value = {
-        ...clientServerState.value,
-        versions,
-        errors: {
-          ...clientServerState.value.errors,
-          versions: {
-            type: ErrorType.INVALID_RESPONSE,
-            message: "errors.invalid_response",
-            technicalDetails: 'Missing or invalid "versions" array',
-            endpoint: versionsUrl,
-          },
-        },
-        loading: false,
-      };
-      return;
-    }
-
-    clientServerState.value = {
-      ...clientServerState.value,
       versions,
+      discoveredEndpoint,
+      errors: {
+        ...(wellKnownErrorToStore &&
+          { clientWellKnown: wellKnownErrorToStore }),
+        ...(versionsErrorToStore && { versions: versionsErrorToStore }),
+      },
       loading: false,
     };
   } finally {
     currentFetchPromise = null;
   }
+}
+
+/**
+ * Helper function to try fetching and parsing the versions endpoint
+ */
+async function tryFetchVersions(
+  versionsUrl: string,
+): Promise<
+  | { versions: VersionsResponse; error: undefined }
+  | { versions: null; error: MatrixError }
+> {
+  const { response: versionsResp, error: versionsError } =
+    await fetchWithTimeout(versionsUrl, 10000);
+
+  if (versionsError) {
+    return { versions: null, error: versionsError };
+  }
+
+  if (!versionsResp || !versionsResp.ok) {
+    const text = versionsResp ? await versionsResp.text().catch(() => "") : "";
+    const error = versionsResp
+      ? createHTTPError(versionsResp, versionsUrl, text)
+      : {
+        type: ErrorType.UNKNOWN,
+        message: "errors.unknown_error",
+        endpoint: versionsUrl,
+      };
+    return { versions: null, error };
+  }
+
+  // Validate Content-Type for versions
+  const versionsContentTypeError = validateContentType(versionsResp);
+  if (versionsContentTypeError) {
+    versionsContentTypeError.endpoint = versionsUrl;
+    return { versions: null, error: versionsContentTypeError };
+  }
+
+  // Parse versions JSON
+  const versionsText = await versionsResp.text();
+  let versions: VersionsResponse;
+  try {
+    versions = JSON.parse(versionsText);
+  } catch (e) {
+    const error = createJSONParseError(e, versionsUrl, versionsText);
+    return { versions: null, error };
+  }
+
+  if (!versions.versions || !Array.isArray(versions.versions)) {
+    return {
+      versions: null,
+      error: {
+        type: ErrorType.INVALID_RESPONSE,
+        message: "errors.invalid_response",
+        technicalDetails: 'Missing or invalid "versions" array',
+        endpoint: versionsUrl,
+      },
+    };
+  }
+
+  return { versions, error: undefined };
 }

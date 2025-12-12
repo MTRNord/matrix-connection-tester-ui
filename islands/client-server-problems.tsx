@@ -23,6 +23,16 @@ export default function ClientServerProblems(
     fetchClientServerInfo(serverName);
   }, [serverName]);
 
+  // Show problems section when error exists
+  useEffect(() => {
+    if (!clientServerLoading.value && clientServerHasErrors.value) {
+      const problemsSection = document.getElementById("problems-section");
+      if (problemsSection) {
+        problemsSection.style.display = "block";
+      }
+    }
+  }, [clientServerLoading.value, clientServerHasErrors.value]);
+
   if (clientServerLoading.value) {
     return null;
   }
@@ -44,21 +54,31 @@ export default function ClientServerProblems(
       </p>
 
       {errors.clientWellKnown && (
-        <ErrorWithSolution
-          error={errors.clientWellKnown}
-          context="client-server"
-          i18n={i18n}
-          baseUrl={baseUrl}
-        />
+        <>
+          <h4 class="govuk-heading-s">
+            {i18n.t("results.client_well_known_endpoint")}
+          </h4>
+          <ErrorWithSolution
+            error={errors.clientWellKnown}
+            context="client-server"
+            i18n={i18n}
+            baseUrl={baseUrl}
+          />
+        </>
       )}
 
       {errors.versions && (
-        <ErrorWithSolution
-          error={errors.versions}
-          context="client-server"
-          i18n={i18n}
-          baseUrl={baseUrl}
-        />
+        <>
+          <h4 class="govuk-heading-s">
+            {i18n.t("results.client_versions_endpoint")}
+          </h4>
+          <ErrorWithSolution
+            error={errors.versions}
+            context="client-server"
+            i18n={i18n}
+            baseUrl={baseUrl}
+          />
+        </>
       )}
     </div>
   );

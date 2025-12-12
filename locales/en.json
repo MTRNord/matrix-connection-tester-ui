@@ -95,6 +95,8 @@
     "support_problems_description": "The following issues were encountered when checking the support information:",
     "client_server_problems_title": "Client-Server API Issues",
     "client_server_problems_description": "The following issues were encountered when checking the Client-Server API:",
+    "client_well_known_endpoint": "Client Discovery (/.well-known/matrix/client)",
+    "client_versions_endpoint": "Client API Versions (/_matrix/client/versions)",
     "problems_title": "Problems",
     "problems_summary": "Encountered issues during testing and possible resolutions.",
     "client_server_api_title": "Client-Server API Overview",

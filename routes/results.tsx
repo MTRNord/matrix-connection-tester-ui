@@ -260,56 +260,59 @@ export default define.page<typeof handler>(function Results(ctx) {
           data-module="govuk-accordion"
           id="accordion-with-summary-sections"
         >
-          {(!successful_federation || hasWellKnownErrors) && (
-            <div
-              class="govuk-accordion__section"
-              id="problems-section"
-            >
-              <div class="govuk-accordion__section-header">
-                <h2 class="govuk-accordion__section-heading">
-                  <span
-                    class="govuk-accordion__section-button"
-                    id="accordion-with-summary-sections-heading-problems"
-                  >
-                    {i18n.t("results.problems_title")}
-                  </span>
-                </h2>
-                <div
-                  class="govuk-accordion__section-summary govuk-body"
-                  id="accordion-with-summary-sections-summary-problems"
+          <div
+            class="govuk-accordion__section"
+            id="problems-section"
+            style={{
+              display: (!successful_federation || hasWellKnownErrors)
+                ? "block"
+                : "none",
+            }}
+          >
+            <div class="govuk-accordion__section-header">
+              <h2 class="govuk-accordion__section-heading">
+                <span
+                  class="govuk-accordion__section-button"
+                  id="accordion-with-summary-sections-heading-problems"
                 >
-                  {i18n.t("results.problems_summary")}
-                </div>
-              </div>
+                  {i18n.t("results.problems_title")}
+                </span>
+              </h2>
               <div
-                id="accordion-with-summary-sections-content-problems"
-                class="govuk-accordion__section-content"
+                class="govuk-accordion__section-summary govuk-body"
+                id="accordion-with-summary-sections-summary-problems"
               >
-                {/* Federation problems from connection reports and well-known errors */}
-                {(!successful_federation || hasWellKnownErrors) && (
-                  <FederationProblems
-                    i18n={i18n}
-                    apiData={data}
-                    baseUrl={ctx.url.origin}
-                  />
-                )}
-
-                {/* Client-Server API problems are checked client-side */}
-                <ClientServerProblems
-                  serverName={serverName}
-                  locale={i18n.getLocale()}
-                  baseUrl={ctx.url.origin}
-                />
-
-                {/* Support information problems are checked client-side */}
-                <SupportProblems
-                  serverName={serverName}
-                  locale={i18n.getLocale()}
-                  baseUrl={ctx.url.origin}
-                />
+                {i18n.t("results.problems_summary")}
               </div>
             </div>
-          )}
+            <div
+              id="accordion-with-summary-sections-content-problems"
+              class="govuk-accordion__section-content"
+            >
+              {/* Federation problems from connection reports and well-known errors */}
+              {(!successful_federation || hasWellKnownErrors) && (
+                <FederationProblems
+                  i18n={i18n}
+                  apiData={data}
+                  baseUrl={ctx.url.origin}
+                />
+              )}
+
+              {/* Client-Server API problems are checked client-side */}
+              <ClientServerProblems
+                serverName={serverName}
+                locale={i18n.getLocale()}
+                baseUrl={ctx.url.origin}
+              />
+
+              {/* Support information problems are checked client-side */}
+              <SupportProblems
+                serverName={serverName}
+                locale={i18n.getLocale()}
+                baseUrl={ctx.url.origin}
+              />
+            </div>
+          </div>
           <div class="govuk-accordion__section">
             <div class="govuk-accordion__section-header">
               <h2 class="govuk-accordion__section-heading">
