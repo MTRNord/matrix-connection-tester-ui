@@ -28,9 +28,9 @@ export default define.page(async function MarkdownDocsPage(ctx) {
 
     // Extract title and description from frontmatter or use defaults
     const title = (frontmatter.title as string) ||
-      i18n.tString(`docs.${page}.title`);
+      i18n.tString(`docs.${page.replaceAll("-", "_")}.title`);
     const description = (frontmatter.description as string) ||
-      i18n.tString(`docs.${page}.description`);
+      i18n.tString(`docs.${page.replaceAll("-", "_")}.description`);
 
     return (
       <DocsLayout
