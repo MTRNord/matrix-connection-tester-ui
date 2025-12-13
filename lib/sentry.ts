@@ -25,6 +25,7 @@ export function initSentry(config: SentryConfig): void {
         }),
         Sentry.feedbackIntegration({
           colorScheme: "system",
+          showBranding: false,
         }),
       ],
       tracesSampleRate: config.tracesSampleRate || 0.1,
