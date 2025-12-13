@@ -42,6 +42,27 @@ export function initSentryServer(config: SentryServerConfig): void {
             delete event.request.headers["Authorization"];
             delete event.request.headers["Cookie"];
           }
+          // Remove client side requests to well-known and version endpoints
+          if (event.request.url) {
+            if (
+              event.request.url.includes("/.well-known/") ||
+              event.request.url.endsWith("/_matrix/client/versions")
+            ) {
+              return null;
+            }
+          }
+          // Remove the value of the serverName query parameter
+          if (event.request.url) {
+            try {
+              const url = new URL(event.request.url);
+              if (url.searchParams.has("serverName")) {
+                url.searchParams.set("serverName", "[redacted]");
+                event.request.url = url.toString();
+              }
+            } catch (_e) {
+              // Ignore URL parsing errors
+            }
+          }
         }
         return event;
       },

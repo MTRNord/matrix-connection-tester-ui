@@ -54,6 +54,18 @@ export function initSentry(config: SentryConfig): void {
               return null;
             }
           }
+          // Remove the value of the serverName query parameter
+          if (event.request.url) {
+            try {
+              const url = new URL(event.request.url);
+              if (url.searchParams.has("serverName")) {
+                url.searchParams.set("serverName", "[redacted]");
+                event.request.url = url.toString();
+              }
+            } catch (_e) {
+              // Ignore URL parsing errors
+            }
+          }
         }
         return event;
       },
