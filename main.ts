@@ -10,7 +10,7 @@ if (SENTRY_DSN) {
   initSentryServer({
     dsn: SENTRY_DSN,
     environment: ENVIRONMENT,
-    tracesSampleRate: 0.1,
+    tracesSampleRate: 0.5,
     serverName: "matrix-connection-tester-ui",
   });
 }
