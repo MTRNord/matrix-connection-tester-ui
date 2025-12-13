@@ -22,7 +22,7 @@ export function initSentryServer(config: SentryServerConfig): void {
   try {
     Sentry.init({
       dsn: config.dsn,
-      debug: true,
+      debug: false,
       environment: config.environment || "production",
       tracesSampleRate: config.tracesSampleRate || 0.5,
       serverName: config.serverName,

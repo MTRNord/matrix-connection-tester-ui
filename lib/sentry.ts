@@ -17,7 +17,7 @@ export function initSentry(config: SentryConfig): void {
   try {
     Sentry.init({
       dsn: config.dsn,
-      debug: true,
+      debug: false,
       environment: config.environment || "production",
       integrations: [
         Sentry.browserTracingIntegration(),
