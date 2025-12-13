@@ -64,6 +64,34 @@ export function initSentryServer(config: SentryServerConfig): void {
             }
           }
         }
+        // Filter out the query parameter "serverName" from the URL also in other event types
+        if (event.spans) {
+          event.spans = event.spans.map((span) => {
+            if (span.data && span.data.url) {
+              try {
+                const url = new URL(span.data.url);
+                if (url.searchParams.has("serverName")) {
+                  url.searchParams.set("serverName", "[redacted]");
+                  span.data.url = url.toString();
+                }
+              } catch (_e) {
+                // Ignore URL parsing errors
+              }
+            }
+            if (span.description) {
+              try {
+                const url = new URL(span.description);
+                if (url.searchParams.has("serverName")) {
+                  url.searchParams.set("serverName", "[redacted]");
+                  span.description = url.toString();
+                }
+              } catch (_e) {
+                // Ignore URL parsing errors
+              }
+            }
+            return span;
+          });
+        }
         return event;
       },
     });
