@@ -29,6 +29,10 @@ export function initSentry(config: SentryConfig): void {
           showBranding: false,
         }),
       ],
+      release: `matrix-connection-tester-ui@${
+        Deno.env.get("FRESH_PUBLIC_APP_VERSION") ||
+        "local"
+      }`,
       tracesSampleRate: config.tracesSampleRate || 0.5,
       replaysSessionSampleRate: config.replaysSessionSampleRate || 0.5,
       replaysOnErrorSampleRate: config.replaysOnErrorSampleRate || 1.0,

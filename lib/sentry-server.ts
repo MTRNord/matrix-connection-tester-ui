@@ -30,6 +30,10 @@ export function initSentryServer(config: SentryServerConfig): void {
         // Add Deno-specific integrations
         Sentry.denoContextIntegration(),
       ],
+      release: `matrix-connection-tester-ui@${
+        Deno.env.get("FRESH_PUBLIC_APP_VERSION") ||
+        "local"
+      }`,
       beforeSend(event, _hint) {
         // Filter out sensitive information
         if (event.request) {
