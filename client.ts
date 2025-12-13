@@ -13,9 +13,9 @@ if (SENTRY_DSN) {
   initSentry({
     dsn: SENTRY_DSN,
     environment: Deno.env.get("FRESH_PUBLIC_ENVIRONMENT") || "production",
-    tracesSampleRate: 0.5,
-    replaysSessionSampleRate: 0.5,
+    tracesSampleRate: 1.0,
+    replaysSessionSampleRate: 1.0,
     replaysOnErrorSampleRate: 1.0,
-    appVersion: APP_VERSION
+    appVersion: APP_VERSION,
   });
 }
