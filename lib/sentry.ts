@@ -7,6 +7,7 @@ export interface SentryConfig {
   tracesSampleRate?: number;
   replaysSessionSampleRate?: number;
   replaysOnErrorSampleRate?: number;
+  appVersion?: string;
 }
 
 // Initialize Sentry without consent checks
@@ -30,7 +31,7 @@ export function initSentry(config: SentryConfig): void {
         }),
       ],
       release: `matrix-connection-tester-ui@${
-        Deno.env.get("FRESH_PUBLIC_APP_VERSION") ||
+        config.appVersion ||
         "local"
       }`,
       tracesSampleRate: config.tracesSampleRate || 0.5,

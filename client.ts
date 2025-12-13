@@ -7,6 +7,7 @@ import "@/locales/en.json" with { type: "json" };
 import { initSentry } from "./lib/sentry.ts";
 
 const SENTRY_DSN = Deno.env.get("FRESH_PUBLIC_SENTRY_DSN");
+const APP_VERSION = Deno.env.get("FRESH_PUBLIC_APP_VERSION");
 
 if (SENTRY_DSN) {
   initSentry({
@@ -15,5 +16,6 @@ if (SENTRY_DSN) {
     tracesSampleRate: 0.5,
     replaysSessionSampleRate: 0.5,
     replaysOnErrorSampleRate: 1.0,
+    appVersion: APP_VERSION
   });
 }
