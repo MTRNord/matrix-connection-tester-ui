@@ -1,5 +1,19 @@
 import { App, csrf, staticFiles } from "fresh";
 import { State } from "./utils.ts";
+import { initSentryServer } from "./lib/sentry-server.ts";
+
+// Initialize Sentry for server-side error tracking
+const SENTRY_DSN = Deno.env.get("FRESH_PUBLIC_SENTRY_DSN");
+const ENVIRONMENT = Deno.env.get("FRESH_PUBLIC_ENVIRONMENT") || "production";
+
+if (SENTRY_DSN) {
+  initSentryServer({
+    dsn: SENTRY_DSN,
+    environment: ENVIRONMENT,
+    tracesSampleRate: 0.1,
+    serverName: "matrix-connection-tester-ui",
+  });
+}
 
 export const app = new App<State>();
 

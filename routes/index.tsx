@@ -49,7 +49,7 @@ export default define.page(function Home(ctx) {
                 type="text"
                 required
                 aria-describedby="homeserver-hint"
-                pattern="^(?:\[([0-9A-Fa-f:.]{2,45})]|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([0-9A-Za-z.-]{1,255}))(?::(\d{1,5}))?$"
+                pattern="^(?:\[([0-9A-Fa-f:.]{2,45})\]|(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})|([0-9A-Za-z.\-]{1,255}))(?::(\d{1,5}))?$"
               />
             </div>
             <div id="statistics-hint" class="govuk-hint">

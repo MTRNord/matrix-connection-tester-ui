@@ -52,6 +52,37 @@ This UI expects <https://github.com/MTRNord/rust-federation-tester> to be runnin
 
 ---
 
+## Sentry Integration
+
+This project includes Sentry error tracking for monitoring application health.
+
+### Features
+
+- **Self-hosted Instance**: Uses a self-hosted Sentry instance at `sentry.mtrnord.blog` (hosted in the EU)
+- **Privacy-First**: Session replays mask all text and media, sensitive headers are filtered
+- **Client & Server Tracking**: Captures errors on both client-side (browser) and server-side (SSR)
+- **Breadcrumb Support**: Track user actions and application flow to help debug issues
+- **Global Error Boundary**: Automatically catches and reports unhandled errors
+
+### Setup
+
+Sentry is automatically initialized when the environment variables are set. No user consent is required as this is not a third-party setup.
+
+**Set environment variables**:
+
+```sh
+# Used for both client and server
+export FRESH_PUBLIC_SENTRY_DSN="<your_sentry_dsn_here>"
+export FRESH_PUBLIC_ENVIRONMENT="production"  # or "stage" for staging
+```
+
+**In CI/CD**: The `.env` file is automatically generated during the build process:
+
+- `main` branch builds use `FRESH_PUBLIC_ENVIRONMENT=stage`
+- Tagged releases (v\*) use `FRESH_PUBLIC_ENVIRONMENT=production`
+
+---
+
 ## Docker
 
 A prebuilt Docker image is available via [GitHub Container Registry (ghcr.io)](https://ghcr.io/):
@@ -68,6 +99,7 @@ docker pull ghcr.io/MTRNord/matrix-connection-tester-ui:latest
 - [x] Improve error handling and user feedback
 - [ ] Add guides explaining common issues and how to resolve them
 - [x] Implement a way to attach the server name as a query parameter to the URL
+- [x] Add GDPR-compliant Sentry integration with analytics consent
 
 ---
 

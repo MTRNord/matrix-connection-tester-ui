@@ -25,6 +25,7 @@
     "message": "Dies ist die Neuimplementierung der Matrix Konnektivitätstester-Benutzeroberfläche. Bitte melden Sie alle Probleme, die Sie finden, auf",
     "github": "GitHub"
   },
+
   "home": {
     "title": "Matrix Konnektivitätstester",
     "welcome": "Willkommen beim Matrix Konnektivitätstester! Dieses Tool hilft Ihnen, die Konnektivität und Konfiguration Ihres Matrix-Servers zu überprüfen, indem es eine Reihe automatisierter Tests auf Ihrem Homeserver durchführt. Er muss daher über das öffentliche Internet erreichbar sein.",

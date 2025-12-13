@@ -28,6 +28,7 @@
     "message": "This is the rewrite of the Matrix Connectivity Tester UI. Please report any issues you find on",
     "github": "GitHub"
   },
+
   "home": {
     "title": "Matrix Connectivity Tester",
     "welcome": "Welcome to the Matrix Connectivity Tester! This tool helps you verify your Matrix server's connectivity and configuration by running a series of automated tests on your homeserver. It therefor must be reachable by the public internet.",

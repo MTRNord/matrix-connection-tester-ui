@@ -1,6 +1,7 @@
 import { define } from "../utils.ts";
 import { getAvailableLocales, type Locale } from "../lib/i18n.ts";
 import LanguageSelector from "../islands/LanguageSelector.tsx";
+import ErrorBoundary from "../components/ErrorBoundary.tsx";
 
 export default define.page(function App({ Component, url, state }) {
   const currentPath = url.pathname;
@@ -59,6 +60,7 @@ export default define.page(function App({ Component, url, state }) {
           document.body.className += ' js-enabled' + ('noModule' in
           HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');
         </script>
+
         <a
           href="#main-content"
           class="govuk-skip-link"
@@ -235,7 +237,9 @@ export default define.page(function App({ Component, url, state }) {
             </a>
           )}
           <main class="govuk-main-wrapper app-conent" id="main-content">
-            <Component />
+            <ErrorBoundary>
+              <Component />
+            </ErrorBoundary>
           </main>
         </div>
         <footer class="govuk-footer">
@@ -303,6 +307,7 @@ export default define.page(function App({ Component, url, state }) {
             </div>
           </div>
         </footer>
+
         <script type="module" src="/js/govuk-frontend.min.js"></script>
 
         <script type="module" src="/js/govuk-frontend.min.js"></script>
