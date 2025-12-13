@@ -16,6 +16,7 @@ export function initSentry(config: SentryConfig): void {
   try {
     Sentry.init({
       dsn: config.dsn,
+      debug: true,
       environment: config.environment || "production",
       integrations: [
         Sentry.browserTracingIntegration(),
@@ -28,9 +29,29 @@ export function initSentry(config: SentryConfig): void {
           showBranding: false,
         }),
       ],
-      tracesSampleRate: config.tracesSampleRate || 0.1,
-      replaysSessionSampleRate: config.replaysSessionSampleRate || 0.1,
+      tracesSampleRate: config.tracesSampleRate || 0.5,
+      replaysSessionSampleRate: config.replaysSessionSampleRate || 0.5,
       replaysOnErrorSampleRate: config.replaysOnErrorSampleRate || 1.0,
+      beforeSend(event, _hint) {
+        // Filter out sensitive information
+        if (event.request) {
+          // Remove sensitive headers
+          if (event.request.headers) {
+            delete event.request.headers["Authorization"];
+            delete event.request.headers["Cookie"];
+          }
+          // Remove client side requests to well-known and version endpoints
+          if (event.request.url) {
+            if (
+              event.request.url.includes("/.well-known/") ||
+              event.request.url.endsWith("/_matrix/client/versions")
+            ) {
+              return null;
+            }
+          }
+        }
+        return event;
+      },
     });
     console.log("Sentry initialized successfully");
   } catch (error) {
@@ -47,7 +68,7 @@ export function addBreadcrumb(
   category?: string,
   level?: Sentry.SeverityLevel,
 ): void {
-  if (typeof window === "undefined") return;
+  if (!IS_BROWSER) return;
 
   try {
     Sentry.addBreadcrumb({
@@ -68,7 +89,7 @@ export function captureException(
   error: Error,
   context?: Record<string, unknown>,
 ): void {
-  if (typeof window === "undefined") return;
+  if (!IS_BROWSER) return;
 
   try {
     Sentry.withScope((scope: Sentry.Scope) => {
@@ -91,7 +112,7 @@ export function captureMessage(
   message: string,
   level: Sentry.SeverityLevel = "info",
 ): void {
-  if (typeof window === "undefined") return;
+  if (!IS_BROWSER) return;
 
   try {
     Sentry.captureMessage(message, level);

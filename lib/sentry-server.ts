@@ -22,8 +22,9 @@ export function initSentryServer(config: SentryServerConfig): void {
   try {
     Sentry.init({
       dsn: config.dsn,
+      debug: true,
       environment: config.environment || "production",
-      tracesSampleRate: config.tracesSampleRate || 0.1,
+      tracesSampleRate: config.tracesSampleRate || 0.5,
       serverName: config.serverName,
       integrations: [
         // Add Deno-specific integrations
