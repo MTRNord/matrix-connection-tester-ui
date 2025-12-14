@@ -179,25 +179,23 @@ pre {
     margin: 0;
 }
 
-/* Modal overlay and positioning */
-.alert-delete-modal {
-    position: relative;
+/* Native dialog element styles */
+.alert-delete-dialog {
+    border: none;
+    padding: 0;
+    max-width: 500px;
+    background: transparent;
 }
 
-/* Overlay background */
-.alert-delete-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+/* Dialog backdrop */
+.alert-delete-dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.7);
-    z-index: 999;
 }
 
-/* Make notification banner in modal look like a dialog */
-.alert-delete-modal .govuk-notification-banner {
+/* Make notification banner in dialog look styled */
+.alert-delete-dialog .govuk-notification-banner {
     background-color: #ffffff;
+    margin: 0;
 }
 
 /* Modal dialog notification banner headers need proper styling */
@@ -221,13 +219,8 @@ pre {
     margin-top: 1.5rem;
 }
 
-/* Modal dialog styles */
+/* Modal dialog content styles */
 .alert-delete-modal-dialog {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 1000;
     max-width: 500px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
     background-color: #ffffff;

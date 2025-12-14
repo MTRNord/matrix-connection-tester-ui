@@ -239,7 +239,7 @@ export default define.page<typeof handler>(function Verify(ctx) {
                         <AlertDeleteButton
                           alertId={alert.id}
                           serverName={alert.server_name}
-                          i18n={i18n}
+                          locale={i18n.getLocale()}
                           apiBaseUrl={apiBaseUrl || ""}
                         />
                       </td>
