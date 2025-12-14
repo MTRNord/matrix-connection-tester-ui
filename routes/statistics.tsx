@@ -8,6 +8,13 @@ import {
 import type { PrometheusParseResult } from "../lib/prometheus-parser.ts";
 import { getConfig } from "../lib/api.ts";
 
+// Cache configuration
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+let cachedStatistics: {
+  data: StatisticsData;
+  timestamp: number;
+} | null = null;
+
 interface ServerDistribution {
   software: string;
   count: number;
@@ -40,7 +47,8 @@ async function fetchStatistics(apiUrl: string): Promise<StatisticsData | null> {
     }
 
     const text = await response.text();
-    const parsed = parsePrometheusText(text);
+    // Only parse the metric we need for statistics
+    const parsed = parsePrometheusText(text, ["federation_request_total"]);
 
     return extractStatistics(parsed);
   } catch (error) {
@@ -56,73 +64,88 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
     "federation_request_total",
   );
 
-  // Filter out unknown servers and failing servers
-  const validSamples = federationRequestSamples.filter((s) => {
-    const family = s.labels.software_family?.toLowerCase() || "";
+  // Process all samples in a single pass for efficiency
+  let successfulTests = 0;
+  let failedTests = 0;
+  const successfulServers = new Set<string>();
+  const softwareMap = new Map<string, number>();
+  const versionMap = new Map<
+    string,
+    { family: string; version: string; count: number }
+  >();
 
-    // Exclude unknown software
-    if (family === "unknown" || family === "" || !family) {
-      return false;
+  for (const sample of federationRequestSamples) {
+    const family = sample.labels.software_family?.toLowerCase() || "";
+    const result = sample.labels.result;
+    const server = sample.labels.server;
+    const value = sample.value;
+
+    // Skip invalid samples
+    if (!family || family === "unknown" || !server || value <= 0) {
+      continue;
     }
 
-    // Only include samples with actual server information
-    return s.labels.server && s.value > 0;
-  });
+    // Count tests by result
+    if (result === "success") {
+      successfulTests += value;
+      successfulServers.add(server);
 
-  // Calculate successful vs failed tests
-  const successfulTests = validSamples
-    .filter((s) => s.labels.result === "success")
-    .reduce((sum, s) => sum + s.value, 0);
+      // Build software distribution (only for successful tests)
+      const familyOriginal = sample.labels.software_family || "Unknown";
+      if (familyOriginal !== "Unknown" && familyOriginal !== "unknown") {
+        softwareMap.set(
+          familyOriginal,
+          (softwareMap.get(familyOriginal) || 0) + value,
+        );
+      }
 
-  const failedTests = validSamples
-    .filter((s) => s.labels.result === "failure")
-    .reduce((sum, s) => sum + s.value, 0);
+      // Build version distribution (only for successful tests)
+      const version = sample.labels.software_version || "Unknown";
+      if (
+        familyOriginal !== "Unknown" && familyOriginal !== "unknown" &&
+        version !== "Unknown" && version !== "unknown"
+      ) {
+        const key = `${familyOriginal}|${version}`;
+        const existing = versionMap.get(key);
+        if (existing) {
+          existing.count += value;
+        } else {
+          versionMap.set(key, {
+            family: familyOriginal,
+            version,
+            count: value,
+          });
+        }
+      }
+    } else if (result === "failure") {
+      failedTests += value;
+    }
+  }
 
   const totalTests = successfulTests + failedTests;
   const successRate = totalTests > 0 ? (successfulTests / totalTests) * 100 : 0;
-
-  // Count unique servers (only successful tests to avoid counting failing servers)
-  const successfulServers = new Set(
-    validSamples
-      .filter((s) => s.labels.result === "success")
-      .map((s) => s.labels.server),
-  );
   const uniqueServers = successfulServers.size;
 
-  // Calculate server software distribution (by family)
-  const softwareMap = new Map<string, number>();
-  validSamples
-    .filter((s) => s.labels.result === "success")
-    .forEach((s) => {
-      const family = s.labels.software_family || "Unknown";
-      if (family !== "Unknown" && family !== "unknown") {
-        softwareMap.set(family, (softwareMap.get(family) || 0) + s.value);
-      }
-    });
-
-  // Group software with only 1 test as "Other" to prevent identification
+  // Process software distribution: group single-test servers as "Other"
   let otherCount = 0;
-  const filteredSoftware = new Map<string, number>();
+  const serverDistribution: ServerDistribution[] = [];
 
   softwareMap.forEach((count, software) => {
     if (count === 1) {
       otherCount += count;
     } else {
-      filteredSoftware.set(software, count);
+      serverDistribution.push({
+        software,
+        count,
+        percentage: totalTests > 0 ? (count / totalTests) * 100 : 0,
+      });
     }
   });
 
-  const serverDistribution: ServerDistribution[] = Array.from(
-    filteredSoftware.entries(),
-  )
-    .map(([software, count]) => ({
-      software,
-      count,
-      percentage: totalTests > 0 ? (count / totalTests) * 100 : 0,
-    }))
-    .sort((a, b) => b.count - a.count);
+  // Sort by count descending
+  serverDistribution.sort((a, b) => b.count - a.count);
 
-  // Add "Other" category if there are any single-test servers
+  // Add "Other" category if applicable
   if (otherCount > 0) {
     serverDistribution.push({
       software: "Other",
@@ -131,58 +154,30 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
     });
   }
 
-  // Calculate version distribution (software family + version)
-  const versionMap = new Map<
-    string,
-    { family: string; version: string; count: number }
-  >();
-  validSamples
-    .filter((s) => s.labels.result === "success")
-    .forEach((s) => {
-      const family = s.labels.software_family || "Unknown";
-      const version = s.labels.software_version || "Unknown";
-
-      if (
-        family !== "Unknown" && family !== "unknown" && version !== "Unknown" &&
-        version !== "unknown"
-      ) {
-        const key = `${family}|${version}`;
-        const existing = versionMap.get(key);
-        if (existing) {
-          existing.count += s.value;
-        } else {
-          versionMap.set(key, { family, version, count: s.value });
-        }
-      }
-    });
-
-  // Group versions with only 1 test as "Other" to prevent identification
+  // Process version distribution: group single-test versions as "Other"
   let otherVersionCount = 0;
-  const filteredVersions: Array<
-    { family: string; version: string; count: number }
-  > = [];
+  const versionDistribution: VersionDistribution[] = [];
 
   versionMap.forEach((v) => {
     if (v.count === 1) {
       otherVersionCount += v.count;
     } else {
-      filteredVersions.push(v);
+      versionDistribution.push({
+        software: v.family,
+        version: v.version,
+        count: v.count,
+        percentage: totalTests > 0 ? (v.count / totalTests) * 100 : 0,
+      });
     }
   });
 
-  const versionDistribution: VersionDistribution[] = filteredVersions
-    .map((v) => ({
-      software: v.family,
-      version: v.version,
-      count: v.count,
-      percentage: totalTests > 0 ? (v.count / totalTests) * 100 : 0,
-    }))
-    .sort((a, b) => b.count - a.count)
-    .slice(0, 15); // Top 15 versions
+  // Sort by count descending and take top 15
+  versionDistribution.sort((a, b) => b.count - a.count);
+  const topVersions = versionDistribution.slice(0, 15);
 
-  // Add "Other" category if there are any single-test versions
-  if (otherVersionCount > 0 && versionDistribution.length < 15) {
-    versionDistribution.push({
+  // Add "Other" category if applicable
+  if (otherVersionCount > 0 && topVersions.length < 15) {
+    topVersions.push({
       software: "Other",
       version: "-",
       count: otherVersionCount,
@@ -197,7 +192,7 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
     successRate,
     uniqueServers,
     serverDistribution,
-    versionDistribution,
+    versionDistribution: topVersions,
     lastUpdated: new Date().toISOString(),
   };
 }
@@ -207,6 +202,30 @@ export const handler = define.handlers({
     const { url } = ctx;
 
     try {
+      // Check if we have valid cached data
+      const now = Date.now();
+      if (
+        cachedStatistics && (now - cachedStatistics.timestamp) < CACHE_TTL_MS
+      ) {
+        // Serve from cache with appropriate headers
+        const age = Math.floor((now - cachedStatistics.timestamp) / 1000);
+        const maxAge = Math.floor(CACHE_TTL_MS / 1000);
+
+        return page(
+          {
+            stats: cachedStatistics.data,
+          },
+          {
+            headers: {
+              "Cache-Control": `public, max-age=${
+                maxAge - age
+              }, stale-while-revalidate=60`,
+              "Age": age.toString(),
+            },
+          },
+        );
+      }
+
       // Fetch API configuration
       const apiConfig = await getConfig(
         `${url.protocol}//${url.host}`,
@@ -217,11 +236,44 @@ export const handler = define.handlers({
       // Fetch statistics from the API
       const stats = await fetchStatistics(apiUrl);
 
-      return page({
-        stats,
-      });
+      // Cache the result if successful
+      if (stats) {
+        cachedStatistics = {
+          data: stats,
+          timestamp: Date.now(),
+        };
+      }
+
+      // Set cache headers for fresh response
+      const maxAge = Math.floor(CACHE_TTL_MS / 1000);
+      return page(
+        {
+          stats,
+        },
+        {
+          headers: {
+            "Cache-Control":
+              `public, max-age=${maxAge}, stale-while-revalidate=60`,
+          },
+        },
+      );
     } catch (error) {
       console.error("Error in statistics handler:", error);
+
+      // If we have stale cached data, serve it on error
+      if (cachedStatistics) {
+        return page(
+          {
+            stats: cachedStatistics.data,
+          },
+          {
+            headers: {
+              "Cache-Control": "public, max-age=60, stale-if-error=3600",
+            },
+          },
+        );
+      }
+
       return page({
         stats: null,
       });

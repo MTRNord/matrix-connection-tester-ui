@@ -22,18 +22,33 @@ export interface PrometheusParseResult {
 const METRIC_LINE_REGEX =
   /^(?<name>[a-zA-Z_:][a-zA-Z0-9_:]*)(?:\{(?<labels>.*)\})?\s+(?<value>[-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)$/;
 
-export function parsePrometheusText(text: string): PrometheusParseResult {
-  const lines = text.split(/\n+/);
+export function parsePrometheusText(
+  text: string,
+  targetMetrics?: string[],
+): PrometheusParseResult {
   const metrics: Record<string, PrometheusMetric> = {};
+  const targetSet = targetMetrics ? new Set(targetMetrics) : null;
 
-  for (const rawLine of lines) {
-    const line = rawLine.trim();
+  // Process line by line without creating array of all lines
+  let lineStart = 0;
+  const textLength = text.length;
+
+  while (lineStart < textLength) {
+    let lineEnd = text.indexOf("\n", lineStart);
+    if (lineEnd === -1) lineEnd = textLength;
+
+    const line = text.slice(lineStart, lineEnd).trim();
+    lineStart = lineEnd + 1;
+
     if (!line) continue;
     if (line.startsWith("#")) {
       // Comment / metadata
       const parts = line.split(/\s+/);
       if (parts.length >= 4 && parts[1] === "HELP") {
         const name = parts[2];
+        // Skip if we're filtering and this isn't a target metric
+        if (targetSet && !targetSet.has(name)) continue;
+
         const help = line
           .substring(line.indexOf(name) + name.length)
           .replace(/^\s+/, "")
@@ -42,6 +57,9 @@ export function parsePrometheusText(text: string): PrometheusParseResult {
         metrics[name].help = help.replace(/^#\s*HELP\s+[^\s]+\s+/, "").trim();
       } else if (parts.length >= 4 && parts[1] === "TYPE") {
         const name = parts[2];
+        // Skip if we're filtering and this isn't a target metric
+        if (targetSet && !targetSet.has(name)) continue;
+
         const type = parts[3];
         metrics[name] = metrics[name] || { name, samples: [] };
         metrics[name].type = type;
@@ -56,20 +74,50 @@ export function parsePrometheusText(text: string): PrometheusParseResult {
       labels?: string;
       value: string;
     };
+
+    // Skip if we're filtering and this isn't a target metric
+    if (targetSet && !targetSet.has(name)) continue;
+
     const labels: Record<string, string> = {};
     if (labelsRaw) {
-      // Split by comma not inside quotes
-      // Simpler approach: split on commas then key=value; Prometheus guarantees simple format
-      // Simple split on commas (Prometheus label values rarely contain unescaped commas)
-      const labelParts = labelsRaw.split(/,/);
-      for (const part of labelParts) {
-        const eq = part.indexOf("=");
-        if (eq === -1) continue;
-        const k = part.slice(0, eq).trim();
-        let v = part.slice(eq + 1).trim();
-        if (v.startsWith('"') && v.endsWith('"')) {
-          v = v.slice(1, -1).replace(/\\"/g, '"');
+      // Parse labels more efficiently without regex split
+      let pos = 0;
+      const len = labelsRaw.length;
+
+      while (pos < len) {
+        // Skip whitespace and commas
+        while (
+          pos < len && (labelsRaw[pos] === " " || labelsRaw[pos] === ",")
+        ) pos++;
+        if (pos >= len) break;
+
+        // Find key
+        const keyStart = pos;
+        while (pos < len && labelsRaw[pos] !== "=") pos++;
+        if (pos >= len) break;
+        const k = labelsRaw.slice(keyStart, pos).trim();
+        pos++; // skip '='
+
+        // Find value
+        while (pos < len && labelsRaw[pos] === " ") pos++;
+        if (pos >= len) break;
+
+        let v: string;
+        if (labelsRaw[pos] === '"') {
+          pos++; // skip opening quote
+          const valueStart = pos;
+          while (pos < len && labelsRaw[pos] !== '"') {
+            if (labelsRaw[pos] === "\\") pos++; // skip escaped char
+            pos++;
+          }
+          v = labelsRaw.slice(valueStart, pos).replace(/\\"/g, '"');
+          pos++; // skip closing quote
+        } else {
+          const valueStart = pos;
+          while (pos < len && labelsRaw[pos] !== ",") pos++;
+          v = labelsRaw.slice(valueStart, pos).trim();
         }
+
         labels[k] = v;
       }
     }
