@@ -522,7 +522,18 @@
     "delete": "Delete",
     "no_alerts": "You don't have any alerts set up yet.",
     "deletion_confirmed": "Alert successfully deleted! The alert has been removed from your account.",
-    "alert_verified": "Alert successfully verified! You will now receive notifications when your server experiences connectivity issues."
+    "alert_verified": "Alert successfully verified! You will now receive notifications when your server experiences connectivity issues.",
+    "delete_confirm_title": "Confirm deletion",
+    "delete_confirm_message": "Request deletion of the alert for",
+    "delete_confirm_warning": "You will receive a verification email to confirm this deletion.",
+    "delete_cancel": "Cancel",
+    "delete_confirm_delete": "Send verification email",
+    "delete_deleting": "Sending...",
+    "delete_success_title": "Verification email sent",
+    "delete_success_message": "Please check your email and click the verification link to complete the deletion of the alert for",
+    "delete_success_note": "Note: The alert will remain in this list until you confirm the deletion via email.",
+    "delete_close": "Close",
+    "delete_pending_deletion": "Deletion pending"
   },
   "docs": {
     "common": {

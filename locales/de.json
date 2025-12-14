@@ -519,7 +519,18 @@
     "delete": "Löschen",
     "no_alerts": "Sie haben noch keine Benachrichtigungen eingerichtet.",
     "deletion_confirmed": "Benachrichtigung erfolgreich gelöscht! Die Benachrichtigung wurde von Ihrem Konto entfernt.",
-    "alert_verified": "Benachrichtigung erfolgreich verifiziert! Sie erhalten jetzt Benachrichtigungen, wenn Ihr Server Verbindungsprobleme hat."
+    "alert_verified": "Benachrichtigung erfolgreich verifiziert! Sie erhalten jetzt Benachrichtigungen, wenn Ihr Server Verbindungsprobleme hat.",
+    "delete_confirm_title": "Löschung bestätigen",
+    "delete_confirm_message": "Löschung der Benachrichtigung anfragen für",
+    "delete_confirm_warning": "Sie erhalten eine Bestätigungs-E-Mail, um diese Löschung zu bestätigen.",
+    "delete_cancel": "Abbrechen",
+    "delete_confirm_delete": "Bestätigungs-E-Mail senden",
+    "delete_deleting": "Wird gesendet...",
+    "delete_success_title": "Bestätigungs-E-Mail gesendet",
+    "delete_success_message": "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um die Löschung der Benachrichtigung für",
+    "delete_success_note": "Hinweis: Die Benachrichtigung bleibt in dieser Liste, bis Sie die Löschung per E-Mail bestätigen.",
+    "delete_close": "Schließen",
+    "delete_pending_deletion": "Löschung ausstehend"
   },
   "statistics": {
     "title": "Statistiken",

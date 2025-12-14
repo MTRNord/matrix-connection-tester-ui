@@ -1,15 +1,16 @@
 import { useComputed, useSignal } from "@preact/signals";
 import { useEffect, useRef } from "preact/hooks";
+import type { I18n } from "../lib/i18n.ts";
 
 interface AlertDeleteButtonProps {
   alertId: string;
   serverName: string;
-  locale: string;
+  i18n: I18n;
   apiBaseUrl: string;
 }
 
 export default function AlertDeleteButton(
-  { alertId, serverName, locale, apiBaseUrl }: AlertDeleteButtonProps,
+  { alertId, serverName, i18n, apiBaseUrl }: AlertDeleteButtonProps,
 ) {
   const showConfirm = useSignal(false);
   const isDeleting = useSignal(false);
@@ -19,52 +20,14 @@ export default function AlertDeleteButton(
   const successDialogRef = useRef<HTMLDivElement>(null);
   const triggerButtonRef = useRef<HTMLButtonElement>(null);
 
-  const translations = {
-    en: {
-      delete: "Delete",
-      confirm_title: "Confirm deletion",
-      confirm_message: "Request deletion of the alert for",
-      confirm_warning:
-        "You will receive a verification email to confirm this deletion.",
-      cancel: "Cancel",
-      confirm_delete: "Send verification email",
-      deleting: "Sending...",
-      success_title: "Verification email sent",
-      success_message:
-        "Please check your email and click the verification link to complete the deletion of the alert for",
-      success_note:
-        "Note: The alert will remain in this list until you confirm the deletion via email.",
-      close: "Close",
-      pending_deletion: "Deletion pending",
-    },
-    de: {
-      delete: "Löschen",
-      confirm_title: "Löschung bestätigen",
-      confirm_message: "Löschung der Benachrichtigung anfragen für",
-      confirm_warning:
-        "Sie erhalten eine Bestätigungs-E-Mail, um diese Löschung zu bestätigen.",
-      cancel: "Abbrechen",
-      confirm_delete: "Bestätigungs-E-Mail senden",
-      deleting: "Wird gesendet...",
-      success_title: "Bestätigungs-E-Mail gesendet",
-      success_message:
-        "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um die Löschung der Benachrichtigung für",
-      success_note:
-        "Hinweis: Die Benachrichtigung bleibt in dieser Liste, bis Sie die Löschung per E-Mail bestätigen.",
-      close: "Schließen",
-      pending_deletion: "Löschung ausstehend",
-    },
-  };
-
-  const t = translations[locale as keyof typeof translations] ||
-    translations.en;
-
   // Computed signal for button text
   const buttonText = useComputed(() => {
     if (isDeletionPending.value) {
-      return t.pending_deletion;
+      return i18n.tString("alerts.delete_pending_deletion");
     }
-    return isDeleting.value ? t.deleting : t.delete;
+    return isDeleting.value
+      ? i18n.tString("alerts.delete_deleting")
+      : i18n.tString("alerts.delete");
   });
 
   const handleDelete = async () => {
@@ -211,16 +174,19 @@ export default function AlertDeleteButton(
                 class="govuk-notification-banner__title"
                 id="confirm-dialog-title"
               >
-                {t.confirm_title}
+                {i18n.tString("alerts.delete_confirm_title")}
               </h2>
             </div>
             <div class="govuk-notification-banner__content">
               <div id="confirm-dialog-description">
                 <p class="govuk-body">
-                  {t.confirm_message} <strong>{serverName}</strong>?
+                  {i18n.tString("alerts.delete_confirm_message")}{" "}
+                  <strong>{serverName}</strong>?
                 </p>
                 <p class="govuk-body">
-                  <strong>{t.confirm_warning}</strong>
+                  <strong>
+                    {i18n.tString("alerts.delete_confirm_warning")}
+                  </strong>
                 </p>
               </div>
               <div class="govuk-button-group">
@@ -231,7 +197,7 @@ export default function AlertDeleteButton(
                   onClick={handleDelete}
                   disabled={isDeleting.value}
                 >
-                  {t.confirm_delete}
+                  {i18n.tString("alerts.delete_confirm_delete")}
                 </button>
                 <button
                   type="button"
@@ -240,7 +206,7 @@ export default function AlertDeleteButton(
                   onClick={handleCloseConfirm}
                   disabled={isDeleting.value}
                 >
-                  {t.cancel}
+                  {i18n.tString("alerts.delete_cancel")}
                 </button>
               </div>
             </div>
@@ -268,16 +234,17 @@ export default function AlertDeleteButton(
                 class="govuk-notification-banner__title"
                 id="success-dialog-title"
               >
-                {t.success_title}
+                {i18n.tString("alerts.delete_success_title")}
               </h2>
             </div>
             <div class="govuk-notification-banner__content">
               <div id="success-dialog-description">
                 <p class="govuk-body">
-                  {t.success_message} <strong>{serverName}</strong>.
+                  {i18n.tString("alerts.delete_success_message")}{" "}
+                  <strong>{serverName}</strong>.
                 </p>
                 <div class="govuk-inset-text modal-inset-text">
-                  {t.success_note}
+                  {i18n.tString("alerts.delete_success_note")}
                 </div>
               </div>
               <button
@@ -286,7 +253,7 @@ export default function AlertDeleteButton(
                 data-module="govuk-button"
                 onClick={handleCloseSuccess}
               >
-                {t.close}
+                {i18n.tString("alerts.delete_close")}
               </button>
             </div>
           </div>
