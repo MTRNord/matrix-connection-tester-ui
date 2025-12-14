@@ -9,21 +9,6 @@ import {
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
-interface ClientWellKnownResp {
-  "m.homeserver"?: {
-    base_url: string;
-  };
-  "m.identity_server"?: {
-    base_url: string;
-  };
-  [key: string]: unknown;
-}
-
-interface VersionsResponse {
-  versions: string[];
-  unstable_features?: Record<string, boolean>;
-}
-
 interface ClientServerAPITasksProps {
   serverName: string;
   locale: Locale;
