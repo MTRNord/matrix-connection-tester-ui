@@ -3,7 +3,13 @@
     "skip_to_main": "Zum Hauptinhalt springen",
     "menu": "Menü",
     "back": "Zurück",
-    "error": "Fehler"
+    "error": "Fehler",
+    "warning": "Warnung",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "success": "Erfolg",
+    "confirm": "Bestätigen"
   },
   "header": {
     "title": "Konnektivitätstester"
@@ -124,7 +130,7 @@
     "no_connectivity_reports": "Keine Konnektivitätsberichte verfügbar.",
     "raw_data_title": "Rohdaten der Ergebnisse",
     "raw_data_summary": "JSON-Daten der Testergebnisse.",
-    "warning": "Warnung",
+
     "wellknown_warning_title": "Well-Known-Konfigurationsprobleme erkannt",
     "wellknown_warning_description": "Ihre Föderation funktioniert derzeit (wahrscheinlich über SRV-Einträge), aber es gibt Probleme mit Ihrem .well-known/matrix/server-Endpunkt. Obwohl nicht sofort kritisch, sollte dies behoben werden, um eine zuverlässige Föderation und Kompatibilität mit allen Matrix-Implementierungen sicherzustellen.",
     "wellknown_problem_for_ip": "Well-Known-Problem für",
@@ -200,7 +206,6 @@
     "check_column": "Prüfung",
     "result_column": "Ergebnis",
     "ok": "Ok",
-    "error": "Fehler",
     "details_summary": "Details zu Schlüsseln und Zertifikaten anzeigen",
     "keys_caption": "Schlüssel",
     "key_id_column": "Schlüssel-ID",
@@ -480,8 +485,7 @@
   "alerts": {
     "title": "Server-Benachrichtigungen",
     "intro": "Richten Sie Benachrichtigungen ein, um informiert zu werden, wenn Ihr Matrix-Server ausfällt oder nicht erreichbar ist. Sie können sich für Benachrichtigungen registrieren oder Ihre bestehenden Benachrichtigungen verwalten.",
-    "success": "Erfolg",
-    "warning": "Warnung",
+
     "tabs_title": "Inhalt",
     "register_tab": "Für Benachrichtigungen registrieren",
     "list_tab": "Benachrichtigungen verwalten",
@@ -516,20 +520,19 @@
     "actions": "Aktionen",
     "verified": "Verifiziert",
     "unverified": "Verifizierung ausstehend",
-    "delete": "Löschen",
     "no_alerts": "Sie haben noch keine Benachrichtigungen eingerichtet.",
     "deletion_confirmed": "Benachrichtigung erfolgreich gelöscht! Die Benachrichtigung wurde von Ihrem Konto entfernt.",
     "alert_verified": "Benachrichtigung erfolgreich verifiziert! Sie erhalten jetzt Benachrichtigungen, wenn Ihr Server Verbindungsprobleme hat.",
-    "delete_confirm_title": "Löschung bestätigen",
+    "delete_confirm_title": "Löschung Bestätigen",
     "delete_confirm_message": "Löschung der Benachrichtigung anfragen für",
     "delete_confirm_warning": "Sie erhalten eine Bestätigungs-E-Mail, um diese Löschung zu bestätigen.",
-    "delete_cancel": "Abbrechen",
+
     "delete_confirm_delete": "Bestätigungs-E-Mail senden",
     "delete_deleting": "Wird gesendet...",
-    "delete_success_title": "Bestätigungs-E-Mail gesendet",
+    "delete_success_title": "Bestätigungs-E-Mail Gesendet",
     "delete_success_message": "Bitte überprüfen Sie Ihre E-Mails und klicken Sie auf den Bestätigungslink, um die Löschung der Benachrichtigung für",
     "delete_success_note": "Hinweis: Die Benachrichtigung bleibt in dieser Liste, bis Sie die Löschung per E-Mail bestätigen.",
-    "delete_close": "Schließen",
+
     "delete_pending_deletion": "Löschung ausstehend"
   },
   "statistics": {

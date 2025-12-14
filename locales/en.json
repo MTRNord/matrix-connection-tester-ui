@@ -6,7 +6,12 @@
     "error": "Error",
     "warning": "Warning",
     "note": "Note:",
-    "and": "and"
+    "and": "and",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "close": "Close",
+    "success": "Success",
+    "confirm": "Confirm"
   },
   "header": {
     "title": "Connectivity Tester"
@@ -127,7 +132,7 @@
     "no_connectivity_reports": "No connectivity reports available.",
     "raw_data_title": "Raw result data",
     "raw_data_summary": "JSON data of the test results.",
-    "warning": "Warning",
+
     "wellknown_warning_title": "Well-Known Configuration Issues Detected",
     "wellknown_warning_description": "Your federation is currently working (likely via SRV records), but there are issues with your .well-known/matrix/server endpoint. While not immediately breaking, this should be fixed to ensure reliable federation and compatibility with all Matrix implementations.",
     "wellknown_problem_for_ip": "Well-Known issue for",
@@ -203,7 +208,6 @@
     "check_column": "Check",
     "result_column": "Result",
     "ok": "Ok",
-    "error": "Error",
     "details_summary": "See details on Keys and Certificates",
     "keys_caption": "Keys",
     "key_id_column": "Key ID",
@@ -483,8 +487,7 @@
   "alerts": {
     "title": "Server Alerts",
     "intro": "Set up alerts to be notified when your Matrix server goes down or becomes unreachable. You can register for alerts or manage your existing alerts.",
-    "success": "Success",
-    "warning": "Warning",
+
     "tabs_title": "Contents",
     "register_tab": "Register for alerts",
     "list_tab": "Manage alerts",
@@ -519,25 +522,23 @@
     "actions": "Actions",
     "verified": "Verified",
     "unverified": "Pending verification",
-    "delete": "Delete",
     "no_alerts": "You don't have any alerts set up yet.",
     "deletion_confirmed": "Alert successfully deleted! The alert has been removed from your account.",
     "alert_verified": "Alert successfully verified! You will now receive notifications when your server experiences connectivity issues.",
-    "delete_confirm_title": "Confirm deletion",
+    "delete_confirm_title": "Confirm Deletion",
     "delete_confirm_message": "Request deletion of the alert for",
     "delete_confirm_warning": "You will receive a verification email to confirm this deletion.",
-    "delete_cancel": "Cancel",
+
     "delete_confirm_delete": "Send verification email",
     "delete_deleting": "Sending...",
-    "delete_success_title": "Verification email sent",
+    "delete_success_title": "Verification Email Sent",
     "delete_success_message": "Please check your email and click the verification link to complete the deletion of the alert for",
     "delete_success_note": "Note: The alert will remain in this list until you confirm the deletion via email.",
-    "delete_close": "Close",
+
     "delete_pending_deletion": "Deletion pending"
   },
   "docs": {
     "common": {
-      "warning": "Warning",
       "important": "Important",
       "required": "Required",
       "recommended": "Recommended",

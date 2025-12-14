@@ -25,7 +25,7 @@ export default function DocsLayout({
             <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
             <strong class="govuk-warning-text__text">
               <span class="govuk-visually-hidden">
-                {i18n.t("docs.common.warning")}
+                {i18n.t("common.warning")}
               </span>
               {i18n.t("docs.common.wip_warning")}
             </strong>

@@ -167,7 +167,7 @@ export function FederationProblems(
           <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
           <strong class="govuk-warning-text__text">
             <span class="govuk-visually-hidden">
-              {i18n.t("results.warning")}
+              {i18n.t("common.warning")}
             </span>
             {i18n.t("results.wellknown_warning_title")}
           </strong>

@@ -49,7 +49,7 @@ export function ConnectivityReportsSection(props: {
                             >
                               {result
                                 ? i18n.t("connectivity-reports.ok")
-                                : i18n.t("connectivity-reports.error")}
+                                : i18n.t("common.error")}
                             </strong>
                           </td>
                         </tr>

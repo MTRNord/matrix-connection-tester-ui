@@ -152,7 +152,7 @@ export default define.page<typeof handler>(function Verify(ctx) {
               class="govuk-notification-banner__title"
               id="success-action-banner-title"
             >
-              {i18n.t("alerts.success")}
+              {i18n.t("common.success")}
             </h2>
           </div>
           <div class="govuk-notification-banner__content">
@@ -175,7 +175,7 @@ export default define.page<typeof handler>(function Verify(ctx) {
               class="govuk-notification-banner__title"
               id="success-banner-title"
             >
-              {i18n.t("alerts.success")}
+              {i18n.t("common.success")}
             </h2>
           </div>
           <div class="govuk-notification-banner__content">

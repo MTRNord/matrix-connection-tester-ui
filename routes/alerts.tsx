@@ -162,7 +162,7 @@ export default define.page<typeof handler>(function Alerts(ctx) {
               class="govuk-notification-banner__title"
               id="success-banner-title"
             >
-              {i18n.t("alerts.success")}
+              {i18n.t("common.success")}
             </h2>
           </div>
           <div class="govuk-notification-banner__content">
@@ -296,7 +296,7 @@ export default define.page<typeof handler>(function Alerts(ctx) {
       <div class="govuk-warning-text">
         <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
         <strong class="govuk-warning-text__text">
-          <span class="govuk-visually-hidden">{i18n.t("alerts.warning")}</span>
+          <span class="govuk-visually-hidden">{i18n.t("common.warning")}</span>
           {i18n.t("alerts.email_verification_notice")}
         </strong>
       </div>

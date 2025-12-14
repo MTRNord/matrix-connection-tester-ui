@@ -26,7 +26,7 @@ export default function AlertDeleteButton(
     }
     return isDeleting.value
       ? i18n.tString("alerts.delete_deleting")
-      : i18n.tString("alerts.delete");
+      : i18n.tString("common.delete");
   });
 
   const handleDelete = async () => {
@@ -204,7 +204,7 @@ export default function AlertDeleteButton(
                 onClick={handleCloseConfirm}
                 disabled={isDeleting.value}
               >
-                {i18n.tString("alerts.delete_cancel")}
+                {i18n.tString("common.cancel")}
               </button>
             </div>
           </div>
@@ -243,7 +243,7 @@ export default function AlertDeleteButton(
               data-module="govuk-button"
               onClick={handleCloseSuccess}
             >
-              {i18n.tString("alerts.delete_close")}
+              {i18n.tString("common.close")}
             </button>
           </div>
         </div>
