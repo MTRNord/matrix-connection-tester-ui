@@ -23,7 +23,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         run: |
           cat > .env << EOF
-          FRESH_PUBLIC_SENTRY_DSN=https://f74ab7fa20da938174aeab18271b9cf4@sentry.mtrnord.blog/2
+          FRESH_PUBLIC_SENTRY_DSN=https://1ea4f3c920c669680fc4439ab084352b@sentry.mtrnord.blog/2
           FRESH_PUBLIC_ENVIRONMENT=stage
           FRESH_PUBLIC_APP_VERSION=${{ github.sha }}
           EOF
@@ -32,7 +32,7 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         run: |
           cat > .env << EOF
-          FRESH_PUBLIC_SENTRY_DSN=https://f74ab7fa20da938174aeab18271b9cf4@sentry.mtrnord.blog/2
+          FRESH_PUBLIC_SENTRY_DSN=https://1ea4f3c920c669680fc4439ab084352b@sentry.mtrnord.blog/2
           FRESH_PUBLIC_ENVIRONMENT=production
           FRESH_PUBLIC_APP_VERSION=${{ github.ref_name }}
           EOF
