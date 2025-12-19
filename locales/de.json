@@ -106,8 +106,10 @@
     "client_server_api_title": "Client-Server-API-Übersicht",
     "client_server_api_summary": "Unterstützte API-Versionen und experimentelle Funktionen.",
     "client_server_api_working": "Client-Server-API funktioniert",
+    "client_server_api_working_with_warnings": "Client-Server-API funktioniert (mit Warnungen)",
     "client_server_api_not_working": "Client-Server-API funktioniert nicht",
     "client_server_api_success_message": "Dein Client kann mit dem Server über die Client-Server-API kommunizieren.",
+    "client_server_api_warning_message": "Dein Client kann mit dem Server kommunizieren, aber es gibt kleinere Konfigurationsprobleme, die du beheben solltest.",
     "client_server_api_failure_message": "Es gab ein Problem bei der Kommunikation mit dem Server über die Client-Server-API.",
     "client_server_api_see_problems": "Bitte überprüfe den Abschnitt \"Probleme\" oben für Details zu den Client-Server-API-Problemen.",
     "client_server_api_latest_version": "Neueste unterstützte Client-Server-API-Version",
@@ -234,6 +236,7 @@
     "content_type": "Content-Type-Fehler",
     "missing_content_type": "Fehlender Content-Type-Header",
     "wrong_content_type": "Falscher Content-Type",
+    "wrong_content_type_warning": "Nicht-Standard Content-Type (Warnung)",
     "not_found": "Nicht gefunden (404)",
     "server_error": "Serverfehler",
     "timeout_error": "Anfrage-Timeout",
@@ -339,6 +342,19 @@
         "Überprüfe deine Webserver-Konfigurationsdateien und stelle sicher, dass sie so eingestellt sind, dass .json-Dateien und Matrix-Endpunkte mit 'Content-Type: application/json' bereitgestellt werden.",
         "Wenn du nginx verwendest, musst du möglicherweise 'types { application/json json; }' zu deiner Konfiguration hinzufügen.",
         "Starte nach den Änderungen deinen Webserver neu und teste erneut."
+      ]
+    },
+    "content_type_warning": {
+      "_context": "This warning addresses non-standard Content-Type headers for client well-known. This is a warning, not an error, because MSC2499 proposes relaxing this requirement and in practice servers work fine. Keep MSC2499 reference, technical terms and URLs untranslated.",
+      "title": "Nicht-Standard Content-Type-Header (Warnung)",
+      "description": "Dein Server gibt die Client-Well-Known-Datei mit einem nicht-standardmäßigen Content-Type-Header zurück. Obwohl die Matrix-Spezifikation technisch 'application/json' erfordert, funktioniert dies in der Praxis, da MSC2499 vorschlägt, diese Anforderung zu lockern und die meisten Clients/Server bereits andere Content-Types akzeptieren.",
+      "technical_note": "MSC2499 (https://github.com/matrix-org/matrix-spec-proposals/pull/2499) schlägt vor, jeden Content-Type für Well-Known-Dateien zuzulassen. Deine Einrichtung funktioniert, aber die Behebung gewährleistet vollständige Spezifikationskonformität.",
+      "learn_more": "Erfahren Sie mehr über die Content-Type-Konfiguration",
+      "steps": [
+        "Dies ist ein kleineres Problem - dein Matrix-Server funktioniert trotz dieser Warnung korrekt.",
+        "Für vollständige Spezifikationskonformität konfiguriere deinen Webserver so, dass er 'Content-Type: application/json' für den /.well-known/matrix/client-Endpunkt zurückgibt.",
+        "In nginx füge hinzu: default_type application/json; oder add_header Content-Type application/json; zum location-Block.",
+        "In Caddy füge hinzu: header Content-Type application/json zu deiner respond-Direktive."
       ]
     },
     "json_parse": {

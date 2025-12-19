@@ -1,5 +1,4 @@
 import { Component, ComponentChildren } from "preact";
-import { captureException } from "@/lib/sentry.ts";
 
 interface ErrorBoundaryProps {
   children: ComponentChildren;
@@ -11,7 +10,7 @@ interface ErrorBoundaryState {
 }
 
 /**
- * Global error boundary component that catches errors and reports them to Sentry
+ * Global error boundary component that catches unexpected errors
  */
 export default class ErrorBoundary extends Component<
   ErrorBoundaryProps,
@@ -36,14 +35,7 @@ export default class ErrorBoundary extends Component<
     error: Error,
     errorInfo: { componentStack?: string },
   ) {
-    // Report error to Sentry
-    captureException(error, {
-      component: "ErrorBoundary",
-      componentStack: errorInfo.componentStack,
-      errorBoundary: true,
-    });
-
-    // Also log to console for development
+    // Log to console for debugging
     console.error("Error caught by boundary:", error, errorInfo);
   }
 
@@ -81,8 +73,8 @@ export default class ErrorBoundary extends Component<
                       An unexpected error has occurred
                     </h3>
                     <p class="govuk-body">
-                      We're sorry, but something went wrong. The error has been
-                      automatically reported and we'll look into it.
+                      We're sorry, but something went wrong. Please try
+                      refreshing the page or return to the home page.
                     </p>
                     <details class="govuk-details">
                       <summary class="govuk-details__summary">

@@ -65,12 +65,35 @@ export const clientServerHasErrors = computed(() =>
     clientServerState.value.errors.versions)
 );
 
-export const clientServerStatus = computed<"loading" | "success" | "error">(
+// Check if all errors are just warnings (not hard errors)
+export const clientServerHasOnlyWarnings = computed(() => {
+  const errors = clientServerState.value.errors;
+  const hasClientWellKnownError = !!errors.clientWellKnown;
+  const hasVersionsError = !!errors.versions;
+
+  // If no errors at all, return false
+  if (!hasClientWellKnownError && !hasVersionsError) return false;
+
+  // Check if all present errors are warnings
+  const clientWellKnownIsWarning = !hasClientWellKnownError ||
+    errors.clientWellKnown?.isWarning === true;
+  const versionsIsWarning = !hasVersionsError ||
+    errors.versions?.isWarning === true;
+
+  return clientWellKnownIsWarning && versionsIsWarning;
+});
+
+export const clientServerStatus = computed<
+  "loading" | "success" | "warning" | "error"
+>(
   () => {
     const state = clientServerState.value;
     if (state.loading) return "loading";
     if (!state.errors.clientWellKnown && !state.errors.versions) {
       return "success";
+    }
+    if (clientServerHasOnlyWarnings.value) {
+      return "warning";
     }
     return "error";
   },
@@ -144,37 +167,49 @@ async function performFetch(serverName: string): Promise<void> {
         };
     } else {
       // Validate Content-Type for well-known
+      // Note: Content-Type errors are treated as warnings for client well-known
+      // because MSC2499 proposes relaxing this requirement and many servers
+      // already work fine without strict application/json content type.
       const contentTypeError = validateContentType(wellKnownResp);
+      let contentTypeWarning: MatrixError | undefined = undefined;
       if (contentTypeError) {
+        // Store as a warning, not a hard error - continue parsing
         contentTypeError.endpoint = wellKnownUrl;
-        wellKnownErrorToStore = contentTypeError;
-      } else {
-        // Parse well-known JSON
-        const wellKnownText = await wellKnownResp.text();
-        try {
-          const parsedWellKnown = JSON.parse(wellKnownText);
-          clientWellKnown = parsedWellKnown;
+        contentTypeError.type = ErrorType.CONTENT_TYPE_WARNING;
+        contentTypeError.isWarning = true;
+        contentTypeError.message = "errors.wrong_content_type_warning";
+        contentTypeWarning = contentTypeError;
+      }
 
-          // Extract homeserver base URL and remove trailing slash
-          homeserverBaseUrl = parsedWellKnown["m.homeserver"]?.base_url || null;
-          if (!homeserverBaseUrl) {
-            wellKnownErrorToStore = {
-              type: ErrorType.MISSING_FIELD,
-              message: "errors.missing_field",
-              technicalDetails: 'Missing "m.homeserver.base_url" field',
-              endpoint: wellKnownUrl,
-            };
-          } else {
-            // Remove trailing slash from base URL to prevent double slashes
-            homeserverBaseUrl = homeserverBaseUrl.replace(/\/$/, "");
+      // Parse well-known JSON regardless of content type (per MSC2499)
+      const wellKnownText = await wellKnownResp.text();
+      try {
+        const parsedWellKnown = JSON.parse(wellKnownText);
+        clientWellKnown = parsedWellKnown;
+
+        // Extract homeserver base URL and remove trailing slash
+        homeserverBaseUrl = parsedWellKnown["m.homeserver"]?.base_url || null;
+        if (!homeserverBaseUrl) {
+          wellKnownErrorToStore = {
+            type: ErrorType.MISSING_FIELD,
+            message: "errors.missing_field",
+            technicalDetails: 'Missing "m.homeserver.base_url" field',
+            endpoint: wellKnownUrl,
+          };
+        } else {
+          // Remove trailing slash from base URL to prevent double slashes
+          homeserverBaseUrl = homeserverBaseUrl.replace(/\/$/, "");
+          // If parsing succeeded but we had a content type issue, store it as a warning
+          if (contentTypeWarning) {
+            wellKnownErrorToStore = contentTypeWarning;
           }
-        } catch (e) {
-          wellKnownErrorToStore = createJSONParseError(
-            e,
-            wellKnownUrl,
-            wellKnownText,
-          );
         }
+      } catch (e) {
+        wellKnownErrorToStore = createJSONParseError(
+          e,
+          wellKnownUrl,
+          wellKnownText,
+        );
       }
     }
 

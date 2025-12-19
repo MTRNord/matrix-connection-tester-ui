@@ -10,6 +10,7 @@ export enum ErrorType {
   TLS_ERROR = "tls_error",
   JSON_PARSE = "json_parse",
   CONTENT_TYPE = "content_type",
+  CONTENT_TYPE_WARNING = "content_type_warning",
   NOT_FOUND = "not_found",
   SERVER_ERROR = "server_error",
   TIMEOUT = "timeout",
@@ -26,6 +27,7 @@ export interface MatrixError {
   httpStatus?: number;
   responseHeaders?: Record<string, string>;
   originalError?: Error;
+  isWarning?: boolean;
 }
 
 /**

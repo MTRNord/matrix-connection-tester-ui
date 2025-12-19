@@ -67,35 +67,3 @@ jobs:
         run: |
           deno install --allow-scripts
           deno task build
-
-      - name: Create Sentry release (main)
-        if: github.ref == 'refs/heads/main'
-        uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: midnightthoughts
-          SENTRY_PROJECT: connectivity-tester-ui
-          SENTRY_URL: https://sentry.mtrnord.blog
-        with:
-          environment: stage
-          version: ${{ github.sha }}
-          sourcemaps: ./_fresh
-          ignore_missing: true
-          ignore_empty: true
-          finalize: true
-
-      - name: Create Sentry release (tagged)
-        if: startsWith(github.ref, 'refs/tags/v')
-        uses: getsentry/action-release@v1
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: midnightthoughts
-          SENTRY_PROJECT: connectivity-tester-ui
-          SENTRY_URL: https://sentry.mtrnord.blog
-        with:
-          environment: production
-          version: ${{ github.ref_name }}
-          sourcemaps: ./_fresh
-          ignore_missing: true
-          ignore_empty: true
-          finalize: true

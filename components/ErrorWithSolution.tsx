@@ -1,7 +1,40 @@
+import type { ComponentChildren } from "preact";
 import type { MatrixError } from "../lib/errors.ts";
 import { getErrorSolution, hasDocumentation } from "../lib/error-solutions.ts";
 import { getTechnicalDetails } from "../lib/errors.ts";
 import type { I18n } from "../lib/i18n.ts";
+
+/**
+ * Converts URLs in text to clickable links
+ */
+function linkifyText(text: string): ComponentChildren {
+  // Regex to match URLs
+  const urlRegex = /(https?:\/\/[^\s)]+)/g;
+  const parts = text.split(urlRegex);
+
+  if (parts.length === 1) {
+    return text;
+  }
+
+  return parts.map((part, index) => {
+    if (urlRegex.test(part)) {
+      // Reset regex lastIndex since we're reusing it
+      urlRegex.lastIndex = 0;
+      return (
+        <a
+          key={index}
+          href={part}
+          class="govuk-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {part}
+        </a>
+      );
+    }
+    return part;
+  });
+}
 
 interface ErrorWithSolutionProps {
   error: MatrixError;
@@ -24,8 +57,16 @@ export function ErrorWithSolution(
   const steps = i18n.t(solution.steps);
   const stepsArray = Array.isArray(steps) ? steps : [String(steps)];
 
+  // Check if this is a warning (not an error)
+  const isWarning = error.isWarning === true;
+
+  // Use govuk-error-summary with modifier class for warnings
+  const containerClass = isWarning
+    ? "govuk-error-summary govuk-error-summary--warning"
+    : "govuk-error-summary";
+
   return (
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div class={containerClass} data-module="govuk-error-summary">
       <div role="alert">
         <h2 class="govuk-error-summary__title">
           {i18n.t(solution.title)}
@@ -45,7 +86,7 @@ export function ErrorWithSolution(
               <strong>
                 {i18n.t("error_solutions.technical_note_label")}:
               </strong>{" "}
-              {i18n.t(solution.technicalNote)}
+              {linkifyText(String(i18n.t(solution.technicalNote)))}
             </div>
           )}
 

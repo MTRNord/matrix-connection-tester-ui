@@ -34,6 +34,9 @@ export function getErrorSolution(
     case ErrorType.CONTENT_TYPE:
       return getContentTypeSolution(context);
 
+    case ErrorType.CONTENT_TYPE_WARNING:
+      return getContentTypeWarningSolution(context);
+
     case ErrorType.JSON_PARSE:
       return getJSONParseSolution(context);
 
@@ -145,6 +148,19 @@ function getContentTypeSolution(
     technicalNote: "error_solutions.content_type.technical_note",
     docsLink: "/docs/server-configuration",
     learnMoreKey: "error_solutions.content_type.learn_more",
+  };
+}
+
+function getContentTypeWarningSolution(
+  _context: "support" | "client-server" | "federation" | "wellknown",
+): ErrorSolution {
+  return {
+    title: "error_solutions.content_type_warning.title",
+    description: "error_solutions.content_type_warning.description",
+    steps: "error_solutions.content_type_warning.steps",
+    technicalNote: "error_solutions.content_type_warning.technical_note",
+    docsLink: "/docs/server-configuration",
+    learnMoreKey: "error_solutions.content_type_warning.learn_more",
   };
 }
 

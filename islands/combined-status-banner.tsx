@@ -6,6 +6,8 @@ import {
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
+type StatusType = "success" | "warning" | "error";
+
 interface CombinedStatusBannerProps {
   serverName: string;
   locale: Locale;
@@ -22,11 +24,13 @@ export default function CombinedStatusBanner(
   }, [serverName]);
 
   // Computed signals for UI state
-  const clientServerSuccess = useComputed(() =>
-    clientServerStatus.value === "success"
-  );
-  const bothSuccess = useComputed(() =>
-    federationSuccess && clientServerSuccess.value
+  const clientServerState = useComputed<StatusType>(() => {
+    const s = clientServerStatus.value;
+    if (s === "loading") return "success"; // fallback, won't render anyway
+    return s;
+  });
+  const bothSuccessNoWarnings = useComputed(() =>
+    federationSuccess && clientServerState.value === "success"
   );
 
   // While loading client-server API, show only federation banner
@@ -57,8 +61,8 @@ export default function CombinedStatusBanner(
     );
   }
 
-  // If both succeed, show combined banner
-  if (bothSuccess.value) {
+  // If both succeed with no warnings, show combined success banner
+  if (bothSuccessNoWarnings.value) {
     return (
       <div
         class="govuk-panel govuk-panel--confirmation"
@@ -74,6 +78,40 @@ export default function CombinedStatusBanner(
       </div>
     );
   }
+
+  // Helper to get panel class based on status
+  const getClientServerPanelClass = () => {
+    switch (clientServerState.value) {
+      case "success":
+        return "govuk-panel--confirmation";
+      case "warning":
+        return "govuk-panel--warning";
+      case "error":
+        return "govuk-panel--error";
+    }
+  };
+
+  const getClientServerTitleKey = () => {
+    switch (clientServerState.value) {
+      case "success":
+        return "results.client_server_api_working";
+      case "warning":
+        return "results.client_server_api_working_with_warnings";
+      case "error":
+        return "results.client_server_api_not_working";
+    }
+  };
+
+  const getClientServerMessageKey = () => {
+    switch (clientServerState.value) {
+      case "success":
+        return "results.client_server_api_success_message";
+      case "warning":
+        return "results.client_server_api_warning_message";
+      case "error":
+        return "results.client_server_api_failure_message";
+    }
+  };
 
   // Otherwise, show both individual banners
   return (
@@ -104,27 +142,15 @@ export default function CombinedStatusBanner(
 
       {/* Client-Server API status banner */}
       <div
-        class={`govuk-panel panel-with-margin ${
-          clientServerSuccess.value
-            ? "govuk-panel--confirmation"
-            : "govuk-panel--error"
-        }`}
-        role={clientServerSuccess.value ? "status" : "alert"}
+        class={`govuk-panel panel-with-margin ${getClientServerPanelClass()}`}
+        role={clientServerState.value === "error" ? "alert" : "status"}
         aria-live="polite"
       >
         <h1 class="govuk-panel__title">
-          {i18n.t(
-            clientServerSuccess.value
-              ? "results.client_server_api_working"
-              : "results.client_server_api_not_working",
-          )}
+          {i18n.t(getClientServerTitleKey())}
         </h1>
         <div class="govuk-panel__body">
-          {i18n.t(
-            clientServerSuccess.value
-              ? "results.client_server_api_success_message"
-              : "results.client_server_api_failure_message",
-          )}
+          {i18n.t(getClientServerMessageKey())}
         </div>
       </div>
     </>

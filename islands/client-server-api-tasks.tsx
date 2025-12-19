@@ -5,7 +5,7 @@ import { ClientServerStatusPanel } from "../components/client-server-api/panel.t
 import {
   clientServerLoading,
   clientServerState,
-  clientServerSuccessful,
+  clientServerStatus,
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
@@ -59,8 +59,9 @@ export default function ClientServerApiTasks({
     );
   }
 
-  // If there are errors, don't show anything here - errors are shown in Problems section
-  if (!clientServerSuccessful.value) {
+  // If there are hard errors (not warnings), show message pointing to Problems section
+  const status = clientServerStatus.value;
+  if (status === "error") {
     return (
       <div class="govuk-body">
         <p>{i18n.t("results.client_server_api_see_problems")}</p>
@@ -68,13 +69,14 @@ export default function ClientServerApiTasks({
     );
   }
 
+  // For success or warning, show the info section
   const { clientWellKnown, discoveredEndpoint } = state.value;
 
   return (
     <>
       <ClientServerStatusPanel
         i18n={i18n}
-        successful={clientServerSuccessful.value}
+        status={status}
       />
 
       <dl class="govuk-summary-list">

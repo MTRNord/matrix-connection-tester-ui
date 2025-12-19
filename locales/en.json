@@ -108,8 +108,10 @@
     "client_server_api_title": "Client-Server API Overview",
     "client_server_api_summary": "Supported API versions and experimental features.",
     "client_server_api_working": "Client-Server API is working",
+    "client_server_api_working_with_warnings": "Client-Server API is working (with warnings)",
     "client_server_api_not_working": "Client-Server API is not working",
     "client_server_api_success_message": "Your client will be able to communicate with the server using the Client-Server API.",
+    "client_server_api_warning_message": "Your client will be able to communicate with the server, but there are minor configuration issues you may want to address.",
     "client_server_api_failure_message": "There was a problem communicating with the server using the Client-Server API.",
     "client_server_api_see_problems": "Please check the Problems section above for details about the Client-Server API issues.",
     "client_server_api_latest_version": "Latest supported Client-Server API version",
@@ -236,6 +238,7 @@
     "content_type": "Content Type Error",
     "missing_content_type": "Missing Content-Type Header",
     "wrong_content_type": "Wrong Content-Type",
+    "wrong_content_type_warning": "Non-Standard Content-Type (Warning)",
     "not_found": "Not Found (404)",
     "server_error": "Server Error",
     "timeout_error": "Request Timeout",
@@ -341,6 +344,19 @@
         "Check your web server configuration files and ensure they're set to serve .json files and Matrix endpoints with 'Content-Type: application/json'.",
         "If you're using nginx, you might need to add 'types { application/json json; }' to your configuration.",
         "After making changes, restart your web server and test again."
+      ]
+    },
+    "content_type_warning": {
+      "_context": "This warning addresses non-standard Content-Type headers for client well-known. This is a warning, not an error, because MSC2499 proposes relaxing this requirement and in practice servers work fine. Keep MSC2499 reference, technical terms and URLs untranslated.",
+      "title": "Non-Standard Content-Type Header (Warning)",
+      "description": "Your server is returning the client well-known file with a non-standard Content-Type header. While the Matrix specification technically requires 'application/json', this works in practice because MSC2499 proposes relaxing this requirement and most clients/servers already accept other content types.",
+      "technical_note": "MSC2499 (https://github.com/matrix-org/matrix-spec-proposals/pull/2499) proposes allowing any content type for well-known files. Your setup will work, but fixing this ensures full spec compliance.",
+      "learn_more": "Learn about Content-Type configuration",
+      "steps": [
+        "This is a minor issue - your Matrix server will work correctly despite this warning.",
+        "For full spec compliance, configure your web server to return 'Content-Type: application/json' for the /.well-known/matrix/client endpoint.",
+        "In nginx, add: default_type application/json; or add_header Content-Type application/json; to the location block.",
+        "In Caddy, add: header Content-Type application/json to your respond directive."
       ]
     },
     "json_parse": {

@@ -19,10 +19,7 @@
     "sass": "npm:sass@^1.94.0",
     "vite": "npm:vite@^7.2.2",
     "marked": "npm:marked@^17.0.1",
-    "he": "npm:he@^1.2.0",
-    "@sentry/deno": "npm:@sentry/deno@^10.30.0",
-    "@sentry/browser": "npm:@sentry/browser@^10.30.0",
-    "@sentry/react": "npm:@sentry/react@^10.30.0"
+    "he": "npm:he@^1.2.0"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],

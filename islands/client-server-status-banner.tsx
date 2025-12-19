@@ -6,6 +6,8 @@ import {
   fetchClientServerInfo,
 } from "../lib/client-server-state.ts";
 
+type StatusType = "success" | "warning" | "error";
+
 interface ClientServerStatusBannerProps {
   serverName: string;
   locale: Locale;
@@ -21,17 +23,44 @@ export default function ClientServerStatusBanner(
   }, [serverName]);
 
   // Computed signals for UI state
-  const isSuccess = useComputed(() => clientServerStatus.value === "success");
-  const titleKey = useComputed(() =>
-    isSuccess.value
-      ? "results.client_server_api_working"
-      : "results.client_server_api_not_working"
-  );
-  const messageKey = useComputed(() =>
-    isSuccess.value
-      ? "results.client_server_api_success_message"
-      : "results.client_server_api_failure_message"
-  );
+  const status = useComputed<StatusType>(() => {
+    const s = clientServerStatus.value;
+    if (s === "loading") return "success"; // fallback, won't render anyway
+    return s;
+  });
+
+  const titleKey = useComputed(() => {
+    switch (status.value) {
+      case "success":
+        return "results.client_server_api_working";
+      case "warning":
+        return "results.client_server_api_working_with_warnings";
+      case "error":
+        return "results.client_server_api_not_working";
+    }
+  });
+
+  const messageKey = useComputed(() => {
+    switch (status.value) {
+      case "success":
+        return "results.client_server_api_success_message";
+      case "warning":
+        return "results.client_server_api_warning_message";
+      case "error":
+        return "results.client_server_api_failure_message";
+    }
+  });
+
+  const panelClass = useComputed(() => {
+    switch (status.value) {
+      case "success":
+        return "govuk-panel--confirmation";
+      case "warning":
+        return "govuk-panel--warning";
+      case "error":
+        return "govuk-panel--error";
+    }
+  });
 
   // Don't render anything while loading
   if (clientServerStatus.value === "loading") {
@@ -40,10 +69,8 @@ export default function ClientServerStatusBanner(
 
   return (
     <div
-      class={`govuk-panel panel-with-margin ${
-        isSuccess.value ? "govuk-panel--confirmation" : "govuk-panel--error"
-      }`}
-      role={isSuccess.value ? "status" : "alert"}
+      class={`govuk-panel panel-with-margin ${panelClass.value}`}
+      role={status.value === "error" ? "alert" : "status"}
       aria-live="polite"
     >
       <h1 class="govuk-panel__title">

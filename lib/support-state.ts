@@ -140,15 +140,18 @@ async function performFetch(serverName: string): Promise<void> {
     }
 
     // Validate Content-Type
+    // Note: Content-Type errors are treated as warnings for support endpoint
+    // because MSC2499 proposes relaxing this requirement and many servers
+    // already work fine without strict application/json content type.
     const contentTypeError = validateContentType(response);
+    let contentTypeWarning: MatrixError | undefined = undefined;
     if (contentTypeError) {
+      // Store as a warning, not a hard error - continue parsing
       contentTypeError.endpoint = url;
-      supportState.value = {
-        ...supportState.value,
-        error: contentTypeError,
-        loading: false,
-      };
-      return;
+      contentTypeError.type = ErrorType.CONTENT_TYPE_WARNING;
+      contentTypeError.isWarning = true;
+      contentTypeError.message = "errors.wrong_content_type_warning";
+      contentTypeWarning = contentTypeError;
     }
 
     // Parse JSON
@@ -180,11 +183,11 @@ async function performFetch(serverName: string): Promise<void> {
       return;
     }
 
-    // Success
+    // Success - but store content type warning if present
     supportState.value = {
       ...supportState.value,
       supportInfo: data as SupportInfo,
-      error: null,
+      error: contentTypeWarning || null,
       loading: false,
     };
   } catch (e) {

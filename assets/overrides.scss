@@ -239,3 +239,22 @@ pre {
         -webkit-overflow-scrolling: touch;
     }
 }
+
+/* Warning variant for error summary (amber/orange instead of red) */
+.govuk-error-summary--warning {
+    border-color: #f47738;
+}
+
+/* Warning panel (darker orange with white text for accessibility) */
+.govuk-panel--warning {
+    color: #fff;
+    background: #b84c00;
+}
+
+@media print {
+    .govuk-panel--warning {
+        border-color: currentcolor;
+        color: #000000;
+        background: none;
+    }
+}
