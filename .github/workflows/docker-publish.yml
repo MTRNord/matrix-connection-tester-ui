@@ -19,6 +19,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install dependencies and build
+        run: |
+          deno install --allow-scripts
+          deno task build
+
+      - name: Run deno tests
+        run: |
+          deno test --allow-net --allow-read
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -57,17 +71,3 @@ jobs:
             ghcr.io/mtrnord/matrix-connection-tester-ui:${{ github.ref_name }}
           build-args: |
             VITE_APP_VERSION=${{ github.sha }}
-
-      - name: Setup Deno
-        uses: denoland/setup-deno@v2
-        with:
-          deno-version: v2.x
-
-      - name: Install dependencies and build
-        run: |
-          deno install --allow-scripts
-          deno task build
-
-      - name: Run deno tests
-        run: |
-          deno test --allow-net --allow-read
