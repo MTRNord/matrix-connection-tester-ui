@@ -67,3 +67,7 @@ jobs:
         run: |
           deno install --allow-scripts
           deno task build
+
+      - name: Run deno tests
+        run: |
+          deno test --allow-net --allow-read
