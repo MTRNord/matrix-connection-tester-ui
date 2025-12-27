@@ -185,8 +185,8 @@
     "description": "Extends the User Profile API to support key-value pairs for user profiles"
   },
   "uk.timedout.msc4323": {
-    "msc": "MSC4323".
-    "title": "User suspension & locking endpoints"
+    "msc": "MSC4323",
+    "title": "User suspension & locking endpoints",
     "description": "Adds new endpoints which allow server administrators to suspend, unsuspend, lock, and unlock given users"
   }
 }
