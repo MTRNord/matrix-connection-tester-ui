@@ -7,7 +7,8 @@ import {
   parsePrometheusText,
 } from "../lib/prometheus-parser.ts";
 import { define } from "../utils.ts";
-import { fetchWithTrace } from "../lib/tracing.ts";
+import { fetchWithTrace, getTracer } from "../lib/tracing.ts";
+import { SpanStatusCode } from "@opentelemetry/api";
 
 // Cache configuration
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -41,21 +42,34 @@ interface StatisticsData {
 }
 
 async function fetchStatistics(apiUrl: string): Promise<StatisticsData | null> {
-  try {
-    const response = await fetchWithTrace(`${apiUrl}/metrics`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch metrics: ${response.statusText}`);
+  const tracer = getTracer();
+  return await tracer.startActiveSpan("fetchStatistics", async (parentSpan) => {
+    try {
+      const response = await fetchWithTrace(`${apiUrl}/metrics`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch metrics: ${response.statusText}`);
+      }
+
+      const text = await response.text();
+      // Only parse the metric we need for statistics
+      const parsed = parsePrometheusText(text, ["federation_request_total"]);
+
+      return extractStatistics(parsed);
+    } catch (error) {
+      console.error("Error fetching statistics:", error);
+
+      if (error instanceof Error) {
+        parentSpan.recordException(error);
+      }
+      parentSpan.setStatus({
+        code: SpanStatusCode.ERROR,
+        message: error instanceof Error ? error.message : String(error),
+      });
+      return null;
+    } finally {
+      parentSpan.end();
     }
-
-    const text = await response.text();
-    // Only parse the metric we need for statistics
-    const parsed = parsePrometheusText(text, ["federation_request_total"]);
-
-    return extractStatistics(parsed);
-  } catch (error) {
-    console.error("Error fetching statistics:", error);
-    return null;
-  }
+  });
 }
 
 function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
@@ -200,85 +214,108 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
 
 export const handler = define.handlers({
   async GET(ctx) {
-    const { url } = ctx;
+    const tracer = getTracer();
+    return await tracer.startActiveSpan(
+      "access federation report api",
+      async (parentSpan) => {
+        const { url } = ctx;
 
-    try {
-      // Check if we have valid cached data
-      const now = Date.now();
-      if (
-        cachedStatistics && (now - cachedStatistics.timestamp) < CACHE_TTL_MS
-      ) {
-        // Serve from cache with appropriate headers
-        const age = Math.floor((now - cachedStatistics.timestamp) / 1000);
-        const maxAge = Math.floor(CACHE_TTL_MS / 1000);
+        try {
+          // Check if we have valid cached data
+          const now = Date.now();
+          if (
+            cachedStatistics &&
+            (now - cachedStatistics.timestamp) < CACHE_TTL_MS
+          ) {
+            // Serve from cache with appropriate headers
+            const age = Math.floor((now - cachedStatistics.timestamp) / 1000);
+            const maxAge = Math.floor(CACHE_TTL_MS / 1000);
 
-        return page(
-          {
-            stats: cachedStatistics.data,
-          },
-          {
-            headers: {
-              "Cache-Control": `public, max-age=${
-                maxAge - age
-              }, stale-while-revalidate=60`,
-              "Age": age.toString(),
+            parentSpan.addEvent("serving from cache");
+
+            return page(
+              {
+                stats: cachedStatistics.data,
+              },
+              {
+                headers: {
+                  "Cache-Control": `public, max-age=${
+                    maxAge - age
+                  }, stale-while-revalidate=60`,
+                  "Age": age.toString(),
+                },
+              },
+            );
+          }
+
+          parentSpan.addEvent("serving from API");
+
+          // Fetch API configuration
+          const apiConfig = await getConfig(
+            `${url.protocol}//${url.host}`,
+          );
+
+          const apiUrl = apiConfig.api_server_url;
+
+          // Fetch statistics from the API
+          const stats = await fetchStatistics(apiUrl);
+          parentSpan.addEvent("fetched statistics");
+
+          // Cache the result if successful
+          if (stats) {
+            parentSpan.addEvent("caching result");
+            cachedStatistics = {
+              data: stats,
+              timestamp: Date.now(),
+            };
+          }
+
+          // Set cache headers for fresh response
+          const maxAge = Math.floor(CACHE_TTL_MS / 1000);
+          return page(
+            {
+              stats,
             },
-          },
-        );
-      }
-
-      // Fetch API configuration
-      const apiConfig = await getConfig(
-        `${url.protocol}//${url.host}`,
-      );
-
-      const apiUrl = apiConfig.api_server_url;
-
-      // Fetch statistics from the API
-      const stats = await fetchStatistics(apiUrl);
-
-      // Cache the result if successful
-      if (stats) {
-        cachedStatistics = {
-          data: stats,
-          timestamp: Date.now(),
-        };
-      }
-
-      // Set cache headers for fresh response
-      const maxAge = Math.floor(CACHE_TTL_MS / 1000);
-      return page(
-        {
-          stats,
-        },
-        {
-          headers: {
-            "Cache-Control":
-              `public, max-age=${maxAge}, stale-while-revalidate=60`,
-          },
-        },
-      );
-    } catch (error) {
-      console.error("Error in statistics handler:", error);
-
-      // If we have stale cached data, serve it on error
-      if (cachedStatistics) {
-        return page(
-          {
-            stats: cachedStatistics.data,
-          },
-          {
-            headers: {
-              "Cache-Control": "public, max-age=60, stale-if-error=3600",
+            {
+              headers: {
+                "Cache-Control":
+                  `public, max-age=${maxAge}, stale-while-revalidate=60`,
+              },
             },
-          },
-        );
-      }
+          );
+        } catch (error) {
+          console.error("Error in statistics handler:", error);
 
-      return page({
-        stats: null,
-      });
-    }
+          if (error instanceof Error) {
+            parentSpan.recordException(error);
+          }
+          parentSpan.setStatus({
+            code: SpanStatusCode.ERROR,
+            message: error instanceof Error ? error.message : String(error),
+          });
+
+          // If we have stale cached data, serve it on error
+          if (cachedStatistics) {
+            return page(
+              {
+                stats: cachedStatistics.data,
+              },
+              {
+                headers: {
+                  "Cache-Control": "public, max-age=60, stale-if-error=3600",
+                },
+              },
+            );
+          }
+
+          return page({
+            stats: null,
+          });
+        } finally {
+          parentSpan.end();
+        }
+      },
+    );
   },
 });
 

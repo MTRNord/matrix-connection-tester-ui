@@ -92,74 +92,106 @@ export interface APIResponseType {
 export const handler = define.handlers({
   async GET(ctx) {
     const tracer = getTracer();
-    return await tracer.startActiveSpan("GET /results", async (parentSpan) => {
-      parentSpan.setAttribute(
-        "serverName",
-        ctx.url.searchParams.get("serverName")!,
-      );
-      parentSpan.setAttribute(
-        "statistics",
-        ctx.url.searchParams.get("statistics")!,
-      );
-      parentSpan.setAttribute(
-        "no_cache",
-        ctx.url.searchParams.get("no_cache")!,
-      );
-      parentSpan.setAttribute("user_agent", ctx.req.headers.get("user-agent")!);
-
-      const url = ctx.url;
-      try {
-        const apiConfig = await getConfig(
-          `${url.protocol}//${url.host}`,
+    return await tracer.startActiveSpan(
+      "get data for results",
+      async (parentSpan) => {
+        parentSpan.setAttribute(
+          "serverName",
+          ctx.url.searchParams.get("serverName")!,
+        );
+        parentSpan.setAttribute(
+          "statistics",
+          ctx.url.searchParams.get("statistics")!,
+        );
+        parentSpan.setAttribute(
+          "no_cache",
+          ctx.url.searchParams.get("no_cache")!,
+        );
+        parentSpan.setAttribute(
+          "user_agent",
+          ctx.req.headers.get("user-agent")!,
         );
 
-        const serverName = url.searchParams.get("serverName");
-        if (!serverName) {
-          // Redirect to home if no serverName is provided
-          return Response.redirect(
-            `${url.protocol}//${url.host}/`,
-            302,
-          );
-        }
-
-        const statisticsOptIn: boolean =
-          url.searchParams.get("statistics") === "opt-in";
-        const apiUrl = `${
-          (apiConfig ?? {}).api_server_url ?? "localhost"
-        }/api/federation/report?server_name=${
-          encodeURIComponent(serverName)
-        }&stats_opt_in=${statisticsOptIn.toString()}&no_cache=true`;
-
+        const url = ctx.url;
         try {
-          const apiResp = await fetchWithTrace(apiUrl);
-          try {
-            const apiData = await apiResp.json();
-            parentSpan.addEvent("received_api_response", {
-              status: apiResp.status,
-              timestamp: Date.now(),
-            });
-            return page({
-              data: apiData,
-              serverName,
-            });
-          } catch (error) {
-            console.error("Error parsing API response JSON:", error);
-            if (error instanceof Error) {
-              parentSpan.recordException(error);
-            }
-            parentSpan.setStatus({
-              code: SpanStatusCode.ERROR,
-              message: error instanceof Error ? error.message : String(error),
-            });
-            return new Response(
-              ctx.state.i18n.tString("errors.missing_api_config"),
-              {
-                status: 500,
-              },
-            );
-          }
+          const apiConfig = await getConfig(
+            `${url.protocol}//${url.host}`,
+          );
+
+          return await tracer.startActiveSpan(
+            "access federation report api",
+            async (parentSpan) => {
+              const serverName = url.searchParams.get("serverName");
+              if (!serverName) {
+                // Redirect to home if no serverName is provided
+                return Response.redirect(
+                  `${url.protocol}//${url.host}/`,
+                  302,
+                );
+              }
+
+              const statisticsOptIn: boolean =
+                url.searchParams.get("statistics") === "opt-in";
+              const apiUrl = `${
+                (apiConfig ?? {}).api_server_url ?? "localhost"
+              }/api/federation/report?server_name=${
+                encodeURIComponent(serverName)
+              }&stats_opt_in=${statisticsOptIn.toString()}&no_cache=true`;
+
+              try {
+                const apiResp = await fetchWithTrace(apiUrl);
+                try {
+                  const apiData = await apiResp.json();
+                  parentSpan.addEvent("received_api_response", {
+                    status: apiResp.status,
+                    timestamp: Date.now(),
+                  });
+                  return page({
+                    data: apiData,
+                    serverName,
+                  });
+                } catch (error) {
+                  console.error("Error parsing API response JSON:", error);
+                  if (error instanceof Error) {
+                    parentSpan.recordException(error);
+                  }
+                  parentSpan.setStatus({
+                    code: SpanStatusCode.ERROR,
+                    message: error instanceof Error
+                      ? error.message
+                      : String(error),
+                  });
+                  return new Response(
+                    ctx.state.i18n.tString("errors.missing_api_config"),
+                    {
+                      status: 500,
+                    },
+                  );
+                }
+              } catch (error) {
+                console.error("Error fetching API data:", error);
+                if (error instanceof Error) {
+                  parentSpan.recordException(error);
+                }
+                parentSpan.setStatus({
+                  code: SpanStatusCode.ERROR,
+                  message: error instanceof Error
+                    ? error.message
+                    : String(error),
+                });
+                return new Response(
+                  ctx.state.i18n.tString("errors.missing_api_config"),
+                  {
+                    status: 500,
+                  },
+                );
+              } finally {
+                parentSpan.end();
+              }
+            },
+          );
         } catch (error) {
-          console.error("Error fetching API data:", error);
+          console.error("Error fetching API config:", error);
           if (error instanceof Error) {
             parentSpan.recordException(error);
           }
@@ -173,26 +205,11 @@ export const handler = define.handlers({
               status: 500,
             },
           );
+        } finally {
+          parentSpan.end();
         }
-      } catch (error) {
-        console.error("Error fetching API config:", error);
-        if (error instanceof Error) {
-          parentSpan.recordException(error);
-        }
-        parentSpan.setStatus({
-          code: SpanStatusCode.ERROR,
-          message: error instanceof Error ? error.message : String(error),
-        });
-        return new Response(
-          ctx.state.i18n.tString("errors.missing_api_config"),
-          {
-            status: 500,
-          },
-        );
-      } finally {
-        parentSpan.end();
-      }
-    });
+      },
+    );
   },
 });
 
