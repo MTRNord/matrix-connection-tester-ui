@@ -30,9 +30,9 @@
     "npm:@babel/preset-react@^7.27.1": "7.28.5_@babel+core@7.28.5",
     "npm:@mjackson/node-fetch-server@0.7": "0.7.0",
     "npm:@opentelemetry/api@^1.9.0": "1.9.0",
-    "npm:@preact/signals@^2.2.1": "2.5.1_preact@10.28.1",
-    "npm:@preact/signals@^2.5.1": "2.5.1_preact@10.28.1",
-    "npm:@prefresh/vite@^2.4.8": "2.4.11_preact@10.28.1_vite@7.3.0__@types+node@24.2.0__sass@1.97.1__picomatch@4.0.3_@types+node@24.2.0_sass@1.97.1",
+    "npm:@preact/signals@^2.2.1": "2.5.1_preact@10.28.2",
+    "npm:@preact/signals@^2.5.1": "2.5.1_preact@10.28.2",
+    "npm:@prefresh/vite@^2.4.8": "2.4.11_preact@10.28.2_vite@7.3.1__@types+node@24.2.0__sass@1.97.2__picomatch@4.0.3_@types+node@24.2.0_sass@1.97.2",
     "npm:@types/node@*": "24.2.0",
     "npm:esbuild-wasm@~0.25.11": "0.25.12",
     "npm:esbuild@0.25.7": "0.25.7",
@@ -40,14 +40,13 @@
     "npm:govuk-frontend@^5.13.0": "5.13.0",
     "npm:he@^1.2.0": "1.2.0",
     "npm:marked@^17.0.1": "17.0.1",
-    "npm:preact-render-to-string@^6.6.3": "6.6.4_preact@10.28.1",
-    "npm:preact@^10.27.0": "10.28.1",
-    "npm:preact@^10.27.2": "10.28.1",
-    "npm:preact@^10.28.1": "10.28.1",
+    "npm:preact-render-to-string@^6.6.3": "6.6.4_preact@10.28.2",
+    "npm:preact@^10.27.0": "10.28.2",
+    "npm:preact@^10.27.2": "10.28.2",
+    "npm:preact@^10.28.2": "10.28.2",
     "npm:rollup@^4.50.0": "4.54.0",
-    "npm:sass@^1.97.1": "1.97.1",
-    "npm:vite@^7.1.4": "7.3.0_@types+node@24.2.0_sass@1.97.1_picomatch@4.0.3",
-    "npm:vite@^7.3.0": "7.3.0_@types+node@24.2.0_sass@1.97.1_picomatch@4.0.3"
+    "npm:sass@^1.97.2": "1.97.2",
+    "npm:vite@^7.3.1": "7.3.1_@types+node@24.2.0_sass@1.97.2_picomatch@4.0.3"
   },
   "jsr": {
     "@deno/esbuild-plugin@1.2.1": {
@@ -104,8 +103,7 @@
         "npm:@babel/preset-react",
         "npm:@mjackson/node-fetch-server",
         "npm:@prefresh/vite",
-        "npm:rollup",
-        "npm:vite@^7.1.4"
+        "npm:rollup"
       ]
     },
     "@std/bytes@1.0.6": {
@@ -734,7 +732,7 @@
     "@preact/signals-core@1.12.1": {
       "integrity": "sha512-BwbTXpj+9QutoZLQvbttRg5x3l5468qaV2kufh+51yha1c53ep5dY4kTuZR35+3pAZxpfQerGJiQqg34ZNZ6uA=="
     },
-    "@preact/signals@2.5.1_preact@10.28.1": {
+    "@preact/signals@2.5.1_preact@10.28.2": {
       "integrity": "sha512-VPjk5YFt7i11Fi4UK0tzaEe5xLwfhUxXL3l89ocxQ5aPz7bRo8M5+N73LjBMPklyXKYKz6YsNo4Smp8n6nplng==",
       "dependencies": [
         "@preact/signals-core",
@@ -744,7 +742,7 @@
     "@prefresh/babel-plugin@0.5.2": {
       "integrity": "sha512-AOl4HG6dAxWkJ5ndPHBgBa49oo/9bOiJuRDKHLSTyH+Fd9x00shTXpdiTj1W41l6oQIwUOAgJeHMn4QwIDpHkA=="
     },
-    "@prefresh/core@1.5.9_preact@10.28.1": {
+    "@prefresh/core@1.5.9_preact@10.28.2": {
       "integrity": "sha512-IKBKCPaz34OFVC+adiQ2qaTF5qdztO2/4ZPf4KsRTgjKosWqxVXmEbxCiUydYZRY8GVie+DQlKzQr9gt6HQ+EQ==",
       "dependencies": [
         "preact"
@@ -753,7 +751,7 @@
     "@prefresh/utils@1.2.1": {
       "integrity": "sha512-vq/sIuN5nYfYzvyayXI4C2QkprfNaHUQ9ZX+3xLD8nL3rWyzpxOm1+K7RtMbhd+66QcaISViK7amjnheQ/4WZw=="
     },
-    "@prefresh/vite@2.4.11_preact@10.28.1_vite@7.3.0__@types+node@24.2.0__sass@1.97.1__picomatch@4.0.3_@types+node@24.2.0_sass@1.97.1": {
+    "@prefresh/vite@2.4.11_preact@10.28.2_vite@7.3.1__@types+node@24.2.0__sass@1.97.2__picomatch@4.0.3_@types+node@24.2.0_sass@1.97.2": {
       "integrity": "sha512-/XjURQqdRiCG3NpMmWqE9kJwrg9IchIOWHzulCfqg2sRe/8oQ1g5De7xrk9lbqPIQLn7ntBkKdqWXIj4E9YXyg==",
       "dependencies": [
         "@babel/core",
@@ -1116,14 +1114,14 @@
         "source-map-js"
       ]
     },
-    "preact-render-to-string@6.6.4_preact@10.28.1": {
+    "preact-render-to-string@6.6.4_preact@10.28.2": {
       "integrity": "sha512-Bn6eQZ5SQ5loVEcC/mZmKT7HzO5Z/+vYzxfE/W2N468oSoNMJVdFGApF0GyXq0lDthuyXKTmtZ8k20NpYjr6Rw==",
       "dependencies": [
         "preact"
       ]
     },
-    "preact@10.28.1": {
-      "integrity": "sha512-u1/ixq/lVQI0CakKNvLDEcW5zfCjUQfZdK9qqWuIJtsezuyG6pk9TWj75GMuI/EzRSZB/VAE43sNWWZfiy8psw=="
+    "preact@10.28.2": {
+      "integrity": "sha512-lbteaWGzGHdlIuiJ0l2Jq454m6kcpI1zNje6d8MlGAFlYvP2GO4ibnat7P74Esfz4sPTdM6UxtTwh/d3pwM9JA=="
     },
     "readdirp@4.1.2": {
       "integrity": "sha512-GDhwkLfywWL2s6vEjyhri+eXmfH6j1L7JE27WhqLeYzoh/A3DBaYGEj2H/HFZCn/kMfim73FXxEJTw06WtxQwg=="
@@ -1160,8 +1158,8 @@
       ],
       "bin": true
     },
-    "sass@1.97.1": {
-      "integrity": "sha512-uf6HoO8fy6ClsrShvMgaKUn14f2EHQLQRtpsZZLeU/Mv0Q1K5P0+x2uvH6Cub39TVVbWNSrraUhDAoFph6vh0A==",
+    "sass@1.97.2": {
+      "integrity": "sha512-y5LWb0IlbO4e97Zr7c3mlpabcbBtS+ieiZ9iwDooShpFKWXf62zz5pEPdwrLYm+Bxn1fnbwFGzHuCLSA9tBmrw==",
       "dependencies": [
         "chokidar",
         "immutable",
@@ -1204,8 +1202,8 @@
       ],
       "bin": true
     },
-    "vite@7.3.0_@types+node@24.2.0_sass@1.97.1_picomatch@4.0.3": {
-      "integrity": "sha512-dZwN5L1VlUBewiP6H9s2+B3e3Jg96D0vzN+Ry73sOefebhYr9f94wwkMNN/9ouoU8pV1BqA1d1zGk8928cx0rg==",
+    "vite@7.3.1_@types+node@24.2.0_sass@1.97.2_picomatch@4.0.3": {
+      "integrity": "sha512-w+N7Hifpc3gRjZ63vYBXA56dvvRlNWRczTdmCBBa+CotUzAPf5b7YMdMR/8CQoeYE5LX3W4wj6RYTgonm1b9DA==",
       "dependencies": [
         "@types/node",
         "esbuild@0.27.2",
@@ -1237,9 +1235,9 @@
       "npm:govuk-frontend@^5.13.0",
       "npm:he@^1.2.0",
       "npm:marked@^17.0.1",
-      "npm:preact@^10.28.1",
-      "npm:sass@^1.97.1",
-      "npm:vite@^7.3.0"
+      "npm:preact@^10.28.2",
+      "npm:sass@^1.97.2",
+      "npm:vite@^7.3.1"
     ]
   }
 }
