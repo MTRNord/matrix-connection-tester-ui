@@ -1,5 +1,6 @@
-import { useEffect } from "preact/hooks";
 import { useComputed, useSignal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
+import { fetchWithTrace } from "../lib/tracing.ts";
 
 interface RawDataSectionProps {
   serverName: string;
@@ -49,7 +50,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
     async function fetchWellKnownAndClientServer() {
       try {
         const versionsUrl = `https://${serverName}/.well-known/matrix/client`;
-        const versionsResponse = await fetch(versionsUrl);
+        const versionsResponse = await fetchWithTrace(versionsUrl);
 
         if (versionsResponse.ok) {
           const wellKnown: WellKnownResponse = await versionsResponse.json();
@@ -63,7 +64,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
             homeserverBaseUrl = homeserverBaseUrl.replace(/\/$/, "");
 
             try {
-              const versionsResp = await fetch(
+              const versionsResp = await fetchWithTrace(
                 `${homeserverBaseUrl}/_matrix/client/versions`,
               );
               if (versionsResp.ok) {
@@ -86,7 +87,7 @@ export default function RawDataSection(props: RawDataSectionProps) {
     async function fetchSupportData() {
       try {
         const supportUrl = `https://${serverName}/.well-known/matrix/support`;
-        const supportResponse = await fetch(supportUrl);
+        const supportResponse = await fetchWithTrace(supportUrl);
 
         if (supportResponse.ok) {
           const support: SupportResponse = await supportResponse.json();

@@ -3,6 +3,8 @@
  * Provides user-friendly error messages with technical details
  */
 
+import { fetchWithTrace } from "./tracing.ts";
+
 export enum ErrorType {
   CORS = "cors",
   CORS_PREFLIGHT = "cors_preflight",
@@ -257,7 +259,7 @@ export async function fetchWithTimeout(
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithTrace(url, {
       signal: controller.signal,
       // Don't send credentials to avoid CORS issues
       credentials: "omit",
@@ -291,7 +293,7 @@ export async function checkCORSPreflight(
   const timeoutId = setTimeout(() => controller.abort(), timeout);
 
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithTrace(url, {
       method: "OPTIONS",
       signal: controller.signal,
       credentials: "omit",

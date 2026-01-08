@@ -1,12 +1,13 @@
-import { define } from "../utils.ts";
 import { page } from "fresh";
 import StatCard from "../components/StatCard.tsx";
+import { getConfig } from "../lib/api.ts";
+import type { PrometheusParseResult } from "../lib/prometheus-parser.ts";
 import {
   getMetricSamples,
   parsePrometheusText,
 } from "../lib/prometheus-parser.ts";
-import type { PrometheusParseResult } from "../lib/prometheus-parser.ts";
-import { getConfig } from "../lib/api.ts";
+import { define } from "../utils.ts";
+import { fetchWithTrace } from "../lib/tracing.ts";
 
 // Cache configuration
 const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -41,7 +42,7 @@ interface StatisticsData {
 
 async function fetchStatistics(apiUrl: string): Promise<StatisticsData | null> {
   try {
-    const response = await fetch(`${apiUrl}/metrics`);
+    const response = await fetchWithTrace(`${apiUrl}/metrics`);
     if (!response.ok) {
       throw new Error(`Failed to fetch metrics: ${response.statusText}`);
     }

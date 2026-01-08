@@ -2,6 +2,7 @@ import { define } from "../utils.ts";
 import { getConfig } from "../lib/api.ts";
 import { page } from "fresh";
 import AlertDeleteButton from "../islands/alert-delete-button.tsx";
+import { fetchWithTrace } from "../lib/tracing.ts";
 
 interface Alert {
   id: string;
@@ -41,7 +42,7 @@ export const handler = define.handlers({
       }/api/alerts/verify?token=${encodeURIComponent(token)}`;
 
       try {
-        const response = await fetch(apiUrl, {
+        const response = await fetchWithTrace(apiUrl, {
           method: "GET",
         });
 

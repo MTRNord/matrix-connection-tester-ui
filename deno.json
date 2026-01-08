@@ -11,6 +11,7 @@
   "exclude": ["**/_fresh/*"],
   "imports": {
     "@/": "./",
+    "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.0",
     "fresh": "jsr:@fresh/core@^2.2.0",
     "govuk-frontend": "npm:govuk-frontend@^5.13.0",
     "preact": "npm:preact@^10.28.2",

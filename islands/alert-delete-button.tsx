@@ -1,6 +1,7 @@
 import { useComputed, useSignal } from "@preact/signals";
 import { useEffect, useMemo, useRef } from "preact/hooks";
 import { I18n, type Locale } from "../lib/i18n.ts";
+import { fetchWithTrace } from "../lib/tracing.ts";
 
 interface AlertDeleteButtonProps {
   alertId: string;
@@ -33,7 +34,7 @@ export default function AlertDeleteButton(
     isDeleting.value = true;
 
     try {
-      const response = await fetch(
+      const response = await fetchWithTrace(
         `${apiBaseUrl}/api/alerts/${encodeURIComponent(alertId)}`,
         {
           method: "DELETE",

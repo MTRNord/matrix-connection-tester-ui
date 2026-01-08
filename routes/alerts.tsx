@@ -1,6 +1,7 @@
 import { define } from "../utils.ts";
 import { getConfig } from "../lib/api.ts";
 import { page } from "fresh";
+import { fetchWithTrace } from "../lib/tracing.ts";
 
 export const handler = define.handlers({
   async POST(ctx) {
@@ -28,7 +29,7 @@ export const handler = define.handlers({
         }/api/alerts/register`;
 
         try {
-          const response = await fetch(apiUrl, {
+          const response = await fetchWithTrace(apiUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -73,7 +74,7 @@ export const handler = define.handlers({
         }/api/alerts/list`;
 
         try {
-          const response = await fetch(apiUrl, {
+          const response = await fetchWithTrace(apiUrl, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
