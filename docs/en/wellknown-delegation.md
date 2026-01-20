@@ -19,8 +19,6 @@ Well-known delegation solves several common problems:
 
 - **Separate your server location from your domain:** Your Matrix server can run on `matrix.example.com` while users have IDs like `@user:example.com`
 - **Use port 443 instead of 8448:** Avoids firewall issues and works better with corporate networks
-- **Easier server migration:** Move your server to a new host without changing user IDs
-- **Better flexibility:** Host multiple services on the same domain without conflicts
 
 :::warning
 Once you set up well-known delegation and users start joining your server, changing it is essentially impossible. Changing it would make it a different server from the vision of others. Plan your delegation structure carefully before going into production.

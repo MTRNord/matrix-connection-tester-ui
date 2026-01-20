@@ -26,7 +26,7 @@ Tritt diesen Matrix-Räumen bei, um Fragen zu stellen und Unterstützung von der
 - Relevante Fehlermeldungen aus den Logs
 - Was du bereits versucht hast
 - Ergebnisse des Konnektivitätstests (falls zutreffend)
-  :::
+:::
 
 ## Offizielle Dokumentation
 
