@@ -99,15 +99,15 @@ export default function DocsSidebar({ currentPath, i18n }: DocsSidebarProps) {
         },
       ],
     },
-    {
-      title: i18n.tString("docs.nav.compliance"),
-      items: [
-        {
-          title: i18n.tString("docs.nav.compliance_suites"),
-          href: "/docs/compliance-suites",
-        },
-      ],
-    },
+    // {
+    //   title: i18n.tString("docs.nav.compliance"),
+    //   items: [
+    //     {
+    //       title: i18n.tString("docs.nav.compliance_suites"),
+    //       href: "/docs/compliance-suites",
+    //     },
+    //   ],
+    // },
   ];
 
   return (
