@@ -47,7 +47,7 @@ Diagnose and resolve common connectivity issues, network problems, and configura
 </div>
 </div>
 
-<div class="govuk-grid-row">
+<!--<div class="govuk-grid-row">
 <div class="govuk-grid-column-one-half">
 <h3 class="govuk-heading-m">
 <a href="/docs/compliance-suites" class="govuk-link">Compliance (Unofficial)</a>
@@ -56,7 +56,7 @@ Diagnose and resolve common connectivity issues, network problems, and configura
 Unofficial compliance suites for Matrix applications (not vetted by SCT).
 </p>
 </div>
-</div>
+</div>-->
 </div>
 </div>
 
