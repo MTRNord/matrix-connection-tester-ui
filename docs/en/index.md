@@ -62,33 +62,9 @@ Unofficial compliance suites for Matrix applications (not vetted by SCT).
 
 ---
 
-## Quick Links
-
-- [Federation Setup](/docs/federation-setup)
-- [CORS Configuration](/docs/cors-configuration)
-- [TLS Certificates](/docs/tls-certificates)
-- [General Troubleshooting](/docs/troubleshooting)
-- [Getting Help](/docs/getting-help)
-- [Server Logs](/docs/server-logs)
-- [Network Troubleshooting](/docs/network-troubleshooting)
-- [Well-Known Delegation](/docs/wellknown-delegation)
-- [Server Configuration](/docs/server-configuration)
-- [Performance](/docs/performance)
-- [Client-Server API](/docs/client-server-api)
-- [CORS Preflight](/docs/cors-preflight)
-- [Support Endpoint](/docs/support-endpoint)
-
 ## About This Documentation
 
-This documentation covers everything you need to know about setting up, configuring, and troubleshooting your Matrix homeserver for optimal connectivity and federation.
-
-### What You'll Find Here
-
-- **Setup Guides** - Step-by-step instructions for configuring federation, TLS, and delegation
-- **Configuration Reference** - Detailed configuration options and best practices
-- **Troubleshooting** - Solutions to common problems and diagnostic procedures
-- **API Documentation** - Understanding Matrix APIs and endpoints
-- **Performance Optimization** - Tips for improving server performance
+This documentation covers everything you need to know about troubleshooting your Matrix homeserver for optimal connectivity and federation.
 
 ### Getting Started
 
