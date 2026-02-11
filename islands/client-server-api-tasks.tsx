@@ -166,7 +166,9 @@ export default function ClientServerApiTasks({
                           ? (
                             <a
                               class="govuk-link"
-                              href={`https://github.com/matrix-org/matrix-spec-proposals/pull/${featureInfo.msc}`}
+                              href={`https://github.com/matrix-org/matrix-spec-proposals/pull/${
+                                featureInfo.msc.replace("MSC", "")
+                              }`}
                               rel="noopener noreferrer"
                             >
                               {featureInfo.msc}
