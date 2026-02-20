@@ -28,8 +28,14 @@
     "maturity": "Experimental",
     "url": "https://codeberg.org/timedout/hammerhead"
   },
-  "vona": { "maturity": "Experimental" },
-  "conduwuit": { "maturity": "Obsolete" },
+  "vona": {
+    "maturity": "Experimental",
+    "url":"https://vona.fsky.io/"
+  },
+  "conduwuit": {
+    "maturity": "Obsolete",
+    "url": "https://github.com/x86pup/conduwuit"
+  },
   "catalyst": { "maturity": "Beta" },
   "tuwunel": {
     "maturity": "Beta",
