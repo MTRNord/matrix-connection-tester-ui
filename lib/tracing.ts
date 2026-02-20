@@ -23,7 +23,7 @@ export function fetchWithTrace(
   const span = trace.getActiveSpan();
   if (!span) {
     console.warn("No active span found");
-    return fetch(req);
+    return fetch(req, { ...init });
   }
   const spanContext = span.spanContext();
 
@@ -38,7 +38,7 @@ export function fetchWithTrace(
     if (tracestateVal) {
       req.headers.set("tracestate", tracestateVal);
     }
-    return fetch(req);
+    return fetch(req, { ...init });
   } else {
     const headers = new Headers(init?.headers);
     if (tracestateVal) headers.set("tracestate", tracestateVal);
