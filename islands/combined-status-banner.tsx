@@ -13,11 +13,17 @@ interface CombinedStatusBannerProps {
   locale: Locale;
   federationSuccess: boolean;
   hasConnectionErrors?: boolean;
+  hasFederationWarning?: boolean;
 }
 
 export default function CombinedStatusBanner(
-  { serverName, locale, federationSuccess, hasConnectionErrors = false }:
-    CombinedStatusBannerProps,
+  {
+    serverName,
+    locale,
+    federationSuccess,
+    hasConnectionErrors = false,
+    hasFederationWarning = false,
+  }: CombinedStatusBannerProps,
 ) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
 
@@ -32,7 +38,8 @@ export default function CombinedStatusBanner(
     return s;
   });
   const bothSuccessNoWarnings = useComputed(() =>
-    federationSuccess && !hasConnectionErrors && clientServerState.value === "success"
+    federationSuccess && !hasConnectionErrors && !hasFederationWarning &&
+    clientServerState.value === "success"
   );
 
   // While loading client-server API, show only federation banner
@@ -123,7 +130,7 @@ export default function CombinedStatusBanner(
         class={`govuk-panel ${
           !federationSuccess
             ? "govuk-panel--error"
-            : hasConnectionErrors
+            : (hasConnectionErrors || hasFederationWarning)
             ? "govuk-panel--warning"
             : "govuk-panel--confirmation"
         }`}
@@ -134,7 +141,7 @@ export default function CombinedStatusBanner(
           {i18n.t(
             !federationSuccess
               ? "results.federation_not_working"
-              : hasConnectionErrors
+              : (hasConnectionErrors || hasFederationWarning)
               ? "results.federation_working_with_errors"
               : "results.federation_working",
           )}
@@ -143,7 +150,7 @@ export default function CombinedStatusBanner(
           {i18n.t(
             !federationSuccess
               ? "results.failure_message"
-              : hasConnectionErrors
+              : (hasConnectionErrors || hasFederationWarning)
               ? "results.partial_success_message"
               : "results.success_message",
           )}

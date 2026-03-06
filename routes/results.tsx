@@ -93,6 +93,7 @@ export interface APIResponseType {
     ConnectionAddresses?: string[];
   }>;
   FederationOK: boolean;
+  FederationWarning?: boolean;
 }
 
 export const handler = define.handlers({
@@ -244,6 +245,9 @@ export default define.page<typeof handler>(function Results(ctx) {
     data.ConnectionErrors && Object.keys(data.ConnectionErrors).length > 0
   );
 
+  // Backend signals a split-brain warning (federation works but well-known is inconsistent)
+  const hasFederationWarning = !!data.FederationWarning;
+
   return (
     <>
       <h1 class="govuk-heading-xl">{i18n.t("results.title")}</h1>
@@ -266,6 +270,7 @@ export default define.page<typeof handler>(function Results(ctx) {
           locale={i18n.getLocale()}
           federationSuccess={successful_federation}
           hasConnectionErrors={hasConnectionErrors}
+          hasFederationWarning={hasFederationWarning}
         />
 
         <dl class="govuk-summary-list">
@@ -346,7 +351,7 @@ export default define.page<typeof handler>(function Results(ctx) {
             style={{
               display: (
                   !successful_federation || hasWellKnownErrors ||
-                  hasConnectionErrors
+                  hasConnectionErrors || hasFederationWarning
                 )
                 ? "block"
                 : "none",
