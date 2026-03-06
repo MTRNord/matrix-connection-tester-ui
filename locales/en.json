@@ -495,6 +495,18 @@
         "If the problem continues, consider asking for help in Matrix community channels or your homeserver's support forum."
       ]
     },
+    "split_brain": {
+      "title": "Split-Brain Well-Known Configuration",
+      "description": "Your server's IP addresses are returning different (or missing) .well-known/matrix/server responses. Remote servers will get different resolution results depending on which of your IPs they reach first, which can cause intermittent or hard-to-diagnose federation failures.",
+      "technical_note": "Split-brain occurs when a hostname resolves to multiple IPs but those IPs don't serve identical well-known responses. Some remote servers may fall back to port 8448 while others use the delegated address from well-known, leading to inconsistent behaviour.",
+      "steps": [
+        "Check that all IP addresses your domain resolves to serve identical .well-known/matrix/server responses.",
+        "If you use a load balancer or multiple servers, ensure the well-known endpoint is shared (e.g. served from a common origin) rather than configured independently on each machine.",
+        "Verify your reverse proxy is consistently reachable on port 443 from all IPs returned in DNS.",
+        "If the well-known endpoint is intentionally absent on some IPs (e.g. bare-metal IPv4 alongside a proxied IPv6), consider routing all IPs through the same reverse proxy or removing the IPs that can't serve well-known from DNS.",
+        "As a simpler alternative, use an explicit port in your server name (e.g. matrix.example.com:443) to bypass well-known discovery entirely."
+      ]
+    },
     "wellknown_error": {
       "_context": "This error solution addresses HTTP errors (like 400 Bad Request) from the .well-known/matrix/server endpoint, which is the preferred server discovery method. Steps systematically check configuration expectations, diagnose rejection causes, validate JSON content, verify headers, and provide testing commands. Keep paths, HTTP status codes like '400 Bad Request', JSON examples, URLs, and command examples untranslated.",
       "title": "Well-Known Endpoint Error",

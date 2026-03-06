@@ -92,6 +92,10 @@ export interface APIResponseType {
      * this IP. Absent when the per-IP path was not taken. */
     ConnectionAddresses?: string[];
   }>;
+  Error?: {
+    Error: string;
+    ErrorCode: string;
+  };
   FederationOK: boolean;
   FederationWarning?: boolean;
 }

@@ -17,6 +17,15 @@ export interface ErrorSolution {
 /**
  * Get user-friendly solution for a Matrix error
  */
+export function getSplitBrainSolution(): ErrorSolution {
+  return {
+    title: "error_solutions.split_brain.title",
+    description: "error_solutions.split_brain.description",
+    steps: "error_solutions.split_brain.steps",
+    technicalNote: "error_solutions.split_brain.technical_note",
+  };
+}
+
 export function getErrorSolution(
   error: MatrixError,
   context: "support" | "client-server" | "federation" | "wellknown",

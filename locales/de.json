@@ -494,6 +494,18 @@
         "Falls das Problem weiterhin besteht, bitten Sie um Hilfe in Matrix-Community-Kanälen oder im Support-Forum Ihres Homeservers."
       ]
     },
+    "split_brain": {
+      "title": "Split-Brain-Well-Known-Konfiguration",
+      "description": "Die IP-Adressen deines Servers liefern unterschiedliche (oder fehlende) .well-known/matrix/server-Antworten. Entfernte Server erhalten je nach erreichter IP unterschiedliche Auflösungsergebnisse, was zu sporadischen oder schwer diagnostizierbaren Föderationsproblemen führen kann.",
+      "technical_note": "Split-Brain tritt auf, wenn ein Hostname auf mehrere IPs auflöst, diese IPs aber keine identischen Well-Known-Antworten liefern. Manche entfernte Server fallen auf Port 8448 zurück, während andere die delegierte Adresse aus Well-Known verwenden.",
+      "steps": [
+        "Stelle sicher, dass alle IP-Adressen, auf die deine Domain auflöst, identische .well-known/matrix/server-Antworten liefern.",
+        "Falls du einen Load Balancer oder mehrere Server verwendest, stelle sicher, dass der Well-Known-Endpunkt gemeinsam (z.B. von einem zentralen Ursprung) bereitgestellt wird und nicht unabhängig auf jedem Gerät konfiguriert ist.",
+        "Überprüfe, ob dein Reverse-Proxy auf Port 443 von allen in DNS zurückgegebenen IPs konsistent erreichbar ist.",
+        "Falls der Well-Known-Endpunkt auf einigen IPs absichtlich fehlt, erwäge alle IPs durch denselben Reverse-Proxy zu leiten oder die IPs, die Well-Known nicht bedienen können, aus dem DNS zu entfernen.",
+        "Als einfachere Alternative kannst du einen expliziten Port im Servernamen verwenden (z.B. matrix.example.com:443), um die Well-Known-Erkennung vollständig zu umgehen."
+      ]
+    },
     "wellknown_error": {
       "_context": "This error solution addresses HTTP errors (like 400 Bad Request) from the .well-known/matrix/server endpoint, which is the preferred server discovery method. Steps systematically check configuration expectations, diagnose rejection causes, validate JSON content, verify headers, and provide testing commands. Keep paths, HTTP status codes like '400 Bad Request', JSON examples, URLs, and command examples untranslated.",
       "title": "Well-Known-Endpunkt-Fehler",

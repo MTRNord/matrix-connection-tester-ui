@@ -2,6 +2,7 @@ import { I18n } from "../lib/i18n.ts";
 import type { APIResponseType, ConnectionReport } from "../routes/results.tsx";
 import { ErrorType, isTLSError, MatrixError } from "../lib/errors.ts";
 import { ErrorWithSolution } from "./ErrorWithSolution.tsx";
+import { getSplitBrainSolution } from "../lib/error-solutions.ts";
 
 interface FederationProblemsProps {
   i18n: I18n;
@@ -174,20 +175,45 @@ export function FederationProblems(
       </p>
 
       {/* Split-brain warning */}
-      {apiData.FederationWarning && (
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-visually-hidden">
-              {i18n.t("common.warning")}
-            </span>
-            {i18n.t("results.split_brain_warning_title")}
-          </strong>
-          <p class="govuk-body">
-            {i18n.t("results.split_brain_warning_description")}
-          </p>
-        </div>
-      )}
+      {apiData.Error?.ErrorCode === "SplitBrain" && (() => {
+        const solution = getSplitBrainSolution();
+        const steps = i18n.t(solution.steps);
+        const stepsArray = Array.isArray(steps) ? steps : [String(steps)];
+        return (
+          <div class="govuk-error-summary govuk-error-summary--warning" data-module="govuk-error-summary">
+            <div role="alert">
+              <h2 class="govuk-error-summary__title">
+                {i18n.t(solution.title)}
+              </h2>
+              <div class="govuk-error-summary__body">
+                <p class="govuk-body">{i18n.t(solution.description)}</p>
+                <h3 class="govuk-heading-s">{i18n.t("error_solutions.what_to_do")}</h3>
+                <ol class="govuk-list govuk-list--number govuk-error-summary__list">
+                  {stepsArray.map((step, index) => <li key={index}>{step}</li>)}
+                </ol>
+                {solution.technicalNote && (
+                  <div class="govuk-inset-text">
+                    <strong>{i18n.t("error_solutions.technical_note_label")}:</strong>{" "}
+                    {i18n.t(solution.technicalNote)}
+                  </div>
+                )}
+                {apiData.Error?.Error && (
+                  <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                      <span class="govuk-details__summary-text">
+                        {i18n.t("results.technical_details")}
+                      </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                      <pre class="technical-details-pre">{apiData.Error.Error}</pre>
+                    </div>
+                  </details>
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Well-Known errors (shown even if federation works via other means) */}
       {wellKnownErrors.length > 0 && (
