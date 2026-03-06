@@ -239,6 +239,11 @@ export default define.page<typeof handler>(function Results(ctx) {
   const hasWellKnownErrors = data.WellKnownResult &&
     Object.values(data.WellKnownResult).some((result) => result.Error);
 
+  // Check if any connection attempts failed outright (network/TLS errors)
+  const hasConnectionErrors = !!(
+    data.ConnectionErrors && Object.keys(data.ConnectionErrors).length > 0
+  );
+
   return (
     <>
       <h1 class="govuk-heading-xl">{i18n.t("results.title")}</h1>
@@ -260,6 +265,7 @@ export default define.page<typeof handler>(function Results(ctx) {
           serverName={serverName}
           locale={i18n.getLocale()}
           federationSuccess={successful_federation}
+          hasConnectionErrors={hasConnectionErrors}
         />
 
         <dl class="govuk-summary-list">
@@ -338,7 +344,10 @@ export default define.page<typeof handler>(function Results(ctx) {
             class="govuk-accordion__section"
             id="problems-section"
             style={{
-              display: (!successful_federation || hasWellKnownErrors)
+              display: (
+                  !successful_federation || hasWellKnownErrors ||
+                  hasConnectionErrors
+                )
                 ? "block"
                 : "none",
             }}

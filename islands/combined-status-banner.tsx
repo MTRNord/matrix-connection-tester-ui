@@ -12,10 +12,12 @@ interface CombinedStatusBannerProps {
   serverName: string;
   locale: Locale;
   federationSuccess: boolean;
+  hasConnectionErrors?: boolean;
 }
 
 export default function CombinedStatusBanner(
-  { serverName, locale, federationSuccess }: CombinedStatusBannerProps,
+  { serverName, locale, federationSuccess, hasConnectionErrors = false }:
+    CombinedStatusBannerProps,
 ) {
   const i18n = useMemo(() => new I18n(locale), [locale]);
 
@@ -30,7 +32,7 @@ export default function CombinedStatusBanner(
     return s;
   });
   const bothSuccessNoWarnings = useComputed(() =>
-    federationSuccess && clientServerState.value === "success"
+    federationSuccess && !hasConnectionErrors && clientServerState.value === "success"
   );
 
   // While loading client-server API, show only federation banner
