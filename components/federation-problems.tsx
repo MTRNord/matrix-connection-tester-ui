@@ -20,16 +20,28 @@ export function FederationProblems(
   const errors: Array<{ ip: string; error: MatrixError }> = [];
   const wellKnownErrors: Array<{ ip: string; error: MatrixError }> = [];
 
-  // Handle WellKnownResult errors (400 Bad Request, etc.)
+  // Handle WellKnownResult errors (timeouts, 400 Bad Request, etc.)
   if (wellKnownResults && Object.keys(wellKnownResults).length > 0) {
     Object.entries(wellKnownResults).forEach(([ip, result]) => {
-      // Check if there's an Error field in the well-known result
       if (result.Error?.Error) {
+        const errText = result.Error.Error.toLowerCase();
+        const isTimeout = errText.includes("timeout");
+        const isNetwork = errText.includes("network") ||
+          errText.includes("connection refused") ||
+          errText.includes("connection reset");
         wellKnownErrors.push({
           ip,
           error: {
-            type: ErrorType.INVALID_RESPONSE,
-            message: "errors.wellknown_error",
+            type: isTimeout
+              ? ErrorType.TIMEOUT
+              : isNetwork
+              ? ErrorType.NETWORK
+              : ErrorType.INVALID_RESPONSE,
+            message: isTimeout
+              ? "errors.timeout_error"
+              : isNetwork
+              ? "errors.network_error"
+              : "errors.wellknown_error",
             technicalDetails: result.Error.Error,
             endpoint: `https://${ip}/.well-known/matrix/server`,
           },
