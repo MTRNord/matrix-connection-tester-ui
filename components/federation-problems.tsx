@@ -161,6 +161,22 @@ export function FederationProblems(
         {i18n.t("results.federation_problems_description")}
       </p>
 
+      {/* Split-brain warning */}
+      {apiData.FederationWarning && (
+        <div class="govuk-warning-text">
+          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+          <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">
+              {i18n.t("common.warning")}
+            </span>
+            {i18n.t("results.split_brain_warning_title")}
+          </strong>
+          <p class="govuk-body">
+            {i18n.t("results.split_brain_warning_description")}
+          </p>
+        </div>
+      )}
+
       {/* Well-Known errors (shown even if federation works via other means) */}
       {wellKnownErrors.length > 0 && (
         <>

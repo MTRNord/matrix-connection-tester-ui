@@ -378,7 +378,8 @@ export default define.page<typeof handler>(function Results(ctx) {
               class="govuk-accordion__section-content"
             >
               {/* Federation problems from connection reports and well-known errors */}
-              {(!successful_federation || hasWellKnownErrors) && (
+              {(!successful_federation || hasWellKnownErrors ||
+                hasConnectionErrors || hasFederationWarning) && (
                 <FederationProblems
                   i18n={i18n}
                   apiData={data}
