@@ -157,7 +157,7 @@ export function ServerResolutionResultsSection(props: {
                     <th scope="col" class="govuk-table__header">
                       {i18n.t("server-resolution.ip_column")}
                     </th>
-                    <th scope="col" class="govuk-table__header">
+                    <th scope="col" class="govuk-table__header" style={{ minWidth: "12rem" }}>
                       {i18n.t("server-resolution.wellknown_status_column")}
                     </th>
                     <th scope="col" class="govuk-table__header">
@@ -188,16 +188,13 @@ export function ServerResolutionResultsSection(props: {
                                 <strong class="govuk-tag govuk-tag--red">
                                   {i18n.t("common.error")}
                                 </strong>
-                                <details class="govuk-details" style={{ marginTop: "0.5rem", marginBottom: 0 }}>
-                                  <summary class="govuk-details__summary">
-                                    <span class="govuk-details__summary-text" style={{ fontSize: "0.875rem" }}>
-                                      {i18n.t("results.technical_details")}
-                                    </span>
-                                  </summary>
-                                  <div class="govuk-details__text" style={{ fontSize: "0.875rem", wordBreak: "break-word" }}>
-                                    {result.Error!.Error}
-                                  </div>
-                                </details>
+                                <br />
+                                <span
+                                  class="govuk-hint"
+                                  style={{ fontSize: "0.875rem", wordBreak: "break-word" }}
+                                >
+                                  {result.Error!.Error}
+                                </span>
                               </>
                             )
                             : (
