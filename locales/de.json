@@ -502,8 +502,8 @@
         "Stelle sicher, dass alle IP-Adressen, auf die deine Domain auflöst, identische .well-known/matrix/server-Antworten liefern.",
         "Falls du einen Load Balancer oder mehrere Server verwendest, stelle sicher, dass der Well-Known-Endpunkt gemeinsam (z.B. von einem zentralen Ursprung) bereitgestellt wird und nicht unabhängig auf jedem Gerät konfiguriert ist.",
         "Überprüfe, ob dein Reverse-Proxy auf Port 443 von allen in DNS zurückgegebenen IPs konsistent erreichbar ist.",
-        "Falls der Well-Known-Endpunkt auf einigen IPs absichtlich fehlt, erwäge alle IPs durch denselben Reverse-Proxy zu leiten oder die IPs, die Well-Known nicht bedienen können, aus dem DNS zu entfernen.",
-        "Als einfachere Alternative kannst du einen expliziten Port im Servernamen verwenden (z.B. matrix.example.com:443), um die Well-Known-Erkennung vollständig zu umgehen."
+        "Falls einige IPs Well-Known nicht bedienen können (z.B. ein Bare-Metal-Server, der über IPv4 erreichbar ist, aber nur über IPv6 proxied wird), leite entweder alle IPs durch denselben Reverse-Proxy, damit Well-Known konsistent bereitgestellt wird, oder entferne die nicht-bedienenden IPs vollständig aus dem DNS.",
+        "Als Alternative zur Well-Known-Delegation kannst du einen SRV-Eintrag (_matrix-fed._tcp.yourdomain) verwenden, der eine einzige autoritative Delegation auf DNS-Ebene bereitstellt und Anforderungen an die IP-Konsistenz vermeidet."
       ]
     },
     "wellknown_error": {

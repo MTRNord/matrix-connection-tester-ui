@@ -503,8 +503,8 @@
         "Check that all IP addresses your domain resolves to serve identical .well-known/matrix/server responses.",
         "If you use a load balancer or multiple servers, ensure the well-known endpoint is shared (e.g. served from a common origin) rather than configured independently on each machine.",
         "Verify your reverse proxy is consistently reachable on port 443 from all IPs returned in DNS.",
-        "If the well-known endpoint is intentionally absent on some IPs (e.g. bare-metal IPv4 alongside a proxied IPv6), consider routing all IPs through the same reverse proxy or removing the IPs that can't serve well-known from DNS.",
-        "As a simpler alternative, use an explicit port in your server name (e.g. matrix.example.com:443) to bypass well-known discovery entirely."
+        "If some IPs cannot serve well-known (e.g. a bare-metal server reachable on IPv4 but only proxied on IPv6), either route all IPs through the same reverse proxy so well-known is served consistently, or remove the non-serving IPs from DNS entirely.",
+        "As an alternative to well-known delegation, consider using an SRV record (_matrix-fed._tcp.yourdomain) which provides a single authoritative delegation at the DNS level and avoids per-IP consistency requirements."
       ]
     },
     "wellknown_error": {

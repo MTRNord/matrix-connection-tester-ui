@@ -126,17 +126,17 @@ export function ServerResolutionResultsSection(props: {
               reach, which will cause intermittent federation failures. */
           }
           {isSplitBrain && (
-            <div class="govuk-warning-text">
-              <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-              <strong class="govuk-warning-text__text">
-                <span class="govuk-visually-hidden">
-                  {i18n.t("common.warning")}
-                </span>
-                {i18n.t("server-resolution.split_brain_warning_title")}
-              </strong>
-              <p class="govuk-body">
-                {i18n.t("server-resolution.split_brain_warning_description")}
-              </p>
+            <div class="govuk-error-summary govuk-error-summary--warning" data-module="govuk-error-summary">
+              <div role="alert">
+                <h2 class="govuk-error-summary__title">
+                  {i18n.t("server-resolution.split_brain_warning_title")}
+                </h2>
+                <div class="govuk-error-summary__body">
+                  <p class="govuk-body">
+                    {i18n.t("server-resolution.split_brain_warning_description")}
+                  </p>
+                </div>
+              </div>
             </div>
           )}
 
@@ -188,13 +188,16 @@ export function ServerResolutionResultsSection(props: {
                                 <strong class="govuk-tag govuk-tag--red">
                                   {i18n.t("common.error")}
                                 </strong>
-                                <br />
-                                <span
-                                  class="govuk-hint"
-                                  style={{ fontSize: "0.875rem" }}
-                                >
-                                  {result.Error!.Error}
-                                </span>
+                                <details class="govuk-details" style={{ marginTop: "0.5rem", marginBottom: 0 }}>
+                                  <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text" style={{ fontSize: "0.875rem" }}>
+                                      {i18n.t("results.technical_details")}
+                                    </span>
+                                  </summary>
+                                  <div class="govuk-details__text" style={{ fontSize: "0.875rem", wordBreak: "break-word" }}>
+                                    {result.Error!.Error}
+                                  </div>
+                                </details>
                               </>
                             )
                             : (
