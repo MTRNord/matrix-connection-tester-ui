@@ -56,6 +56,7 @@ export interface ConnectionReport {
 }
 
 export interface APIResponseType {
+  ServerName?: string;
   ConnectionReports?: Record<string, ConnectionReport>;
   ConnectionErrors?: Record<string, {
     Error: string;
@@ -85,6 +86,11 @@ export interface APIResponseType {
         NotOk?: string;
       };
     };
+    /** The connection addresses the backend actually used for this IP after the
+     * well-known phase. If well-known succeeded these are the resolved IPs of
+     * the delegated m.server; if it failed this is the single :8448 address for
+     * this IP. Absent when the per-IP path was not taken. */
+    ConnectionAddresses?: string[];
   }>;
   FederationOK: boolean;
 }
@@ -217,7 +223,9 @@ export default define.page<typeof handler>(function Results(ctx) {
   const { i18n } = ctx.state;
 
   const data: APIResponseType = ctx.data?.data;
-  const serverName: string = ctx.data?.serverName;
+  // Prefer the ServerName from the API response (what the backend actually queried)
+  // and fall back to the query param for display purposes.
+  const serverName: string = data?.ServerName ?? ctx.data?.serverName;
 
   // TODO: Handle failures. (TypeError: Cannot read properties of undefined (reading 'name'))
   const successful_federation = data.FederationOK;

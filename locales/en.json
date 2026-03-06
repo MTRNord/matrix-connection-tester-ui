@@ -11,7 +11,8 @@
     "cancel": "Cancel",
     "close": "Close",
     "success": "Success",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "ok": "OK"
   },
   "header": {
     "title": "Connectivity Tester"
@@ -138,6 +139,7 @@
     "wellknown_warning_title": "Well-Known Configuration Issues Detected",
     "wellknown_warning_description": "Your federation is currently working (likely via SRV records), but there are issues with your .well-known/matrix/server endpoint. While not immediately breaking, this should be fixed to ensure reliable federation and compatibility with all Matrix implementations.",
     "wellknown_problem_for_ip": "Well-Known issue for",
+
     "cors_preflight_warning_title": "CORS Preflight Not Configured",
     "cors_preflight_warning_description": "Your server does not properly handle CORS preflight (OPTIONS) requests. While the API is accessible, browser-based Matrix clients like Element Web may have connection issues. This only affects web clients, not mobile apps or desktop clients.",
     "cors_preflight_problem_title": "CORS Preflight Configuration Issue"
@@ -203,7 +205,13 @@
     "wellknown_description_suffix": "entry and found the following results:",
     "wellknown_caption": ".well-known/matrix/server results",
     "key_column": "Key",
-    "value_column": "Value"
+    "value_column": "Value",
+    "ip_column": "IP Address",
+    "wellknown_status_column": "Well-Known Status",
+    "wellknown_m_server_column": "Delegated Server (m.server)",
+    "wellknown_connection_target_column": "Connection Addresses",
+    "split_brain_warning_title": "Inconsistent Well-Known Results Across IPs",
+    "split_brain_warning_description": "Your server's IPs are returning different well-known responses. Depending on which IP a remote server reaches, it may resolve federation differently or fail entirely. This is a configuration problem that will cause intermittent federation issues."
   },
   "connectivity-reports": {
     "report_for": "Report for:",
@@ -419,7 +427,7 @@
         "Configure /.well-known/matrix/server delegation (recommended): Create a file at https://yourdomain.com/.well-known/matrix/server that points to your actual Matrix server location (which can be on a different port or subdomain).",
         "If you're using a reverse proxy, ensure it's properly forwarding federation traffic from your domain to your homeserver.",
         "Verify your Matrix homeserver is running and accessible. Check your homeserver logs for any startup or connectivity errors.",
-        "As a last resort, if not using .well-known delegation, configure DNS SRV records (_matrix._tcp.yourdomain.com) or ensure your homeserver is directly accessible on port 8448."
+        "If not using .well-known delegation, configure DNS SRV records (_matrix._tcp.yourdomain.com) or ensure your homeserver is directly accessible on port 8448 (the default Matrix federation port)."
       ]
     },
     "tls": {
@@ -489,12 +497,12 @@
       "_context": "This error solution addresses HTTP errors (like 400 Bad Request) from the .well-known/matrix/server endpoint, which is the preferred server discovery method. Steps systematically check configuration expectations, diagnose rejection causes, validate JSON content, verify headers, and provide testing commands. Keep paths, HTTP status codes like '400 Bad Request', JSON examples, URLs, and command examples untranslated.",
       "title": "Well-Known Endpoint Error",
       "description": "Your .well-known/matrix/server endpoint is returning an error (such as 400 Bad Request). While your federation may currently work via SRV records or direct connection, this misconfiguration should be fixed as it may cause issues with some Matrix clients and servers.",
-      "technical_note": "The .well-known/matrix/server endpoint is the preferred method for server discovery according to the Matrix specification. While SRV records and direct connections on port 8448 work as fallbacks, relying solely on them is not recommended. A 400 error suggests web server misconfiguration rather than a missing file.",
+      "technical_note": "The .well-known/matrix/server endpoint is one method for server discovery according to the Matrix specification. SRV records and direct connections on port 8448 (the default Matrix federation port) are equally valid alternatives. A 400 error suggests web server misconfiguration rather than a missing file.",
       "learn_more": "Learn about well-known server delegation",
       "steps": [
         "Check your web server configuration for the /.well-known/matrix/server endpoint. It should either return valid JSON with an 'm.server' field, or return a 404 if you're not using well-known delegation.",
         "A 400 Bad Request usually means your web server is rejecting the request due to misconfiguration. Check if there are any request filtering rules, security modules (like ModSecurity), or incorrect rewrite rules affecting the .well-known path.",
-        "Ensure the .well-known/matrix/server file (if it exists) contains valid JSON. The file should look like: {\"m.server\": \"matrix.yourdomain.com:8448\"}",
+        "Ensure the .well-known/matrix/server file (if it exists) contains valid JSON. The file should look like: {\"m.server\": \"matrix.yourdomain.com:443\"}",
         "Verify that your web server is configured to serve .well-known files with the correct Content-Type header (application/json).",
         "Test the endpoint directly in your browser or with curl: curl -v https://yourdomain.com/.well-known/matrix/server"
       ]
@@ -620,7 +628,7 @@
         "srv_record": "SRV Record",
         "srv_record_desc": "DNS SRV record for _matrix._tcp pointing to your server (Alternative)",
         "port_8448": "Port 8448 Direct",
-        "port_8448_desc": "Expose federation API directly on port 8448 (Fallback option)"
+        "port_8448_desc": "Expose federation API directly on port 8448 (the default Matrix federation port)"
       },
       "setup_steps_title": "Setup Steps",
       "step_1_title": "Configure your server name",
@@ -635,11 +643,11 @@
       "option_443_text": "Serve a .well-known/matrix/server file on port 443 that points to your federation endpoint. This is the most flexible and firewall-friendly option.",
       "option_srv_title": "SRV Record (Alternative)",
       "option_srv_text": "Create a DNS SRV record (_matrix._tcp.yourdomain.com) pointing to your server. This is useful when you cannot serve well-known files.",
-      "option_8448_title": "Port 8448 Direct (Fallback)",
-      "option_8448_text": "Expose your federation API directly on port 8448. This is the simplest but least flexible option and may have firewall issues.",
+      "option_8448_title": "Port 8448 Direct",
+      "option_8448_text": "Expose your federation API directly on port 8448, the default Matrix federation port. This is the simplest option and may have firewall issues in some network configurations.",
       "step_4_title": "Test your configuration",
       "step_4_text": "Use this connectivity tester to verify that your server is properly configured and reachable by other Matrix servers.",
-      "important_note": "The preferred federation setup uses port 443 with well-known delegation. This approach works better with firewalls, proxies, and is more flexible for complex deployments. Port 8448 should only be used as a fallback when well-known delegation or SRV records are not feasible.",
+      "important_note": "Federation can be set up via well-known delegation on port 443, SRV records, or directly on port 8448 (the default Matrix federation port). Well-known delegation on port 443 tends to work better with firewalls and proxies and is more flexible for complex deployments.",
       "testing_title": "Testing Your Setup",
       "testing_text": "Once you've completed the setup steps, use this tool to test your server's federation connectivity and identify any configuration issues.",
       "test_button": "Test My Server",

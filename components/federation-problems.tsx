@@ -73,7 +73,7 @@ export function FederationProblems(
                 message: "errors.invalid_certificates",
                 technicalDetails:
                   `The TLS certificates for ${ip} are not valid. This could be due to expired certificates, self-signed certificates, or certificate chain issues.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -87,7 +87,7 @@ export function FederationProblems(
                 message: "errors.server_name_mismatch",
                 technicalDetails:
                   `The server name in the response does not match the expected server name for ${ip}.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -101,7 +101,7 @@ export function FederationProblems(
                 message: "errors.missing_ed25519_key",
                 technicalDetails:
                   `The server at ${ip} does not have an Ed25519 signing key configured.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -115,7 +115,7 @@ export function FederationProblems(
                 message: "errors.invalid_ed25519_signature",
                 technicalDetails:
                   `The Ed25519 signatures for ${ip} could not be validated. This indicates the server's signing keys may not match the signatures in the response.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -129,7 +129,7 @@ export function FederationProblems(
                 message: "errors.expired_keys",
                 technicalDetails:
                   `The signing keys for ${ip} have expired or the valid_until_ts is in the past.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -143,7 +143,7 @@ export function FederationProblems(
                 message: "errors.invalid_server_version",
                 technicalDetails:
                   `The server version for ${ip} could not be parsed. The server may not be returning proper version information.`,
-                endpoint: `https://${ip}:8448`,
+                endpoint: `https://${ip}`,
               },
             });
           }
@@ -161,36 +161,38 @@ export function FederationProblems(
         {i18n.t("results.federation_problems_description")}
       </p>
 
-      {/* Well-Known errors (shown even if federation works) */}
+      {/* Well-Known errors (shown even if federation works via other means) */}
       {wellKnownErrors.length > 0 && (
-        <div class="govuk-warning-text">
-          <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-          <strong class="govuk-warning-text__text">
-            <span class="govuk-visually-hidden">
-              {i18n.t("common.warning")}
-            </span>
-            {i18n.t("results.wellknown_warning_title")}
-          </strong>
-          <p class="govuk-body">
-            {i18n.t("results.wellknown_warning_description")}
-          </p>
-        </div>
-      )}
+        <>
+          <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+            <strong class="govuk-warning-text__text">
+              <span class="govuk-visually-hidden">
+                {i18n.t("common.warning")}
+              </span>
+              {i18n.t("results.wellknown_warning_title")}
+            </strong>
+            <p class="govuk-body">
+              {i18n.t("results.wellknown_warning_description")}
+            </p>
+          </div>
 
-      {wellKnownErrors.map(({ ip, error }, index) => (
-        <div key={`wellknown-${index}`}>
-          <h4 class="govuk-heading-s">
-            {i18n.t("results.wellknown_problem_for_ip")}:{" "}
-            <code aria-label="IP address">{ip}</code>
-          </h4>
-          <ErrorWithSolution
-            error={error}
-            context="wellknown"
-            i18n={i18n}
-            baseUrl={baseUrl}
-          />
-        </div>
-      ))}
+          {wellKnownErrors.map(({ ip, error }, index) => (
+            <div key={`wellknown-${index}`}>
+              <h4 class="govuk-heading-s">
+                {i18n.t("results.wellknown_problem_for_ip")}:{" "}
+                <code aria-label="IP address">{ip}</code>
+              </h4>
+              <ErrorWithSolution
+                error={error}
+                context="wellknown"
+                i18n={i18n}
+                baseUrl={baseUrl}
+              />
+            </div>
+          ))}
+        </>
+      )}
 
       {/* Federation errors (connection and check failures) */}
       {errors.length === 0 && wellKnownErrors.length === 0

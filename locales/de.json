@@ -9,7 +9,10 @@
     "cancel": "Abbrechen",
     "close": "Schließen",
     "success": "Erfolg",
-    "confirm": "Bestätigen"
+    "confirm": "Bestätigen",
+    "ok": "OK",
+    "note": "Hinweis:",
+    "and": "und"
   },
   "header": {
     "title": "Konnektivitätstester"
@@ -201,7 +204,13 @@
     "wellknown_description_suffix": "Eintrag des Servers überprüft und die folgenden Ergebnisse gefunden:",
     "wellknown_caption": ".well-known/matrix/server Ergebnisse",
     "key_column": "Schlüssel",
-    "value_column": "Wert"
+    "value_column": "Wert",
+    "ip_column": "IP-Adresse",
+    "wellknown_status_column": "Well-Known-Status",
+    "wellknown_m_server_column": "Delegierter Server (m.server)",
+    "wellknown_connection_target_column": "Verbindungsadressen",
+    "split_brain_warning_title": "Inkonsistente Well-Known-Ergebnisse über IPs hinweg",
+    "split_brain_warning_description": "Die IPs deines Servers liefern unterschiedliche Well-Known-Antworten. Je nachdem, welche IP ein entfernter Server erreicht, kann die Föderation unterschiedlich aufgelöst werden oder ganz fehlschlagen. Dies ist ein Konfigurationsproblem, das zu sporadischen Föderationsproblemen führen wird."
   },
   "connectivity-reports": {
     "report_for": "Bericht für:",
@@ -417,7 +426,7 @@
         "Konfiguriere /.well-known/matrix/server-Delegation (empfohlen): Erstelle eine Datei unter https://deinedomain.de/.well-known/matrix/server, die auf deinen tatsächlichen Matrix-Server-Standort verweist (der auf einem anderen Port oder einer Subdomain sein kann).",
         "Wenn du einen Reverse-Proxy verwendest, stelle sicher, dass er Federation-Traffic von deiner Domain ordnungsgemäß an deinen Homeserver weiterleitet.",
         "Überprüfe, ob dein Matrix-Homeserver läuft und erreichbar ist. Überprüfe die Homeserver-Logs auf Start- oder Konnektivitätsfehler.",
-        "Als letzten Ausweg, wenn du keine .well-known-Delegation verwendest, konfiguriere DNS-SRV-Einträge (_matrix._tcp.deinedomain.de) oder stelle sicher, dass dein Homeserver direkt auf Port 8448 erreichbar ist."
+        "Wenn du keine .well-known-Delegation verwendest, konfiguriere DNS-SRV-Einträge (_matrix._tcp.deinedomain.de) oder stelle sicher, dass dein Homeserver direkt auf Port 8448 (dem Standard-Matrix-Föderationsport) erreichbar ist."
       ]
     },
     "tls": {
@@ -487,12 +496,12 @@
       "_context": "This error solution addresses HTTP errors (like 400 Bad Request) from the .well-known/matrix/server endpoint, which is the preferred server discovery method. Steps systematically check configuration expectations, diagnose rejection causes, validate JSON content, verify headers, and provide testing commands. Keep paths, HTTP status codes like '400 Bad Request', JSON examples, URLs, and command examples untranslated.",
       "title": "Well-Known-Endpunkt-Fehler",
       "description": "Dein .well-known/matrix/server-Endpunkt gibt einen Fehler zurück (z.B. 400 Bad Request). Obwohl deine Föderation derzeit möglicherweise über SRV-Einträge oder direkte Verbindung funktioniert, sollte diese Fehlkonfiguration behoben werden, da sie Probleme mit einigen Matrix-Clients und -Servern verursachen kann.",
-      "technical_note": "Der .well-known/matrix/server-Endpunkt ist die bevorzugte Methode zur Server-Erkennung gemäß der Matrix-Spezifikation. Während SRV-Einträge und direkte Verbindungen auf Port 8448 als Fallback funktionieren, wird es nicht empfohlen, sich ausschließlich darauf zu verlassen. Ein 400-Fehler deutet auf eine Webserver-Fehlkonfiguration hin und nicht auf eine fehlende Datei.",
+      "technical_note": "Der .well-known/matrix/server-Endpunkt ist eine Methode zur Server-Erkennung gemäß der Matrix-Spezifikation. SRV-Einträge und direkte Verbindungen auf Port 8448 (dem Standard-Matrix-Föderationsport) sind gleichermaßen gültige Alternativen. Ein 400-Fehler deutet auf eine Webserver-Fehlkonfiguration hin und nicht auf eine fehlende Datei.",
       "learn_more": "Erfahren Sie mehr über Well-Known-Server-Delegation",
       "steps": [
         "Überprüfe deine Webserver-Konfiguration für den /.well-known/matrix/server-Endpunkt. Er sollte entweder gültiges JSON mit einem 'm.server'-Feld zurückgeben oder 404 zurückgeben, wenn du keine Well-Known-Delegation verwendest.",
         "Ein 400 Bad Request bedeutet normalerweise, dass dein Webserver die Anfrage aufgrund einer Fehlkonfiguration ablehnt. Prüfe, ob es Anfrage-Filterregeln, Sicherheitsmodule (wie ModSecurity) oder fehlerhafte Rewrite-Regeln gibt, die den .well-known-Pfad beeinflussen.",
-        "Stelle sicher, dass die Datei .well-known/matrix/server (falls vorhanden) gültiges JSON enthält. Die Datei sollte so aussehen: {\"m.server\": \"matrix.deinedomain.de:8448\"}",
+        "Stelle sicher, dass die Datei .well-known/matrix/server (falls vorhanden) gültiges JSON enthält. Die Datei sollte so aussehen: {\"m.server\": \"matrix.deinedomain.de:443\"}",
         "Überprüfe, dass dein Webserver so konfiguriert ist, dass .well-known-Dateien mit dem korrekten Content-Type-Header (application/json) ausgeliefert werden.",
         "Teste den Endpunkt direkt in deinem Browser oder mit curl: curl -v https://deinedomain.de/.well-known/matrix/server"
       ]
