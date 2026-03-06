@@ -121,23 +121,31 @@ export default function CombinedStatusBanner(
       {/* Federation status banner */}
       <div
         class={`govuk-panel ${
-          federationSuccess ? "govuk-panel--confirmation" : "govuk-panel--error"
+          !federationSuccess
+            ? "govuk-panel--error"
+            : hasConnectionErrors
+            ? "govuk-panel--warning"
+            : "govuk-panel--confirmation"
         }`}
         role={federationSuccess ? "status" : "alert"}
         aria-live="polite"
       >
         <h1 class="govuk-panel__title">
           {i18n.t(
-            federationSuccess
-              ? "results.federation_working"
-              : "results.federation_not_working",
+            !federationSuccess
+              ? "results.federation_not_working"
+              : hasConnectionErrors
+              ? "results.federation_working_with_errors"
+              : "results.federation_working",
           )}
         </h1>
         <div class="govuk-panel__body">
           {i18n.t(
-            federationSuccess
-              ? "results.success_message"
-              : "results.failure_message",
+            !federationSuccess
+              ? "results.failure_message"
+              : hasConnectionErrors
+              ? "results.partial_success_message"
+              : "results.success_message",
           )}
         </div>
       </div>
