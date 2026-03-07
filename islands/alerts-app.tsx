@@ -481,16 +481,14 @@ export default function AlertsApp(
         )}
 
       {/* Sign out */}
-      <p class="govuk-body" style="margin-top: 2rem">
-        <button
-          type="button"
-          class="govuk-link"
-          style="background: none; border: none; cursor: pointer; padding: 0; font-size: inherit"
-          onClick={handleSignOut}
-        >
-          {i18n.tString("auth.sign_out")}
-        </button>
-      </p>
+      <button
+        type="button"
+        class="govuk-button govuk-button--secondary"
+        data-module="govuk-button"
+        onClick={handleSignOut}
+      >
+        {i18n.tString("auth.sign_out")}
+      </button>
 
       {/* Delete confirmation dialog */}
       <dialog
