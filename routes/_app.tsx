@@ -1,6 +1,7 @@
 import { define } from "../utils.ts";
 import { getAvailableLocales, type Locale } from "../lib/i18n.ts";
 import LanguageSelector from "../islands/LanguageSelector.tsx";
+import AccountNavLink from "../islands/AccountNavLink.tsx";
 import ErrorBoundary from "../components/ErrorBoundary.tsx";
 
 export default define.page(function App({ Component, url, state }) {
@@ -169,6 +170,9 @@ export default define.page(function App({ Component, url, state }) {
                     >
                       {i18n.t("nav.statistics")}
                     </a>
+                  </li>
+                  <li class="govuk-service-navigation__item">
+                    <AccountNavLink label={i18n.tString("nav.account")} />
                   </li>
                 </ul>
               </nav>

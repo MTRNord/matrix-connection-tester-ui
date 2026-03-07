@@ -21,7 +21,8 @@
     "home": "Home",
     "alerts": "Alerts",
     "documentation": "Documentation",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "account": "Your account"
   },
   "language": {
     "select": "Select language",
