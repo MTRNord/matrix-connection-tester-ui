@@ -1,3 +1,4 @@
 {
-  "api_server_url": "https://stage.connectivity-tester.mtrnord.blog"
+  "api_server_url": "http://localhost:8080",
+  "oauth2_client_id": "federation-tester-frontend"
 }

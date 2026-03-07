@@ -3,6 +3,7 @@ import { fetchWithTrace, getTracer } from "./tracing.ts";
 
 interface ConfigType {
   api_server_url: string;
+  oauth2_client_id: string;
 }
 
 export async function getConfig(currentHost: string): Promise<ConfigType> {

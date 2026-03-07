@@ -1,7 +1,7 @@
-import { define } from "../utils.ts";
-import { getConfig } from "../lib/api.ts";
+import { define } from "../../utils.ts";
+import { getConfig } from "../../lib/api.ts";
 import { page } from "fresh";
-import AlertsApp from "../islands/alerts-app.tsx";
+import OAuthCallback from "../../islands/oauth-callback.tsx";
 
 export const handler = define.handlers({
   async GET(ctx) {
@@ -18,15 +18,14 @@ export const handler = define.handlers({
   },
 });
 
-export default define.page<typeof handler>(function Alerts(ctx) {
+export default define.page<typeof handler>(function OAuthCallbackPage(ctx) {
   const { i18n } = ctx.state;
   const { apiUrl, clientId } = ctx.data;
 
   return (
     <>
-      <h1 class="govuk-heading-xl">{i18n.tString("alerts.title")}</h1>
-      <p class="govuk-body">{i18n.tString("alerts.intro")}</p>
-      <AlertsApp
+      <h1 class="govuk-heading-xl">{i18n.tString("alerts.verify_title")}</h1>
+      <OAuthCallback
         apiUrl={apiUrl}
         clientId={clientId}
         locale={i18n.getLocale()}

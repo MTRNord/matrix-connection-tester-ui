@@ -118,6 +118,30 @@ export default define.page<typeof handler>(function Verify(ctx) {
     <>
       <h1 class="govuk-heading-xl">{i18n.t("alerts.verify_title")}</h1>
 
+      <div
+        class="govuk-notification-banner"
+        role="region"
+        aria-labelledby="migration-notice-title"
+        data-module="govuk-notification-banner"
+      >
+        <div class="govuk-notification-banner__header">
+          <h2
+            class="govuk-notification-banner__title"
+            id="migration-notice-title"
+          >
+            {i18n.t("common.note")}
+          </h2>
+        </div>
+        <div class="govuk-notification-banner__content">
+          <p class="govuk-body">
+            {i18n.t("auth.verify_migration_notice")}{" "}
+            <a class="govuk-link" href="/alerts">
+              {i18n.t("auth.verify_migration_link")}
+            </a>
+          </p>
+        </div>
+      </div>
+
       {error && (
         <div
           class="govuk-notification-banner govuk-notification-banner--error"
