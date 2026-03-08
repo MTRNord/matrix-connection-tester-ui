@@ -298,7 +298,9 @@ export async function checkCORSPreflight(
       signal: controller.signal,
       credentials: "omit",
       headers: {
-        "Origin": "https://example.com",
+        // Use the actual deployment origin so the CORS check reflects what browsers
+        // see in production, rather than a hardcoded test domain.
+        "Origin": globalThis.location?.origin ?? "https://example.com",
         "Access-Control-Request-Method": "GET",
         "Access-Control-Request-Headers": "content-type",
       },

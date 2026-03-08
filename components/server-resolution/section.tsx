@@ -101,7 +101,17 @@ export function ServerResolutionResultsSection(props: {
                           {record.Weight}
                         </td>
                         <td class="govuk-table__cell">
-                          <code>{record.Addrs}</code>
+                          {record.Addrs && record.Addrs.length > 0
+                            ? (
+                              <ul class="govuk-list">
+                                {record.Addrs.map((addr) => (
+                                  <li>
+                                    <code>{addr}</code>
+                                  </li>
+                                ))}
+                              </ul>
+                            )
+                            : <span class="govuk-hint">—</span>}
                         </td>
                         <td class="govuk-table__cell">
                           {/* TODO Fix */}

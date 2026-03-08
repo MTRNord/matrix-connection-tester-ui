@@ -1,5 +1,14 @@
 // deno-lint-ignore-file no-explicit-any
-import { marked } from "marked";
+import { marked, type RendererObject } from "marked";
+
+/** Runtime context that marked injects into renderer functions. */
+interface MarkedRendererCtx {
+  parser: {
+    parse(tokens: object[]): string;
+    parseInline(tokens: object[]): string;
+  };
+  tablecell(token: object): string;
+}
 
 /**
  * Escape HTML special characters
@@ -20,8 +29,7 @@ function escapeHtml(text: string): string {
  */
 const govukRenderer = {
   heading({ tokens, depth }: { tokens: any[]; depth: number }): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const text = this.parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
     const sizes: Record<number, string> = {
       1: "govuk-heading-xl",
       2: "govuk-heading-l",
@@ -38,8 +46,7 @@ const govukRenderer = {
   },
 
   paragraph({ tokens }: { tokens: any[] }): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const text = this.parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
     return `<p class="govuk-body">${text}</p>\n`;
   },
 
@@ -71,7 +78,7 @@ const govukRenderer = {
     checked?: boolean;
     loose?: boolean;
   }): string {
-    // @ts-ignore - this.parser is available at runtime from marked
+    const r = this as unknown as MarkedRendererCtx;
     let text = item.text;
     if (item.tokens && item.tokens.length > 0) {
       // Check if tokens contain block-level elements (paragraph, list, etc.)
@@ -83,12 +90,10 @@ const govukRenderer = {
 
       if (hasBlockTokens) {
         // Block-level tokens (loose list, nested lists, etc.) - use parse()
-        // @ts-ignore - this.parser is available at runtime from marked
-        text = this.parser.parse(item.tokens);
+        text = r.parser.parse(item.tokens);
       } else {
         // Tight list with inline tokens - use parseInline()
-        // @ts-ignore - this.parser is available at runtime from marked
-        text = this.parser.parseInline(item.tokens);
+        text = r.parser.parseInline(item.tokens);
       }
     }
 
@@ -104,8 +109,7 @@ const govukRenderer = {
       tokens: any[];
     },
   ): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const text = this.parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
     const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
     return `<a href="${
       escapeHtml(href)
@@ -113,17 +117,14 @@ const govukRenderer = {
   },
 
   table(token: { header: any[]; rows: any[][] }): string {
+    const r = this as unknown as MarkedRendererCtx;
     // Render header row
-    // @ts-ignore - this.tablecell is available at runtime from marked
-    const headerCells = token.header.map((cell) => this.tablecell(cell)).join(
-      "",
-    );
+    const headerCells = token.header.map((cell) => r.tablecell(cell)).join("");
     const header = `<tr class="govuk-table__row">\n${headerCells}</tr>\n`;
 
     // Render body rows
     const body = token.rows.map((row) => {
-      // @ts-ignore - this.tablecell is available at runtime from marked
-      const cells = row.map((cell) => this.tablecell(cell)).join("");
+      const cells = row.map((cell) => r.tablecell(cell)).join("");
       return `<tr class="govuk-table__row">\n${cells}</tr>\n`;
     }).join("");
 
@@ -143,8 +144,7 @@ const govukRenderer = {
   tablecell(
     token: { header?: boolean; tokens: any[]; align?: string | null },
   ): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const content = this.parser.parseInline(token.tokens);
+    const content = (this as unknown as MarkedRendererCtx).parser.parseInline(token.tokens);
     const tag = token.header ? "th" : "td";
     const className = token.header
       ? "govuk-table__header"
@@ -155,8 +155,7 @@ const govukRenderer = {
   },
 
   strong({ tokens }: { tokens: any[] }): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const text = this.parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
     return `<strong class="govuk-!-font-weight-bold">${text}</strong>`;
   },
 
@@ -176,8 +175,7 @@ const govukRenderer = {
   },
 
   blockquote({ tokens }: { tokens: any[] }): string {
-    // @ts-ignore - this.parser is available at runtime from marked
-    const quote = this.parser.parse(tokens);
+    const quote = (this as unknown as MarkedRendererCtx).parser.parse(tokens);
     return `<div class="govuk-inset-text">\n${quote}</div>\n`;
   },
 
@@ -187,9 +185,8 @@ const govukRenderer = {
 };
 
 // Configure marked to use the GOV.UK renderer
-// @ts-ignore - renderer object matches RendererObject interface at runtime
 marked.use({
-  renderer: govukRenderer,
+  renderer: govukRenderer as unknown as RendererObject,
   gfm: true,
   breaks: false,
 });

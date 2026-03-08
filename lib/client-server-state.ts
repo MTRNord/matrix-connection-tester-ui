@@ -5,6 +5,31 @@
 
 import { computed, signal } from "@preact/signals";
 import type { MatrixError } from "./errors.ts";
+
+// ---------------------------------------------------------------------------
+// Lazy config cache
+// ---------------------------------------------------------------------------
+
+/** Timeout for well-known and versions fetches (spec-required endpoints). */
+const CLIENT_FETCH_TIMEOUT_MS = 10_000;
+/** Timeout for optional capability probes (RTC transports, MSC3266). */
+const PROBE_TIMEOUT_MS = 5_000;
+
+let _configCache: { allowHttp: boolean } | null = null;
+
+async function _getScheme(): Promise<string> {
+  if (_configCache) {
+    return _configCache.allowHttp ? "http" : "https";
+  }
+  try {
+    const resp = await fetch("/config.json");
+    const cfg = await resp.json();
+    _configCache = { allowHttp: !!(cfg.allow_http) };
+  } catch {
+    _configCache = { allowHttp: false };
+  }
+  return _configCache.allowHttp ? "http" : "https";
+}
 import {
   createHTTPError,
   createJSONParseError,
@@ -170,10 +195,14 @@ async function performFetch(serverName: string): Promise<void> {
   };
 
   try {
+    // Determine scheme once upfront; https is the spec default, http only when allow_http
+    // is set in config.json (intranet / lab deployments).
+    const scheme = await _getScheme();
+
     // Step 1: Fetch /.well-known/matrix/client
-    const wellKnownUrl = `https://${serverName}/.well-known/matrix/client`;
+    const wellKnownUrl = `${scheme}://${serverName}/.well-known/matrix/client`;
     const { response: wellKnownResp, error: wellKnownError } =
-      await fetchWithTimeout(wellKnownUrl, 10000);
+      await fetchWithTimeout(wellKnownUrl, CLIENT_FETCH_TIMEOUT_MS);
 
     let clientWellKnown: ClientWellKnownResp | null = null;
     let wellKnownErrorToStore: MatrixError | undefined = undefined;
@@ -261,14 +290,14 @@ async function performFetch(serverName: string): Promise<void> {
 
     // If well-known failed or versions from discovered endpoint failed, try direct server name
     if (!versions) {
-      const directVersionsUrl = `https://${serverName}/_matrix/client/versions`;
+      const directVersionsUrl = `${scheme}://${serverName}/_matrix/client/versions`;
       const result = await tryFetchVersions(directVersionsUrl);
 
       if (result.versions) {
         versions = result.versions;
         // If we succeeded with direct endpoint but well-known failed, update discovered endpoint
         if (!homeserverBaseUrl) {
-          discoveredEndpoint = `https://${serverName}`;
+          discoveredEndpoint = `${scheme}://${serverName}`;
         }
         // Clear versions error if direct fetch succeeded
         versionsErrorToStore = undefined;
@@ -288,7 +317,7 @@ async function performFetch(serverName: string): Promise<void> {
     const stableRtcUrl = `${rtcBaseUrl}/_matrix/client/v1/rtc/transports`;
     const { response: stableRtcResp } = await fetchWithTimeout(
       stableRtcUrl,
-      5000,
+      PROBE_TIMEOUT_MS,
     );
     if (stableRtcResp?.ok) {
       try {
@@ -303,7 +332,7 @@ async function performFetch(serverName: string): Promise<void> {
         `${rtcBaseUrl}/_matrix/client/unstable/org.matrix.msc4143/rtc/transports`;
       const { response: unstableRtcResp } = await fetchWithTimeout(
         unstableRtcUrl,
-        5000,
+        PROBE_TIMEOUT_MS,
       );
       if (unstableRtcResp?.ok) {
         try {
@@ -324,7 +353,7 @@ async function performFetch(serverName: string): Promise<void> {
     const probeRoomId = encodeURIComponent(`!probe:${serverName}`);
     const msc3266Url =
       `${probeBase}/_matrix/client/v1/room_summary/${probeRoomId}`;
-    const { response: msc3266Resp } = await fetchWithTimeout(msc3266Url, 5000);
+    const { response: msc3266Resp } = await fetchWithTimeout(msc3266Url, PROBE_TIMEOUT_MS);
     if (msc3266Resp) {
       if (
         msc3266Resp.status === 200 || msc3266Resp.status === 401 ||
@@ -373,7 +402,7 @@ async function tryFetchVersions(
   | { versions: null; error: MatrixError }
 > {
   const { response: versionsResp, error: versionsError } =
-    await fetchWithTimeout(versionsUrl, 10000);
+    await fetchWithTimeout(versionsUrl, CLIENT_FETCH_TIMEOUT_MS);
 
   if (versionsError) {
     return { versions: null, error: versionsError };

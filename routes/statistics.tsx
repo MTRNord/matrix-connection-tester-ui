@@ -1,5 +1,6 @@
 import { page } from "fresh";
-import StatCard from "../components/StatCard.tsx";
+import { StatisticsView } from "../components/StatisticsView.tsx";
+import type { StatisticsData } from "../components/StatisticsView.tsx";
 import { getConfig } from "../lib/api.ts";
 import type { PrometheusParseResult } from "../lib/prometheus-parser.ts";
 import {
@@ -16,30 +17,6 @@ let cachedStatistics: {
   data: StatisticsData;
   timestamp: number;
 } | null = null;
-
-interface ServerDistribution {
-  software: string;
-  count: number;
-  percentage: number;
-}
-
-interface VersionDistribution {
-  software: string;
-  version: string;
-  count: number;
-  percentage: number;
-}
-
-interface StatisticsData {
-  totalTests: number;
-  successfulTests: number;
-  failedTests: number;
-  successRate: number;
-  uniqueServers: number;
-  serverDistribution: ServerDistribution[];
-  versionDistribution: VersionDistribution[];
-  lastUpdated: string;
-}
 
 async function fetchStatistics(apiUrl: string): Promise<StatisticsData | null> {
   const tracer = getTracer();
@@ -143,7 +120,7 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
 
   // Process software distribution: group single-test servers as "Other"
   let otherCount = 0;
-  const serverDistribution: ServerDistribution[] = [];
+  const serverDistribution = [] as StatisticsData["serverDistribution"];
 
   softwareMap.forEach((count, software) => {
     if (count === 1) {
@@ -157,10 +134,8 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
     }
   });
 
-  // Sort by count descending
   serverDistribution.sort((a, b) => b.count - a.count);
 
-  // Add "Other" category if applicable
   if (otherCount > 0) {
     serverDistribution.push({
       software: "Other",
@@ -171,7 +146,7 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
 
   // Process version distribution: group single-test versions as "Other"
   let otherVersionCount = 0;
-  const versionDistribution: VersionDistribution[] = [];
+  const versionDistribution = [] as StatisticsData["versionDistribution"];
 
   versionMap.forEach((v) => {
     if (v.count === 1) {
@@ -186,11 +161,9 @@ function extractStatistics(parsed: PrometheusParseResult): StatisticsData {
     }
   });
 
-  // Sort by count descending and take top 15
   versionDistribution.sort((a, b) => b.count - a.count);
   const topVersions = versionDistribution.slice(0, 15);
 
-  // Add "Other" category if applicable
   if (otherVersionCount > 0 && topVersions.length < 15) {
     topVersions.push({
       software: "Other",
@@ -227,16 +200,13 @@ export const handler = define.handlers({
             cachedStatistics &&
             (now - cachedStatistics.timestamp) < CACHE_TTL_MS
           ) {
-            // Serve from cache with appropriate headers
             const age = Math.floor((now - cachedStatistics.timestamp) / 1000);
             const maxAge = Math.floor(CACHE_TTL_MS / 1000);
 
             parentSpan.addEvent("serving from cache");
 
             return page(
-              {
-                stats: cachedStatistics.data,
-              },
+              { stats: cachedStatistics.data },
               {
                 headers: {
                   "Cache-Control": `public, max-age=${
@@ -250,32 +220,18 @@ export const handler = define.handlers({
 
           parentSpan.addEvent("serving from API");
 
-          // Fetch API configuration
-          const apiConfig = await getConfig(
-            `${url.protocol}//${url.host}`,
-          );
-
-          const apiUrl = apiConfig.api_server_url;
-
-          // Fetch statistics from the API
-          const stats = await fetchStatistics(apiUrl);
+          const apiConfig = await getConfig(`${url.protocol}//${url.host}`);
+          const stats = await fetchStatistics(apiConfig.api_server_url);
           parentSpan.addEvent("fetched statistics");
 
-          // Cache the result if successful
           if (stats) {
             parentSpan.addEvent("caching result");
-            cachedStatistics = {
-              data: stats,
-              timestamp: Date.now(),
-            };
+            cachedStatistics = { data: stats, timestamp: Date.now() };
           }
 
-          // Set cache headers for fresh response
           const maxAge = Math.floor(CACHE_TTL_MS / 1000);
           return page(
-            {
-              stats,
-            },
+            { stats },
             {
               headers: {
                 "Cache-Control":
@@ -294,12 +250,9 @@ export const handler = define.handlers({
             message: error instanceof Error ? error.message : String(error),
           });
 
-          // If we have stale cached data, serve it on error
           if (cachedStatistics) {
             return page(
-              {
-                stats: cachedStatistics.data,
-              },
+              { stats: cachedStatistics.data },
               {
                 headers: {
                   "Cache-Control": "public, max-age=60, stale-if-error=3600",
@@ -308,9 +261,7 @@ export const handler = define.handlers({
             );
           }
 
-          return page({
-            stats: null,
-          });
+          return page({ stats: null });
         } finally {
           parentSpan.end();
         }
@@ -320,222 +271,7 @@ export const handler = define.handlers({
 });
 
 export default define.page<typeof handler>(function Statistics(ctx) {
-  const { i18n } = ctx.state;
-  const stats = ctx.data?.stats;
-
   return (
-    <>
-      <h1 class="govuk-heading-xl">{i18n.tString("statistics.title")}</h1>
-      <p class="govuk-body-l">{i18n.tString("statistics.description")}</p>
-
-      {!stats
-        ? (
-          <div class="stats-error">
-            <h2 class="govuk-heading-m">
-              {i18n.tString("statistics.error_title")}
-            </h2>
-            <p class="govuk-body">
-              {i18n.tString("statistics.error_message")}
-            </p>
-          </div>
-        )
-        : (
-          <>
-            {/* Overview Section */}
-            <div class="stats-section">
-              <h2 class="govuk-heading-l stats-section__title">
-                {i18n.tString("statistics.overview_title")}
-              </h2>
-              <p class="govuk-body stats-section__description">
-                {i18n.tString("statistics.overview_description")}
-              </p>
-
-              <div class="stats-grid">
-                <StatCard
-                  title={i18n.tString("statistics.total_tests")}
-                  value={stats.totalTests}
-                  description={i18n.tString(
-                    "statistics.total_tests_description",
-                  )}
-                  highlight
-                />
-
-                <StatCard
-                  title={i18n.tString("statistics.unique_servers")}
-                  value={stats.uniqueServers}
-                  description={i18n.tString(
-                    "statistics.unique_servers_description",
-                  )}
-                  highlight
-                />
-
-                <StatCard
-                  title={i18n.tString("statistics.success_rate")}
-                  value={`${stats.successRate.toFixed(1)}%`}
-                  description={i18n.tString(
-                    "statistics.success_rate_description",
-                  )}
-                  highlight
-                />
-              </div>
-
-              <div class="stats-grid stats-grid--two-col">
-                <StatCard
-                  title={i18n.tString("statistics.successful_tests")}
-                  value={stats.successfulTests}
-                  description={i18n.tString(
-                    "statistics.successful_tests_description",
-                  )}
-                />
-
-                <StatCard
-                  title={i18n.tString("statistics.failed_tests")}
-                  value={stats.failedTests}
-                  description={i18n.tString(
-                    "statistics.failed_tests_description",
-                  )}
-                />
-              </div>
-            </div>
-
-            {/* Server Software Distribution */}
-            {stats.serverDistribution.length > 0 && (
-              <div class="stats-section">
-                <h2 class="govuk-heading-l stats-section__title">
-                  {i18n.tString("statistics.server_distribution_title")}
-                </h2>
-                <p class="govuk-body stats-section__description">
-                  {i18n.tString("statistics.server_distribution_description")}
-                </p>
-
-                <div class="table-wrapper">
-                  <div class="table-scroll">
-                    <table class="govuk-table">
-                      <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
-                        {i18n.tString("statistics.server_distribution_title")}
-                      </caption>
-                      <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                          <th scope="col" class="govuk-table__header">
-                            {i18n.tString("statistics.server_software")}
-                          </th>
-                          <th
-                            scope="col"
-                            class="govuk-table__header govuk-table__header--numeric"
-                          >
-                            {i18n.tString("statistics.test_count")}
-                          </th>
-                          <th
-                            scope="col"
-                            class="govuk-table__header govuk-table__header--numeric"
-                          >
-                            {i18n.tString("statistics.percentage")}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="govuk-table__body">
-                        {stats.serverDistribution.map((item) => (
-                          <tr class="govuk-table__row" key={item.software}>
-                            <th scope="row" class="govuk-table__header">
-                              {item.software === "Other"
-                                ? i18n.tString("statistics.other")
-                                : item.software}
-                            </th>
-                            <td class="govuk-table__cell govuk-table__cell--numeric">
-                              {item.count.toLocaleString("en-GB")}
-                            </td>
-                            <td class="govuk-table__cell govuk-table__cell--numeric">
-                              {item.percentage.toFixed(1)}%
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Version Distribution */}
-            {stats.versionDistribution.length > 0 && (
-              <div class="stats-section">
-                <h2 class="govuk-heading-l stats-section__title">
-                  {i18n.tString("statistics.version_distribution_title")}
-                </h2>
-                <p class="govuk-body stats-section__description">
-                  {i18n.tString("statistics.version_distribution_description")}
-                </p>
-
-                <div class="table-wrapper">
-                  <div class="table-scroll">
-                    <table class="govuk-table">
-                      <caption class="govuk-table__caption govuk-table__caption--m govuk-visually-hidden">
-                        {i18n.tString("statistics.version_distribution_title")}
-                      </caption>
-                      <thead class="govuk-table__head">
-                        <tr class="govuk-table__row">
-                          <th scope="col" class="govuk-table__header">
-                            {i18n.tString("statistics.server_software")}
-                          </th>
-                          <th scope="col" class="govuk-table__header">
-                            {i18n.tString("statistics.version")}
-                          </th>
-                          <th
-                            scope="col"
-                            class="govuk-table__header govuk-table__header--numeric"
-                          >
-                            {i18n.tString("statistics.test_count")}
-                          </th>
-                          <th
-                            scope="col"
-                            class="govuk-table__header govuk-table__header--numeric"
-                          >
-                            {i18n.tString("statistics.percentage")}
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody class="govuk-table__body">
-                        {stats.versionDistribution.map((item) => (
-                          <tr
-                            class="govuk-table__row"
-                            key={`${item.software}-${item.version}`}
-                          >
-                            <th scope="row" class="govuk-table__header">
-                              {item.software === "Other"
-                                ? i18n.tString("statistics.other")
-                                : item.software}
-                            </th>
-                            <td class="govuk-table__cell">
-                              {item.version}
-                            </td>
-                            <td class="govuk-table__cell govuk-table__cell--numeric">
-                              {item.count.toLocaleString("en-GB")}
-                            </td>
-                            <td class="govuk-table__cell govuk-table__cell--numeric">
-                              {item.percentage.toFixed(1)}%
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Information Section */}
-            <div class="govuk-inset-text">
-              <p class="govuk-body">
-                {i18n.tString("statistics.privacy_note")}
-              </p>
-            </div>
-
-            <p class="stats-updated">
-              {i18n.tString("statistics.last_updated")}:{" "}
-              {new Date(stats.lastUpdated).toLocaleString(i18n.getLocale())}
-            </p>
-          </>
-        )}
-    </>
+    <StatisticsView stats={ctx.data?.stats ?? null} i18n={ctx.state.i18n} />
   );
 });

@@ -140,6 +140,8 @@
     "no_connectivity_reports": "No connectivity reports available.",
     "raw_data_title": "Raw result data",
     "raw_data_summary": "JSON data of the test results.",
+    "retry_warning_title": "Connection Instability Detected",
+    "retry_warning_body": "One or more connections required a retry to succeed. This indicates transient instability that federation peers may also encounter.",
     "matrixrtc_title": "MatrixRTC Readiness",
     "matrixrtc_summary": "MatrixRTC (MSC4143) support for voice and video calls.",
 

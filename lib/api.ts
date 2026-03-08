@@ -4,6 +4,9 @@ import { fetchWithTrace, getTracer } from "./tracing.ts";
 interface ConfigType {
   api_server_url: string;
   oauth2_client_id: string;
+  /** When true, fall back to plain HTTP when probing the client-server API.
+   *  HTTPS is required by the Matrix spec; only set this for intranet/lab deployments. */
+  allow_http?: boolean;
 }
 
 export async function getConfig(currentHost: string): Promise<ConfigType> {

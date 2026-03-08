@@ -140,6 +140,8 @@
     "no_connectivity_reports": "Keine Konnektivitätsberichte verfügbar.",
     "raw_data_title": "Rohdaten der Ergebnisse",
     "raw_data_summary": "JSON-Daten der Testergebnisse.",
+    "retry_warning_title": "Verbindungsinstabilität erkannt",
+    "retry_warning_body": "Eine oder mehrere Verbindungen benötigten einen Neuversuch. Dies weist auf eine vorübergehende Instabilität hin, die auch bei Föderations-Partnern auftreten kann.",
     "matrixrtc_title": "MatrixRTC-Bereitschaft",
     "matrixrtc_summary": "MatrixRTC (MSC4143)-Unterstützung für Sprach- und Videoanrufe.",
 

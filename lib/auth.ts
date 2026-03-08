@@ -4,6 +4,9 @@
  * The SSR server never sees tokens.
  */
 
+/** How early before expiry to trigger a silent token refresh. */
+const TOKEN_EXPIRY_WARNING_MS = 5 * 60 * 1000;
+
 const STORAGE_KEYS = {
   ACCESS_TOKEN: "auth_access_token",
   REFRESH_TOKEN: "auth_refresh_token",
@@ -233,7 +236,7 @@ export function isAuthenticated(): boolean {
 export function isTokenExpiringSoon(): boolean {
   const expiresAt = getTokenExpiresAt();
   if (!expiresAt) return false;
-  return Date.now() > expiresAt - 5 * 60 * 1000;
+  return Date.now() > expiresAt - TOKEN_EXPIRY_WARNING_MS;
 }
 
 /** Remove all auth-related entries from sessionStorage. */
