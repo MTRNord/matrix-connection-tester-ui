@@ -1,5 +1,6 @@
 {
   "api_server_url": "http://localhost:8080",
   "oauth2_client_id": "federation-tester-frontend",
+
   "allow_http": false
 }

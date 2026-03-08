@@ -46,6 +46,18 @@ Then open <http://localhost:5173> in your browser.
 
 ---
 
+## Configuration
+
+The UI reads `static/config.json` at runtime. Copy `static/config.json.example` to `static/config.json` and adjust as needed.
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `api_server_url` | `"http://localhost:8080"` | Base URL of the backend API server. |
+| `oauth2_client_id` | `"federation-tester-frontend"` | OAuth2 client ID registered with the backend. Only relevant when the backend has `oauth2.enabled = true`. |
+| `allow_http` | `false` | When `true`, the client-server API prober falls back to plain `http://` if the `https://` probe fails. HTTPS is required by the Matrix spec; only enable this for **intranet or lab deployments** where the target server does not have a valid TLS certificate. |
+
+---
+
 ## API
 
 This UI expects <https://github.com/MTRNord/rust-federation-tester> to be running as a backend API.
