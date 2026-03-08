@@ -183,7 +183,7 @@ export default define.page(function App({ Component, url, state }) {
           <div class="govuk-phase-banner">
             <p class="govuk-phase-banner__content">
               <strong class="govuk-tag govuk-phase-banner__content__tag">
-                {i18n.t("banner.alpha")}
+                {i18n.t("banner.beta")}
               </strong>
               <span class="govuk-phase-banner__text">
                 {i18n.t("banner.message")}{" "}

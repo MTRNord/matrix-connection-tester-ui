@@ -28,10 +28,23 @@ interface VersionsResponse {
   unstable_features?: Record<string, boolean>;
 }
 
+interface RtcTransport {
+  type: string;
+  [key: string]: unknown;
+}
+
+interface RtcTransportsResponse {
+  rtc_transports: RtcTransport[];
+}
+
 interface ClientServerState {
   clientWellKnown: ClientWellKnownResp | null;
   versions: VersionsResponse | null;
   discoveredEndpoint: string | null;
+  rtcTransports: RtcTransportsResponse | null;
+  rtcTransportsEndpoint: string | null;
+  /** null = probe not yet done or inconclusive, true/false = definitive result */
+  msc3266Supported: boolean | null;
   errors: {
     clientWellKnown?: MatrixError;
     versions?: MatrixError;
@@ -44,6 +57,9 @@ const initialState: ClientServerState = {
   clientWellKnown: null,
   versions: null,
   discoveredEndpoint: null,
+  rtcTransports: null,
+  rtcTransportsEndpoint: null,
+  msc3266Supported: null,
   errors: {},
   loading: false,
   serverName: null,
@@ -101,6 +117,18 @@ export const clientServerStatus = computed<
 
 export const clientServerSuccessful = computed(() =>
   clientServerStatus.value === "success"
+);
+
+export const rtcTransportsResult = computed(() =>
+  clientServerState.value.rtcTransports
+);
+
+export const rtcTransportsEndpointUrl = computed(() =>
+  clientServerState.value.rtcTransportsEndpoint
+);
+
+export const msc3266SupportedResult = computed(() =>
+  clientServerState.value.msc3266Supported
 );
 
 // Track in-flight requests to prevent duplicate fetches
@@ -253,12 +281,76 @@ async function performFetch(serverName: string): Promise<void> {
       }
     }
 
+    // Step 3: Fetch /rtc/transports — stable v1 endpoint first, then unstable prefix
+    let rtcTransports: RtcTransportsResponse | null = null;
+    let rtcTransportsEndpoint: string | null = null;
+    const rtcBaseUrl = discoveredEndpoint || `https://${serverName}`;
+    const stableRtcUrl = `${rtcBaseUrl}/_matrix/client/v1/rtc/transports`;
+    const { response: stableRtcResp } = await fetchWithTimeout(
+      stableRtcUrl,
+      5000,
+    );
+    if (stableRtcResp?.ok) {
+      try {
+        const json = await stableRtcResp.json();
+        if (json && Array.isArray(json.rtc_transports)) {
+          rtcTransports = json as RtcTransportsResponse;
+          rtcTransportsEndpoint = stableRtcUrl;
+        }
+      } catch { /* ignore parse errors */ }
+    } else {
+      const unstableRtcUrl =
+        `${rtcBaseUrl}/_matrix/client/unstable/org.matrix.msc4143/rtc/transports`;
+      const { response: unstableRtcResp } = await fetchWithTimeout(
+        unstableRtcUrl,
+        5000,
+      );
+      if (unstableRtcResp?.ok) {
+        try {
+          const json = await unstableRtcResp.json();
+          if (json && Array.isArray(json.rtc_transports)) {
+            rtcTransports = json as RtcTransportsResponse;
+            rtcTransportsEndpoint = unstableRtcUrl;
+          }
+        } catch { /* ignore parse errors */ }
+      }
+    }
+
+    // Step 4: Probe /_matrix/client/v1/room_summary/ to check MSC3266 support.
+    // Use a dummy room ID — the goal is to distinguish M_UNRECOGNIZED (endpoint absent)
+    // from M_NOT_FOUND / 401 / 403 (endpoint exists, room just not found or access denied).
+    let msc3266Supported: boolean | null = null;
+    const probeBase = discoveredEndpoint || `https://${serverName}`;
+    const probeRoomId = encodeURIComponent(`!probe:${serverName}`);
+    const msc3266Url =
+      `${probeBase}/_matrix/client/v1/room_summary/${probeRoomId}`;
+    const { response: msc3266Resp } = await fetchWithTimeout(msc3266Url, 5000);
+    if (msc3266Resp) {
+      if (
+        msc3266Resp.status === 200 || msc3266Resp.status === 401 ||
+        msc3266Resp.status === 403
+      ) {
+        msc3266Supported = true;
+      } else if (msc3266Resp.status === 404) {
+        try {
+          const json = await msc3266Resp.json();
+          // M_UNRECOGNIZED means the endpoint doesn't exist at all
+          msc3266Supported = json?.errcode !== "M_UNRECOGNIZED";
+        } catch {
+          msc3266Supported = null;
+        }
+      }
+    }
+
     // Update state with all results
     clientServerState.value = {
       ...clientServerState.value,
       clientWellKnown,
       versions,
       discoveredEndpoint,
+      rtcTransports,
+      rtcTransportsEndpoint,
+      msc3266Supported,
       errors: {
         ...(wellKnownErrorToStore &&
           { clientWellKnown: wellKnownErrorToStore }),

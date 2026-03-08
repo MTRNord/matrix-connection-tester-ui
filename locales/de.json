@@ -32,8 +32,10 @@
   },
   "banner": {
     "alpha": "Alpha",
-    "message": "Dies ist die Neuimplementierung der Matrix Konnektivitätstester-Benutzeroberfläche. Bitte melden Sie alle Probleme, die Sie finden, auf",
-    "github": "GitHub"
+    "beta": "Beta",
+    "message": "Dieser Dienst befindet sich in der Beta-Phase. Bitte melden Sie alle gefundenen Probleme auf",
+    "github": "GitHub",
+    "alpha_feature_message": "Diese Funktion befindet sich in der Alpha-Phase. Ergebnisse können unvollständig oder fehlerhaft sein. Bitte melden Sie Probleme auf"
   },
 
   "home": {
@@ -138,6 +140,8 @@
     "no_connectivity_reports": "Keine Konnektivitätsberichte verfügbar.",
     "raw_data_title": "Rohdaten der Ergebnisse",
     "raw_data_summary": "JSON-Daten der Testergebnisse.",
+    "matrixrtc_title": "MatrixRTC-Bereitschaft",
+    "matrixrtc_summary": "MatrixRTC (MSC4143)-Unterstützung für Sprach- und Videoanrufe.",
 
     "wellknown_warning_title": "Well-Known-Konfigurationsprobleme erkannt",
     "wellknown_warning_description": "Deine Föderation funktioniert derzeit (wahrscheinlich über SRV-Einträge), aber es gibt Probleme mit deinem .well-known/matrix/server-Endpunkt. Obwohl nicht sofort kritisch, sollte dies behoben werden, um eine zuverlässige Föderation und Kompatibilität mit allen Matrix-Implementierungen sicherzustellen.",
@@ -640,5 +644,24 @@
     "oauth2_retry": "Erneut anmelden",
     "verify_migration_notice": "Wir haben auf kontobasierte Anmeldungen umgestellt. Erstelle ein Konto oder melde dich an, um deine Benachrichtigungen künftig zu verwalten.",
     "verify_migration_link": "Zu den Benachrichtigungen"
+  },
+  "matrixrtc": {
+    "intro": "Dieser Abschnitt zeigt, ob der Server MatrixRTC (MSC4143) und verwandte Funktionen für Sprach- und Videoanrufe via Element Call unterstützt. Fehlende Unterstützung ist nur informativ — sie hat keinen Einfluss auf die Föderation oder allgemeine Matrix-Nutzung.",
+    "msc4143_label": "MatrixRTC (Sprach-/Videoanrufe via Element Call)",
+    "msc4140_label": "Verzögerte Ereignisse (erforderlich für zuverlässigen MatrixRTC-Anrufstatus)",
+    "msc3266_label": "Raumzusammenfassungen (stabil seit v1.15, von Element Call für Raumsuche verwendet)",
+    "rtc_transports_label": "RTC-Transports-Endpunkt",
+    "rtc_endpoint_label": "Verwendeter Endpunkt",
+    "foci_wellknown_label": "Legacy-Focus-Konfiguration",
+    "foci_wellknown_hint": "in /.well-known/matrix/client",
+    "supported": "Unterstützt",
+    "not_supported": "Nicht unterstützt",
+    "configured": "Konfiguriert",
+    "not_configured": "Nicht konfiguriert",
+    "unknown": "Unbekannt",
+    "status_ready_title": "MatrixRTC ist bereit für Anrufe",
+    "status_ready_message": "Dieser Server hat einen SFU/Focus konfiguriert. Element Call kann Sprach- und Videoanrufe tätigen.",
+    "status_not_configured_title": "MatrixRTC nicht konfiguriert",
+    "status_not_configured_message": "Weder der RTC-Transports-Endpunkt noch eine Legacy-Focus-Konfiguration wurde gefunden. Sprach- und Videoanrufe via Element Call werden auf diesem Server nicht funktionieren."
   }
 }

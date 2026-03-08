@@ -188,5 +188,15 @@
     "msc": "MSC4323",
     "title": "User suspension & locking endpoints",
     "description": "Adds new endpoints which allow server administrators to suspend, unsuspend, lock, and unlock given users"
+  },
+  "org.matrix.msc4143": {
+    "msc": "MSC4143",
+    "title": "MatrixRTC",
+    "description": "Real-time communication (voice/video calls) via MatrixRTC, used by Element Call"
+  },
+  "org.matrix.msc3266": {
+    "msc": "MSC3266",
+    "title": "Room summaries",
+    "description": "Fetch a summary of a room without joining, used by Element Call for room lookup"
   }
 }

@@ -32,8 +32,10 @@
   },
   "banner": {
     "alpha": "Alpha",
-    "message": "This is the rewrite of the Matrix Connectivity Tester UI. Please report any issues you find on",
-    "github": "GitHub"
+    "beta": "Beta",
+    "message": "This service is in beta. Please report any issues you find on",
+    "github": "GitHub",
+    "alpha_feature_message": "This feature is in alpha. Results may be incomplete or incorrect. Please report any issues on"
   },
 
   "home": {
@@ -138,6 +140,8 @@
     "no_connectivity_reports": "No connectivity reports available.",
     "raw_data_title": "Raw result data",
     "raw_data_summary": "JSON data of the test results.",
+    "matrixrtc_title": "MatrixRTC Readiness",
+    "matrixrtc_summary": "MatrixRTC (MSC4143) support for voice and video calls.",
 
     "wellknown_warning_title": "Well-Known Configuration Issues Detected",
     "wellknown_warning_description": "Your federation is currently working (likely via SRV records), but there are issues with your .well-known/matrix/server endpoint. While not immediately breaking, this should be fixed to ensure reliable federation and compatibility with all Matrix implementations.",
@@ -946,5 +950,24 @@
     "oauth2_retry": "Try signing in again",
     "verify_migration_notice": "We have upgraded to account-based logins. Create an account or sign in to manage your alerts going forward.",
     "verify_migration_link": "Go to alerts"
+  },
+  "matrixrtc": {
+    "intro": "This section shows whether the server supports MatrixRTC (MSC4143) and related features required for voice and video calls via Element Call. Missing support is informational only — it does not affect federation or general Matrix usage.",
+    "msc4143_label": "MatrixRTC (voice/video calls via Element Call)",
+    "msc4140_label": "Delayed events (required for reliable MatrixRTC call state)",
+    "msc3266_label": "Room summaries (stable since v1.15, used by Element Call for room lookup)",
+    "rtc_transports_label": "RTC transports endpoint",
+    "rtc_endpoint_label": "Endpoint used",
+    "foci_wellknown_label": "Legacy focus configuration",
+    "foci_wellknown_hint": "in /.well-known/matrix/client",
+    "supported": "Supported",
+    "not_supported": "Not supported",
+    "configured": "Configured",
+    "not_configured": "Not configured",
+    "unknown": "Unknown",
+    "status_ready_title": "MatrixRTC is ready for calls",
+    "status_ready_message": "This server has an SFU/focus configured. Element Call can make voice and video calls.",
+    "status_not_configured_title": "MatrixRTC not configured",
+    "status_not_configured_message": "Neither the RTC transports endpoint nor legacy focus configuration was found. Voice and video calls via Element Call will not work on this server."
   }
 }

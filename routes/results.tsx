@@ -10,6 +10,7 @@ import SupportInfo from "../islands/support-info.tsx";
 import SupportProblems from "../islands/support-problems.tsx";
 import ClientServerAPITasks from "../islands/client-server-api-tasks.tsx";
 import ClientServerProblems from "../islands/client-server-problems.tsx";
+import MatrixRtcTasks from "../islands/matrixrtc-tasks.tsx";
 import CombinedStatusBanner from "../islands/combined-status-banner.tsx";
 import RawDataSection from "../islands/raw-data-section.tsx";
 import { getConfig } from "../lib/api.ts";
@@ -432,6 +433,36 @@ export default define.page<typeof handler>(function Results(ctx) {
                 locale={i18n.getLocale()}
                 unstableFeatures={unstableFeatures}
                 baseUrl={ctx.url.origin}
+              />
+            </div>
+          </div>
+          <div class="govuk-accordion__section">
+            <div class="govuk-accordion__section-header">
+              <h2 class="govuk-accordion__section-heading">
+                <span
+                  class="govuk-accordion__section-button"
+                  id="accordion-with-summary-sections-heading-matrixrtc"
+                >
+                  {i18n.t("results.matrixrtc_title")}{" "}
+                  <strong class="govuk-tag govuk-tag--blue govuk-!-font-size-16">
+                    {i18n.t("banner.alpha")}
+                  </strong>
+                </span>
+              </h2>
+              <div
+                class="govuk-accordion__section-summary govuk-body"
+                id="accordion-with-summary-sections-summary-matrixrtc"
+              >
+                {i18n.t("results.matrixrtc_summary")}
+              </div>
+            </div>
+            <div
+              id="accordion-with-summary-sections-content-matrixrtc"
+              class="govuk-accordion__section-content"
+            >
+              <MatrixRtcTasks
+                serverName={serverName}
+                locale={i18n.getLocale()}
               />
             </div>
           </div>
