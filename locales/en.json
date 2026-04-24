@@ -40,7 +40,7 @@
 
   "home": {
     "title": "Matrix Connectivity Tester",
-    "welcome": "Welcome to the Matrix Connectivity Tester! This tool helps you verify your Matrix server's connectivity and configuration by running a series of automated tests on your homeserver. It therefor must be reachable by the public internet.",
+    "welcome": "Welcome to the Matrix Connectivity Tester! This tool helps you verify your Matrix server's connectivity and configuration by running a series of automated tests on your homeserver. It must therefore be reachable by the public internet.",
     "getting_started": "To get started enter your Matrix server's domain name (e.g. \"example.com\") in the input field below and click \"Run Tests\".",
     "find_server_title": "How can I find my server's domain name?",
     "find_server_description": "Your server's domain name is the part of your Matrix ID that comes after the colon. For example, if your Matrix ID is \"@username:matrix.org\", then your server's domain name is \"matrix.org\".",
