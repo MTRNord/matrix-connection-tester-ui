@@ -352,7 +352,7 @@ async function performFetch(serverName: string): Promise<void> {
     const probeBase = discoveredEndpoint || `https://${serverName}`;
     const probeRoomId = encodeURIComponent(`!probe:${serverName}`);
     const msc3266Url =
-      `${probeBase}/_matrix/client/v1/room_summary/${probeRoomId}`;
+      `${probeBase}/_matrix/client/v1/room_summary/${probeRoomId}?via=${encodeURIComponent(serverName)}`;
     const { response: msc3266Resp } = await fetchWithTimeout(msc3266Url, PROBE_TIMEOUT_MS);
     if (msc3266Resp) {
       if (
