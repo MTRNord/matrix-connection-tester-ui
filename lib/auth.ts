@@ -13,7 +13,11 @@ const STORAGE_KEYS = {
   TOKEN_EXPIRES_AT: "auth_token_expires_at",
   PKCE_STATE: "auth_pkce_state",
   PKCE_VERIFIER: "auth_pkce_verifier",
+  PKCE_CREATED_AT: "auth_pkce_created_at",
 } as const;
+
+/** PKCE sessions expire after 1 hour — matches the magic link JWT TTL. */
+const PKCE_TTL_MS = 60 * 60 * 1000;
 
 // ---------------------------------------------------------------------------
 // PKCE helpers
@@ -250,22 +254,30 @@ export function clearTokens(): void {
 // PKCE session storage
 // ---------------------------------------------------------------------------
 
-/** Persist the PKCE state + verifier before redirecting to the authorize endpoint. */
+/** Persist the PKCE state + verifier before redirecting to the authorize endpoint.
+ * Uses localStorage so the session survives across tabs (magic link emails open in a new tab). */
 export function storePkceSession(state: string, verifier: string): void {
-  sessionStorage.setItem(STORAGE_KEYS.PKCE_STATE, state);
-  sessionStorage.setItem(STORAGE_KEYS.PKCE_VERIFIER, verifier);
+  localStorage.setItem(STORAGE_KEYS.PKCE_STATE, state);
+  localStorage.setItem(STORAGE_KEYS.PKCE_VERIFIER, verifier);
+  localStorage.setItem(STORAGE_KEYS.PKCE_CREATED_AT, String(Date.now()));
 }
 
-/** Retrieve the stored PKCE session, or null if it is missing. */
+/** Retrieve the stored PKCE session, or null if it is missing or older than 1 hour. */
 export function getPkceSession(): { state: string; verifier: string } | null {
-  const state = sessionStorage.getItem(STORAGE_KEYS.PKCE_STATE);
-  const verifier = sessionStorage.getItem(STORAGE_KEYS.PKCE_VERIFIER);
+  const state = localStorage.getItem(STORAGE_KEYS.PKCE_STATE);
+  const verifier = localStorage.getItem(STORAGE_KEYS.PKCE_VERIFIER);
+  const createdAt = localStorage.getItem(STORAGE_KEYS.PKCE_CREATED_AT);
   if (!state || !verifier) return null;
+  if (createdAt && Date.now() - Number(createdAt) > PKCE_TTL_MS) {
+    clearPkceSession();
+    return null;
+  }
   return { state, verifier };
 }
 
 /** Remove the PKCE session after a successful code exchange. */
 export function clearPkceSession(): void {
-  sessionStorage.removeItem(STORAGE_KEYS.PKCE_STATE);
-  sessionStorage.removeItem(STORAGE_KEYS.PKCE_VERIFIER);
+  localStorage.removeItem(STORAGE_KEYS.PKCE_STATE);
+  localStorage.removeItem(STORAGE_KEYS.PKCE_VERIFIER);
+  localStorage.removeItem(STORAGE_KEYS.PKCE_CREATED_AT);
 }
