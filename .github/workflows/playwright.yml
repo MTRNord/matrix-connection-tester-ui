@@ -70,6 +70,10 @@ jobs:
             enabled: false
           oauth2:
             enabled: false
+          statistics:
+            enabled: true
+            prometheus_enabled: true
+            anonymization_salt: "e2e-ci-test-salt-1234"
           EOF
 
       - name: Run database migrations
