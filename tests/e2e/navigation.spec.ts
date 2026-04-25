@@ -1,4 +1,15 @@
-import { test, expect } from "./fixtures.ts";
+import { test, expect, type Page } from "@playwright/test";
+
+/** Click the mobile nav toggle if it is visible (mobile viewport only). */
+async function openNavIfMobile(page: Page): Promise<void> {
+  const toggle = page.locator(".govuk-js-service-navigation-toggle");
+  const isVisible = await toggle.isVisible();
+  if (isVisible) {
+    await toggle.click();
+    // Wait briefly for the nav list to expand
+    await page.locator("#navigation").waitFor({ state: "visible", timeout: 3_000 }).catch(() => {});
+  }
+}
 
 test.describe("navigation", () => {
   test("header shows service name", async ({ page }) => {
@@ -19,6 +30,7 @@ test.describe("navigation", () => {
     for (const { path, label } of pages) {
       test(`"${label}" link is present`, async ({ page }) => {
         await page.goto(path);
+        await openNavIfMobile(page);
         const nav = page.locator(".govuk-service-navigation__list");
         await expect(nav.getByText(label)).toBeVisible();
       });
@@ -44,13 +56,12 @@ test.describe("navigation", () => {
     });
   });
 
-  test.describe("back link", () => {
-    test("results page shows Back link pointing to home", async ({ page }) => {
-      // Navigate to results with a server param so the page can render
+  test.describe("breadcrumbs", () => {
+    test("results page shows breadcrumb with Home link", async ({ page }) => {
       await page.goto("/results?serverName=matrix.org");
-      const backLink = page.locator(".govuk-back-link");
-      await expect(backLink).toBeVisible();
-      await expect(backLink).toHaveAttribute("href", "/");
+      const breadcrumbs = page.locator(".govuk-breadcrumbs");
+      await expect(breadcrumbs).toBeVisible();
+      await expect(breadcrumbs.getByRole("link", { name: "Home" })).toBeVisible();
     });
 
     test("top-level pages do not show Back link", async ({ page }) => {
@@ -61,7 +72,7 @@ test.describe("navigation", () => {
     });
   });
 
-  test("404 page shows not-found content", async ({ page }) => {
+  test("404 page shows not-found content and returns 404 status", async ({ page }) => {
     const response = await page.goto("/this-does-not-exist-xyz");
     expect(response?.status()).toBe(404);
     await expect(page.locator("h1")).toContainText("Page not found");
