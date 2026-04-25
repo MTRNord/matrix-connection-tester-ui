@@ -1,5 +1,11 @@
 import { define } from "../utils.ts";
 
+export const handler = define.handlers({
+  GET(ctx) {
+    return ctx.render({}, { status: 404 });
+  },
+});
+
 export default define.page(function NotFound(ctx) {
   const { i18n } = ctx.state;
 
