@@ -63,17 +63,13 @@ jobs:
         working-directory: backend
         run: |
           cat > config.yaml <<'EOF'
-          database:
-            url: "sqlite://./e2e-test.db?mode=rwc"
-          server:
-            host: "0.0.0.0"
-            port: 8080
+          database_url: "sqlite://./e2e-test.db?mode=rwc"
+          frontend_url: "http://localhost:8000"
+          magic_token_secret: "e2e-ci-secret-not-for-production"
           smtp:
             enabled: false
           oauth2:
             enabled: false
-          redis:
-            url: ""
           EOF
 
       - name: Run database migrations
@@ -84,11 +80,20 @@ jobs:
 
       - name: Start backend
         working-directory: backend
-        run: ./target/release/rust-federation-tester &
+        run: |
+          ./target/release/rust-federation-tester > /tmp/backend.log 2>&1 &
+          echo $! > /tmp/backend.pid
+          echo "Backend started with PID $(cat /tmp/backend.pid)"
 
       - name: Wait for backend to be ready
         run: |
+          BACKEND_PID=$(cat /tmp/backend.pid)
           for i in $(seq 1 30); do
+            if ! kill -0 "$BACKEND_PID" 2>/dev/null; then
+              echo "Backend process died. Last log output:" >&2
+              tail -50 /tmp/backend.log >&2
+              exit 1
+            fi
             if curl -sf http://localhost:8080/healthz > /dev/null 2>&1; then
               echo "Backend is ready"
               exit 0
@@ -96,7 +101,8 @@ jobs:
             echo "Attempt $i/30 — waiting..."
             sleep 2
           done
-          echo "Backend did not start in time" >&2
+          echo "Backend did not become ready in time. Last log output:" >&2
+          tail -50 /tmp/backend.log >&2
           exit 1
 
       - name: Setup Deno
