@@ -32,16 +32,6 @@ jobs:
           echo "sha=${BACKEND_SHA}" >> "$GITHUB_OUTPUT"
           echo "Pinned backend to ${BACKEND_SHA}"
 
-      - name: Cache Rust artifacts
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            backend/target
-          key: rust-${{ steps.pin.outputs.sha }}-linux
-          restore-keys: rust-
-
       - name: Checkout backend at pinned SHA
         uses: actions/checkout@v4
         with:
@@ -57,6 +47,13 @@ jobs:
 
       - name: Install Rust (nightly)
         uses: dtolnay/rust-toolchain@nightly
+
+      # Swatinem/rust-cache keys on Cargo.lock + toolchain so the cache survives
+      # even when the pinned backend SHA advances (as long as deps don't change).
+      - name: Cache Rust artifacts
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: "backend -> target"
 
       - name: Build backend
         working-directory: backend
