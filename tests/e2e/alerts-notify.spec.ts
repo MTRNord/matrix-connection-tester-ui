@@ -77,8 +77,10 @@ test.describe("notification emails — manage panel", () => {
     await firstRow.getByRole("button", { name: "Manage" }).click();
     const select = firstRow.locator("select");
     await expect(select).toBeVisible();
-    await expect(select.locator("option", { hasText: "user2@example.com" }))
-      .toBeVisible();
+    // <option> elements inside a closed <select> are not "visible" in Playwright —
+    // check the innerHTML instead to confirm the email is present as an option.
+    const html = await select.innerHTML();
+    expect(html).toContain("user2@example.com");
     // unverified@example.com is not verified so must not appear
     await expect(
       select.locator("option", { hasText: "unverified@example.com" }),
