@@ -1,8 +1,9 @@
+import { page } from "fresh";
 import { define } from "../utils.ts";
 
 export const handler = define.handlers({
-  GET(ctx) {
-    return ctx.render({}, { status: 404 });
+  GET(_ctx) {
+    return page({}, { status: 404 });
   },
 });
 
