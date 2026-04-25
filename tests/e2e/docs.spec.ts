@@ -8,19 +8,19 @@ test.describe("documentation", () => {
 
   test("index shows section cards", async ({ page }) => {
     await page.goto("/docs");
-    // Docs index should have at least 4 section card headings
+    // Docs index should have at least one heading or card
     const cards = page.locator(".govuk-card, .govuk-summary-card, h2, h3");
     await expect(cards.first()).toBeVisible();
   });
 
   test("index shows Getting Started section", async ({ page }) => {
     await page.goto("/docs");
-    await expect(page.getByText("Getting Started")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Getting Started" })).toBeVisible();
   });
 
   test("index shows Configuration section", async ({ page }) => {
     await page.goto("/docs");
-    await expect(page.getByText("Configuration")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Configuration" })).toBeVisible();
   });
 
   test("federation setup sub-page renders correctly", async ({ page }) => {
@@ -30,10 +30,11 @@ test.describe("documentation", () => {
     );
   });
 
-  test("sub-page shows Back link pointing to docs index", async ({ page }) => {
+  test("sub-page shows breadcrumb with docs index link", async ({ page }) => {
     await page.goto("/docs/federation-setup");
-    const backLink = page.locator(".govuk-back-link");
-    await expect(backLink).toBeVisible();
+    const breadcrumbs = page.locator(".govuk-breadcrumbs");
+    await expect(breadcrumbs).toBeVisible();
+    await expect(breadcrumbs.getByRole("link", { name: "Documentation" })).toBeVisible();
   });
 
   test("non-existent doc page returns 404", async ({ page }) => {
