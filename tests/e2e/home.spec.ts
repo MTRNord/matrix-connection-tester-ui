@@ -23,10 +23,11 @@ test.describe("home page", () => {
   });
 
   test("renders statistics opt-in checkbox", async ({ page }) => {
-    const checkbox = page.locator(
-      'input[type="checkbox"][name="includeInStatistics"]',
+    // GovUK checkboxes have opacity:0 on the native input — check the wrapper instead
+    const checkboxItem = page.locator(
+      '.govuk-checkboxes__item:has(input[type="checkbox"][name="statistics"])',
     );
-    await expect(checkbox).toBeVisible();
+    await expect(checkboxItem).toBeVisible();
   });
 
   test("submitting with a valid domain redirects to results", async ({
