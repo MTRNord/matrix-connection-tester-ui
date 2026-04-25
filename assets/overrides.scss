@@ -14,12 +14,20 @@
 }
 
 /* In GovUK v6 the header container no longer uses flexbox by default.
-   Re-apply flex to keep logo and language selector on one row. */
+   Re-apply flex to keep logo and language selector on one row on wider screens.
+   On narrow screens allow wrapping so the language selector doesn't overflow. */
 .govuk-header__container {
   display: flex;
   flex-direction: row;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  gap: 4px 0;
+}
+
+@media (min-width: 641px) {
+  .govuk-header__container {
+    flex-wrap: nowrap;
+  }
 }
 
 .govuk-header__content {
