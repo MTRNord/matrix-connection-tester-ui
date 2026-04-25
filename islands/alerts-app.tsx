@@ -25,6 +25,7 @@ interface AlertDto {
   created_at: string;
   last_check_at?: string | null;
   is_currently_failing: boolean;
+  notify_emails: string[];
 }
 
 type AppState =
@@ -53,6 +54,11 @@ export default function AlertsApp(
   const isDeleting = useSignal(false);
   const deleteError = useSignal<string | null>(null);
   const confirmDialogRef = useRef<HTMLDialogElement>(null);
+
+  // Per-alert notification email management state
+  const userEmails = useSignal<string[]>([]);
+  const managingAlertId = useSignal<number | null>(null);
+  const notifyEmailError = useSignal<string | null>(null);
 
   async function redirectToLogin() {
     state.value = { type: "redirecting" };
@@ -89,10 +95,27 @@ export default function AlertsApp(
     return data.alerts ?? [];
   }
 
+  async function fetchUserEmails(token: string): Promise<string[]> {
+    try {
+      const res = await fetch(`${apiUrl}/oauth2/account/me`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return [];
+      const me = await res.json();
+      const emails: string[] = [];
+      if (me.email_verified && me.email) emails.push(me.email);
+      for (const e of me.additional_emails ?? []) {
+        if (e.verified && e.email) emails.push(e.email);
+      }
+      return emails;
+    } catch {
+      return [];
+    }
+  }
+
   useEffect(() => {
     (async () => {
       try {
-        // Attempt silent token refresh if expiring soon
         if (isTokenExpiringSoon() && getRefreshToken()) {
           const oidc = await fetchOidcConfig(apiUrl);
           const tokens = await refreshAccessToken(oidc.tokenEndpoint, {
@@ -108,7 +131,11 @@ export default function AlertsApp(
         }
 
         const token = getAccessToken()!;
-        const alerts = await fetchAlerts(token);
+        const [alerts, emails] = await Promise.all([
+          fetchAlerts(token),
+          fetchUserEmails(token),
+        ]);
+        userEmails.value = emails;
         state.value = { type: "authenticated", alerts };
       } catch (err) {
         console.error("AlertsApp init error:", err);
@@ -164,7 +191,6 @@ export default function AlertsApp(
       addSuccess.value = i18n.tString("auth.add_alert_success");
       addServerName.value = "";
 
-      // Refresh alert list
       const alerts = await fetchAlerts(token);
       state.value = { type: "authenticated", alerts };
     } catch {
@@ -214,7 +240,6 @@ export default function AlertsApp(
 
       closeDeleteDialog();
 
-      // Remove from list optimistically
       if (state.value.type === "authenticated") {
         state.value = {
           type: "authenticated",
@@ -225,6 +250,35 @@ export default function AlertsApp(
       deleteError.value = i18n.tString("auth.delete_failed");
     } finally {
       isDeleting.value = false;
+    }
+  }
+
+  async function updateNotifyEmails(alertId: number, emails: string[]) {
+    notifyEmailError.value = null;
+    const token = getAccessToken()!;
+    const response = await fetch(
+      `${apiUrl}/api/v2/alerts/${alertId}/notify-emails`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emails }),
+      },
+    );
+    if (!response.ok) {
+      notifyEmailError.value = i18n.tString("auth.notify_emails_update_failed");
+      return;
+    }
+    const updated: AlertDto = await response.json();
+    if (state.value.type === "authenticated") {
+      state.value = {
+        type: "authenticated",
+        alerts: state.value.alerts.map((a) =>
+          a.id === alertId ? updated : a
+        ),
+      };
     }
   }
 
@@ -412,6 +466,12 @@ export default function AlertsApp(
       {/* Alerts list */}
       <h2 class="govuk-heading-m">{i18n.tString("auth.your_alerts")}</h2>
 
+      {notifyEmailError.value && (
+        <p class="govuk-error-message" role="alert">
+          {notifyEmailError.value}
+        </p>
+      )}
+
       {alerts.length === 0
         ? (
           <div class="govuk-inset-text">
@@ -431,49 +491,156 @@ export default function AlertsApp(
                       {i18n.tString("auth.status")}
                     </th>
                     <th scope="col" class="govuk-table__header">
+                      {i18n.tString("auth.notify_emails_column")}
+                    </th>
+                    <th scope="col" class="govuk-table__header">
                       {i18n.tString("auth.actions")}
                     </th>
                   </tr>
                 </thead>
                 <tbody class="govuk-table__body">
-                  {alerts.map((alert) => (
-                    <tr class="govuk-table__row" key={alert.id}>
-                      <td class="govuk-table__cell">
-                        <code>{alert.server_name}</code>
-                        {alert.is_currently_failing && (
-                          <strong
-                            class="govuk-tag govuk-tag--red"
-                            style="margin-left: 0.5rem"
-                          >
-                            {i18n.tString("auth.currently_failing")}
-                          </strong>
-                        )}
-                      </td>
-                      <td class="govuk-table__cell">
-                        {alert.verified
-                          ? (
-                            <strong class="govuk-tag govuk-tag--green">
-                              {i18n.tString("auth.verified")}
-                            </strong>
-                          )
-                          : (
-                            <strong class="govuk-tag govuk-tag--yellow">
-                              {i18n.tString("auth.unverified")}
+                  {alerts.map((alert) => {
+                    const isManaging = managingAlertId.value === alert.id;
+                    // Emails the user can still add (not already in the list)
+                    const addableEmails = userEmails.value.filter(
+                      (e) => !alert.notify_emails.includes(e),
+                    );
+
+                    return (
+                      <tr class="govuk-table__row" key={alert.id}>
+                        <td class="govuk-table__cell">
+                          <code>{alert.server_name}</code>
+                          {alert.is_currently_failing && (
+                            <strong
+                              class="govuk-tag govuk-tag--red"
+                              style="margin-left: 0.5rem"
+                            >
+                              {i18n.tString("auth.currently_failing")}
                             </strong>
                           )}
-                      </td>
-                      <td class="govuk-table__cell">
-                        <button
-                          type="button"
-                          class="govuk-button govuk-button--warning govuk-button--secondary"
-                          data-module="govuk-button"
-                          onClick={() => openDeleteDialog(alert)}
-                        >
-                          {i18n.tString("common.delete")}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                        </td>
+                        <td class="govuk-table__cell">
+                          {alert.verified
+                            ? (
+                              <strong class="govuk-tag govuk-tag--green">
+                                {i18n.tString("auth.verified")}
+                              </strong>
+                            )
+                            : (
+                              <strong class="govuk-tag govuk-tag--yellow">
+                                {i18n.tString("auth.unverified")}
+                              </strong>
+                            )}
+                        </td>
+                        <td class="govuk-table__cell">
+                          {/* Notification email chips */}
+                          {alert.notify_emails.length === 0
+                            ? (
+                              <span class="govuk-hint" style="margin: 0">
+                                {i18n.tString("auth.notify_emails_none")}
+                              </span>
+                            )
+                            : (
+                              <ul
+                                style="list-style: none; margin: 0; padding: 0"
+                                aria-label="Notification emails"
+                              >
+                                {alert.notify_emails.map((email) => (
+                                  <li
+                                    key={email}
+                                    style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem"
+                                  >
+                                    <code
+                                      style="font-size: 0.875rem"
+                                    >
+                                      {email}
+                                    </code>
+                                    {isManaging && (
+                                      <button
+                                        type="button"
+                                        class="govuk-button govuk-button--warning"
+                                        style="margin: 0; padding: 2px 6px; font-size: 0.75rem; min-height: unset; line-height: 1.4"
+                                        onClick={() =>
+                                          updateNotifyEmails(
+                                            alert.id,
+                                            alert.notify_emails.filter((e) =>
+                                              e !== email
+                                            ),
+                                          )}
+                                      >
+                                        {i18n.tString(
+                                          "auth.notify_emails_remove",
+                                        )}
+                                      </button>
+                                    )}
+                                  </li>
+                                ))}
+                              </ul>
+                            )}
+
+                          {/* Add email row (only when managing) */}
+                          {isManaging && addableEmails.length > 0 && (
+                            <div
+                              style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem"
+                            >
+                              <select
+                                id={`add-email-${alert.id}`}
+                                class="govuk-select"
+                                style="width: auto; margin: 0"
+                              >
+                                {addableEmails.map((e) => (
+                                  <option key={e} value={e}>{e}</option>
+                                ))}
+                              </select>
+                              <button
+                                type="button"
+                                class="govuk-button govuk-button--secondary"
+                                style="margin: 0; padding: 4px 8px; font-size: 0.875rem; min-height: unset"
+                                onClick={() => {
+                                  const sel = document.getElementById(
+                                    `add-email-${alert.id}`,
+                                  ) as HTMLSelectElement | null;
+                                  if (sel?.value) {
+                                    updateNotifyEmails(alert.id, [
+                                      ...alert.notify_emails,
+                                      sel.value,
+                                    ]);
+                                  }
+                                }}
+                              >
+                                {i18n.tString("auth.notify_emails_add_button")}
+                              </button>
+                            </div>
+                          )}
+
+                          {/* Manage / Done toggle */}
+                          <button
+                            type="button"
+                            class="govuk-button govuk-button--secondary"
+                            style="margin-top: 0.5rem; padding: 4px 8px; font-size: 0.875rem; min-height: unset"
+                            onClick={() =>
+                              managingAlertId.value = isManaging
+                                ? null
+                                : alert.id}
+                          >
+                            {isManaging
+                              ? i18n.tString("auth.notify_emails_done")
+                              : i18n.tString("auth.notify_emails_manage")}
+                          </button>
+                        </td>
+                        <td class="govuk-table__cell">
+                          <button
+                            type="button"
+                            class="govuk-button govuk-button--warning govuk-button--secondary"
+                            data-module="govuk-button"
+                            onClick={() => openDeleteDialog(alert)}
+                          >
+                            {i18n.tString("common.delete")}
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

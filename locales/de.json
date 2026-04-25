@@ -645,7 +645,15 @@
     "oauth2_state_error": "Deine Anmeldesitzung ist abgelaufen oder ungültig. Bitte versuche es erneut.",
     "oauth2_retry": "Erneut anmelden",
     "verify_migration_notice": "Wir haben auf kontobasierte Anmeldungen umgestellt. Erstelle ein Konto oder melde dich an, um deine Benachrichtigungen künftig zu verwalten.",
-    "verify_migration_link": "Zu den Benachrichtigungen"
+    "verify_migration_link": "Zu den Benachrichtigungen",
+    "notify_emails_column": "Benachrichtigungen",
+    "notify_emails_manage": "Verwalten",
+    "notify_emails_done": "Fertig",
+    "notify_emails_add_placeholder": "E-Mail hinzufügen…",
+    "notify_emails_add_button": "Hinzufügen",
+    "notify_emails_remove": "Entfernen",
+    "notify_emails_none": "Keine",
+    "notify_emails_update_failed": "Benachrichtigungs-E-Mails konnten nicht aktualisiert werden. Bitte versuche es erneut."
   },
   "matrixrtc": {
     "intro": "Dieser Abschnitt zeigt, ob der Server MatrixRTC (MSC4143) und verwandte Funktionen für Sprach- und Videoanrufe via Element Call unterstützt. Fehlende Unterstützung ist nur informativ — sie hat keinen Einfluss auf die Föderation oder allgemeine Matrix-Nutzung.",

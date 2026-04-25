@@ -951,7 +951,15 @@
     "oauth2_state_error": "Your sign-in session has expired or is invalid. Please try again.",
     "oauth2_retry": "Try signing in again",
     "verify_migration_notice": "We have upgraded to account-based logins. Create an account or sign in to manage your alerts going forward.",
-    "verify_migration_link": "Go to alerts"
+    "verify_migration_link": "Go to alerts",
+    "notify_emails_column": "Notifications",
+    "notify_emails_manage": "Manage",
+    "notify_emails_done": "Done",
+    "notify_emails_add_placeholder": "Add email…",
+    "notify_emails_add_button": "Add",
+    "notify_emails_remove": "Remove",
+    "notify_emails_none": "None",
+    "notify_emails_update_failed": "Failed to update notification emails. Please try again."
   },
   "matrixrtc": {
     "intro": "This section shows whether the server supports MatrixRTC (MSC4143) and related features required for voice and video calls via Element Call. Missing support is informational only — it does not affect federation or general Matrix usage.",
