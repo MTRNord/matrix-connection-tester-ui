@@ -17,33 +17,33 @@ test.describe("language switcher", () => {
   });
 
   test("switching to German changes page content", async ({ page }) => {
-    await page.goto("/?locale=de");
-    // The German heading would be different — just verify h1 is visible and locale cookie is set
+    await page.goto("/?lang=de");
+    // The German heading would be different — just verify h1 is visible and lang cookie is set
     await expect(page.locator("h1")).toBeVisible();
     const cookies = await page.context().cookies();
-    const localeCookie = cookies.find((c) => c.name === "locale");
+    const localeCookie = cookies.find((c) => c.name === "lang");
     expect(localeCookie?.value).toBe("de");
   });
 
   test("locale cookie persists across navigation", async ({ page }) => {
-    await page.goto("/?locale=de");
+    await page.goto("/?lang=de");
     await page.goto("/docs");
     const cookies = await page.context().cookies();
-    const localeCookie = cookies.find((c) => c.name === "locale");
+    const localeCookie = cookies.find((c) => c.name === "lang");
     expect(localeCookie?.value).toBe("de");
   });
 
   test("switching back to English works", async ({ page }) => {
-    await page.goto("/?locale=de");
-    await page.goto("/?locale=en");
+    await page.goto("/?lang=de");
+    await page.goto("/?lang=en");
     const cookies = await page.context().cookies();
-    const localeCookie = cookies.find((c) => c.name === "locale");
+    const localeCookie = cookies.find((c) => c.name === "lang");
     expect(localeCookie?.value).toBe("en");
     await expect(page.locator("h1")).toContainText("Matrix Connectivity Tester");
   });
 
   test("German locale renders German headings on home", async ({ page }) => {
-    await page.goto("/?locale=de");
+    await page.goto("/?lang=de");
     // German page should not show the English heading
     await expect(page.locator("h1")).not.toContainText(
       "Matrix Connectivity Tester",
