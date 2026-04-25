@@ -546,8 +546,7 @@ export default function AlertsApp(
                                   {isManaging && (
                                     <button
                                       type="button"
-                                      class="govuk-link"
-                                      style="font-size:0.875rem; background:none; border:none; cursor:pointer; padding:0; color:#d4351c"
+                                      class="notify-link-btn notify-link-btn--danger"
                                       onClick={() =>
                                         updateNotifyEmails(
                                           alert.id,
@@ -599,8 +598,7 @@ export default function AlertsApp(
                             {/* Manage / Done — compact link to avoid disrupting table row height */}
                             <button
                               type="button"
-                              class="govuk-link"
-                              style="background:none; border:none; cursor:pointer; padding:0; font-size:0.875rem; text-align:left"
+                              class="notify-link-btn"
                               onClick={() =>
                                 managingAlertId.value = isManaging
                                   ? null

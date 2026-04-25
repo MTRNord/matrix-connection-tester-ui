@@ -3,6 +3,7 @@
 @use "govuk-frontend" with (
   $govuk-font-family: (InterVariable, arial, sans-serif),
   $govuk-font-family-print: "sans-serif",
+  $govuk-suppressed-warnings: ("pre-brand-colour"),
 );
 @use "./overrides.scss";
 @use "./statistics.scss";

@@ -13,10 +13,20 @@
   margin-bottom: 10px;
 }
 
+/* In GovUK v6 the header container no longer uses flexbox by default.
+   Re-apply flex to keep logo and language selector on one row. */
+.govuk-header__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 .govuk-header__content {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .govuk-panel__title--error {
@@ -181,6 +191,44 @@ pre {
 
 .govuk-table__cell button {
   margin: 0;
+}
+
+/* Compact link-style buttons used inside table cells (Manage/Done/Remove).
+   Uses govuk-link colors + focus styles without overriding them with inline styles. */
+.notify-link-btn {
+  display: inline;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: 0.875rem;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-thickness: max(1px, 0.0625rem);
+  text-underline-offset: 0.1578em;
+  color: var(--govuk-link-colour, #1a65a6);
+
+  &:hover {
+    text-decoration-thickness: max(3px, 0.1875rem, 0.12em);
+    color: var(--govuk-link-hover-colour, #0f385c);
+  }
+
+  &:focus-visible {
+    outline: 3px solid transparent;
+    background-color: var(--govuk-focus-colour, #fd0);
+    box-shadow: 0 -2px var(--govuk-focus-colour, #fd0), 0 4px var(--govuk-focus-text-colour, #0b0c0c);
+    text-decoration: none;
+    color: var(--govuk-focus-text-colour, #0b0c0c);
+  }
+
+  &--danger {
+    color: #d4351c;
+
+    &:hover {
+      color: #942514;
+    }
+  }
 }
 
 /* Native dialog element styles */
