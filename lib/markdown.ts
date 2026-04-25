@@ -218,9 +218,9 @@ export function parseMarkdown(
   // Extract directives before markdown parsing
   let processedMarkdown = markdown;
 
-  // Parse warning callouts
+  // Parse warning callouts — content may start on the same line as :::warning
   processedMarkdown = processedMarkdown.replace(
-    /:::warning\s*\n([\s\S]*?)\n\s*:::/g,
+    /:::warning\s*([\s\S]*?)\s*:::/g,
     (_, content) => {
       const id = `DIRECTIVE_WARNING_${directiveCounter++}`;
       directives.set(id, {
@@ -231,9 +231,9 @@ export function parseMarkdown(
     },
   );
 
-  // Parse inset text
+  // Parse inset text — content may start on the same line as :::inset
   processedMarkdown = processedMarkdown.replace(
-    /:::inset\s*\n([\s\S]*?)\n\s*:::/g,
+    /:::inset\s*([\s\S]*?)\s*:::/g,
     (_, content) => {
       const id = `DIRECTIVE_INSET_${directiveCounter++}`;
       directives.set(id, { type: "inset", content: content.trim() });
@@ -241,9 +241,9 @@ export function parseMarkdown(
     },
   );
 
-  // Parse details/summary (collapsible sections)
+  // Parse details/summary — title is the rest of the :::details line
   processedMarkdown = processedMarkdown.replace(
-    /:::details\s+(.+?)\s*\n([\s\S]*?)\n\s*:::/g,
+    /:::details\s+([^\n]+)\n([\s\S]*?)\s*:::/g,
     (_, summary, content) => {
       const id = `DIRECTIVE_DETAILS_${directiveCounter++}`;
       directives.set(id, {
