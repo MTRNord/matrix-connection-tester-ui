@@ -20,7 +20,7 @@ test.describe("documentation", () => {
 
   test("index shows Configuration section", async ({ page }) => {
     await page.goto("/docs");
-    await expect(page.getByRole("link", { name: "Configuration" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Configuration", exact: true })).toBeVisible();
   });
 
   test("federation setup sub-page renders correctly", async ({ page }) => {

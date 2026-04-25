@@ -33,7 +33,7 @@ test.describe("statistics page", () => {
     test("shows overview section", async ({ page }) => {
       await page.goto("/statistics");
       await expect(
-        page.locator("h2, h3").filter({ hasText: /overview|total tests/i }),
+        page.getByRole("heading", { name: "Overview" }),
       ).toBeVisible({ timeout: 15_000 });
     });
 
