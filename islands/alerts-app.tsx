@@ -531,96 +531,86 @@ export default function AlertsApp(
                             )}
                         </td>
                         <td class="govuk-table__cell">
-                          {/* Notification email chips */}
-                          {alert.notify_emails.length === 0
-                            ? (
-                              <span class="govuk-hint" style="margin: 0">
-                                {i18n.tString("auth.notify_emails_none")}
-                              </span>
-                            )
-                            : (
-                              <ul
-                                style="list-style: none; margin: 0; padding: 0"
-                                aria-label="Notification emails"
-                              >
-                                {alert.notify_emails.map((email) => (
-                                  <li
-                                    key={email}
-                                    style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem"
-                                  >
-                                    <code style="font-size: 0.875rem">
-                                      {email}
-                                    </code>
-                                    {isManaging && (
-                                      <button
-                                        type="button"
-                                        class="govuk-button govuk-button--warning"
-                                        style="margin: 0; padding: 2px 6px; font-size: 0.75rem; min-height: unset; line-height: 1.4"
-                                        onClick={() =>
-                                          updateNotifyEmails(
-                                            alert.id,
-                                            alert.notify_emails.filter((e) =>
-                                              e !== email
-                                            ),
-                                          )}
-                                      >
-                                        {i18n.tString(
-                                          "auth.notify_emails_remove",
+                          <div style="display:flex; flex-direction:column; gap:4px">
+                            {/* Notification email chips — always populated (fallback to alert.email on backend) */}
+                            <ul
+                              style="list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:4px"
+                              aria-label="Notification emails"
+                            >
+                              {alert.notify_emails.map((email) => (
+                                <li
+                                  key={email}
+                                  style="display:flex; align-items:center; gap:0.25rem"
+                                >
+                                  <code style="font-size:0.875rem">{email}</code>
+                                  {isManaging && (
+                                    <button
+                                      type="button"
+                                      class="govuk-link"
+                                      style="font-size:0.875rem; background:none; border:none; cursor:pointer; padding:0; color:#d4351c"
+                                      onClick={() =>
+                                        updateNotifyEmails(
+                                          alert.id,
+                                          alert.notify_emails.filter((e) =>
+                                            e !== email
+                                          ),
                                         )}
-                                      </button>
-                                    )}
-                                  </li>
-                                ))}
-                              </ul>
+                                    >
+                                      {i18n.tString("auth.notify_emails_remove")}
+                                    </button>
+                                  )}
+                                </li>
+                              ))}
+                            </ul>
+
+                            {/* Add email row (only when managing) */}
+                            {isManaging && addableEmails.length > 0 && (
+                              <div style="display:flex; align-items:center; gap:0.5rem">
+                                <select
+                                  id={`add-email-${alert.id}`}
+                                  class="govuk-select"
+                                  style="width:auto; margin:0"
+                                >
+                                  {addableEmails.map((e) => (
+                                    <option key={e} value={e}>{e}</option>
+                                  ))}
+                                </select>
+                                <button
+                                  type="button"
+                                  class="govuk-button govuk-button--secondary"
+                                  style="margin:0; padding:4px 8px; font-size:0.875rem; min-height:unset"
+                                  onClick={() => {
+                                    const sel = document.getElementById(
+                                      `add-email-${alert.id}`,
+                                    ) as HTMLSelectElement | null;
+                                    if (sel?.value) {
+                                      updateNotifyEmails(alert.id, [
+                                        ...alert.notify_emails,
+                                        sel.value,
+                                      ]);
+                                    }
+                                  }}
+                                >
+                                  {i18n.tString("auth.notify_emails_add_button")}
+                                </button>
+                              </div>
                             )}
 
-                          {/* Add email row (only when managing) */}
-                          {isManaging && addableEmails.length > 0 && (
-                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem">
-                              <select
-                                id={`add-email-${alert.id}`}
-                                class="govuk-select"
-                                style="width: auto; margin: 0"
-                              >
-                                {addableEmails.map((e) => (
-                                  <option key={e} value={e}>{e}</option>
-                                ))}
-                              </select>
-                              <button
-                                type="button"
-                                class="govuk-button govuk-button--secondary"
-                                style="margin: 0; padding: 4px 8px; font-size: 0.875rem; min-height: unset"
-                                onClick={() => {
-                                  const sel = document.getElementById(
-                                    `add-email-${alert.id}`,
-                                  ) as HTMLSelectElement | null;
-                                  if (sel?.value) {
-                                    updateNotifyEmails(alert.id, [
-                                      ...alert.notify_emails,
-                                      sel.value,
-                                    ]);
-                                  }
-                                }}
-                              >
-                                {i18n.tString("auth.notify_emails_add_button")}
-                              </button>
-                            </div>
-                          )}
-
-                          {/* Manage / Done toggle */}
-                          <button
-                            type="button"
-                            class="govuk-button govuk-button--secondary"
-                            style="margin-top: 0.5rem; padding: 4px 8px; font-size: 0.875rem; min-height: unset"
-                            onClick={() =>
-                              managingAlertId.value = isManaging
-                                ? null
-                                : alert.id}
-                          >
-                            {isManaging
-                              ? i18n.tString("auth.notify_emails_done")
-                              : i18n.tString("auth.notify_emails_manage")}
-                          </button>
+                            {/* Manage / Done — compact link to avoid disrupting table row height */}
+                            <button
+                              type="button"
+                              class="govuk-link"
+                              style="background:none; border:none; cursor:pointer; padding:0; font-size:0.875rem; text-align:left"
+                              onClick={() =>
+                                managingAlertId.value = isManaging
+                                  ? null
+                                  : alert.id}
+                            >
+                              {isManaging
+                                ? i18n.tString("auth.notify_emails_done")
+                                : i18n.tString("auth.notify_emails_manage")}
+                            </button>
+                          </div>
                         </td>
                         <td class="govuk-table__cell">
                           <button
