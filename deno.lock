@@ -40,7 +40,7 @@
     "npm:esbuild-wasm@~0.25.11": "0.25.12",
     "npm:esbuild@0.25.7": "0.25.7",
     "npm:esbuild@~0.25.5": "0.25.12",
-    "npm:govuk-frontend@^5.14.0": "5.14.0",
+    "npm:govuk-frontend@^6.1.0": "6.1.0",
     "npm:he@^1.2.0": "1.2.0",
     "npm:marked@^18.0.2": "18.0.2",
     "npm:preact-render-to-string@^6.6.3": "6.6.7_preact@10.29.1",
@@ -1207,8 +1207,8 @@
     "gensync@1.0.0-beta.2": {
       "integrity": "sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg=="
     },
-    "govuk-frontend@5.14.0": {
-      "integrity": "sha512-MgfaXswIM6KpXS2T5gltEnzgVLgfM3UoE9+rYkhBiR0suaJ8Let31VZXQZqz9QhiPDbv28fW1nRjIyLujfZIBA=="
+    "govuk-frontend@6.1.0": {
+      "integrity": "sha512-sqivexZFa82LiDIDVMItsUlqEXE/wEUWWBqzEoxHvUFLBH7bY0C8lVrj1qsDThSnj5JEUMS7isBAbKnfQ5Qp6g=="
     },
     "he@1.2.0": {
       "integrity": "sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==",
@@ -1393,7 +1393,7 @@
       "jsr:@fresh/plugin-vite@^1.0.8",
       "npm:@opentelemetry/api@^1.9.1",
       "npm:@preact/signals@^2.9.0",
-      "npm:govuk-frontend@^5.14.0",
+      "npm:govuk-frontend@^6.1.0",
       "npm:he@^1.2.0",
       "npm:marked@^18.0.2",
       "npm:preact@^10.29.1",

@@ -42,7 +42,7 @@ export default define.page(function App({ Component, url, state }) {
   };
 
   return (
-    <html lang={locale} class="govuk-template govuk-template--rebranded">
+    <html lang={locale} class="govuk-template">
       <head>
         <meta charset="utf-8" />
         <meta
@@ -74,7 +74,7 @@ export default define.page(function App({ Component, url, state }) {
             <div class="govuk-header__logo">
               <a
                 href="/"
-                class="govuk-header__link govuk-header__link--homepage"
+                class="govuk-header__homepage-link"
               >
                 {i18n.t("header.title")}
               </a>

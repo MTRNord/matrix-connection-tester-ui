@@ -13,7 +13,7 @@
     "@/": "./",
     "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
     "fresh": "jsr:@fresh/core@^2.3.0",
-    "govuk-frontend": "npm:govuk-frontend@^5.14.0",
+    "govuk-frontend": "npm:govuk-frontend@^6.1.0",
     "preact": "npm:preact@^10.29.1",
     "@preact/signals": "npm:@preact/signals@^2.9.0",
     "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.8",
