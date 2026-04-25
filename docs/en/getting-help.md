@@ -5,7 +5,8 @@ description: Where to find help and support for Matrix server administration
 
 ## Community Support
 
-The Matrix community is friendly and helpful. If you're having issues with your server, there are several places to get help.
+The Matrix community is friendly and helpful. If you're having issues with your
+server, there are several places to get help.
 
 ### Matrix Community Rooms
 
@@ -19,38 +20,42 @@ Join these Matrix rooms to ask questions and get support from the community:
 | [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org)               | Questions about the Matrix specification                |
 | [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org)     | Weekly Matrix news and updates                          |
 
-:::inset
-**Tip:** When asking for help, include:
+:::inset **Tip:** When asking for help, include:
 
 - Your Matrix server software and version
 - Relevant error messages from logs
 - What you've already tried
-- Results from the connectivity tester (if applicable)
-  :::
+- Results from the connectivity tester (if applicable) :::
 
 ## Official Documentation
 
 ### Synapse
 
-- [Synapse Documentation](https://element-hq.github.io/synapse/latest/) - Official documentation for Synapse homeserver
-- [Synapse on GitHub](https://github.com/element-hq/synapse) - Source code and issue tracker
+- [Synapse Documentation](https://element-hq.github.io/synapse/latest/) -
+  Official documentation for Synapse homeserver
+- [Synapse on GitHub](https://github.com/element-hq/synapse) - Source code and
+  issue tracker
 - [Synapse Installation Guide](https://element-hq.github.io/synapse/latest/setup/installation.html)
 
 ### Continuwuity
 
-- [Continuwuity Website](https://continuwuity.org/) - Official Continuwuity documentation
-- [Continuwuity Repository](https://forgejo.ellis.link/continuwuation/continuwuity) - Source code and documentation
+- [Continuwuity Website](https://continuwuity.org/) - Official Continuwuity
+  documentation
+- [Continuwuity Repository](https://forgejo.ellis.link/continuwuation/continuwuity) -
+  Source code and documentation
 
 ### Matrix Specification
 
-- [Matrix Specification](https://spec.matrix.org/) - Official protocol specification
+- [Matrix Specification](https://spec.matrix.org/) - Official protocol
+  specification
 - [Matrix.org](https://matrix.org/) - Information about the Matrix protocol
 
 ## Before Asking for Help
 
 ### Run the Connectivity Tester
 
-Use this connection tester tool to diagnose issues with your server. It will check:
+Use this connection tester tool to diagnose issues with your server. It will
+check:
 
 - Server accessibility
 - TLS certificate validity
@@ -58,11 +63,13 @@ Use this connection tester tool to diagnose issues with your server. It will che
 - Federation connectivity
 - DNS configuration
 
-The test results can help you identify problems and provide valuable information when seeking help.
+The test results can help you identify problems and provide valuable information
+when seeking help.
 
 ### Check Server Logs
 
-Review your [server logs](/docs/server-logs) for error messages. Common issues often have clear error messages that can help diagnose the problem.
+Review your [server logs](/docs/server-logs) for error messages. Common issues
+often have clear error messages that can help diagnose the problem.
 
 ### Search for Similar Issues
 
@@ -79,15 +86,15 @@ Before asking for help:
 - **Server type and version**: "Synapse 1.96.0" or "Continuwuity latest"
 - **Operating system**: "Ubuntu 22.04" or "Debian 12"
 - **Reverse proxy**: "Nginx 1.24" or "Caddy 2.7"
-- **When the problem started**: "After updating to version X" or "Fresh installation"
+- **When the problem started**: "After updating to version X" or "Fresh
+  installation"
 
 ### Include Relevant Logs
 
 Share the specific error messages from your logs, not the entire log file.
 
-:::warning
-Logs may contain sensitive information like user IDs, IP addresses, or domain names. Review and redact sensitive data before sharing publicly.
-:::
+:::warning Logs may contain sensitive information like user IDs, IP addresses,
+or domain names. Review and redact sensitive data before sharing publicly. :::
 
 ### Describe What You've Tried
 
@@ -109,8 +116,9 @@ Let others know what troubleshooting steps you've already taken:
 
 ### Synapse Commercial Support
 
-Commercial support is offered by a number of organizations.
-For an updated list have a look at the [Hosting page](https://matrix.org/ecosystem/hosting/) on the Matrix.org website.
+Commercial support is offered by a number of organizations. For an updated list
+have a look at the [Hosting page](https://matrix.org/ecosystem/hosting/) on the
+Matrix.org website.
 
 ## Report Bugs
 
@@ -129,11 +137,14 @@ If you've found a bug in the software:
 
 ## Contributing to Documentation
 
-Found an error in these docs or want to improve them? Contributions are welcome! Check the project repository for contribution guidelines.
+Found an error in these docs or want to improve them? Contributions are welcome!
+Check the project repository for contribution guidelines.
 
 ## Stay Updated
 
-- Join [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org) for weekly Matrix ecosystem updates
+- Join
+  [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org)
+  for weekly Matrix ecosystem updates
 - Follow [Matrix.org blog](https://matrix.org/blog/) for announcements
 - Check your homeserver's changelog for updates and security patches
 
@@ -147,7 +158,8 @@ If you discover a security vulnerability:
 - Report to security contacts:
   - Synapse: [security@element.io](mailto:security@element.io)
   - Matrix Protocol: [security@matrix.org](mailto:security@matrix.org)
-  - Continuwuity: [security@continuwuity.org](mailto:security@continuwuity.org) or contact members via E2EE private messages directly at:
+  - Continuwuity: [security@continuwuity.org](mailto:security@continuwuity.org)
+    or contact members via E2EE private messages directly at:
     - [@jade:ellis.link](https://matrix.to/#/@jade:ellis.link)
     - [@nex:nexy7574.co.uk](https://matrix.to/#/@nex:nexy7574.co.uk)
 
@@ -162,4 +174,5 @@ If you believe your server has been compromised:
 
 ## Additional Resources
 
-- [Matrix Community](https://matrix.to/#/#community:matrix.org) - Central hub for Matrix community spaces
+- [Matrix Community](https://matrix.to/#/#community:matrix.org) - Central hub
+  for Matrix community spaces

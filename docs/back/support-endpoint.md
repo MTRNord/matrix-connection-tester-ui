@@ -5,20 +5,25 @@ description: Configure the Matrix support endpoint for contact information
 
 ## What is the Support Endpoint?
 
-The Matrix support endpoint provides contact information for your homeserver. It tells users and administrators how to get help, report issues, or contact server operators.
+The Matrix support endpoint provides contact information for your homeserver. It
+tells users and administrators how to get help, report issues, or contact server
+operators.
 
-This endpoint is accessed at `https://matrix.example.com/.well-known/matrix/support` and returns contact information in a standardized format.
+This endpoint is accessed at
+`https://matrix.example.com/.well-known/matrix/support` and returns contact
+information in a standardized format.
 
-:::inset
-**Technical Reference:** The support endpoint is defined in [MSC1929](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/1929-homeserver-admin-contact-endpoint.md) and is part of the Matrix specification.
-:::
+:::inset **Technical Reference:** The support endpoint is defined in
+[MSC1929](https://github.com/matrix-org/matrix-spec-proposals/blob/main/proposals/1929-homeserver-admin-contact-endpoint.md)
+and is part of the Matrix specification. :::
 
 ## Why Configure a Support Endpoint?
 
 - **User support** - Help users find assistance when they have problems
 - **Admin contact** - Provide ways to reach server administrators
 - **Security reports** - Enable responsible disclosure of security issues
-- **Federation issues** - Help other server admins contact you about federation problems
+- **Federation issues** - Help other server admins contact you about federation
+  problems
 - **Transparency** - Show users how to reach the people running the server
 
 ## Support Endpoint Format
@@ -187,7 +192,8 @@ For security-related issues:
 
 ### Required Fields
 
-None of the fields are strictly required, but you should provide at least one contact method.
+None of the fields are strictly required, but you should provide at least one
+contact method.
 
 ### matrix_id
 
@@ -315,7 +321,8 @@ Expected headers:
 
 ### Using This Connectivity Tester
 
-Run the connectivity tester on the [homepage](/) to check your support endpoint. The tool will verify:
+Run the connectivity tester on the [homepage](/) to check your support endpoint.
+The tool will verify:
 
 - Endpoint accessibility
 - Valid JSON format
@@ -414,7 +421,8 @@ For security contacts, consider:
 
 ### Security Policy
 
-Create a security policy at `https://example.com/security` or `/.well-known/security.txt`:
+Create a security policy at `https://example.com/security` or
+`/.well-known/security.txt`:
 
 ```securitytxt
 Contact: mailto:security@example.com
@@ -438,7 +446,8 @@ Some homeservers can serve the support endpoint directly.
 
 ### Synapse
 
-Synapse doesn't serve support endpoint natively. Configure via reverse proxy (recommended) or serve as static file.
+Synapse doesn't serve support endpoint natively. Configure via reverse proxy
+(recommended) or serve as static file.
 
 ### Continuwuity
 

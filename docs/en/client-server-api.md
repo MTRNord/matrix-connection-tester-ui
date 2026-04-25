@@ -5,14 +5,18 @@ description: Understanding the Matrix Client-Server API
 
 ## What is the Client-Server API?
 
-The Matrix Client-Server API is the primary interface between Matrix clients (like Element, FluffyChat, etc.) and your homeserver. It handles user authentication, message sending/receiving, room management, and all other client operations.
+The Matrix Client-Server API is the primary interface between Matrix clients
+(like Element, FluffyChat, etc.) and your homeserver. It handles user
+authentication, message sending/receiving, room management, and all other client
+operations.
 
-:::inset
-**Technical Reference:** The Client-Server API is defined in the [Matrix Client-Server API Specification](https://spec.matrix.org/latest/client-server-api/). Your homeserver must implement this API for clients to connect.
-:::
+:::inset **Technical Reference:** The Client-Server API is defined in the
+[Matrix Client-Server API Specification](https://spec.matrix.org/latest/client-server-api/).
+Your homeserver must implement this API for clients to connect. :::
 
-:::warning
-This page is a Work in Progress and therefor missing deeper explanations for endusers. For technical users please refer to the [Matrix Client-Server API Specification](https://spec.matrix.org/latest/client-server-api/).
+:::warning This page is a Work in Progress and therefor missing deeper
+explanations for endusers. For technical users please refer to the
+[Matrix Client-Server API Specification](https://spec.matrix.org/latest/client-server-api/).
 :::
 
 ## Next Steps

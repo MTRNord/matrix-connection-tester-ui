@@ -5,111 +5,111 @@
 
 // Inline code
 .code-inline {
-    background-color: govuk-frontend.govuk-colour("light-grey");
-    color: govuk-frontend.govuk-colour("black");
-    padding: 2px 4px;
-    font-family: monospace, monospace;
-    font-size: 16px;
-    border-radius: 0;
-    display: inline;
-    vertical-align: baseline;
-    line-height: inherit;
-    box-decoration-break: clone;
-    -webkit-box-decoration-break: clone;
+  background-color: govuk-frontend.govuk-colour("light-grey");
+  color: govuk-frontend.govuk-colour("black");
+  padding: 2px 4px;
+  font-family: monospace, monospace;
+  font-size: 16px;
+  border-radius: 0;
+  display: inline;
+  vertical-align: baseline;
+  line-height: inherit;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 // Code blocks
 .code-block {
-    background-color: #f8f8f8; // Lighter grey for better contrast
-    border: 1px solid govuk-frontend.govuk-colour("mid-grey");
-    border-left: 4px solid govuk-frontend.govuk-colour("blue");
-    padding: govuk-frontend.govuk-spacing(3);
-    margin-bottom: govuk-frontend.govuk-spacing(4);
-    overflow-x: auto;
-    border-radius: 0;
+  background-color: #f8f8f8; // Lighter grey for better contrast
+  border: 1px solid govuk-frontend.govuk-colour("mid-grey");
+  border-left: 4px solid govuk-frontend.govuk-colour("blue");
+  padding: govuk-frontend.govuk-spacing(3);
+  margin-bottom: govuk-frontend.govuk-spacing(4);
+  overflow-x: auto;
+  border-radius: 0;
 
-    code {
-        font-family: monospace, monospace;
-        font-size: 14px;
-        line-height: 1.6;
-        color: #0b0c0c; // Darker text for better contrast
-        background: none;
-        padding: 0;
-        border: none;
-        display: block;
-        white-space: pre;
-        word-wrap: normal;
-    }
+  code {
+    font-family: monospace, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #0b0c0c; // Darker text for better contrast
+    background: none;
+    padding: 0;
+    border: none;
+    display: block;
+    white-space: pre;
+    word-wrap: normal;
+  }
 }
 
 // Syntax highlighting colors following GOV.UK palette
 // High contrast for better readability
 .code-block code {
-    // Comments
-    .comment {
-        color: #505a5f; // Mid grey for better contrast
-        font-style: italic;
-    }
+  // Comments
+  .comment {
+    color: #505a5f; // Mid grey for better contrast
+    font-style: italic;
+  }
 
-    // Strings
-    .string {
-        color: #005ea5; // GOV.UK blue
-        font-weight: 500;
-    }
+  // Strings
+  .string {
+    color: #005ea5; // GOV.UK blue
+    font-weight: 500;
+  }
 
-    // Numbers
-    .number {
-        color: #912b88; // GOV.UK purple
-        font-weight: 500;
-    }
+  // Numbers
+  .number {
+    color: #912b88; // GOV.UK purple
+    font-weight: 500;
+  }
 
-    // Keywords (if, else, function, etc)
-    .keyword {
-        color: #00703c; // GOV.UK green
-        font-weight: 600;
-    }
+  // Keywords (if, else, function, etc)
+  .keyword {
+    color: #00703c; // GOV.UK green
+    font-weight: 600;
+  }
 
-    // Function names
-    .function {
-        color: #d4351c; // GOV.UK red
-        font-weight: 600;
-    }
+  // Function names
+  .function {
+    color: #d4351c; // GOV.UK red
+    font-weight: 600;
+  }
 
-    // Variables
-    .variable {
-        color: #b10e1e; // GOV.UK dark red for high contrast
-        font-weight: 500;
-    }
+  // Variables
+  .variable {
+    color: #b10e1e; // GOV.UK dark red for high contrast
+    font-weight: 500;
+  }
 
-    // Operators
-    .operator {
-        color: #0b0c0c; // Black
-        font-weight: 500;
-    }
+  // Operators
+  .operator {
+    color: #0b0c0c; // Black
+    font-weight: 500;
+  }
 
-    // Property names (for JSON/TOML)
-    .property {
-        color: #1d70b8; // GOV.UK link blue (brighter)
-        font-weight: 600;
-    }
+  // Property names (for JSON/TOML)
+  .property {
+    color: #1d70b8; // GOV.UK link blue (brighter)
+    font-weight: 600;
+  }
 }
 
 // Responsive adjustments
 @media (max-width: 40.0625em) {
-    .code-block {
-        padding: govuk-frontend.govuk-spacing(2);
-        margin-left: -(govuk-frontend.govuk-spacing(3));
-        margin-right: -(govuk-frontend.govuk-spacing(3));
-        border-left-width: 4px;
-        border-radius: 0;
+  .code-block {
+    padding: govuk-frontend.govuk-spacing(2);
+    margin-left: -(govuk-frontend.govuk-spacing(3));
+    margin-right: -(govuk-frontend.govuk-spacing(3));
+    border-left-width: 4px;
+    border-radius: 0;
 
-        code {
-            font-size: 12px;
-        }
+    code {
+      font-size: 12px;
     }
+  }
 
-    .code-inline {
-        font-size: 14px;
-        padding: 2px 4px;
-    }
+  .code-inline {
+    font-size: 14px;
+    padding: 2px 4px;
+  }
 }

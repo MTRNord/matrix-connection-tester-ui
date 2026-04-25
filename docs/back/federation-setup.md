@@ -5,11 +5,14 @@ description: Learn how to configure your Matrix homeserver for federation with o
 
 ## What is Matrix Federation?
 
-Matrix federation allows different Matrix servers to communicate with each other, enabling users on different servers to participate in the same conversations and rooms. This distributed architecture is fundamental to Matrix's design.
+Matrix federation allows different Matrix servers to communicate with each
+other, enabling users on different servers to participate in the same
+conversations and rooms. This distributed architecture is fundamental to
+Matrix's design.
 
-:::warning
-Your Matrix server must be accessible from the public internet for federation to work properly. Ensure your firewall and network configuration allow incoming connections.
-:::
+:::warning Your Matrix server must be accessible from the public internet for
+federation to work properly. Ensure your firewall and network configuration
+allow incoming connections. :::
 
 ## Federation Requirements
 
@@ -24,17 +27,21 @@ Your Matrix server must be accessible from the public internet for federation to
 
 ### 1. Configure your server name
 
-Set your server's domain name in your homeserver configuration. This is the domain users will see in their Matrix IDs (e.g., `@user:example.com`).
+Set your server's domain name in your homeserver configuration. This is the
+domain users will see in their Matrix IDs (e.g., `@user:example.com`).
 
 :::details Example configuration
+
 ```yaml
 server_name: "example.com"
 ```
+
 :::
 
 ### 2. Obtain a valid TLS certificate
 
-Use Let's Encrypt or another certificate authority to obtain a valid TLS certificate for your domain. Matrix requires valid certificates for federation.
+Use Let's Encrypt or another certificate authority to obtain a valid TLS
+certificate for your domain. Matrix requires valid certificates for federation.
 
 ```bash
 # Example using certbot for Let's Encrypt
@@ -43,15 +50,22 @@ sudo certbot certonly --nginx -d matrix.example.com
 
 ### 3. Configure federation discovery
 
-Choose how other servers will discover your federation endpoint. The recommended approach is to use well-known delegation on port 443.
+Choose how other servers will discover your federation endpoint. The recommended
+approach is to use well-known delegation on port 443.
 
 :::details Federation discovery options (in order of preference)
 
-1. **Port 443 with Well-Known Delegation (Recommended)**: Serve a `/.well-known/matrix/server` file on port 443 that points to your federation endpoint. This is the most flexible and firewall-friendly option.
+1. **Port 443 with Well-Known Delegation (Recommended)**: Serve a
+   `/.well-known/matrix/server` file on port 443 that points to your federation
+   endpoint. This is the most flexible and firewall-friendly option.
 
-2. **SRV Record (Alternative)**: Create a DNS SRV record (`_matrix._tcp.yourdomain.com`) pointing to your server. This is useful when you cannot serve well-known files.
+2. **SRV Record (Alternative)**: Create a DNS SRV record
+   (`_matrix._tcp.yourdomain.com`) pointing to your server. This is useful when
+   you cannot serve well-known files.
 
-3. **Port 8448 Direct (Fallback)**: Expose your federation API directly on port 8448. This is the simplest but least flexible option and may have firewall issues.
+3. **Port 8448 Direct (Fallback)**: Expose your federation API directly on
+   port 8448. This is the simplest but least flexible option and may have
+   firewall issues.
 
 :::
 
@@ -65,7 +79,8 @@ Create a file at `https://example.com/.well-known/matrix/server`:
 }
 ```
 
-This tells other servers to connect to `matrix.example.com` on port 443 for federation.
+This tells other servers to connect to `matrix.example.com` on port 443 for
+federation.
 
 **Nginx configuration example:**
 
@@ -104,7 +119,8 @@ This tells other servers to connect to `matrix.example.com` on port 8448.
 
 #### Option 3: Direct Port 8448
 
-Expose your Matrix server directly on port 8448. Other servers will attempt to connect to `example.com:8448` by default.
+Expose your Matrix server directly on port 8448. Other servers will attempt to
+connect to `example.com:8448` by default.
 
 ```nginx
 server {
@@ -122,7 +138,8 @@ server {
 
 ### 4. Test your configuration
 
-Use this connectivity tester to verify that your server is properly configured and reachable by other Matrix servers.
+Use this connectivity tester to verify that your server is properly configured
+and reachable by other Matrix servers.
 
 Enter your server's domain name on the [homepage](/) and run the tests to check:
 
@@ -131,9 +148,10 @@ Enter your server's domain name on the [homepage](/) and run the tests to check:
 - Federation endpoint accessibility
 - Server version and compatibility
 
-:::inset
-**Important Note:** The preferred federation setup uses port 443 with well-known delegation. This approach works better with firewalls, proxies, and is more flexible for complex deployments. Port 8448 should only be used as a fallback when well-known delegation or SRV records are not feasible.
-:::
+:::inset **Important Note:** The preferred federation setup uses port 443 with
+well-known delegation. This approach works better with firewalls, proxies, and
+is more flexible for complex deployments. Port 8448 should only be used as a
+fallback when well-known delegation or SRV records are not feasible. :::
 
 ## Common Federation Setups
 
@@ -165,11 +183,14 @@ Your Matrix server must run on a non-standard port (e.g., 8448).
 
 If federation isn't working after setup:
 
-1. **Test with this tool**: Run the connectivity tester to identify specific issues
+1. **Test with this tool**: Run the connectivity tester to identify specific
+   issues
 2. **Check DNS**: Verify your DNS records are correct using `dig` or `nslookup`
-3. **Verify TLS**: Ensure your certificate is valid and covers all necessary domains
+3. **Verify TLS**: Ensure your certificate is valid and covers all necessary
+   domains
 4. **Check firewall**: Make sure required ports are open (443 or 8448)
-5. **Review logs**: Check your [server logs](/docs/server-logs) for federation errors
+5. **Review logs**: Check your [server logs](/docs/server-logs) for federation
+   errors
 6. **Test manually**: Try connecting to your federation endpoint with curl
 
 ```bash
@@ -182,8 +203,10 @@ curl https://example.com/.well-known/matrix/server
 
 ## Security Considerations
 
-- **Always use valid TLS certificates** - Self-signed certificates will not work for federation
-- **Keep your server updated** - Security patches are critical for federated servers
+- **Always use valid TLS certificates** - Self-signed certificates will not work
+  for federation
+- **Keep your server updated** - Security patches are critical for federated
+  servers
 - **Monitor federation traffic** - Watch for unusual activity or abuse
 - **Configure rate limiting** - Protect your server from federation spam
 

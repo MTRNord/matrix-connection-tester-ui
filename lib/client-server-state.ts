@@ -290,7 +290,8 @@ async function performFetch(serverName: string): Promise<void> {
 
     // If well-known failed or versions from discovered endpoint failed, try direct server name
     if (!versions) {
-      const directVersionsUrl = `${scheme}://${serverName}/_matrix/client/versions`;
+      const directVersionsUrl =
+        `${scheme}://${serverName}/_matrix/client/versions`;
       const result = await tryFetchVersions(directVersionsUrl);
 
       if (result.versions) {
@@ -353,7 +354,10 @@ async function performFetch(serverName: string): Promise<void> {
     const probeRoomId = encodeURIComponent(`!probe:${serverName}`);
     const msc3266Url =
       `${probeBase}/_matrix/client/v1/room_summary/${probeRoomId}`;
-    const { response: msc3266Resp } = await fetchWithTimeout(msc3266Url, PROBE_TIMEOUT_MS);
+    const { response: msc3266Resp } = await fetchWithTimeout(
+      msc3266Url,
+      PROBE_TIMEOUT_MS,
+    );
     if (msc3266Resp) {
       if (
         msc3266Resp.status === 200 || msc3266Resp.status === 401 ||

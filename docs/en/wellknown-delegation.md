@@ -5,39 +5,54 @@ description: Configure Matrix well-known delegation for flexible server hosting
 
 ## What is Well-Known Delegation?
 
-Well-known delegation allows you to run your Matrix server on a different domain or port than your Matrix ID suggests. For example, you can have Matrix IDs like `@user:example.com` while actually hosting your Matrix server at `matrix.example.com` or on a non-standard port.
+Well-known delegation allows you to run your Matrix server on a different domain
+or port than your Matrix ID suggests. For example, you can have Matrix IDs like
+`@user:example.com` while actually hosting your Matrix server at
+`matrix.example.com` or on a non-standard port.
 
-This is the recommended approach for Matrix federation because it's more flexible and firewall-friendly than using SRV records or port 8448 directly.
+This is the recommended approach for Matrix federation because it's more
+flexible and firewall-friendly than using SRV records or port 8448 directly.
 
-:::inset
-**Technical Reference:** Well-known delegation is specified in the [Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#server-discovery) and the [Matrix Client-Server API specification](https://spec.matrix.org/v1.16/client-server-api/#well-known-uri).
+:::inset **Technical Reference:** Well-known delegation is specified in the
+[Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#server-discovery)
+and the
+[Matrix Client-Server API specification](https://spec.matrix.org/v1.16/client-server-api/#well-known-uri).
 :::
 
 ## Why Use Well-Known Delegation?
 
 Well-known delegation solves several common problems:
 
-- **Separate your server location from your domain:** Your Matrix server can run on `matrix.example.com` while users have IDs like `@user:example.com`
-- **Use port 443 instead of 8448:** Avoids firewall issues and works better with corporate networks
+- **Separate your server location from your domain:** Your Matrix server can run
+  on `matrix.example.com` while users have IDs like `@user:example.com`
+- **Use port 443 instead of 8448:** Avoids firewall issues and works better with
+  corporate networks
 
-:::warning
-Once you set up well-known delegation and users start joining your server, changing it is essentially impossible. Changing it would make it a different server from the vision of others. Plan your delegation structure carefully before going into production.
-:::
+:::warning Once you set up well-known delegation and users start joining your
+server, changing it is essentially impossible. Changing it would make it a
+different server from the vision of others. Plan your delegation structure
+carefully before going into production. :::
 
 ## How Well-Known Discovery Works (simplified)
 
-When a Matrix client or server wants to communicate with your server, here's what happens:
+When a Matrix client or server wants to communicate with your server, here's
+what happens:
 
-1. **Check well-known files:** Looks for `https://example.com/.well-known/matrix/server` (for federation) and `https://example.com/.well-known/matrix/client` (for clients)
-2. **Read delegation target:** The well-known file tells where your actual server is located
-3. **Connect to delegated server:** Makes the actual connection to the delegated location
+1. **Check well-known files:** Looks for
+   `https://example.com/.well-known/matrix/server` (for federation) and
+   `https://example.com/.well-known/matrix/client` (for clients)
+2. **Read delegation target:** The well-known file tells where your actual
+   server is located
+3. **Connect to delegated server:** Makes the actual connection to the delegated
+   location
 
 :::details Example: Discovery process
 
 **Scenario:** A user wants to send a message to `@alice:example.com`
 
 1. Client requests: `https://example.com/.well-known/matrix/client`
-2. Well-known file responds: `{ "m.homeserver": { "base_url": "https://matrix.example.com" } }`
+2. Well-known file responds:
+   `{ "m.homeserver": { "base_url": "https://matrix.example.com" } }`
 3. Client connects to `https://matrix.example.com`
 
 :::
@@ -200,7 +215,8 @@ Expected response headers:
 
 ### Test with this tool
 
-Use this connectivity tester to verify your well-known delegation is working correctly. Enter your domain on the [homepage](/) and run the tests.
+Use this connectivity tester to verify your well-known delegation is working
+correctly. Enter your domain on the [homepage](/) and run the tests.
 
 The tool will check:
 
@@ -223,7 +239,8 @@ Access-Control-Allow-Origin: *
 
 ### Wrong Content-Type
 
-**Problem:** Well-known files served with wrong content type (e.g., `text/plain`).
+**Problem:** Well-known files served with wrong content type (e.g.,
+`text/plain`).
 
 **Solution:** Set the content type to `application/json`:
 
@@ -264,7 +281,8 @@ cat server.json | jq .
 
 ### Multiple Homeservers
 
-You cannot delegate a single domain to multiple homeservers. Each domain can only delegate to one Matrix server.
+You cannot delegate a single domain to multiple homeservers. Each domain can
+only delegate to one Matrix server.
 
 ## Security Considerations
 
@@ -275,9 +293,11 @@ You cannot delegate a single domain to multiple homeservers. Each domain can onl
 
 ## Next Steps
 
-- Learn about [Federation Setup](/docs/federation-setup) for complete configuration
+- Learn about [Federation Setup](/docs/federation-setup) for complete
+  configuration
 - Understand [TLS Certificates](/docs/tls-certificates) requirements
-- Review [Network Troubleshooting](/docs/network-troubleshooting) if issues arise
+- Review [Network Troubleshooting](/docs/network-troubleshooting) if issues
+  arise
 - Check [Server Configuration](/docs/server-configuration) best practices
 
 ## Related Documentation

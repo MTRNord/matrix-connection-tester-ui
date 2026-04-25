@@ -5,25 +5,37 @@ description: Configure Cross-Origin Resource Sharing for your Matrix server
 
 ## What is CORS?
 
-Cross-Origin Resource Sharing (CORS) is a security feature built into web browsers. It controls whether a website can access resources from another domain. For Matrix, this means your server needs to tell web browsers that it's okay for Matrix clients (like Element Web) to access your server's API.
+Cross-Origin Resource Sharing (CORS) is a security feature built into web
+browsers. It controls whether a website can access resources from another
+domain. For Matrix, this means your server needs to tell web browsers that it's
+okay for Matrix clients (like Element Web) to access your server's API.
 
-:::inset
-**Technical Reference:** CORS is defined by the [Fetch Standard](https://fetch.spec.whatwg.org/#http-cors-protocol). Matrix requires CORS for web-based clients as specified in the [Matrix Client-Server API specification](https://spec.matrix.org/v1.16/client-server-api/#web-browser-clients).
+:::inset **Technical Reference:** CORS is defined by the
+[Fetch Standard](https://fetch.spec.whatwg.org/#http-cors-protocol). Matrix
+requires CORS for web-based clients as specified in the
+[Matrix Client-Server API specification](https://spec.matrix.org/v1.16/client-server-api/#web-browser-clients).
 :::
 
 ## Why Does Matrix Need CORS?
 
-When someone uses a web-based Matrix client (like Element running in their browser), the client needs to communicate with your Matrix server. Without proper CORS configuration, browsers will block these requests for security reasons.
+When someone uses a web-based Matrix client (like Element running in their
+browser), the client needs to communicate with your Matrix server. Without
+proper CORS configuration, browsers will block these requests for security
+reasons.
 
 :::details Example: How CORS affects Matrix clients
 
-Imagine a user visits `app.element.io` and wants to connect to your server at `matrix.example.com`. The browser sees these as two different origins (different domains), so it checks if your server allows cross-origin requests. If CORS isn't configured, the browser blocks the connection.
+Imagine a user visits `app.element.io` and wants to connect to your server at
+`matrix.example.com`. The browser sees these as two different origins (different
+domains), so it checks if your server allows cross-origin requests. If CORS
+isn't configured, the browser blocks the connection.
 
 :::
 
 ## Required CORS Headers
 
-Your Matrix server needs to send specific headers that tell browsers it's safe to make cross-origin requests. These are the essential headers:
+Your Matrix server needs to send specific headers that tell browsers it's safe
+to make cross-origin requests. These are the essential headers:
 
 | Header                         | Required Value                                                  | Purpose                                     |
 | ------------------------------ | --------------------------------------------------------------- | ------------------------------------------- |
@@ -31,13 +43,14 @@ Your Matrix server needs to send specific headers that tell browsers it's safe t
 | `Access-Control-Allow-Methods` | `GET, POST, PUT, DELETE, OPTIONS`                               | Specifies which HTTP methods are allowed    |
 | `Access-Control-Allow-Headers` | `Origin, X-Requested-With, Content-Type, Accept, Authorization` | Specifies which request headers are allowed |
 
-:::warning
-CORS must be configured on all Matrix API endpoints, including `/_matrix/client/*`, `/_matrix/media/*`, and `/_matrix/federation/*`. Missing CORS headers on any endpoint will cause web clients to fail.
-:::
+:::warning CORS must be configured on all Matrix API endpoints, including
+`/_matrix/client/*`, `/_matrix/media/*`, and `/_matrix/federation/*`. Missing
+CORS headers on any endpoint will cause web clients to fail. :::
 
 ## Configuring CORS in Reverse Proxies
 
-Most Matrix deployments use a reverse proxy (Nginx, Caddy, Apache) in front of the homeserver. This is where you should configure CORS.
+Most Matrix deployments use a reverse proxy (Nginx, Caddy, Apache) in front of
+the homeserver. This is where you should configure CORS.
 
 ### Nginx Configuration
 
@@ -130,7 +143,8 @@ Add CORS headers using mod_headers:
 
 ### Using This Connectivity Tester
 
-Run the connectivity tester on the [homepage](/) to automatically check CORS configuration. The tool will test:
+Run the connectivity tester on the [homepage](/) to automatically check CORS
+configuration. The tool will test:
 
 - CORS headers on client-server API endpoints
 - Preflight request handling
@@ -148,7 +162,8 @@ fetch("https://matrix.example.com/_matrix/client/versions")
   .catch((error) => console.error("CORS Error:", error));
 ```
 
-If CORS is configured correctly, you'll see the server's supported versions. If not, you'll see a CORS error.
+If CORS is configured correctly, you'll see the server's supported versions. If
+not, you'll see a CORS error.
 
 ### Using curl
 
@@ -180,19 +195,22 @@ Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Au
 
 **Symptoms:** Browser console shows "No 'Access-Control-Allow-Origin' header"
 
-**Solution:** Add CORS headers to your reverse proxy configuration (see examples above)
+**Solution:** Add CORS headers to your reverse proxy configuration (see examples
+above)
 
 ### CORS Only on Some Endpoints
 
 **Symptoms:** Some API calls work, others fail with CORS errors
 
-**Solution:** Ensure CORS headers are set for all `/_matrix/*` paths, not just specific endpoints
+**Solution:** Ensure CORS headers are set for all `/_matrix/*` paths, not just
+specific endpoints
 
 ### Preflight Requests Failing
 
 **Symptoms:** OPTIONS requests return errors or missing headers
 
-**Solution:** Configure your reverse proxy to handle OPTIONS requests correctly (see [CORS Preflight](/docs/cors-preflight))
+**Solution:** Configure your reverse proxy to handle OPTIONS requests correctly
+(see [CORS Preflight](/docs/cors-preflight))
 
 ### Wrong CORS Headers
 
@@ -206,7 +224,8 @@ Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Au
 
 ## CORS and Well-Known Files
 
-Well-known delegation files (`/.well-known/matrix/server` and `/.well-known/matrix/client`) also need CORS headers:
+Well-known delegation files (`/.well-known/matrix/server` and
+`/.well-known/matrix/client`) also need CORS headers:
 
 ```nginx
 location /.well-known/matrix/server {

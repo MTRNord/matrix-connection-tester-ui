@@ -180,20 +180,27 @@ export function FederationProblems(
         const steps = i18n.t(solution.steps);
         const stepsArray = Array.isArray(steps) ? steps : [String(steps)];
         return (
-          <div class="govuk-error-summary govuk-error-summary--warning" data-module="govuk-error-summary">
+          <div
+            class="govuk-error-summary govuk-error-summary--warning"
+            data-module="govuk-error-summary"
+          >
             <div role="alert">
               <h2 class="govuk-error-summary__title">
                 {i18n.t(solution.title)}
               </h2>
               <div class="govuk-error-summary__body">
                 <p class="govuk-body">{i18n.t(solution.description)}</p>
-                <h3 class="govuk-heading-s">{i18n.t("error_solutions.what_to_do")}</h3>
+                <h3 class="govuk-heading-s">
+                  {i18n.t("error_solutions.what_to_do")}
+                </h3>
                 <ol class="govuk-list govuk-list--number govuk-error-summary__list">
                   {stepsArray.map((step, index) => <li key={index}>{step}</li>)}
                 </ol>
                 {solution.technicalNote && (
                   <div class="govuk-inset-text">
-                    <strong>{i18n.t("error_solutions.technical_note_label")}:</strong>{" "}
+                    <strong>
+                      {i18n.t("error_solutions.technical_note_label")}:
+                    </strong>{" "}
                     {i18n.t(solution.technicalNote)}
                   </div>
                 )}

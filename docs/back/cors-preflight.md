@@ -5,12 +5,18 @@ description: Understanding and configuring CORS preflight OPTIONS requests
 
 ## What are CORS Preflight Requests?
 
-Before making certain types of requests, web browsers automatically send a "preflight" request to check if the actual request is allowed. This preflight request uses the OPTIONS HTTP method and asks the server for permission.
+Before making certain types of requests, web browsers automatically send a
+"preflight" request to check if the actual request is allowed. This preflight
+request uses the OPTIONS HTTP method and asks the server for permission.
 
-Think of it like knocking on a door before entering—the browser is checking if it's okay to proceed with the real request.
+Think of it like knocking on a door before entering—the browser is checking if
+it's okay to proceed with the real request.
 
-:::inset
-**Technical Reference:** CORS preflight is defined in the [Fetch Standard](https://fetch.spec.whatwg.org/#cors-preflight-fetch). Matrix servers must handle preflight requests correctly for web-based clients to work, as specified in the [Matrix Client-Server API](https://spec.matrix.org/v1.16/client-server-api/#web-browser-clients).
+:::inset **Technical Reference:** CORS preflight is defined in the
+[Fetch Standard](https://fetch.spec.whatwg.org/#cors-preflight-fetch). Matrix
+servers must handle preflight requests correctly for web-based clients to work,
+as specified in the
+[Matrix Client-Server API](https://spec.matrix.org/v1.16/client-server-api/#web-browser-clients).
 :::
 
 ## When Do Preflight Requests Happen?
@@ -19,7 +25,8 @@ Browsers send preflight requests when the actual request meets certain criteria:
 
 - Uses methods other than GET, HEAD, or POST
 - Includes custom headers like `Authorization`
-- Sends data with content types other than `application/x-www-form-urlencoded`, `multipart/form-data`, or `text/plain`
+- Sends data with content types other than `application/x-www-form-urlencoded`,
+  `multipart/form-data`, or `text/plain`
 
 For Matrix, preflight requests happen frequently because:
 
@@ -166,15 +173,18 @@ Handle OPTIONS requests with Apache:
 
 ### Issue: Preflight Returns 404 or 405
 
-**Symptoms:** Browser console shows "Method OPTIONS is not allowed" or "404 Not Found" for OPTIONS requests.
+**Symptoms:** Browser console shows "Method OPTIONS is not allowed" or "404 Not
+Found" for OPTIONS requests.
 
 **Cause:** Server or reverse proxy isn't configured to handle OPTIONS method.
 
-**Solution:** Add explicit handling for OPTIONS requests (see configuration examples above).
+**Solution:** Add explicit handling for OPTIONS requests (see configuration
+examples above).
 
 ### Issue: Missing CORS Headers on Preflight
 
-**Symptoms:** Browser console shows "Response to preflight request doesn't pass access control check".
+**Symptoms:** Browser console shows "Response to preflight request doesn't pass
+access control check".
 
 **Cause:** CORS headers missing from OPTIONS response.
 
@@ -191,17 +201,21 @@ if ($request_method = OPTIONS) {
 
 ### Issue: Preflight Failing But Regular Requests Work
 
-**Symptoms:** GET requests work fine, but POST/PUT requests fail with CORS errors.
+**Symptoms:** GET requests work fine, but POST/PUT requests fail with CORS
+errors.
 
-**Cause:** OPTIONS method not handled, or different CORS headers on OPTIONS vs other methods.
+**Cause:** OPTIONS method not handled, or different CORS headers on OPTIONS vs
+other methods.
 
 **Solution:** Ensure OPTIONS returns the same CORS headers as other methods.
 
 ### Issue: Wrong Status Code
 
-**Symptoms:** Preflight returns 200 instead of 204, or returns unexpected content.
+**Symptoms:** Preflight returns 200 instead of 204, or returns unexpected
+content.
 
-**Cause:** Preflight request being proxied to backend instead of handled by reverse proxy.
+**Cause:** Preflight request being proxied to backend instead of handled by
+reverse proxy.
 
 **Solution:** Handle OPTIONS in the reverse proxy and return 204 No Content:
 
@@ -252,7 +266,8 @@ fetch("https://matrix.example.com/_matrix/client/versions", {
 
 ### Using This Connectivity Tester
 
-Run the connectivity tester on the [homepage](/) to automatically test preflight handling. The tool checks:
+Run the connectivity tester on the [homepage](/) to automatically test preflight
+handling. The tool checks:
 
 - OPTIONS method support
 - Correct CORS headers on preflight responses
@@ -261,7 +276,8 @@ Run the connectivity tester on the [homepage](/) to automatically test preflight
 
 ## Preflight Caching
 
-The `Access-Control-Max-Age` header tells browsers how long to cache the preflight response. This reduces the number of preflight requests.
+The `Access-Control-Max-Age` header tells browsers how long to cache the
+preflight response. This reduces the number of preflight requests.
 
 ```nginx
 add_header 'Access-Control-Max-Age' 86400; # 24 hours
@@ -273,16 +289,16 @@ add_header 'Access-Control-Max-Age' 86400; # 24 hours
 - **Production:** `86400` (24 hours) or `1728000` (20 days)
 - **Maximum:** Most browsers cap at 86400 seconds
 
-:::inset
-**Note:** Browsers may ignore or cap the max-age value. Don't rely on it being cached for the exact duration specified.
-:::
+:::inset **Note:** Browsers may ignore or cap the max-age value. Don't rely on
+it being cached for the exact duration specified. :::
 
 ## Performance Optimization
 
 ### Reduce Preflight Requests
 
 1. **Set appropriate Max-Age:** Cache preflight responses for 24 hours
-2. **Use simple requests when possible:** GET requests without custom headers don't trigger preflight
+2. **Use simple requests when possible:** GET requests without custom headers
+   don't trigger preflight
 3. **Minimize custom headers:** Only send necessary headers
 
 ### Handle Preflight at Edge
@@ -297,7 +313,8 @@ If using a CDN or edge proxy:
 
 ### Preflight Doesn't Prevent Requests
 
-Important: CORS and preflight are **browser security features**. They don't prevent:
+Important: CORS and preflight are **browser security features**. They don't
+prevent:
 
 - Requests from non-browser clients (curl, apps, etc.)
 - Malicious actors from bypassing CORS
@@ -325,11 +342,14 @@ Using `Access-Control-Allow-Origin: *` is safe for Matrix because:
 
 ### Look for Red Flags
 
-**Preflight request not appearing:** May indicate simple request or CORS not needed
+**Preflight request not appearing:** May indicate simple request or CORS not
+needed
 
-**Preflight returning errors:** Check server logs and reverse proxy configuration
+**Preflight returning errors:** Check server logs and reverse proxy
+configuration
 
-**Preflight succeeding but actual request failing:** Different CORS headers between OPTIONS and actual method
+**Preflight succeeding but actual request failing:** Different CORS headers
+between OPTIONS and actual method
 
 ### Enable Verbose Logging
 

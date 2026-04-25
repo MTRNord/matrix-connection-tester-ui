@@ -1,264 +1,264 @@
 @use "govuk-frontend" as govuk;
 
 .govuk-header__link--homepage {
-    word-spacing: unset !important;
+  word-spacing: unset !important;
 }
 
 .run-tests-button {
-    margin-top: 20px !important;
+  margin-top: 20px !important;
 }
 
 .language-selector {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .govuk-header__content {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
 }
 
 .govuk-panel__title--error {
-    color: #d4351c !important;
+  color: #d4351c !important;
 }
 
 .govuk-section-break--visible--blue {
-    border-color: #1d70b8 !important;
+  border-color: #1d70b8 !important;
 }
 
 .govuk-accordion__section-button {
-    border-top-color: #1d70b8 !important;
+  border-top-color: #1d70b8 !important;
 }
 
 .govuk-panel--error {
-    color: #fff;
-    background: #d4351c;
+  color: #fff;
+  background: #d4351c;
 }
 
 @media print {
-    .govuk-panel--error {
-        border-color: currentcolor;
-        color: #000000;
-        background: none;
-    }
+  .govuk-panel--error {
+    border-color: currentcolor;
+    color: #000000;
+    background: none;
+  }
 }
 
 .table-wrapper {
-    position: relative;
+  position: relative;
 }
 
 .table-scroll {
-    overflow: auto;
+  overflow: auto;
 }
 
 .table-wrapper table {
-    width: 100%;
+  width: 100%;
 }
 
 .language-selector-form {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .language-selector-button {
-    margin: 0 !important;
-    font-size: 16px !important;
-    min-width: auto !important;
+  margin: 0 !important;
+  font-size: 16px !important;
+  min-width: auto !important;
 }
 
 .support-contact-role {
-    display: inline-block;
+  display: inline-block;
 }
 
 .support-contact-details {
-    display: inline-block;
-    vertical-align: top;
+  display: inline-block;
+  vertical-align: top;
 }
 
 /* Loading spinner animation */
 .loading-spinner {
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-    border: 3px solid rgba(0, 0, 0, 0.1);
-    border-radius: 50%;
-    border-top-color: #1d70b8;
-    animation: spin 1s ease-in-out infinite;
-    vertical-align: middle;
-    margin-left: 0.5rem;
-    flex-shrink: 0;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  border-radius: 50%;
+  border-top-color: #1d70b8;
+  animation: spin 1s ease-in-out infinite;
+  vertical-align: middle;
+  margin-left: 0.5rem;
+  flex-shrink: 0;
 }
 
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .loading-container {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .loading-container p {
-    margin: 0;
+  margin: 0;
 }
 
 /* Progress bar styling for GovUK */
 progress.govuk-progress {
-    width: 100%;
-    height: 30px;
-    border: 2px solid #b1b4b6;
-    background-color: #f3f2f1;
-    border-radius: 0;
+  width: 100%;
+  height: 30px;
+  border: 2px solid #b1b4b6;
+  background-color: #f3f2f1;
+  border-radius: 0;
 }
 
 progress.govuk-progress::-webkit-progress-bar {
-    background-color: #f3f2f1;
+  background-color: #f3f2f1;
 }
 
 progress.govuk-progress::-webkit-progress-value {
-    background-color: #1d70b8;
+  background-color: #1d70b8;
 }
 
 progress.govuk-progress::-moz-progress-bar {
-    background-color: #1d70b8;
+  background-color: #1d70b8;
 }
 
 /* Technical details pre styling */
 .technical-details-pre {
-    white-space: pre-wrap;
-    word-break: break-all;
-    font-size: 0.875rem;
-    background: #f3f2f1;
-    padding: 1rem;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font-size: 0.875rem;
+  background: #f3f2f1;
+  padding: 1rem;
 }
 
 /* Raw data pre styling */
 pre {
-    background-color: #f3f2f1;
-    padding: 20px;
-    overflow-x: auto;
-    font-family: monospace;
-    font-size: 14px;
-    line-height: 1.6;
+  background-color: #f3f2f1;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: monospace;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 /* Table wrapper with margin */
 .table-wrapper-with-margin {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 /* Panel with top margin */
 .panel-with-margin {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 /* Success notification banner */
 .govuk-notification-banner--success {
-    border-color: #00703c;
+  border-color: #00703c;
 }
 
 .govuk-notification-banner--success .govuk-notification-banner__header {
-    background-color: #00703c;
+  background-color: #00703c;
 }
 
 .govuk-notification-banner--error {
-    border-color: #d4351c;
+  border-color: #d4351c;
 }
 
 .govuk-notification-banner--error .govuk-notification-banner__header {
-    background-color: #d4351c;
+  background-color: #d4351c;
 }
 
 /* Ensure delete button fits nicely in table */
 .govuk-table__cell form {
-    margin: 0;
+  margin: 0;
 }
 
 .govuk-table__cell button {
-    margin: 0;
+  margin: 0;
 }
 
 /* Native dialog element styles */
 .alert-delete-dialog {
-    border: none;
-    padding: 0;
-    max-width: 500px;
-    background: transparent;
+  border: none;
+  padding: 0;
+  max-width: 500px;
+  background: transparent;
 }
 
 /* Dialog backdrop */
 .alert-delete-dialog::backdrop {
-    background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 /* Make notification banner in dialog look styled */
 .alert-delete-dialog .govuk-notification-banner {
-    background-color: #ffffff;
-    margin: 0;
+  background-color: #ffffff;
+  margin: 0;
 }
 
 /* Modal dialog notification banner headers need proper styling */
 .alert-delete-modal-dialog .govuk-notification-banner__header {
-    background-color: #1d70b8;
+  background-color: #1d70b8;
 }
 
 .alert-delete-modal-dialog.govuk-notification-banner--success
-    .govuk-notification-banner__header {
-    background-color: #00703c;
+  .govuk-notification-banner__header {
+  background-color: #00703c;
 }
 
 .alert-delete-modal-dialog .govuk-notification-banner__title {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* Button group spacing for alerts */
 .govuk-button-group {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 /* Modal dialog content styles */
 .alert-delete-modal-dialog {
-    max-width: 500px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
+  max-width: 500px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
 }
 
 /* Inset text in modals */
 .modal-inset-text {
-    margin-top: 1rem;
+  margin-top: 1rem;
 }
 
 /* Markdown content styles */
 .markdown-content {
-    /* Table wrapper for horizontal scrolling on mobile */
-    .table-scroll-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+  /* Table wrapper for horizontal scrolling on mobile */
+  .table-scroll-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Warning variant for error summary (amber/orange instead of red) */
 .govuk-error-summary--warning {
-    border-color: #f47738;
+  border-color: #f47738;
 }
 
 /* Warning panel (darker orange with white text for accessibility) */
 .govuk-panel--warning {
-    color: #fff;
-    background: #b84c00;
+  color: #fff;
+  background: #b84c00;
 }
 
 @media print {
-    .govuk-panel--warning {
-        border-color: currentcolor;
-        color: #000000;
-        background: none;
-    }
+  .govuk-panel--warning {
+    border-color: currentcolor;
+    color: #000000;
+    background: none;
+  }
 }

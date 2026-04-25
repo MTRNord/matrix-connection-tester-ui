@@ -11,15 +11,15 @@
   "exclude": ["**/_fresh/*"],
   "imports": {
     "@/": "./",
-    "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.0",
-    "fresh": "jsr:@fresh/core@^2.2.0",
-    "govuk-frontend": "npm:govuk-frontend@^5.13.0",
-    "preact": "npm:preact@^10.28.2",
-    "@preact/signals": "npm:@preact/signals@^2.5.1",
+    "@opentelemetry/api": "npm:@opentelemetry/api@^1.9.1",
+    "fresh": "jsr:@fresh/core@^2.3.0",
+    "govuk-frontend": "npm:govuk-frontend@^5.14.0",
+    "preact": "npm:preact@^10.29.1",
+    "@preact/signals": "npm:@preact/signals@^2.9.0",
     "@fresh/plugin-vite": "jsr:@fresh/plugin-vite@^1.0.8",
-    "sass": "npm:sass@^1.97.2",
-    "vite": "npm:vite@^7.3.1",
-    "marked": "npm:marked@^17.0.1",
+    "sass": "npm:sass@^1.99.0",
+    "vite": "npm:vite@^7.3.2",
+    "marked": "npm:marked@^18.0.2",
     "he": "npm:he@^1.2.0"
   },
   "compilerOptions": {

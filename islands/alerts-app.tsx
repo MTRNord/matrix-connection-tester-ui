@@ -275,9 +275,7 @@ export default function AlertsApp(
     if (state.value.type === "authenticated") {
       state.value = {
         type: "authenticated",
-        alerts: state.value.alerts.map((a) =>
-          a.id === alertId ? updated : a
-        ),
+        alerts: state.value.alerts.map((a) => a.id === alertId ? updated : a),
       };
     }
   }
@@ -550,9 +548,7 @@ export default function AlertsApp(
                                     key={email}
                                     style="display: flex; align-items: center; gap: 0.25rem; margin-bottom: 0.25rem"
                                   >
-                                    <code
-                                      style="font-size: 0.875rem"
-                                    >
+                                    <code style="font-size: 0.875rem">
                                       {email}
                                     </code>
                                     {isManaging && (
@@ -580,9 +576,7 @@ export default function AlertsApp(
 
                           {/* Add email row (only when managing) */}
                           {isManaging && addableEmails.length > 0 && (
-                            <div
-                              style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem"
-                            >
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem">
                               <select
                                 id={`add-email-${alert.id}`}
                                 class="govuk-select"

@@ -64,13 +64,15 @@ Unofficial compliance suites for Matrix applications (not vetted by SCT).
 
 ## About This Documentation
 
-This documentation covers everything you need to know about troubleshooting your Matrix homeserver for optimal connectivity and federation.
+This documentation covers everything you need to know about troubleshooting your
+Matrix homeserver for optimal connectivity and federation.
 
 ### Getting Started
 
 If you're new to Matrix server administration, we recommend starting with:
 
-1. [Federation Setup](/docs/federation-setup) - Configure your server for federation
+1. [Federation Setup](/docs/federation-setup) - Configure your server for
+   federation
 2. [TLS Certificates](/docs/tls-certificates) - Set up secure connections
 3. [Well-Known Delegation](/docs/wellknown-delegation) - Configure discovery
 4. [CORS Configuration](/docs/cors-configuration) - Enable web clients
@@ -84,4 +86,5 @@ If you're new to Matrix server administration, we recommend starting with:
 
 ## Contributing
 
-Found an error or want to improve this documentation? Contributions are welcome! Check the project repository for contribution guidelines.
+Found an error or want to improve this documentation? Contributions are welcome!
+Check the project repository for contribution guidelines.

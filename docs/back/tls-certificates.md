@@ -5,38 +5,45 @@ description: Configure TLS certificates for Matrix server security and federatio
 
 ## What are TLS Certificates?
 
-TLS (Transport Layer Security) certificates are digital certificates that prove your server's identity and encrypt communications. They're essential for secure HTTPS connections and are required for Matrix federation.
+TLS (Transport Layer Security) certificates are digital certificates that prove
+your server's identity and encrypt communications. They're essential for secure
+HTTPS connections and are required for Matrix federation.
 
-Think of a TLS certificate like a passport for your server—it proves who you are and ensures that communications with your server are private and tamper-proof.
+Think of a TLS certificate like a passport for your server—it proves who you are
+and ensures that communications with your server are private and tamper-proof.
 
-:::inset
-**Technical Reference:** Matrix federation requires valid TLS certificates as specified in the [Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#tls-certificates). Self-signed certificates are not accepted for federation.
-:::
+:::inset **Technical Reference:** Matrix federation requires valid TLS
+certificates as specified in the
+[Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#tls-certificates).
+Self-signed certificates are not accepted for federation. :::
 
-:::warning
-Matrix federation requires certificates from a trusted Certificate Authority (CA). Self-signed certificates will not work for federation, even if they work for HTTPS web access.
-:::
+:::warning Matrix federation requires certificates from a trusted Certificate
+Authority (CA). Self-signed certificates will not work for federation, even if
+they work for HTTPS web access. :::
 
 ## Certificate Requirements for Matrix
 
 Your TLS certificate must meet these requirements:
 
-| Requirement | Description | Status |
-|-------------|-------------|--------|
-| **Trusted CA** | Certificate must be issued by a recognized Certificate Authority (like Let's Encrypt, DigiCert, etc.) | Required |
-| **Valid domain** | Certificate must match your server's domain name (including wildcards if applicable) | Required |
-| **Not expired** | Certificate must be within its validity period | Required |
-| **Complete chain** | Must include all intermediate certificates | Required |
-| **Valid signature** | Certificate must have a valid cryptographic signature | Required |
-| **Modern cipher** | Must support modern TLS protocols (TLS 1.2 or 1.3) | Recommended |
+| Requirement         | Description                                                                                           | Status      |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ----------- |
+| **Trusted CA**      | Certificate must be issued by a recognized Certificate Authority (like Let's Encrypt, DigiCert, etc.) | Required    |
+| **Valid domain**    | Certificate must match your server's domain name (including wildcards if applicable)                  | Required    |
+| **Not expired**     | Certificate must be within its validity period                                                        | Required    |
+| **Complete chain**  | Must include all intermediate certificates                                                            | Required    |
+| **Valid signature** | Certificate must have a valid cryptographic signature                                                 | Required    |
+| **Modern cipher**   | Must support modern TLS protocols (TLS 1.2 or 1.3)                                                    | Recommended |
 
 ## Getting a Free Certificate with Let's Encrypt
 
-[Let's Encrypt](https://letsencrypt.org/) provides free, automated TLS certificates that work perfectly with Matrix. It's the recommended solution for most deployments.
+[Let's Encrypt](https://letsencrypt.org/) provides free, automated TLS
+certificates that work perfectly with Matrix. It's the recommended solution for
+most deployments.
 
 ### Using Certbot
 
-Certbot is the official Let's Encrypt client and the easiest way to get certificates.
+Certbot is the official Let's Encrypt client and the easiest way to get
+certificates.
 
 #### Install Certbot
 
@@ -75,7 +82,8 @@ sudo certbot certonly --standalone -d example.com -d matrix.example.com
 
 #### Test Automatic Renewal
 
-Let's Encrypt certificates expire after 90 days. Certbot automatically sets up renewal:
+Let's Encrypt certificates expire after 90 days. Certbot automatically sets up
+renewal:
 
 ```bash
 # Test renewal process (dry run)
@@ -90,7 +98,8 @@ sudo certbot renew
 
 ### Using Caddy
 
-[Caddy](https://caddyserver.com/) automatically obtains and renews Let's Encrypt certificates with zero configuration.
+[Caddy](https://caddyserver.com/) automatically obtains and renews Let's Encrypt
+certificates with zero configuration.
 
 **Caddyfile example:**
 
@@ -107,6 +116,7 @@ example.com {
 ```
 
 Caddy handles everything automatically:
+
 - Obtains certificates from Let's Encrypt
 - Renews certificates before expiry
 - Configures TLS with secure defaults
@@ -127,7 +137,7 @@ listeners:
   - port: 8008
     type: http
     tls: false
-    bind_addresses: ['127.0.0.1']
+    bind_addresses: ["127.0.0.1"]
 ```
 
 **Option 2: Direct TLS in Synapse**
@@ -138,9 +148,9 @@ listeners:
   - port: 8448
     type: http
     tls: true
-    bind_addresses: ['::']
+    bind_addresses: ["::"]
     x_forwarded: false
-    
+
 tls_certificate_path: "/etc/letsencrypt/live/matrix.example.com/fullchain.pem"
 tls_private_key_path: "/etc/letsencrypt/live/matrix.example.com/privkey.pem"
 ```
@@ -158,7 +168,8 @@ sudo chgrp ssl-cert /etc/letsencrypt/live/matrix.example.com/privkey.pem
 
 ### For Continuwuity
 
-Similar to Synapse, Continuwuity can use certificates directly or through a reverse proxy. The reverse proxy approach is recommended for easier management.
+Similar to Synapse, Continuwuity can use certificates directly or through a
+reverse proxy. The reverse proxy approach is recommended for easier management.
 
 ## Reverse Proxy Configuration
 
@@ -244,6 +255,7 @@ You'll need to create DNS TXT records as instructed by Certbot.
 ### Using Wildcard with Matrix
 
 A wildcard certificate for `*.example.com` covers:
+
 - `matrix.example.com`
 - `element.example.com`
 - `jitsi.example.com`
@@ -344,12 +356,15 @@ curl -vI https://matrix.example.com 2>&1 | grep -i "SSL\|TLS\|certificate"
 
 ### Using Online Tools
 
-- [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - Comprehensive SSL/TLS analysis
-- [SSL Checker](https://www.sslshopper.com/ssl-checker.html) - Quick certificate validation
+- [SSL Labs Server Test](https://www.ssllabs.com/ssltest/) - Comprehensive
+  SSL/TLS analysis
+- [SSL Checker](https://www.sslshopper.com/ssl-checker.html) - Quick certificate
+  validation
 
 ### Using This Connectivity Tester
 
 Run the connectivity tester on the [homepage](/) to check:
+
 - Certificate validity
 - Certificate expiry
 - Domain name matching
@@ -397,7 +412,8 @@ ssl_certificate /etc/letsencrypt/live/matrix.example.com/fullchain.pem;
 
 **Symptoms:** Federation fails with certificate validation errors.
 
-**Solution:** Replace with a certificate from a trusted CA like Let's Encrypt. Self-signed certificates do not work for federation.
+**Solution:** Replace with a certificate from a trusted CA like Let's Encrypt.
+Self-signed certificates do not work for federation.
 
 ### Permission Denied
 
@@ -423,7 +439,8 @@ Set up monitoring to avoid certificate expiry surprises:
 
 ### Using Certbot
 
-Certbot sends email notifications before expiry if you provided an email during setup.
+Certbot sends email notifications before expiry if you provided an email during
+setup.
 
 ### Using Monitoring Tools
 
@@ -496,6 +513,7 @@ While Let's Encrypt is recommended, other options exist:
 ### Certbot Rate Limits
 
 Let's Encrypt has rate limits:
+
 - 50 certificates per domain per week
 - 5 duplicate certificates per week
 
@@ -533,7 +551,8 @@ sudo ufw delete allow 80/tcp
 
 - Configure [Federation Setup](/docs/federation-setup) with your new certificate
 - Set up [Well-Known Delegation](/docs/wellknown-delegation)
-- Review [Network Troubleshooting](/docs/network-troubleshooting) if issues arise
+- Review [Network Troubleshooting](/docs/network-troubleshooting) if issues
+  arise
 - Test your setup with this connectivity tester
 
 ## Related Documentation

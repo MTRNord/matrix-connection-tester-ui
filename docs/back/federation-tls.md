@@ -5,36 +5,41 @@ description: Configure TLS certificates for secure Matrix federation
 
 # Why TLS Matters for Federation
 
-Matrix federation requires valid TLS certificates to ensure secure, encrypted communication between servers. Unlike web browsing where users can click through certificate warnings, Matrix federation automatically rejects connections with invalid certificates.
+Matrix federation requires valid TLS certificates to ensure secure, encrypted
+communication between servers. Unlike web browsing where users can click through
+certificate warnings, Matrix federation automatically rejects connections with
+invalid certificates.
 
-:::inset
-**Technical Reference:** TLS requirements for Matrix federation are specified in the [Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#tls-certificates).
+:::inset **Technical Reference:** TLS requirements for Matrix federation are
+specified in the
+[Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#tls-certificates).
 :::
 
-:::warning
-Self-signed certificates will NOT work for federation. You must use a certificate from a trusted Certificate Authority (CA) like Let's Encrypt.
-:::
+:::warning Self-signed certificates will NOT work for federation. You must use a
+certificate from a trusted Certificate Authority (CA) like Let's Encrypt. :::
 
 ## Federation TLS Requirements
 
 Your TLS certificate must meet these strict requirements for federation to work:
 
-| Requirement | Details |
-|-------------|---------|
-| Trusted CA | Certificate must be issued by a Certificate Authority trusted by common operating systems (Let's Encrypt, DigiCert, etc.) |
-| Valid domain | Certificate CN or SAN must exactly match the federation domain |
-| Not expired | Certificate must be within its validity period |
-| Complete chain | Must include all intermediate certificates |
-| TLS 1.2+ | Must support TLS 1.2 or TLS 1.3 (older versions not accepted) |
-| Strong ciphers | Must use modern cipher suites (no RC4, DES, 3DES, etc.) |
+| Requirement    | Details                                                                                                                   |
+| -------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Trusted CA     | Certificate must be issued by a Certificate Authority trusted by common operating systems (Let's Encrypt, DigiCert, etc.) |
+| Valid domain   | Certificate CN or SAN must exactly match the federation domain                                                            |
+| Not expired    | Certificate must be within its validity period                                                                            |
+| Complete chain | Must include all intermediate certificates                                                                                |
+| TLS 1.2+       | Must support TLS 1.2 or TLS 1.3 (older versions not accepted)                                                             |
+| Strong ciphers | Must use modern cipher suites (no RC4, DES, 3DES, etc.)                                                                   |
 
 ## Certificate Domain Matching
 
-The certificate domain must match the server your well-known delegation points to:
+The certificate domain must match the server your well-known delegation points
+to:
 
 ### Scenario 1: Using Well-Known Delegation
 
-Your well-known file at `https://example.com/.well-known/matrix/server` contains:
+Your well-known file at `https://example.com/.well-known/matrix/server`
+contains:
 
 ```json
 {
@@ -46,17 +51,20 @@ Your TLS certificate must be valid for `matrix.example.com`.
 
 ### Scenario 2: No Delegation
 
-If you don't use delegation and your server name is `example.com`, your certificate must be valid for `example.com`.
+If you don't use delegation and your server name is `example.com`, your
+certificate must be valid for `example.com`.
 
 ### Scenario 3: Using Port 8448
 
-If federation connects directly to port 8448 on `example.com`, your certificate must be valid for `example.com`.
+If federation connects directly to port 8448 on `example.com`, your certificate
+must be valid for `example.com`.
 
 ## Obtaining Certificates
 
 ### Using Let's Encrypt with Certbot
 
-Let's Encrypt provides free, automated certificates. This is the recommended approach:
+Let's Encrypt provides free, automated certificates. This is the recommended
+approach:
 
 ```bash
 # Install Certbot
@@ -85,9 +93,9 @@ matrix.example.com {
 # That's it! No manual certificate management needed.
 ```
 
-:::inset
-**Why Caddy?** Caddy is excellent for Matrix because it handles certificate acquisition, renewal, and OCSP stapling completely automatically with zero configuration.
-:::
+:::inset **Why Caddy?** Caddy is excellent for Matrix because it handles
+certificate acquisition, renewal, and OCSP stapling completely automatically
+with zero configuration. :::
 
 ## Testing Federation TLS
 
@@ -109,9 +117,12 @@ openssl s_client -connect matrix.example.com:443 -servername matrix.example.com 
 
 ### Method 2: Use This Connection Tester
 
-**The easiest and most comprehensive way** to check your TLS configuration is to use this connection tester tool:
+**The easiest and most comprehensive way** to check your TLS configuration is to
+use this connection tester tool:
 
-Visit the [homepage](/) and enter your Matrix server's domain name. The tool will automatically check your TLS certificate validity, chain, expiration, and more.
+Visit the [homepage](/) and enter your Matrix server's domain name. The tool
+will automatically check your TLS certificate validity, chain, expiration, and
+more.
 
 ### Method 3: SSL Labs
 
@@ -121,7 +132,8 @@ Get a comprehensive TLS security report:
 
 ### Method 4: This Tool
 
-Use this connectivity tester on the [home page](/) to check your federation TLS configuration.
+Use this connectivity tester on the [home page](/) to check your federation TLS
+configuration.
 
 ## Common TLS Issues
 
@@ -147,7 +159,8 @@ Use this connectivity tester on the [home page](/) to check your federation TLS 
 
 :::details Name mismatch or Certificate hostname mismatch
 
-**What it means:** The domain in your certificate doesn't match the domain other servers are trying to connect to.
+**What it means:** The domain in your certificate doesn't match the domain other
+servers are trying to connect to.
 
 **Example problem:**
 
@@ -163,7 +176,8 @@ Use this connectivity tester on the [home page](/) to check your federation TLS 
 
 :::details Unable to get local issuer certificate
 
-**What it means:** The certificate chain is incomplete — intermediate certificates are missing.
+**What it means:** The certificate chain is incomplete — intermediate
+certificates are missing.
 
 **How to fix:**
 
@@ -175,7 +189,8 @@ Use this connectivity tester on the [home page](/) to check your federation TLS 
 
 :::details Certificate expired or about to expire
 
-**Prevention:** Let's Encrypt certificates expire after 90 days and must be renewed.
+**Prevention:** Let's Encrypt certificates expire after 90 days and must be
+renewed.
 
 **For Certbot:**
 
@@ -190,7 +205,8 @@ sudo certbot renew --dry-run
 sudo certbot renew --force-renewal
 ```
 
-**For Caddy:** Renewal is completely automatic. Check logs if certificate expires.
+**For Caddy:** Renewal is completely automatic. Check logs if certificate
+expires.
 
 :::
 
@@ -266,9 +282,12 @@ matrix.example.com {
 
 ## SNI (Server Name Indication)
 
-Server Name Indication (SNI) is required for Matrix federation. It allows servers to present the correct certificate when multiple domains are hosted on the same IP address.
+Server Name Indication (SNI) is required for Matrix federation. It allows
+servers to present the correct certificate when multiple domains are hosted on
+the same IP address.
 
-Modern TLS libraries support SNI automatically, but ensure your web server is configured correctly:
+Modern TLS libraries support SNI automatically, but ensure your web server is
+configured correctly:
 
 - **Nginx:** Use `server_name` directive
 - **Caddy:** SNI is handled automatically
@@ -301,7 +320,8 @@ fi
 
 ## Port 8448 Considerations
 
-If using port 8448 for federation (not recommended), your TLS configuration must be on that port:
+If using port 8448 for federation (not recommended), your TLS configuration must
+be on that port:
 
 ```nginx
 # Nginx configuration for port 8448 (if needed)
@@ -324,9 +344,9 @@ server {
 }
 ```
 
-:::inset
-**Recommendation:** Use port 443 with well-known delegation instead of port 8448. It's more firewall-friendly and easier to manage. See the [Well-Known Delegation Guide](/docs/wellknown-delegation).
-:::
+:::inset **Recommendation:** Use port 443 with well-known delegation instead of
+port 8448. It's more firewall-friendly and easier to manage. See the
+[Well-Known Delegation Guide](/docs/wellknown-delegation). :::
 
 ## Best Practices Summary
 

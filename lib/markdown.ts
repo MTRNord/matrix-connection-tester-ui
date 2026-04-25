@@ -29,7 +29,9 @@ function escapeHtml(text: string): string {
  */
 const govukRenderer = {
   heading({ tokens, depth }: { tokens: any[]; depth: number }): string {
-    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(
+      tokens,
+    );
     const sizes: Record<number, string> = {
       1: "govuk-heading-xl",
       2: "govuk-heading-l",
@@ -46,7 +48,9 @@ const govukRenderer = {
   },
 
   paragraph({ tokens }: { tokens: any[] }): string {
-    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(
+      tokens,
+    );
     return `<p class="govuk-body">${text}</p>\n`;
   },
 
@@ -109,7 +113,9 @@ const govukRenderer = {
       tokens: any[];
     },
   ): string {
-    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(
+      tokens,
+    );
     const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
     return `<a href="${
       escapeHtml(href)
@@ -144,7 +150,9 @@ const govukRenderer = {
   tablecell(
     token: { header?: boolean; tokens: any[]; align?: string | null },
   ): string {
-    const content = (this as unknown as MarkedRendererCtx).parser.parseInline(token.tokens);
+    const content = (this as unknown as MarkedRendererCtx).parser.parseInline(
+      token.tokens,
+    );
     const tag = token.header ? "th" : "td";
     const className = token.header
       ? "govuk-table__header"
@@ -155,7 +163,9 @@ const govukRenderer = {
   },
 
   strong({ tokens }: { tokens: any[] }): string {
-    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(tokens);
+    const text = (this as unknown as MarkedRendererCtx).parser.parseInline(
+      tokens,
+    );
     return `<strong class="govuk-!-font-weight-bold">${text}</strong>`;
   },
 

@@ -44,10 +44,12 @@ export function ResultsView(
   const successful_federation = data?.FederationOK ?? false;
   const server_type = data?.Version?.name ?? "";
   const server_version = data?.Version?.version ?? "";
-  const server_info =
-    (knownServers as unknown as Record<string, { url?: string; maturity: string }>)[
-      server_type.toLowerCase()
-    ] ?? null;
+  const server_info = (knownServers as unknown as Record<
+    string,
+    { url?: string; maturity: string }
+  >)[
+    server_type.toLowerCase()
+  ] ?? null;
   const discovered_ips = data?.DNSResult?.Addrs ?? [];
 
   const hasWellKnownErrors = data?.WellKnownResult &&

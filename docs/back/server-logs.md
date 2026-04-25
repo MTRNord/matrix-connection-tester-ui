@@ -5,11 +5,13 @@ description: Understanding and troubleshooting Matrix server logs
 
 ## Why Server Logs Matter
 
-Server logs are your primary tool for diagnosing issues with your Matrix server. They record errors, warnings, and information about server operations, helping you understand what's happening when things go wrong.
+Server logs are your primary tool for diagnosing issues with your Matrix server.
+They record errors, warnings, and information about server operations, helping
+you understand what's happening when things go wrong.
 
-:::inset
-**Quick Tip:** When asking for help in community channels, always include relevant log excerpts. They help others understand and diagnose your problem much faster.
-:::
+:::inset **Quick Tip:** When asking for help in community channels, always
+include relevant log excerpts. They help others understand and diagnose your
+problem much faster. :::
 
 ## Finding Your Logs
 
@@ -73,12 +75,12 @@ sudo journalctl -u caddy -f
 
 Matrix servers use different log levels to indicate severity:
 
-| Level | Meaning | Action Required |
-|-------|---------|----------------|
-| **ERROR** | Something went wrong that needs attention | Investigate |
-| **WARNING** | Potential issue or unusual situation | Review |
-| **INFO** | Normal operational messages | Normal |
-| **DEBUG** | Detailed technical information | Optional |
+| Level       | Meaning                                   | Action Required |
+| ----------- | ----------------------------------------- | --------------- |
+| **ERROR**   | Something went wrong that needs attention | Investigate     |
+| **WARNING** | Potential issue or unusual situation      | Review          |
+| **INFO**    | Normal operational messages               | Normal          |
+| **DEBUG**   | Detailed technical information            | Optional        |
 
 ## Common Error Messages
 
@@ -86,7 +88,8 @@ Matrix servers use different log levels to indicate severity:
 
 :::details "SSL verification failed" or "certificate verify failed"
 
-**What it means:** Your server cannot verify the TLS certificate of a remote server.
+**What it means:** Your server cannot verify the TLS certificate of a remote
+server.
 
 **Common causes:**
 
@@ -156,7 +159,8 @@ nslookup remote-server.example.com
 
 **What it means:** Client is using an invalid or expired authentication token.
 
-**This is usually normal:** Clients automatically re-authenticate when tokens expire. Only investigate if it happens frequently or causes problems.
+**This is usually normal:** Clients automatically re-authenticate when tokens
+expire. Only investigate if it happens frequently or causes problems.
 
 :::
 
@@ -181,7 +185,7 @@ version: 1
 
 formatters:
   precise:
-    format: '%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s'
+    format: "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
 
 handlers:
   # Log to systemd journal
@@ -211,7 +215,7 @@ loggers:
 
 root:
   level: INFO
-  handlers: [journal]  # or [file]
+  handlers: [journal] # or [file]
 ```
 
 ### Increasing Log Detail
@@ -228,13 +232,13 @@ loggers:
     level: DEBUG
 ```
 
-:::warning
-Debug logging generates large amounts of data. Only use it for troubleshooting, then return to INFO level.
-:::
+:::warning Debug logging generates large amounts of data. Only use it for
+troubleshooting, then return to INFO level. :::
 
 ### Log Rotation
 
-If logging to files, ensure log rotation is configured to prevent disk space issues:
+If logging to files, ensure log rotation is configured to prevent disk space
+issues:
 
 ```bash
 # Example logrotate configuration
@@ -281,18 +285,20 @@ Consider using log analysis tools for better visibility:
 
 ### Privacy Considerations
 
-:::warning
-Server logs may contain sensitive information:
+:::warning Server logs may contain sensitive information:
 
 - User IDs and room IDs
 - IP addresses
 - Error messages that reveal configuration details
 
-Be cautious when sharing logs publicly. Redact sensitive information before posting.
-:::
+Be cautious when sharing logs publicly. Redact sensitive information before
+posting. :::
 
 ## Next Steps
 
-- Learn about [Server Configuration](/docs/server-configuration) to optimize your setup
-- Use [Network Troubleshooting](/docs/network-troubleshooting) tools to diagnose connectivity issues
-- Review [Federation Setup](/docs/federation-setup) if you have federation-related errors
+- Learn about [Server Configuration](/docs/server-configuration) to optimize
+  your setup
+- Use [Network Troubleshooting](/docs/network-troubleshooting) tools to diagnose
+  connectivity issues
+- Review [Federation Setup](/docs/federation-setup) if you have
+  federation-related errors

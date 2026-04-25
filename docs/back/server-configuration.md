@@ -5,11 +5,12 @@ description: General Matrix server configuration guide
 
 ## Overview
 
-This guide covers general configuration best practices for Matrix homeservers. Proper configuration ensures optimal performance, security, and compatibility with the Matrix ecosystem.
+This guide covers general configuration best practices for Matrix homeservers.
+Proper configuration ensures optimal performance, security, and compatibility
+with the Matrix ecosystem.
 
-:::inset
-**Note:** This guide provides general recommendations. Always consult your specific homeserver's documentation for detailed configuration options.
-:::
+:::inset **Note:** This guide provides general recommendations. Always consult
+your specific homeserver's documentation for detailed configuration options. :::
 
 ## Basic Configuration
 
@@ -30,9 +31,8 @@ server_name: "example.com"
 server_name = "example.com"
 ```
 
-:::warning
-The server name cannot be changed after users start registering. Choose carefully before going into production.
-:::
+:::warning The server name cannot be changed after users start registering.
+Choose carefully before going into production. :::
 
 ### Listening Configuration
 
@@ -45,7 +45,7 @@ listeners:
   - port: 8008
     type: http
     tls: false
-    bind_addresses: ['127.0.0.1']
+    bind_addresses: ["127.0.0.1"]
     x_forwarded: true
     resources:
       - names: [client, federation]
@@ -53,11 +53,13 @@ listeners:
 ```
 
 **For reverse proxy setup (recommended):**
+
 - Listen on `127.0.0.1` (localhost only)
 - Set `tls: false` (let reverse proxy handle TLS)
 - Enable `x_forwarded: true` to trust proxy headers
 
 **For direct exposure (not recommended):**
+
 - Listen on `0.0.0.0` or `::`
 - Set `tls: true` and configure certificate paths
 - Bind to port 8448 for federation
@@ -106,9 +108,8 @@ database:
     database: /path/to/homeserver.db
 ```
 
-:::warning
-SQLite has severe performance limitations and is not suitable for production use. Always use PostgreSQL for production deployments.
-:::
+:::warning SQLite has severe performance limitations and is not suitable for
+production use. Always use PostgreSQL for production deployments. :::
 
 ## Registration and User Management
 
@@ -204,13 +205,13 @@ media_retention:
 ```yaml
 url_preview_enabled: true
 url_preview_ip_range_blacklist:
-  - '127.0.0.0/8'
-  - '10.0.0.0/8'
-  - '172.16.0.0/12'
-  - '192.168.0.0/16'
-  - '::1/128'
-  - 'fe80::/10'
-  - 'fc00::/7'
+  - "127.0.0.0/8"
+  - "10.0.0.0/8"
+  - "172.16.0.0/12"
+  - "192.168.0.0/16"
+  - "::1/128"
+  - "fe80::/10"
+  - "fc00::/7"
 max_spider_size: "10M"
 ```
 
@@ -250,7 +251,7 @@ version: 1
 
 formatters:
   precise:
-    format: '%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s'
+    format: "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
 
 handlers:
   file:
@@ -450,18 +451,21 @@ python -c "import yaml; yaml.safe_load(open('/etc/matrix-synapse/homeserver.yaml
 ### Common Configuration Errors
 
 **YAML Syntax Error:**
+
 ```
 Check indentation - YAML is whitespace-sensitive
 Use spaces, not tabs
 ```
 
 **Invalid Server Name:**
+
 ```
 Must be a valid domain name
 Cannot include protocol (no https://)
 ```
 
 **Database Connection Failed:**
+
 ```
 Check credentials
 Verify database exists
@@ -482,7 +486,7 @@ report_stats: false
 ### Production
 
 ```yaml
-enable_registration: false  # Or with verification
+enable_registration: false # Or with verification
 report_stats: true
 enable_metrics: true
 # Use PostgreSQL
@@ -503,13 +507,13 @@ git add homeserver.yaml log.yaml
 git commit -m "Initial configuration"
 ```
 
-:::warning
-Never commit secrets (passwords, keys) to version control. Use environment variables or secret management tools.
-:::
+:::warning Never commit secrets (passwords, keys) to version control. Use
+environment variables or secret management tools. :::
 
 ### Configuration Templates
 
 Use templating tools for multiple servers:
+
 - Ansible
 - Terraform
 - Jinja2 templates

@@ -5,40 +5,48 @@ description: Configure network settings, DNS, and firewall rules for Matrix fede
 
 # Understanding Federation Network
 
-Matrix federation allows different Matrix servers to communicate with each other, creating a decentralized network where users on one server can chat with users on another server. Think of it like email - you can send messages from Gmail to Outlook because they use compatible protocols.
+Matrix federation allows different Matrix servers to communicate with each
+other, creating a decentralized network where users on one server can chat with
+users on another server. Think of it like email - you can send messages from
+Gmail to Outlook because they use compatible protocols.
 
-:::inset
-**Recommended approach:** Use .well-known delegation to serve federation on port 443. This is easier to configure, more reliable, and works better with firewalls and network infrastructure than the legacy port 8448 approach.
-:::
+:::inset **Recommended approach:** Use .well-known delegation to serve
+federation on port 443. This is easier to configure, more reliable, and works
+better with firewalls and network infrastructure than the legacy port 8448
+approach. :::
 
-:::warning
-Running a Matrix homeserver behind residential NAT/router setups is not recommended. Matrix federation is complex and works best on VPS or dedicated hosting with a static public IP. Residential setups with port forwarding often encounter issues with ISP blocks, dynamic IPs, and network complexity.
-:::
+:::warning Running a Matrix homeserver behind residential NAT/router setups is
+not recommended. Matrix federation is complex and works best on VPS or dedicated
+hosting with a static public IP. Residential setups with port forwarding often
+encounter issues with ISP blocks, dynamic IPs, and network complexity. :::
 
-:::warning
-Federation requires specific network ports to be open and properly configured. Incorrect network settings are the most common cause of federation problems.
-:::
+:::warning Federation requires specific network ports to be open and properly
+configured. Incorrect network settings are the most common cause of federation
+problems. :::
 
 ## Network Requirements
 
 ### Required Ports
 
-For Matrix federation to work, your server needs to be accessible on specific ports. We recommend using port 443 with .well-known delegation:
+For Matrix federation to work, your server needs to be accessible on specific
+ports. We recommend using port 443 with .well-known delegation:
 
-| Port | Protocol | Purpose | Recommendation |
-|------|----------|---------|----------------|
-| 443 | HTTPS | Federation API and .well-known | ✓ Recommended |
-| 8448 | HTTPS | Federation API (legacy direct) | Alternative |
+| Port | Protocol | Purpose                        | Recommendation |
+| ---- | -------- | ------------------------------ | -------------- |
+| 443  | HTTPS    | Federation API and .well-known | ✓ Recommended  |
+| 8448 | HTTPS    | Federation API (legacy direct) | Alternative    |
 
 **Setup options in order of preference:**
 
-1. **Port 443 with .well-known delegation** (Best) - Works with all networks and firewalls
+1. **Port 443 with .well-known delegation** (Best) - Works with all networks and
+   firewalls
 2. **SRV record with custom port** (Good) - Flexible but requires DNS management
 3. **Port 8448 direct** (Legacy) - May be blocked by some networks and firewalls
 
 ### Firewall Configuration
 
-Your firewall must allow incoming connections to your Matrix server. Here's how to configure common Linux firewalls:
+Your firewall must allow incoming connections to your Matrix server. Here's how
+to configure common Linux firewalls:
 
 #### UFW (Ubuntu/Debian)
 
@@ -68,33 +76,38 @@ sudo firewall-cmd --reload
 
 ### NAT and Port Forwarding (Not Recommended)
 
-:::warning
-Running a Matrix homeserver behind NAT (home/residential setups) is strongly discouraged. Use a VPS or dedicated server with a public IP instead. NAT setups are complex, unreliable for federation, and often blocked by ISPs.
+:::warning Running a Matrix homeserver behind NAT (home/residential setups) is
+strongly discouraged. Use a VPS or dedicated server with a public IP instead.
+NAT setups are complex, unreliable for federation, and often blocked by ISPs.
 :::
 
-If you must run behind a router or NAT gateway despite the strong recommendation against it, you need to configure port forwarding:
+If you must run behind a router or NAT gateway despite the strong recommendation
+against it, you need to configure port forwarding:
 
 1. Access your router's admin panel (usually at 192.168.1.1 or 192.168.0.1)
 2. Find the "Port Forwarding" or "NAT" section
 3. Forward external port 443 to your server's internal IP on port 443
 4. Optional: Only forward port 8448 if not using .well-known delegation
 
-:::inset
-**Example:** If your server's internal IP is 192.168.1.100, forward:
+:::inset **Example:** If your server's internal IP is 192.168.1.100, forward:
 
 - External 443 → 192.168.1.100:443 (required)
 - External 8448 → 192.168.1.100:8448 (only if not using delegation)
 
-**Note:** Again, this NAT setup is not recommended. Consider using a VPS with a public IP instead for better reliability and federation compatibility.
-:::
+**Note:** Again, this NAT setup is not recommended. Consider using a VPS with a
+public IP instead for better reliability and federation compatibility. :::
 
 ## DNS Configuration
 
-Proper DNS configuration is essential for federation. Other servers need to find your federation endpoint.
+Proper DNS configuration is essential for federation. Other servers need to find
+your federation endpoint.
 
 ### SRV Records (Alternative Method)
 
-SRV records tell other servers where to find your federation API. This is an alternative to .well-known delegation and allows flexible port and hostname configuration. Only use this if you're not using .well-known delegation on port 443.
+SRV records tell other servers where to find your federation API. This is an
+alternative to .well-known delegation and allows flexible port and hostname
+configuration. Only use this if you're not using .well-known delegation on
+port 443.
 
 ```dns
 _matrix._tcp.example.com. 3600 IN SRV 10 0 8448 matrix.example.com.
@@ -123,7 +136,11 @@ matrix.example.com. 3600 IN AAAA 2001:db8::10
 
 ### Delegated Configuration (Recommended)
 
-When using .well-known delegation (the recommended approach), you serve federation on port 443 and only need basic A/AAAA DNS records pointing to your server. You don't need an SRV record. See the [.well-known Delegation](/docs/wellknown-delegation) guide for complete setup instructions.
+When using .well-known delegation (the recommended approach), you serve
+federation on port 443 and only need basic A/AAAA DNS records pointing to your
+server. You don't need an SRV record. See the
+[.well-known Delegation](/docs/wellknown-delegation) guide for complete setup
+instructions.
 
 ## Testing Network Connectivity
 
@@ -165,7 +182,9 @@ dig @8.8.8.8 SRV _matrix._tcp.example.com
 
 ### Use This Connection Tester
 
-**This is the recommended first step for testing your setup.** Use the connection tester on the homepage of this site to automatically check your federation network configuration. It will:
+**This is the recommended first step for testing your setup.** Use the
+connection tester on the homepage of this site to automatically check your
+federation network configuration. It will:
 
 - Verify DNS SRV records are properly configured
 - Test network connectivity to federation ports
@@ -174,15 +193,14 @@ dig @8.8.8.8 SRV _matrix._tcp.example.com
 - Provide detailed diagnostics for any issues found
 - Give you specific recommendations for fixing problems
 
-Simply enter your Matrix server's domain name on the [homepage](/) to run a comprehensive test.
+Simply enter your Matrix server's domain name on the [homepage](/) to run a
+comprehensive test.
 
 ## Common Network Issues
 
 ### Connection Timeout
 
-:::warning
-**Problem:** Other servers cannot connect to your federation port
-:::
+:::warning **Problem:** Other servers cannot connect to your federation port :::
 
 Possible causes:
 
@@ -237,7 +255,8 @@ Possible causes:
 
 ### IPv6 Support
 
-Enabling IPv6 improves connectivity with IPv6-only servers and is increasingly important:
+Enabling IPv6 improves connectivity with IPv6-only servers and is increasingly
+important:
 
 1. Ensure your server has an IPv6 address
 2. Add AAAA DNS records
@@ -256,7 +275,8 @@ If using a load balancer or reverse proxy:
 
 ### CDN and DDoS Protection
 
-Matrix federation requires direct server-to-server connections, so traditional CDNs that proxy all traffic won't work. However, you can:
+Matrix federation requires direct server-to-server connections, so traditional
+CDNs that proxy all traffic won't work. However, you can:
 
 - Use CDN for client-server API (port 443) only
 - Keep federation API (port 8448) direct to your server
@@ -286,10 +306,14 @@ Regular monitoring helps catch issues early:
 
 ## Related Documentation
 
-- [Federation TLS Configuration](/docs/federation-tls) - Configure TLS certificates for federation
-- [.well-known Delegation](/docs/wellknown-delegation) - Set up delegation to use port 443
-- [Server Configuration](/docs/server-configuration) - Configure your Matrix server
-- [Troubleshooting Guide](/docs/troubleshooting) - Fix common federation problems
+- [Federation TLS Configuration](/docs/federation-tls) - Configure TLS
+  certificates for federation
+- [.well-known Delegation](/docs/wellknown-delegation) - Set up delegation to
+  use port 443
+- [Server Configuration](/docs/server-configuration) - Configure your Matrix
+  server
+- [Troubleshooting Guide](/docs/troubleshooting) - Fix common federation
+  problems
 
 ## External Resources
 

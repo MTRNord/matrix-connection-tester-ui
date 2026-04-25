@@ -5,11 +5,12 @@ description: Diagnose and resolve common Matrix server issues
 
 ## Overview
 
-This guide helps you diagnose and fix common issues with your Matrix server. If you're experiencing problems, start by identifying the symptoms and work through the relevant sections below.
+This guide helps you diagnose and fix common issues with your Matrix server. If
+you're experiencing problems, start by identifying the symptoms and work through
+the relevant sections below.
 
-:::inset
-**Quick Start:** Run the [connectivity tester](/) to automatically identify issues with your server configuration.
-:::
+:::inset **Quick Start:** Run the [connectivity tester](/) to automatically
+identify issues with your server configuration. :::
 
 ## Common Issues and Solutions
 
@@ -17,7 +18,8 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 :::details Other servers cannot find my server
 
-**Symptoms:** Users on other servers cannot send messages to your users, or your users cannot join rooms on other servers.
+**Symptoms:** Users on other servers cannot send messages to your users, or your
+users cannot join rooms on other servers.
 
 **Common causes:**
 
@@ -28,19 +30,23 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 **How to fix:**
 
-1. Test your well-known files: `curl https://yourdomain.com/.well-known/matrix/server`
+1. Test your well-known files:
+   `curl https://yourdomain.com/.well-known/matrix/server`
 2. Verify they return valid JSON with proper CORS headers
 3. Check your TLS certificate is valid for the domain specified in well-known
 4. Ensure port 443 (or 8448) is open and accessible from the internet
-5. Test federation endpoint: `curl https://matrix.yourdomain.com/_matrix/federation/v1/version`
+5. Test federation endpoint:
+   `curl https://matrix.yourdomain.com/_matrix/federation/v1/version`
 
-**See also:** [Federation Setup Guide](/docs/federation-setup), [Well-Known Delegation](/docs/wellknown-delegation)
+**See also:** [Federation Setup Guide](/docs/federation-setup),
+[Well-Known Delegation](/docs/wellknown-delegation)
 
 :::
 
 :::details TLS certificate errors in federation
 
-**Symptoms:** Logs show SSL/TLS verification errors when federating with other servers.
+**Symptoms:** Logs show SSL/TLS verification errors when federating with other
+servers.
 
 **Common causes:**
 
@@ -51,12 +57,14 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 **How to fix:**
 
-1. Check certificate expiry: `openssl s_client -connect matrix.yourdomain.com:443 -servername matrix.yourdomain.com | openssl x509 -noout -dates`
+1. Check certificate expiry:
+   `openssl s_client -connect matrix.yourdomain.com:443 -servername matrix.yourdomain.com | openssl x509 -noout -dates`
 2. Verify certificate matches your domain
 3. Use Let's Encrypt or another trusted CA
 4. Include full certificate chain
 
-**See also:** [TLS Certificates](/docs/tls-certificates), [Federation TLS](/docs/federation-tls)
+**See also:** [TLS Certificates](/docs/tls-certificates),
+[Federation TLS](/docs/federation-tls)
 
 :::
 
@@ -84,7 +92,8 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 :::details Clients cannot connect to homeserver
 
-**Symptoms:** Matrix clients show connection errors or cannot find the homeserver.
+**Symptoms:** Matrix clients show connection errors or cannot find the
+homeserver.
 
 **Common causes:**
 
@@ -95,18 +104,22 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 **How to fix:**
 
-1. Test client well-known: `curl https://yourdomain.com/.well-known/matrix/client`
+1. Test client well-known:
+   `curl https://yourdomain.com/.well-known/matrix/client`
 2. Verify it returns valid JSON with CORS headers
 3. Check the `base_url` points to your homeserver
-4. Test the client-server API: `curl https://matrix.yourdomain.com/_matrix/client/versions`
+4. Test the client-server API:
+   `curl https://matrix.yourdomain.com/_matrix/client/versions`
 
-**See also:** [CORS Configuration](/docs/cors-configuration), [Client-Server API](/docs/client-server-api)
+**See also:** [CORS Configuration](/docs/cors-configuration),
+[Client-Server API](/docs/client-server-api)
 
 :::
 
 :::details CORS preflight errors
 
-**Symptoms:** Browser console shows CORS errors, requests fail with OPTIONS method.
+**Symptoms:** Browser console shows CORS errors, requests fail with OPTIONS
+method.
 
 **Common causes:**
 
@@ -118,7 +131,8 @@ This guide helps you diagnose and fix common issues with your Matrix server. If 
 
 1. Ensure your reverse proxy handles OPTIONS requests
 2. Return appropriate CORS headers on all responses
-3. Include: `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`, `Access-Control-Allow-Headers`
+3. Include: `Access-Control-Allow-Origin`, `Access-Control-Allow-Methods`,
+   `Access-Control-Allow-Headers`
 
 **See also:** [CORS Preflight](/docs/cors-preflight)
 
@@ -197,7 +211,8 @@ Wait 24-48 hours for DNS propagation after changes.
 3. Consider upgrading server specs
 4. Optimize logging level to INFO or WARNING
 
-**See also:** [Performance](/docs/performance), [Server Configuration](/docs/server-configuration)
+**See also:** [Performance](/docs/performance),
+[Server Configuration](/docs/server-configuration)
 
 :::
 
@@ -237,7 +252,8 @@ Wait 24-48 hours for DNS propagation after changes.
 **How to fix:**
 
 1. Check [server logs](/docs/server-logs) for startup errors
-2. Validate YAML syntax: `python -c "import yaml; yaml.safe_load(open('homeserver.yaml'))"`
+2. Validate YAML syntax:
+   `python -c "import yaml; yaml.safe_load(open('homeserver.yaml'))"`
 3. Check port availability: `sudo lsof -i :8008`
 4. Verify file permissions: `ls -la /path/to/homeserver.yaml`
 
@@ -379,6 +395,8 @@ Set up monitoring for:
 
 - [Server Logs](/docs/server-logs) - Understanding log files
 - [Federation Setup](/docs/federation-setup) - Configure federation
-- [Network Troubleshooting](/docs/network-troubleshooting) - Network-specific issues
+- [Network Troubleshooting](/docs/network-troubleshooting) - Network-specific
+  issues
 - [Getting Help](/docs/getting-help) - Where to find support
-- [Server Configuration](/docs/server-configuration) - Configuration best practices
+- [Server Configuration](/docs/server-configuration) - Configuration best
+  practices

@@ -5,21 +5,24 @@ description: Diagnose and resolve network connectivity issues with your Matrix s
 
 ## Network Troubleshooting Guide
 
-This guide helps you diagnose and fix network connectivity issues with your Matrix server. Network problems are the most common cause of federation failures, but they're usually straightforward to fix once identified.
+This guide helps you diagnose and fix network connectivity issues with your
+Matrix server. Network problems are the most common cause of federation
+failures, but they're usually straightforward to fix once identified.
 
-:::warning
-Always test from an external network, not from the same network as your server. Testing from inside your network can give misleading results.
-:::
+:::warning Always test from an external network, not from the same network as
+your server. Testing from inside your network can give misleading results. :::
 
 ## Quick Diagnostic Steps
 
 Follow these steps in order to identify where the problem is:
 
-1. **Check if the server is running** - Verify your Matrix server process is active
+1. **Check if the server is running** - Verify your Matrix server process is
+   active
 2. **Verify the server is listening** - Ensure it's bound to the correct ports
 3. **Test local connectivity** - Check if you can connect from the server itself
 4. **Check firewall rules** - Verify nothing is blocking the ports
-5. **Test from external network** - Confirm the server is accessible from the internet
+5. **Test from external network** - Confirm the server is accessible from the
+   internet
 6. **Verify DNS resolution** - Make sure DNS records are correct
 
 ## Step 1: Check Server Status
@@ -74,9 +77,11 @@ tcp        0      0 0.0.0.0:8448            0.0.0.0:*               LISTEN      
 tcp6       0      0 :::8448                 :::*                    LISTEN      1234/python
 ```
 
-**If you see nothing:** Your server isn't listening on that port. Check your server configuration file.
+**If you see nothing:** Your server isn't listening on that port. Check your
+server configuration file.
 
-**If it says 127.0.0.1:8448:** Your server is only listening on localhost. You need to configure it to listen on 0.0.0.0 or your public IP.
+**If it says 127.0.0.1:8448:** Your server is only listening on localhost. You
+need to configure it to listen on 0.0.0.0 or your public IP.
 
 ## Step 3: Test Local Connectivity
 
@@ -95,9 +100,11 @@ nc -zv localhost 8448
 
 Expected output from curl should show a JSON response with server information.
 
-If this works, your server is running and responding locally. The problem is likely with firewall or external access.
+If this works, your server is running and responding locally. The problem is
+likely with firewall or external access.
 
-If this fails, the problem is with your server configuration or TLS certificates.
+If this fails, the problem is with your server configuration or TLS
+certificates.
 
 ## Step 4: Check Firewall Rules
 
@@ -174,7 +181,8 @@ Connected to matrix.example.com.
 Escape character is '^]'.
 ```
 
-If you get "Connection refused" or "Connection timed out", the port is not accessible from the internet.
+If you get "Connection refused" or "Connection timed out", the port is not
+accessible from the internet.
 
 ### Using curl (from external machine)
 
@@ -300,7 +308,8 @@ If you recently changed DNS:
 
 **Solutions:**
 
-1. Check certificate expiry: `openssl s_client -connect matrix.example.com:443 -servername matrix.example.com | openssl x509 -noout -dates`
+1. Check certificate expiry:
+   `openssl s_client -connect matrix.example.com:443 -servername matrix.example.com | openssl x509 -noout -dates`
 2. Verify certificate matches domain
 3. Use trusted CA (Let's Encrypt recommended)
 4. Include full certificate chain
@@ -429,7 +438,8 @@ If you're still experiencing issues:
 
 3. Review [General Troubleshooting](/docs/troubleshooting) guide
 
-4. Ask for help in Matrix community rooms (see [Getting Help](/docs/getting-help))
+4. Ask for help in Matrix community rooms (see
+   [Getting Help](/docs/getting-help))
 
 Include all diagnostic information when asking for help!
 

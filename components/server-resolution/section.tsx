@@ -136,14 +136,19 @@ export function ServerResolutionResultsSection(props: {
               reach, which will cause intermittent federation failures. */
           }
           {isSplitBrain && (
-            <div class="govuk-error-summary govuk-error-summary--warning" data-module="govuk-error-summary">
+            <div
+              class="govuk-error-summary govuk-error-summary--warning"
+              data-module="govuk-error-summary"
+            >
               <div role="alert">
                 <h2 class="govuk-error-summary__title">
                   {i18n.t("server-resolution.split_brain_warning_title")}
                 </h2>
                 <div class="govuk-error-summary__body">
                   <p class="govuk-body">
-                    {i18n.t("server-resolution.split_brain_warning_description")}
+                    {i18n.t(
+                      "server-resolution.split_brain_warning_description",
+                    )}
                   </p>
                 </div>
               </div>
@@ -167,7 +172,11 @@ export function ServerResolutionResultsSection(props: {
                     <th scope="col" class="govuk-table__header">
                       {i18n.t("server-resolution.ip_column")}
                     </th>
-                    <th scope="col" class="govuk-table__header" style={{ minWidth: "12rem" }}>
+                    <th
+                      scope="col"
+                      class="govuk-table__header"
+                      style={{ minWidth: "12rem" }}
+                    >
                       {i18n.t("server-resolution.wellknown_status_column")}
                     </th>
                     <th scope="col" class="govuk-table__header">
@@ -201,7 +210,10 @@ export function ServerResolutionResultsSection(props: {
                                 <br />
                                 <span
                                   class="govuk-hint"
-                                  style={{ fontSize: "0.875rem", wordBreak: "break-word" }}
+                                  style={{
+                                    fontSize: "0.875rem",
+                                    wordBreak: "break-word",
+                                  }}
                                 >
                                   {result.Error!.Error}
                                 </span>

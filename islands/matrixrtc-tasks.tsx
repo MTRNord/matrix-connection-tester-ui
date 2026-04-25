@@ -224,7 +224,10 @@ export default function MatrixRtcTasks({
                             </span>
                           </summary>
                           <div class="govuk-details__text">
-                            <pre class="govuk-body govuk-!-font-size-16" style={{ margin: 0 }}>
+                            <pre
+                              class="govuk-body govuk-!-font-size-16"
+                              style={{ margin: 0 }}
+                            >
                               <code>{JSON.stringify(value, null, 2)}</code>
                             </pre>
                           </div>

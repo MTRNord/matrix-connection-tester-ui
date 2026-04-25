@@ -5,11 +5,13 @@ description: Matrix server performance optimization
 
 ## Overview
 
-This guide covers performance optimization for Matrix homeservers. Proper optimization ensures your server can handle user load efficiently and provides a good user experience.
+This guide covers performance optimization for Matrix homeservers. Proper
+optimization ensures your server can handle user load efficiently and provides a
+good user experience.
 
-:::inset
-**Note:** Performance tuning should be based on actual metrics and monitoring data, not assumptions. Always measure before and after optimization changes.
-:::
+:::inset **Note:** Performance tuning should be based on actual metrics and
+monitoring data, not assumptions. Always measure before and after optimization
+changes. :::
 
 ## Understanding Matrix Performance
 
@@ -97,8 +99,8 @@ Configure appropriate connection pool size:
 ```yaml
 database:
   args:
-    cp_min: 5      # Minimum connections
-    cp_max: 10     # Maximum connections
+    cp_min: 5 # Minimum connections
+    cp_max: 10 # Maximum connections
 ```
 
 For busy servers, increase `cp_max` to 20-50.
@@ -177,7 +179,7 @@ caches:
   per_cache_factors:
     get_users_who_share_room_with_user: 5.0
     get_state_for_auth_event: 5.0
-    
+
 event_cache_size: "100K"
 ```
 
@@ -333,7 +335,7 @@ systemd-cgtop
 # Lower cache sizes for low-memory servers
 caches:
   global_factor: 0.5
-  
+
 event_cache_size: "10K"
 ```
 
@@ -379,7 +381,7 @@ Balance security and performance:
 
 ```yaml
 rc_message:
-  per_second: 10    # Increase for busy servers
+  per_second: 10 # Increase for busy servers
   burst_count: 20
 
 rc_registration:
@@ -456,11 +458,13 @@ ab -n 100 -c 10 https://matrix.example.com/_matrix/client/versions
 **Symptoms:** CPU at 100%, slow response times
 
 **Common causes:**
+
 - Large room state resolution
 - Inefficient database queries
 - Too many concurrent operations
 
 **Solutions:**
+
 1. Check for problematic large rooms
 2. Review slow query logs
 3. Increase worker count
@@ -471,11 +475,13 @@ ab -n 100 -c 10 https://matrix.example.com/_matrix/client/versions
 **Symptoms:** Out of memory errors, OOM killer
 
 **Common causes:**
+
 - Cache sizes too large
 - Memory leaks
 - Insufficient RAM for load
 
 **Solutions:**
+
 1. Reduce cache sizes
 2. Check for memory leaks (restart service)
 3. Add more RAM or enable swap
@@ -486,6 +492,7 @@ ab -n 100 -c 10 https://matrix.example.com/_matrix/client/versions
 **Symptoms:** Long API response times
 
 **Solutions:**
+
 1. Run VACUUM ANALYZE
 2. Check for missing indexes
 3. Tune PostgreSQL configuration
@@ -496,11 +503,13 @@ ab -n 100 -c 10 https://matrix.example.com/_matrix/client/versions
 **Symptoms:** Delayed messages from federated servers
 
 **Common causes:**
+
 - Network issues
 - Overloaded server
 - Database bottleneck
 
 **Solutions:**
+
 1. Increase federation workers
 2. Check network connectivity
 3. Optimize database
@@ -518,6 +527,7 @@ ab -n 100 -c 10 https://matrix.example.com/_matrix/client/versions
 ### Monitoring Alerts
 
 Set up alerts for:
+
 - CPU usage > 80%
 - Memory usage > 90%
 - Disk usage > 85%
@@ -527,6 +537,7 @@ Set up alerts for:
 ### Capacity Planning
 
 Monitor growth trends:
+
 - User registration rate
 - Message volume
 - Media storage growth
