@@ -5,7 +5,10 @@
     "dev": "mkdir -p static/assets/images static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite",
     "build": "mkdir -p static/assets/images static/js && cp node_modules/govuk-frontend/dist/govuk/govuk-frontend.min.js static/js && cp -r node_modules/govuk-frontend/dist/govuk/assets/images/* static/assets/images/ && cp node_modules/govuk-frontend/dist/govuk/assets/manifest.json static/assets/ && vite build",
     "start": "deno serve -A _fresh/server.js",
-    "update": "deno run -A -r jsr:@fresh/update ."
+    "update": "deno run -A -r jsr:@fresh/update .",
+    "test:e2e": "deno run -A npm:@playwright/test test --config=playwright.config.ts",
+    "test:e2e:ui": "deno run -A npm:@playwright/test test --config=playwright.config.ts --ui",
+    "playwright:install": "deno run -A npm:@playwright/test install --with-deps chromium firefox"
   },
   "lint": { "rules": { "tags": ["fresh", "recommended"] } },
   "exclude": ["**/_fresh/*"],
@@ -20,7 +23,9 @@
     "sass": "npm:sass@^1.99.0",
     "vite": "npm:vite@^7.3.2",
     "marked": "npm:marked@^18.0.2",
-    "he": "npm:he@^1.2.0"
+    "he": "npm:he@^1.2.0",
+    "@playwright/test": "npm:@playwright/test@^1.52.0",
+    "@axe-core/playwright": "npm:@axe-core/playwright@^4.10.1"
   },
   "compilerOptions": {
     "lib": ["dom", "dom.asynciterable", "dom.iterable", "deno.ns"],

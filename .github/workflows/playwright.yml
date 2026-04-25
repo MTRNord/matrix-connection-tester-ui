@@ -1,0 +1,147 @@
+name: Playwright E2E Tests
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout UI
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # -----------------------------------------------------------------------
+      # Pin the backend to the latest commit on main that existed at the time
+      # this UI commit was authored — reproducible across CI restarts.
+      # -----------------------------------------------------------------------
+      - name: Determine pinned backend SHA
+        id: pin
+        run: |
+          UI_TIMESTAMP=$(git log -1 --format='%cI' HEAD)
+          BACKEND_SHA=$(curl -sf \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/MTRNord/rust-federation-tester/commits?sha=main&until=${UI_TIMESTAMP}&per_page=1" \
+            | jq -r '.[0].sha')
+          echo "sha=${BACKEND_SHA}" >> "$GITHUB_OUTPUT"
+          echo "Pinned backend to ${BACKEND_SHA}"
+
+      - name: Cache Rust artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            backend/target
+          key: rust-${{ steps.pin.outputs.sha }}-linux
+          restore-keys: rust-
+
+      - name: Checkout backend at pinned SHA
+        uses: actions/checkout@v4
+        with:
+          repository: MTRNord/rust-federation-tester
+          ref: ${{ steps.pin.outputs.sha }}
+          path: backend
+          sparse-checkout: |
+            Cargo.toml
+            Cargo.lock
+            crates/
+            migration/
+            config.yaml.example
+
+      - name: Install Rust (nightly)
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Build backend
+        working-directory: backend
+        run: cargo build --release --locked
+
+      - name: Write backend config
+        working-directory: backend
+        run: |
+          cat > config.yaml <<'EOF'
+          database:
+            url: "sqlite://./e2e-test.db?mode=rwc"
+          server:
+            host: "0.0.0.0"
+            port: 8080
+          smtp:
+            enabled: false
+          oauth2:
+            enabled: false
+          redis:
+            url: ""
+          EOF
+
+      - name: Run database migrations
+        working-directory: backend
+        run: ./target/release/migration up
+
+      - name: Start backend
+        working-directory: backend
+        run: ./target/release/rust-federation-tester &
+
+      - name: Wait for backend to be ready
+        run: |
+          for i in $(seq 1 30); do
+            if curl -sf http://localhost:8080/healthz > /dev/null 2>&1; then
+              echo "Backend is ready"
+              exit 0
+            fi
+            echo "Attempt $i/30 — waiting..."
+            sleep 2
+          done
+          echo "Backend did not start in time" >&2
+          exit 1
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Install npm dependencies
+        run: deno install --allow-scripts
+
+      - name: Write frontend config
+        run: |
+          cat > static/config.json <<'EOF'
+          {
+            "api_server_url": "http://localhost:8080",
+            "oauth2_client_id": "federation-tester-frontend",
+            "allow_http": true
+          }
+          EOF
+
+      - name: Build frontend
+        run: deno task build
+
+      - name: Install Playwright browsers
+        run: deno task playwright:install
+
+      - name: Run E2E tests
+        run: deno task test:e2e
+        env:
+          CI: "true"
+          SKIP_BACKEND_TESTS: "false"
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14
+
+      - name: Upload test results
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test-results/
+          retention-days: 14
