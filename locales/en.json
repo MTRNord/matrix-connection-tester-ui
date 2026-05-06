@@ -959,7 +959,15 @@
     "notify_emails_add_button": "Add",
     "notify_emails_remove": "Remove",
     "notify_emails_none": "None",
-    "notify_emails_update_failed": "Failed to update notification emails. Please try again."
+    "notify_emails_update_failed": "Failed to update notification emails. Please try again.",
+    "alert_settings_manage": "Settings",
+    "alert_settings_done": "Done",
+    "alert_settings_save": "Save settings",
+    "alert_settings_server_name": "Notify on server name change",
+    "alert_settings_version": "Notify on version update",
+    "alert_settings_tls_cert": "Notify on TLS certificate change",
+    "alert_settings_tls_expiry": "Notify on TLS certificate expiry (≤14 days)",
+    "alert_settings_update_failed": "Failed to update settings. Please try again."
   },
   "matrixrtc": {
     "intro": "This section shows whether the server supports MatrixRTC (MSC4143) and related features required for voice and video calls via Element Call. Missing support is informational only — it does not affect federation or general Matrix usage.",

@@ -26,6 +26,17 @@ interface AlertDto {
   last_check_at?: string | null;
   is_currently_failing: boolean;
   notify_emails: string[];
+  notify_server_name_change: boolean;
+  notify_version_change: boolean;
+  notify_tls_cert_change: boolean;
+  notify_tls_expiry: boolean;
+}
+
+interface AlertSettings {
+  notify_server_name_change: boolean;
+  notify_version_change: boolean;
+  notify_tls_cert_change: boolean;
+  notify_tls_expiry: boolean;
 }
 
 type AppState =
@@ -59,6 +70,11 @@ export default function AlertsApp(
   const userEmails = useSignal<string[]>([]);
   const managingAlertId = useSignal<number | null>(null);
   const notifyEmailError = useSignal<string | null>(null);
+
+  // Per-alert notification settings state
+  const managingSettingsAlertId = useSignal<number | null>(null);
+  const settingsError = useSignal<string | null>(null);
+  const pendingSettings = useSignal<AlertSettings | null>(null);
 
   async function redirectToLogin() {
     state.value = { type: "redirecting" };
@@ -278,6 +294,33 @@ export default function AlertsApp(
         alerts: state.value.alerts.map((a) => a.id === alertId ? updated : a),
       };
     }
+  }
+
+  async function updateAlertSettings(alertId: number) {
+    if (!pendingSettings.value) return;
+    settingsError.value = null;
+    const token = getAccessToken()!;
+    const response = await fetch(`${apiUrl}/api/v2/alerts/${alertId}/settings`, {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(pendingSettings.value),
+    });
+    if (!response.ok) {
+      settingsError.value = i18n.tString("auth.alert_settings_update_failed");
+      return;
+    }
+    const updated: AlertDto = await response.json();
+    if (state.value.type === "authenticated") {
+      state.value = {
+        type: "authenticated",
+        alerts: state.value.alerts.map((a) => a.id === alertId ? updated : a),
+      };
+    }
+    managingSettingsAlertId.value = null;
+    pendingSettings.value = null;
   }
 
   async function handleSignOut() {
@@ -504,6 +547,9 @@ export default function AlertsApp(
                       (e) => !alert.notify_emails.includes(e),
                     );
 
+                    const isManagingSettings =
+                      managingSettingsAlertId.value === alert.id;
+
                     return (
                       <tr class="govuk-table__row" key={alert.id}>
                         <td class="govuk-table__cell">
@@ -608,6 +654,163 @@ export default function AlertsApp(
                                 ? i18n.tString("auth.notify_emails_done")
                                 : i18n.tString("auth.notify_emails_manage")}
                             </button>
+
+                            {/* Settings toggle */}
+                            <button
+                              type="button"
+                              class="notify-link-btn"
+                              onClick={() => {
+                                if (isManagingSettings) {
+                                  managingSettingsAlertId.value = null;
+                                  pendingSettings.value = null;
+                                  settingsError.value = null;
+                                } else {
+                                  managingSettingsAlertId.value = alert.id;
+                                  pendingSettings.value = {
+                                    notify_server_name_change:
+                                      alert.notify_server_name_change,
+                                    notify_version_change:
+                                      alert.notify_version_change,
+                                    notify_tls_cert_change:
+                                      alert.notify_tls_cert_change,
+                                    notify_tls_expiry: alert.notify_tls_expiry,
+                                  };
+                                }
+                              }}
+                            >
+                              {isManagingSettings
+                                ? i18n.tString("auth.alert_settings_done")
+                                : i18n.tString("auth.alert_settings_manage")}
+                            </button>
+
+                            {/* Settings panel */}
+                            {isManagingSettings && pendingSettings.value && (
+                              <div style="margin-top:8px">
+                                {settingsError.value && (
+                                  <p class="govuk-error-message">
+                                    {settingsError.value}
+                                  </p>
+                                )}
+                                <div class="govuk-checkboxes govuk-checkboxes--small">
+                                  <div class="govuk-checkboxes__item">
+                                    <input
+                                      class="govuk-checkboxes__input"
+                                      id={`setting-server-name-${alert.id}`}
+                                      type="checkbox"
+                                      checked={pendingSettings.value
+                                        .notify_server_name_change}
+                                      onChange={(e) => {
+                                        if (pendingSettings.value) {
+                                          pendingSettings.value = {
+                                            ...pendingSettings.value,
+                                            notify_server_name_change:
+                                              (e.target as HTMLInputElement)
+                                                .checked,
+                                          };
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      class="govuk-label govuk-checkboxes__label"
+                                      for={`setting-server-name-${alert.id}`}
+                                    >
+                                      {i18n.tString(
+                                        "auth.alert_settings_server_name",
+                                      )}
+                                    </label>
+                                  </div>
+                                  <div class="govuk-checkboxes__item">
+                                    <input
+                                      class="govuk-checkboxes__input"
+                                      id={`setting-version-${alert.id}`}
+                                      type="checkbox"
+                                      checked={pendingSettings.value
+                                        .notify_version_change}
+                                      onChange={(e) => {
+                                        if (pendingSettings.value) {
+                                          pendingSettings.value = {
+                                            ...pendingSettings.value,
+                                            notify_version_change:
+                                              (e.target as HTMLInputElement)
+                                                .checked,
+                                          };
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      class="govuk-label govuk-checkboxes__label"
+                                      for={`setting-version-${alert.id}`}
+                                    >
+                                      {i18n.tString(
+                                        "auth.alert_settings_version",
+                                      )}
+                                    </label>
+                                  </div>
+                                  <div class="govuk-checkboxes__item">
+                                    <input
+                                      class="govuk-checkboxes__input"
+                                      id={`setting-tls-cert-${alert.id}`}
+                                      type="checkbox"
+                                      checked={pendingSettings.value
+                                        .notify_tls_cert_change}
+                                      onChange={(e) => {
+                                        if (pendingSettings.value) {
+                                          pendingSettings.value = {
+                                            ...pendingSettings.value,
+                                            notify_tls_cert_change:
+                                              (e.target as HTMLInputElement)
+                                                .checked,
+                                          };
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      class="govuk-label govuk-checkboxes__label"
+                                      for={`setting-tls-cert-${alert.id}`}
+                                    >
+                                      {i18n.tString(
+                                        "auth.alert_settings_tls_cert",
+                                      )}
+                                    </label>
+                                  </div>
+                                  <div class="govuk-checkboxes__item">
+                                    <input
+                                      class="govuk-checkboxes__input"
+                                      id={`setting-tls-expiry-${alert.id}`}
+                                      type="checkbox"
+                                      checked={pendingSettings.value
+                                        .notify_tls_expiry}
+                                      onChange={(e) => {
+                                        if (pendingSettings.value) {
+                                          pendingSettings.value = {
+                                            ...pendingSettings.value,
+                                            notify_tls_expiry:
+                                              (e.target as HTMLInputElement)
+                                                .checked,
+                                          };
+                                        }
+                                      }}
+                                    />
+                                    <label
+                                      class="govuk-label govuk-checkboxes__label"
+                                      for={`setting-tls-expiry-${alert.id}`}
+                                    >
+                                      {i18n.tString(
+                                        "auth.alert_settings_tls_expiry",
+                                      )}
+                                    </label>
+                                  </div>
+                                </div>
+                                <button
+                                  type="button"
+                                  class="govuk-button govuk-button--secondary"
+                                  style="margin-top:8px; margin-bottom:0; padding:4px 8px; font-size:0.875rem; min-height:unset"
+                                  onClick={() => updateAlertSettings(alert.id)}
+                                >
+                                  {i18n.tString("auth.alert_settings_save")}
+                                </button>
+                              </div>
+                            )}
                           </div>
                         </td>
                         <td class="govuk-table__cell">

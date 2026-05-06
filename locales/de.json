@@ -653,7 +653,15 @@
     "notify_emails_add_button": "Hinzufügen",
     "notify_emails_remove": "Entfernen",
     "notify_emails_none": "Keine",
-    "notify_emails_update_failed": "Benachrichtigungs-E-Mails konnten nicht aktualisiert werden. Bitte versuche es erneut."
+    "notify_emails_update_failed": "Benachrichtigungs-E-Mails konnten nicht aktualisiert werden. Bitte versuche es erneut.",
+    "alert_settings_manage": "Einstellungen",
+    "alert_settings_done": "Fertig",
+    "alert_settings_save": "Einstellungen speichern",
+    "alert_settings_server_name": "Benachrichtigung bei Servernamen-Änderung",
+    "alert_settings_version": "Benachrichtigung bei Versions-Update",
+    "alert_settings_tls_cert": "Benachrichtigung bei TLS-Zertifikat-Änderung",
+    "alert_settings_tls_expiry": "Benachrichtigung bei TLS-Zertifikat-Ablauf (≤14 Tage)",
+    "alert_settings_update_failed": "Einstellungen konnten nicht gespeichert werden. Bitte versuche es erneut."
   },
   "matrixrtc": {
     "intro": "Dieser Abschnitt zeigt, ob der Server MatrixRTC (MSC4143) und verwandte Funktionen für Sprach- und Videoanrufe via Element Call unterstützt. Fehlende Unterstützung ist nur informativ — sie hat keinen Einfluss auf die Föderation oder allgemeine Matrix-Nutzung.",
