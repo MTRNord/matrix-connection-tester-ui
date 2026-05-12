@@ -1,0 +1,39 @@
+.wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1;
+}
+.wordmark .mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.18em;
+}
+.wordmark .mark span {
+  width: 0.18em;
+  background: var(--ink);
+  border-radius: 1px;
+  transform: skewX(-12deg);
+}
+.wordmark .mark span:nth-child(1) {
+  height: 0.45em;
+  opacity: 0.4;
+}
+.wordmark .mark span:nth-child(2) {
+  height: 0.65em;
+  opacity: 0.7;
+}
+.wordmark .mark span:nth-child(3) {
+  height: 0.85em;
+}
+.wordmark .name {
+  white-space: nowrap;
+}
+.wordmark .name em {
+  font-style: normal;
+  font-weight: 700;
+}

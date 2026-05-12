@@ -1,0 +1,27 @@
+.footer {
+  background: var(--ink);
+  color: var(--surface);
+}
+.footer__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+.footer__row {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.footer__row a {
+  color: var(--surface);
+  font-size: 14px;
+  opacity: 0.85;
+}
+.footer__meta {
+  font-size: 13px;
+  color: var(--ink-4);
+  margin-top: 24px;
+  line-height: 1.6;
+  max-width: 70ch;
+  opacity: 0.85;
+}

@@ -1,0 +1,269 @@
+@layer reset, tokens, base, a11y, utilities;
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+  button {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer tokens {
+  :root {
+    --ink: #1b1714;
+    --ink-2: #2f2a25;
+    --ink-3: #4d4844;
+    --ink-4: #6c6660;
+
+    --surface: #f7f2e8;
+    --surface-2: #efe9db;
+    --surface-3: #e5dfce;
+    --line: #c9c2ae;
+    --line-2: #a89f88;
+
+    --stone: #e8e2d2;
+    --stone-2: #d2cab4;
+
+    --ok: #0f7a4e;
+    --ok-tint: #d6e8da;
+    --ok-deep: #094e32;
+
+    --warn: #8e5e0b;
+    --warn-tint: #f4e6c7;
+    --warn-deep: #5c3d07;
+
+    --bad: #a8392c;
+    --bad-tint: #f2d6cc;
+    --bad-deep: #57190c;
+
+    --info: #1f5a93;
+    --info-tint: #dce8f2;
+    --info-deep: #133a60;
+
+    --r-1: 3px;
+    --r-2: 5px;
+    --r-3: 8px;
+
+    --sans: 'Inter', system-ui, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    --container: 1180px;
+  }
+}
+
+@layer base {
+  body {
+    font-family: var(--sans);
+    background: var(--surface);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.5;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--sans);
+    color: var(--ink);
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1 {
+    font: 800 52px/1.02 var(--sans);
+    letter-spacing: -0.035em;
+    margin: 0 0 24px;
+  }
+  h2 {
+    font: 700 30px/1.15 var(--sans);
+    letter-spacing: -0.025em;
+    margin: 56px 0 16px;
+  }
+  h3 {
+    font: 600 20px/1.3 var(--sans);
+    letter-spacing: -0.01em;
+    margin: 32px 0 12px;
+  }
+  h4 {
+    font: 600 17px/1.35 var(--sans);
+    margin: 24px 0 10px;
+  }
+  p {
+    margin: 0 0 16px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--ink-2);
+    text-wrap: pretty;
+  }
+  a {
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1.5px;
+    transition:
+      color 0.12s ease,
+      text-decoration-thickness 0.12s ease;
+  }
+  a:hover {
+    text-decoration-thickness: 2px;
+  }
+  a:visited {
+    color: var(--ink);
+  }
+  hr {
+    border: 0;
+    height: 1px;
+    background: var(--line);
+    margin: 32px 0;
+  }
+  ::selection {
+    background: var(--ink);
+    color: var(--surface);
+  }
+  code,
+  kbd,
+  samp {
+    font-family: var(--mono);
+    font-size: 0.92em;
+  }
+  code {
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: var(--r-1);
+    color: var(--ink);
+  }
+}
+
+@layer a11y {
+  .sr-only {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .page {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 56px 32px 80px;
+  }
+
+  .eyebrow {
+    font: 600 12px/1 var(--sans);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    margin-bottom: 16px;
+  }
+  .lead {
+    font-size: 19px;
+    line-height: 1.65;
+    color: var(--ink-2);
+    max-width: 62ch;
+    margin: 0 0 20px;
+    text-wrap: pretty;
+  }
+
+  .breadcrumb {
+    font-size: 13px;
+    color: var(--ink-3);
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .breadcrumb a {
+    color: var(--ink-3);
+    text-decoration: none;
+  }
+  .breadcrumb a:hover {
+    color: var(--ink);
+    text-decoration: underline;
+  }
+  .breadcrumb__sep {
+    margin: 0 8px;
+    opacity: 0.5;
+  }
+
+  .betabar {
+    background: var(--stone);
+    padding: 12px 28px;
+    font-size: 14px;
+    color: var(--ink-2);
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    max-width: var(--container);
+    margin: 0 auto;
+    border-radius: 0 0 var(--r-3) var(--r-3);
+  }
+
+  .mono {
+    font-family: var(--mono);
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .hidden {
+    display: none;
+  }
+
+  /* Brand-guide swatch (used only in BrandGuide) */
+  .swatch {
+    border-radius: var(--r-3);
+    padding: 16px;
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .swatch__name {
+    font-weight: 600;
+    font-size: 13px;
+    font-family: var(--sans);
+  }
+  .swatch__hex {
+    opacity: 0.85;
+  }
+}

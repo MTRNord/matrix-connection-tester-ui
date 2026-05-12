@@ -1,0 +1,90 @@
+.chrome {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+.chrome__inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 22px 32px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.chrome__nav {
+  display: flex;
+  gap: 28px;
+  margin-left: auto;
+}
+.chrome__nav a {
+  color: var(--ink-2);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
+}
+.chrome__nav a:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink-4);
+}
+.chrome__nav a.active {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.chrome__lang {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--ink-2);
+  border: 0;
+  border: var(--r-2);
+  font: 500 14px/1 var(--sans);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.chrome__lang:hover {
+  background: var(--surface-2);
+  border-color: var(--ink);
+}
+
+.chrome__lang .caret {
+  font-size: 10px;
+  color: var(--ink-3);
+}
+
+.chrome__lang-popover {
+  position: fixed;
+  z-index: 1000;
+}
+
+.chrome__lang-arrow {
+  position: absolute;
+  top: -6px;
+  right: 18px;
+  width: 12px;
+  height: 12px;
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.betabar {
+  background: var(--stone);
+  padding: 14px 32px;
+  font-size: 14px;
+  color: var(--ink-2);
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  max-width: 1180px;
+  margin: 0 auto;
+  border-radius: 0 0 var(--r-3) var(--r-3);
+}

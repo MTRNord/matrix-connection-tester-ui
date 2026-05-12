@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "alerts": "Warnungen",
+    "docs": "Dokumentation",
+    "statistics": "Statistiken",
+    "account": "Konto",
+    "betabar": "Dieser Dienst befindet sich in der Beta – bitte melde Probleme im <forumLink>Forum</forumLink>."
+  },
+  "lang": {
+    "choose": "Sprache wählen",
+    "helpTranslate": "Beim Übersetzen helfen"
+  },
+  "home": {
+    "eyebrow": "Willkommen – fang hier an",
+    "headline": "Ist dein Matrix-Server erreichbar?",
+    "lead": "Gib unten die Domain deines Homeservers ein. Wir führen einige Tests von außerhalb deines Netzwerks durch und zeigen dir, was Aufmerksamkeit benötigt.",
+    "form": {
+      "domainLabel": "Was ist die Domain deines Homeservers?",
+      "domainHint": "Der Teil nach dem Doppelpunkt in deiner Matrix-Adresse. Wenn du <code>@alice:example.com</code> bist, ist deine Domain <code>example.com</code>.",
+      "statsLabel": "Dieses Ergebnis zur öffentlichen Statistikseite beitragen. Wir hashen deine Domain vor der Speicherung – nie den rohen Namen.",
+      "submit": "Tests starten →",
+      "timing": "Es kann ein paar Sekunden dauern."
+    },
+    "checks": {
+      "title": "Was geprüft wird",
+      "step1Title": "Können andere Server deinen Server erreichen?",
+      "step1Detail": "Federation-Handshake auf Port 8448 oder dem delegierten Äquivalent.",
+      "step2Title": "Können Clients sich einloggen?",
+      "step2Detail": "Client-Server-API-Erkennung und Versionsabfrage.",
+      "step3Title": "Werden Sprach- und Videoanrufe unterstützt?",
+      "step3Detail": "MatrixRTC-Bereitschaft – MSC4143.",
+      "step4Title": "Veröffentlichst du Support-Kontakte?",
+      "step4Detail": "MSC1929 – Missbrauchs- und Sicherheitskontakte."
+    },
+    "help": {
+      "title": "Brauchst du Hilfe?",
+      "body": "Die Dokumentation erklärt die Einrichtung eines Homeservers Schritt für Schritt – kein Fachjargon nötig.",
+      "link": "Dokumentation lesen →"
+    }
+  },
+  "footer": {
+    "meta": "Ein freies, Open-Source-Diagnosetool für Matrix-Homeserver-Betreiber. Selbst-hostbar unter AGPL-3.0.",
+    "project": "Projekt",
+    "uiSource": "UI-Quellcode",
+    "apiSource": "API-Quellcode",
+    "documentation": "Dokumentation",
+    "matrix": "Matrix",
+    "specification": "Spezifikation",
+    "sponsoring": "Unterstützen"
+  },
+  "sponsor": {
+    "text": "Dieser Dienst ist kostenlos nutzbar. Wenn er dir Kopfschmerzen erspart hat, erwäge die Entwicklung zu unterstützen.",
+    "ariaLabel": "Projekt unterstützen"
+  }
+}

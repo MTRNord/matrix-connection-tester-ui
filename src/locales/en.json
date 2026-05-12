@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "home": "Home",
+    "alerts": "Alerts",
+    "docs": "Documentation",
+    "statistics": "Statistics",
+    "account": "Account",
+    "betabar": "This service is in beta — please report issues on <forumLink>the Forum</forumLink>."
+  },
+  "lang": {
+    "choose": "Choose language",
+    "helpTranslate": "Help translate the project"
+  },
+  "home": {
+    "eyebrow": "Welcome — start here",
+    "headline": "Let's see if your Matrix server is reachable.",
+    "lead": "Type your homeserver's domain below. We run a few checks from outside your network and walk you through anything that needs attention.",
+    "form": {
+      "domainLabel": "What's your homeserver's domain?",
+      "domainHint": "The bit after the colon in your Matrix handle. If you're <code>@alice:example.com</code>, your domain is <code>example.com</code>.",
+      "statsLabel": "Contribute this result to the public statistics page. We hash your domain before storing — never the raw name.",
+      "submit": "Run tests →",
+      "timing": "Takes a few seconds."
+    },
+    "checks": {
+      "title": "What this checks",
+      "step1Title": "Can other servers reach yours?",
+      "step1Detail": "Federation handshake on port 8448 or its delegated equivalent.",
+      "step2Title": "Can clients log in?",
+      "step2Detail": "Client-server API discovery and version probe.",
+      "step3Title": "Are voice & video calls supported?",
+      "step3Detail": "MatrixRTC readiness — MSC4143.",
+      "step4Title": "Do you publish support contacts?",
+      "step4Detail": "MSC1929 — abuse and security reachability."
+    },
+    "help": {
+      "title": "Need a hand?",
+      "body": "The docs walk through running a homeserver gently — no jargon required up front.",
+      "link": "Read the documentation →"
+    }
+  },
+  "footer": {
+    "meta": "A free, open-source diagnostic tool for Matrix homeserver operators. Self-hostable under AGPL-3.0.",
+    "project": "Project",
+    "uiSource": "UI source code",
+    "apiSource": "API source code",
+    "documentation": "Documentation",
+    "matrix": "Matrix",
+    "specification": "Specification",
+    "sponsoring": "Sponsoring"
+  },
+  "sponsor": {
+    "text": "This service is free to use. If it's saved you a headache, consider supporting development.",
+    "ariaLabel": "Support the project"
+  }
+}

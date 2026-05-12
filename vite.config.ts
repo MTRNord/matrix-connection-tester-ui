@@ -1,17 +1,17 @@
-import { defineConfig } from "vite";
-import { fresh } from "@fresh/plugin-vite";
-export default defineConfig({
+import { defineConfig } from 'vite'
+import { devtools } from '@tanstack/devtools-vite'
+
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
+
+import viteReact from '@vitejs/plugin-react'
+
+const config = defineConfig({
+  resolve: { tsconfigPaths: true },
   plugins: [
-    fresh(),
+    devtools(),
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    viteReact(),
   ],
-  css: {
-    preprocessorOptions: {
-      scss: {
-        quietDeps: true,
-      },
-      sass: {
-        quietDeps: true,
-      },
-    },
-  },
-});
+})
+
+export default config

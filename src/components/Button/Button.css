@@ -1,0 +1,61 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  white-space: nowrap;
+  font: 500 16px/1 var(--sans);
+  padding: 16px 24px;
+  border: 1.5px solid var(--ink);
+  border-radius: var(--r-2);
+  background: var(--ink);
+  color: var(--surface);
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease,
+    transform 0.04s ease;
+}
+.btn:hover {
+  background: #000;
+  border-color: #000;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn:visited {
+  color: var(--surface);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn.ghost:hover {
+  background: var(--surface-2);
+  border-color: var(--ink);
+  color: var(--ink);
+}
+.btn.ghost:visited {
+  color: var(--ink);
+}
+
+.btn.danger {
+  background: var(--bad-deep);
+  border-color: var(--bad-deep);
+  color: #fff;
+}
+.btn.danger:hover {
+  background: #3d0f08;
+  border-color: #3d0f08;
+}
+
+.btn.small {
+  padding: 10px 14px;
+  font-size: 14px;
+}
+.btn.block {
+  width: 100%;
+}

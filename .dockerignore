@@ -1,3 +1,6 @@
 node_modules
-_fresh
-deno.lock
+dist
+.git
+.github
+tests
+*.md

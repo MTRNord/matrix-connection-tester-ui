@@ -1,0 +1,141 @@
+import './Navbar.css'
+import '../Pill/Pill.css'
+import Wordmark from '../Wordmark/Wordmark'
+import { Link } from '@tanstack/react-router'
+import { createPortal } from 'react-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Trans, useTranslation } from 'react-i18next'
+import LanguageMenu from '../LanguageMenu/LanguageMenu'
+import { LANGS } from '../../locales/languages'
+
+const NAV_LINKS = (authed: boolean) =>
+  [
+    { key: 'nav.home', to: '/' },
+    { key: 'nav.alerts', to: '/alerts' },
+    { key: 'nav.docs', to: '/docs' },
+    { key: 'nav.statistics', to: '/statistics' },
+    ...(authed ? [{ key: 'nav.account', to: '/account' }] : []),
+  ] as const
+
+export default function Navbar({
+  authed = false,
+  defaultLangOpen = false,
+}: {
+  authed?: boolean
+  defaultLangOpen?: boolean
+}) {
+  const { t, i18n } = useTranslation()
+  const [open, setOpen] = useState(defaultLangOpen)
+  const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const popoverRef = useRef<HTMLDivElement>(null)
+
+  const langCode = i18n.language.split('-')[0]
+  const currentLang = LANGS.find((l) => l.code === langCode) ?? LANGS[0]
+
+  const handleToggle = () => {
+    if (!open && btnRef.current) {
+      setAnchorRect(btnRef.current.getBoundingClientRect())
+    }
+    setOpen((v) => !v)
+  }
+
+  const handlePick = (code: string) => {
+    i18n.changeLanguage(code)
+  }
+
+  useEffect(() => {
+    if (!open) return
+    const onDown = (e: PointerEvent) => {
+      if (!(e.target instanceof Node)) return
+      if (
+        btnRef.current?.contains(e.target) ||
+        popoverRef.current?.contains(e.target)
+      )
+        return
+      setOpen(false)
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setOpen(false)
+        btnRef.current?.focus()
+      }
+    }
+    document.addEventListener('pointerdown', onDown, true)
+    document.addEventListener('keydown', onKey)
+    return () => {
+      document.removeEventListener('pointerdown', onDown, true)
+      document.removeEventListener('keydown', onKey)
+    }
+  }, [open])
+
+  return (
+    <>
+      <header className="chrome">
+        <div className="chrome__inner">
+          <Wordmark size={20} />
+          <nav className="chrome__nav" aria-label="Primary navigation">
+            {NAV_LINKS(authed).map((item) => (
+              <Link
+                key={item.key}
+                to={item.to}
+                activeProps={{ className: 'active' }}
+              >
+                {t(item.key)}
+              </Link>
+            ))}
+          </nav>
+          <button
+            ref={btnRef}
+            type="button"
+            className="chrome__lang"
+            aria-haspopup="menu"
+            aria-expanded={open}
+            onClick={handleToggle}
+          >
+            <span>{currentLang.native}</span>
+            <span className="caret" aria-hidden="true">
+              ▾
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {open &&
+        anchorRect &&
+        createPortal(
+          <div
+            ref={popoverRef}
+            className="chrome__lang-popover"
+            style={{
+              top: anchorRect.bottom + 10,
+              right: window.innerWidth - anchorRect.right,
+            }}
+          >
+            <div className="chrome__lang-arrow" aria-hidden="true" />
+            <LanguageMenu
+              currentLang={langCode}
+              onPick={handlePick}
+              onClose={() => setOpen(false)}
+            />
+          </div>,
+          document.body,
+        )}
+
+      <div className="container" style={{ padding: 0 }}>
+        <div className="betabar">
+          <span className="pill pill--beta">BETA</span>
+          <Trans
+            i18nKey="nav.betabar"
+            parent="span"
+            components={{
+              forumLink: (
+                <a href="https://forum.mtrnord.blog/c/matrix-connectivity-tester/support/6" />
+              ),
+            }}
+          />
+        </div>
+      </div>
+    </>
+  )
+}

@@ -1,0 +1,26 @@
+/* Card — white surface sitting on the cream page.
+   Use `.card.tinted` for soft contrast, `.card.stone` / `.card.ink`
+   for explicit panels. */
+.card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: 28px;
+}
+.card.tinted {
+  background: var(--surface-2);
+  border-color: var(--line);
+}
+.card.stone {
+  background: var(--stone);
+  border-color: var(--stone-2);
+}
+.card.ink {
+  background: var(--ink);
+  color: var(--surface);
+  border-color: var(--ink);
+}
+.card.flush {
+  padding: 0;
+  overflow: hidden;
+}

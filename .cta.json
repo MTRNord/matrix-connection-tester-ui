@@ -1,0 +1,16 @@
+{
+  "projectName": "matrix-connectivity-tester-ui",
+  "mode": "file-router",
+  "typescript": true,
+  "packageManager": "bun",
+  "includeExamples": false,
+  "tailwind": true,
+  "addOnOptions": {},
+  "envVarValues": {},
+  "git": true,
+  "install": true,
+  "routerOnly": true,
+  "version": 1,
+  "framework": "react",
+  "chosenAddOns": ["eslint"]
+}

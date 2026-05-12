@@ -1,0 +1,73 @@
+.banner {
+  display: flex;
+  gap: 20px;
+  padding: 22px 26px;
+  border-radius: var(--r-3);
+  border-left: 5px solid;
+  background: var(--surface-2);
+}
+.banner__icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+}
+.banner__title {
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.2;
+  margin: 0 0 6px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.banner__body {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
+}
+.banner.ok {
+  background: var(--ok-tint);
+  border-color: var(--ok-deep);
+}
+.banner.ok .banner__title {
+  color: var(--ok-deep);
+}
+.banner.ok .banner__icon {
+  background: var(--ok-deep);
+}
+.banner.warn {
+  background: var(--warn-tint);
+  border-color: var(--warn-deep);
+}
+.banner.warn .banner__title {
+  color: var(--warn-deep);
+}
+.banner.warn .banner__icon {
+  background: var(--warn-deep);
+}
+.banner.bad {
+  background: var(--bad-tint);
+  border-color: var(--bad-deep);
+}
+.banner.bad .banner__title {
+  color: var(--bad-deep);
+}
+.banner.bad .banner__icon {
+  background: var(--bad-deep);
+}
+.banner.info {
+  background: var(--info-tint);
+  border-color: var(--info-deep);
+}
+.banner.info .banner__title {
+  color: var(--info-deep);
+}
+.banner.info .banner__icon {
+  background: var(--info-deep);
+}
