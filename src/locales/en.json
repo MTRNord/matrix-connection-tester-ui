@@ -5,6 +5,8 @@
     "docs": "Documentation",
     "statistics": "Statistics",
     "account": "Account",
+    "signOut": "Sign out",
+    "skipToContent": "Skip to main content",
     "betabar": "This service is in beta — please report issues on <forumLink>the Forum</forumLink>."
   },
   "lang": {
@@ -48,6 +50,136 @@
     "matrix": "Matrix",
     "specification": "Specification",
     "sponsoring": "Sponsoring"
+  },
+  "alerts": {
+    "loggedOut": {
+      "eyebrow": "Downtime alerts",
+      "headline": "Know the moment your server goes down.",
+      "lead": "Add any number of Matrix homeservers to watch. We check federation every five minutes and email you when something breaks. You get a reminder every 12 hours while it stays down, and a confirmation when it recovers.",
+      "features": {
+        "failure": {
+          "title": "Instant failure notification",
+          "body": "One email when federation breaks, then a reminder every 12 hours while it stays down."
+        },
+        "recovery": {
+          "title": "Recovery confirmation",
+          "body": "A follow-up when the server comes back so you know it's resolved."
+        },
+        "recipients": {
+          "title": "Multiple recipients",
+          "body": "Notify any set of verified addresses — ops team, on-call, or just yourself."
+        }
+      },
+      "cta": "Sign in to manage alerts →",
+      "ctaNote": "Your account is used only to deliver alert emails — no Matrix login required."
+    },
+    "authed": {
+      "breadcrumbHome": "Home",
+      "headline": "Server alerts",
+      "lead": "Get a quiet email the moment a homeserver becomes unreachable — and another when it recovers. Watch as many servers as you like; notify any combination of addresses for each. Email-only for now; Matrix-room delivery is on the roadmap.",
+      "form": {
+        "title": "Add a new alert",
+        "description": "We probe the server every five minutes. The first failure triggers a notification; we won't spam you while it stays down.",
+        "domainLabel": "Server domain",
+        "domainHint": "For example, <code>example.com</code>.",
+        "notifyLegend": "Notify these addresses",
+        "notifyHint": "Pick one or more. Add additional addresses from your account settings.",
+        "submit": "Add alert"
+      },
+      "addresses": {
+        "eyebrow": "Notification addresses",
+        "addLink": "Add another address →"
+      },
+      "pills": {
+        "primary": "Primary",
+        "pending": "Pending",
+        "verified": "Verified",
+        "healthy": "Healthy",
+        "degraded": "Degraded",
+        "failing": "Failing"
+      },
+      "table": {
+        "colServer": "Server",
+        "colStatus": "Status",
+        "colLastCheck": "Last check",
+        "colNotifies": "Notifies",
+        "colActions": "Actions",
+        "added": "Added {{date}}",
+        "edit": "Edit",
+        "delete": "Delete",
+        "footerNote": "One address can be on any number of alerts. Removing an alert never deletes the address itself."
+      }
+    },
+    "edit": {
+      "breadcrumb": "Edit",
+      "headline": "Edit alert for",
+      "lead": "Pick which changes you want to hear about, who should hear about them, and how often. Saving overwrites the existing alert.",
+      "watchTitle": "What to watch for",
+      "watchDescription": "You can mix and match. We send one email per event, never one per check.",
+      "pillOn": "On",
+      "pillOff": "Off",
+      "types": {
+        "uptime": {
+          "title": "Connectivity / downtime",
+          "detail": "Notify when federation or the client-server API stops responding. Probed every 5 minutes.",
+          "hint": "The original alert. Most people want this."
+        },
+        "rename": {
+          "title": "Server name change",
+          "detail": "Notify if the homeserver implementation reported via /_matrix/federation/v1/version changes — e.g. a Synapse server suddenly identifies as Dendrite.",
+          "hint": "Useful for spotting account takeovers or accidental rollouts."
+        },
+        "version": {
+          "title": "Version update",
+          "detail": "Notify when the version string reported by /_matrix/federation/v1/version changes — typically an upgrade.",
+          "hint": "Quiet by default — most useful for operators tracking peer servers."
+        },
+        "tlsChange": {
+          "title": "TLS certificate change",
+          "detail": "Notify if the TLS certificate fingerprint changes for any federation or client endpoint.",
+          "hint": "Flags re-issued or rotated certificates. Some renewals are expected; this is a heads-up, not a problem."
+        },
+        "tlsExpiry": {
+          "title": "TLS certificate expiry (≤ 14 days)",
+          "detail": "Notify when any certificate in the chain has 14 days or fewer remaining. Repeats daily once tripped.",
+          "hint": "A safety net even if your renewal cron usually handles it."
+        }
+      },
+      "notifyTitle": "Notify these addresses",
+      "notifyHint": "Tap to toggle. Manage the address list itself from your account settings.",
+      "save": "Save changes",
+      "cancel": "Cancel",
+      "delete": "Delete alert",
+      "status": {
+        "eyebrow": "Current status",
+        "diagnosticLink": "Run a diagnostic now →"
+      },
+      "quietHours": {
+        "eyebrow": "Quiet hours",
+        "description": "Defer notifications outside working hours. Critical downtime always sends.",
+        "checkboxLabel": "Don't email between {{from}}–{{to}} {{timezone}}"
+      },
+      "recentEvents": {
+        "eyebrow": "Recent events"
+      }
+    },
+    "login": {
+      "eyebrow": "Sign in to manage alerts",
+      "headline": "Welcome back.",
+      "lead": "An account is only used for downtime alerts.",
+      "tablistLabel": "Sign-in method",
+      "tabPassword": "Email + password",
+      "tabMagic": "Magic link",
+      "emailLabel": "Email address",
+      "passwordLabel": "Password",
+      "submitPassword": "Sign in →",
+      "createAccount": "Create an account",
+      "forgotPassword": "Forgot password",
+      "magicDescription": "We'll email a one-time link that signs you in without a password. Valid for 1 hour.",
+      "submitMagic": "Send magic link →",
+      "createAccountMagic": "Don't have an account? Create one",
+      "disclaimer": "The Connectivity Tester does not log in with Matrix; this account exists only to deliver alert emails for the homeservers you watch."
+    }
   },
   "sponsor": {
     "text": "This service is free to use. If it's saved you a headache, consider supporting development.",

@@ -5,24 +5,29 @@
   font: 500 13px/1 var(--sans);
   padding: 6px 12px 5px;
   border-radius: 999px;
+  white-space: nowrap;
 }
-.pill--ok {
+.pill.ok {
   background: var(--ok-tint);
   color: var(--ok-deep);
 }
-.pill--warn {
+.pill.warn {
   background: var(--warn-tint);
   color: var(--warn-deep);
 }
-.pill--bad {
+.pill.bad {
   background: var(--bad-tint);
   color: var(--bad-deep);
 }
-.pill--ink {
+.pill.ink {
   background: var(--surface-3);
   color: var(--ink-2);
 }
-.pill--beta {
+.pill.info {
+  background: var(--info-tint);
+  color: var(--info-deep);
+}
+.pill.beta {
   background: var(--ink);
   color: var(--surface);
   padding: 6px 14px 5px;

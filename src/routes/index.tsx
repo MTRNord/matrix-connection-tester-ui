@@ -17,7 +17,7 @@ function Home() {
   return (
     <div>
       <Navbar />
-      <main className="page">
+      <main id="main" className="page">
         <div
           style={{
             display: 'grid',

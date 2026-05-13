@@ -1,10 +1,12 @@
 {
   "nav": {
     "home": "Startseite",
-    "alerts": "Warnungen",
+    "alerts": "Benachrichtigungen",
     "docs": "Dokumentation",
     "statistics": "Statistiken",
     "account": "Konto",
+    "signOut": "Abmelden",
+    "skipToContent": "Zum Hauptinhalt springen",
     "betabar": "Dieser Dienst befindet sich in der Beta – bitte melde Probleme im <forumLink>Forum</forumLink>."
   },
   "lang": {
@@ -48,6 +50,136 @@
     "matrix": "Matrix",
     "specification": "Spezifikation",
     "sponsoring": "Unterstützen"
+  },
+  "alerts": {
+    "loggedOut": {
+      "eyebrow": "Ausfallbenachrichtigungen",
+      "headline": "Werde sofort informiert, wenn dein Server ausfällt.",
+      "lead": "Überwache beliebig viele Matrix-Homeserver. Wir prüfen die Federation alle fünf Minuten und schreiben dir, wenn etwas schiefläuft. Alle 12 Stunden erhältst du eine Erinnerung, solange der Server nicht erreichbar ist, und eine Bestätigung, sobald er sich erholt.",
+      "features": {
+        "failure": {
+          "title": "Sofortige Ausfallmeldung",
+          "body": "Eine E-Mail beim ersten Ausfall, danach alle 12 Stunden eine Erinnerung, solange der Server down bleibt."
+        },
+        "recovery": {
+          "title": "Wiederherstellungsbestätigung",
+          "body": "Eine Nachricht, wenn der Server wieder läuft – damit du weißt, dass das Problem behoben ist."
+        },
+        "recipients": {
+          "title": "Mehrere Empfänger",
+          "body": "Benachrichtige beliebig viele verifizierte Adressen – Ops-Team, On-Call oder nur dich selbst."
+        }
+      },
+      "cta": "Anmelden und Benachrichtigungen verwalten →",
+      "ctaNote": "Dein Konto dient ausschließlich zur Zustellung von Benachrichtigungs-E-Mails – keine Matrix-Anmeldung erforderlich."
+    },
+    "authed": {
+      "breadcrumbHome": "Startseite",
+      "headline": "Server-Benachrichtigungen",
+      "lead": "Erhalte eine ruhige E-Mail, sobald ein Homeserver nicht mehr erreichbar ist – und eine weitere, wenn er sich erholt. Überwache beliebig viele Server und benachrichtige für jeden eine beliebige Kombination von Adressen. Vorerst nur per E-Mail; Matrix-Raum-Benachrichtigungen sind geplant.",
+      "form": {
+        "title": "Neue Benachrichtigung hinzufügen",
+        "description": "Wir prüfen den Server alle fünf Minuten. Der erste Ausfall löst eine Benachrichtigung aus; danach melden wir uns alle 12 Stunden, solange er down bleibt.",
+        "domainLabel": "Server-Domain",
+        "domainHint": "Zum Beispiel <code>example.com</code>.",
+        "notifyLegend": "Diese Adressen benachrichtigen",
+        "notifyHint": "Wähle eine oder mehrere. Weitere Adressen kannst du in den Kontoeinstellungen hinzufügen.",
+        "submit": "Benachrichtigung hinzufügen"
+      },
+      "addresses": {
+        "eyebrow": "Benachrichtigungsadressen",
+        "addLink": "Weitere Adresse hinzufügen →"
+      },
+      "pills": {
+        "primary": "Primär",
+        "pending": "Ausstehend",
+        "verified": "Verifiziert",
+        "healthy": "Erreichbar",
+        "degraded": "Beeinträchtigt",
+        "failing": "Ausgefallen"
+      },
+      "table": {
+        "colServer": "Server",
+        "colStatus": "Status",
+        "colLastCheck": "Letzte Prüfung",
+        "colNotifies": "Benachrichtigt",
+        "colActions": "Aktionen",
+        "added": "Hinzugefügt {{date}}",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "footerNote": "Eine Adresse kann auf beliebig vielen Benachrichtigungen stehen. Das Entfernen einer Benachrichtigung löscht die Adresse nicht."
+      }
+    },
+    "edit": {
+      "breadcrumb": "Bearbeiten",
+      "headline": "Benachrichtigung bearbeiten für",
+      "lead": "Wähle aus, über welche Änderungen du informiert werden möchtest, wer benachrichtigt wird und wie oft. Speichern überschreibt die vorhandene Benachrichtigung.",
+      "watchTitle": "Was überwachen",
+      "watchDescription": "Du kannst beliebig kombinieren. Wir senden eine E-Mail pro Ereignis, nie eine pro Prüfung.",
+      "pillOn": "An",
+      "pillOff": "Aus",
+      "types": {
+        "uptime": {
+          "title": "Verbindung / Ausfall",
+          "detail": "Benachrichtigung, wenn Federation oder die Client-Server-API nicht mehr antwortet. Prüfung alle 5 Minuten.",
+          "hint": "Die ursprüngliche Benachrichtigung. Die meisten wollen das."
+        },
+        "rename": {
+          "title": "Servernamensänderung",
+          "detail": "Benachrichtigung, wenn sich die via /_matrix/federation/v1/version gemeldete Serverimplementierung ändert – z. B. wenn ein Synapse-Server plötzlich als Dendrite erscheint.",
+          "hint": "Nützlich, um Kontoübernahmen oder versehentliche Rollouts zu erkennen."
+        },
+        "version": {
+          "title": "Versions-Update",
+          "detail": "Benachrichtigung, wenn sich der Versionsstring von /_matrix/federation/v1/version ändert – typischerweise ein Upgrade.",
+          "hint": "Standardmäßig deaktiviert – am nützlichsten für Betreiber, die Peer-Server verfolgen."
+        },
+        "tlsChange": {
+          "title": "TLS-Zertifikat geändert",
+          "detail": "Benachrichtigung, wenn sich der TLS-Zertifikat-Fingerabdruck eines Federation- oder Client-Endpunkts ändert.",
+          "hint": "Markiert neu ausgestellte oder rotierte Zertifikate. Manche Erneuerungen sind erwartet – das ist ein Hinweis, kein Problem."
+        },
+        "tlsExpiry": {
+          "title": "TLS-Zertifikat läuft ab (≤ 14 Tage)",
+          "detail": "Benachrichtigung, wenn ein Zertifikat in der Kette noch 14 Tage oder weniger Gültigkeit hat. Wiederholt sich täglich.",
+          "hint": "Ein Sicherheitsnetz, auch wenn dein Erneuerungscron es normalerweise regelt."
+        }
+      },
+      "notifyTitle": "Diese Adressen benachrichtigen",
+      "notifyHint": "Antippen zum Umschalten. Verwalte die Adressliste in den Kontoeinstellungen.",
+      "save": "Änderungen speichern",
+      "cancel": "Abbrechen",
+      "delete": "Löschen",
+      "status": {
+        "eyebrow": "Aktueller Status",
+        "diagnosticLink": "Jetzt Diagnose durchführen →"
+      },
+      "quietHours": {
+        "eyebrow": "Ruhestunden",
+        "description": "Benachrichtigungen außerhalb der Arbeitszeiten verschieben. Kritische Ausfälle werden immer gesendet.",
+        "checkboxLabel": "Keine E-Mails zwischen {{from}}–{{to}} {{timezone}}"
+      },
+      "recentEvents": {
+        "eyebrow": "Letzte Ereignisse"
+      }
+    },
+    "login": {
+      "eyebrow": "Anmelden, um Benachrichtigungen zu verwalten",
+      "headline": "Willkommen zurück.",
+      "lead": "Ein Konto dient ausschließlich für Ausfallbenachrichtigungen.",
+      "tablistLabel": "Anmeldemethode",
+      "tabPassword": "E-Mail + Passwort",
+      "tabMagic": "Magic Link",
+      "emailLabel": "E-Mail-Adresse",
+      "passwordLabel": "Passwort",
+      "submitPassword": "Anmelden →",
+      "createAccount": "Konto erstellen",
+      "forgotPassword": "Passwort vergessen",
+      "magicDescription": "Wir schicken dir einen Einmal-Link, mit dem du dich ohne Passwort anmelden kannst. Gültig für 1 Stunde.",
+      "submitMagic": "Magic Link senden →",
+      "createAccountMagic": "Noch kein Konto? Jetzt erstellen",
+      "disclaimer": "Der Connectivity Tester meldet sich nicht bei Matrix an; dieses Konto dient ausschließlich zur Zustellung von Benachrichtigungs-E-Mails für die Server, die du beobachtest."
+    }
   },
   "sponsor": {
     "text": "Dieser Dienst ist kostenlos nutzbar. Wenn er dir Kopfschmerzen erspart hat, erwäge die Entwicklung zu unterstützen.",

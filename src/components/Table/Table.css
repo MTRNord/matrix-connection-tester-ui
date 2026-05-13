@@ -1,0 +1,38 @@
+/* Table — white surface, ink-stamped header */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+  background: #fff;
+}
+.table th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 12px;
+  padding: 13px 18px;
+  color: var(--ink);
+  background: var(--surface-2);
+  border-bottom: 2px solid var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.table td {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+  color: var(--ink-2);
+  background: #fff;
+}
+.table tbody tr:hover td {
+  background: var(--surface-2);
+}
+.table .mono {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink-2);
+}
+.table .num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-2);
+}

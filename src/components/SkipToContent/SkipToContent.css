@@ -1,0 +1,19 @@
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  z-index: 9999;
+  padding: 8px 16px;
+  background: var(--ink);
+  color: var(--surface);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 0 0 var(--r-2) var(--r-2);
+  text-decoration: none;
+  transition: top 0.1s ease;
+}
+.skip-to-content:focus {
+  top: 0;
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}

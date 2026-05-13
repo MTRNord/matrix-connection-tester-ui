@@ -12,6 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsIndexRouteImport } from './routes/results.index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
+import { Route as AlertsIndexRouteImport } from './routes/alerts/index'
+import { Route as AlertsLoginRouteImport } from './routes/alerts/login'
+import { Route as AlertsEditRouteImport } from './routes/alerts/edit'
+import { Route as AlertsCallbackRouteImport } from './routes/alerts/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +32,91 @@ const DocsIndexRoute = DocsIndexRouteImport.update({
   path: '/docs/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AlertsIndexRoute = AlertsIndexRouteImport.update({
+  id: '/alerts/',
+  path: '/alerts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsLoginRoute = AlertsLoginRouteImport.update({
+  id: '/alerts/login',
+  path: '/alerts/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsEditRoute = AlertsEditRouteImport.update({
+  id: '/alerts/edit',
+  path: '/alerts/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsCallbackRoute = AlertsCallbackRouteImport.update({
+  id: '/alerts/callback',
+  path: '/alerts/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts/callback': typeof AlertsCallbackRoute
+  '/alerts/edit': typeof AlertsEditRoute
+  '/alerts/login': typeof AlertsLoginRoute
+  '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts/callback': typeof AlertsCallbackRoute
+  '/alerts/edit': typeof AlertsEditRoute
+  '/alerts/login': typeof AlertsLoginRoute
+  '/alerts': typeof AlertsIndexRoute
   '/docs': typeof DocsIndexRoute
   '/results': typeof ResultsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alerts/callback': typeof AlertsCallbackRoute
+  '/alerts/edit': typeof AlertsEditRoute
+  '/alerts/login': typeof AlertsLoginRoute
+  '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/docs/' | '/results/'
+  fullPaths:
+    | '/'
+    | '/alerts/callback'
+    | '/alerts/edit'
+    | '/alerts/login'
+    | '/alerts/'
+    | '/docs/'
+    | '/results/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/docs' | '/results'
-  id: '__root__' | '/' | '/docs/' | '/results/'
+  to:
+    | '/'
+    | '/alerts/callback'
+    | '/alerts/edit'
+    | '/alerts/login'
+    | '/alerts'
+    | '/docs'
+    | '/results'
+  id:
+    | '__root__'
+    | '/'
+    | '/alerts/callback'
+    | '/alerts/edit'
+    | '/alerts/login'
+    | '/alerts/'
+    | '/docs/'
+    | '/results/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertsCallbackRoute: typeof AlertsCallbackRoute
+  AlertsEditRoute: typeof AlertsEditRoute
+  AlertsLoginRoute: typeof AlertsLoginRoute
+  AlertsIndexRoute: typeof AlertsIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   ResultsIndexRoute: typeof ResultsIndexRoute
 }
@@ -82,11 +144,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/alerts/': {
+      id: '/alerts/'
+      path: '/alerts'
+      fullPath: '/alerts/'
+      preLoaderRoute: typeof AlertsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts/login': {
+      id: '/alerts/login'
+      path: '/alerts/login'
+      fullPath: '/alerts/login'
+      preLoaderRoute: typeof AlertsLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts/edit': {
+      id: '/alerts/edit'
+      path: '/alerts/edit'
+      fullPath: '/alerts/edit'
+      preLoaderRoute: typeof AlertsEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts/callback': {
+      id: '/alerts/callback'
+      path: '/alerts/callback'
+      fullPath: '/alerts/callback'
+      preLoaderRoute: typeof AlertsCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertsCallbackRoute: AlertsCallbackRoute,
+  AlertsEditRoute: AlertsEditRoute,
+  AlertsLoginRoute: AlertsLoginRoute,
+  AlertsIndexRoute: AlertsIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   ResultsIndexRoute: ResultsIndexRoute,
 }

@@ -237,6 +237,26 @@
     border-radius: 0 0 var(--r-3) var(--r-3);
   }
 
+  .config-errorbar {
+    background: var(--bad);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 28px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .config-errorbar__label {
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .config-errorbar__msg {
+    opacity: 0.9;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+
   .mono {
     font-family: var(--mono);
   }

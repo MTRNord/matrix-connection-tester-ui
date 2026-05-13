@@ -9,7 +9,7 @@ export default function Button({
   children,
   ...rest
 }: {
-  kind?: 'solid' | 'ghost'
+  kind?: 'solid' | 'ghost' | 'danger'
   size?: 'md' | 'small'
   block?: boolean
   as?: React.ElementType
@@ -18,10 +18,11 @@ export default function Button({
 } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const cls = [
     'btn',
-    kind === 'ghost' && 'ghost',
-    size === 'small' && 'small',
-    block && 'block',
-    className,
+    kind === 'ghost' ? 'ghost' : null,
+    kind === 'danger' ? 'danger' : null,
+    size === 'small' ? 'small' : null,
+    block ? 'block' : null,
+    className || null,
   ]
     .filter(Boolean)
     .join(' ')

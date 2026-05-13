@@ -1,12 +1,13 @@
 import './Navbar.css'
-import '../Pill/Pill.css'
 import Wordmark from '../Wordmark/Wordmark'
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { createPortal } from 'react-dom'
 import { useEffect, useRef, useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import LanguageMenu from '../LanguageMenu/LanguageMenu'
 import { LANGS } from '../../locales/languages'
+import Pill from '../Pill/Pill'
+import { useAuth } from '../../contexts/AuthContext'
 
 const NAV_LINKS = (authed: boolean) =>
   [
@@ -18,13 +19,13 @@ const NAV_LINKS = (authed: boolean) =>
   ] as const
 
 export default function Navbar({
-  authed = false,
   defaultLangOpen = false,
 }: {
-  authed?: boolean
   defaultLangOpen?: boolean
-}) {
+} = {}) {
   const { t, i18n } = useTranslation()
+  const { isAuthenticated, logout } = useAuth()
+  const navigate = useNavigate()
   const [open, setOpen] = useState(defaultLangOpen)
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
   const btnRef = useRef<HTMLButtonElement>(null)
@@ -75,7 +76,7 @@ export default function Navbar({
         <div className="chrome__inner">
           <Wordmark size={20} />
           <nav className="chrome__nav" aria-label="Primary navigation">
-            {NAV_LINKS(authed).map((item) => (
+            {NAV_LINKS(isAuthenticated).map((item) => (
               <Link
                 key={item.key}
                 to={item.to}
@@ -98,6 +99,19 @@ export default function Navbar({
               ▾
             </span>
           </button>
+
+          {isAuthenticated && (
+            <button
+              type="button"
+              className="chrome__signout"
+              onClick={async () => {
+                await logout()
+                navigate({ to: '/' })
+              }}
+            >
+              {t('nav.signOut')}
+            </button>
+          )}
         </div>
       </header>
 
@@ -124,7 +138,7 @@ export default function Navbar({
 
       <div className="container" style={{ padding: 0 }}>
         <div className="betabar">
-          <span className="pill pill--beta">BETA</span>
+          <Pill kind="beta">BETA</Pill>
           <Trans
             i18nKey="nav.betabar"
             parent="span"
