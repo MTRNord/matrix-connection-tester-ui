@@ -1,4 +1,6 @@
 {
   "api_server_url": "https://api.stage.connectivity-tester.mtrnord.blog",
-  "oauth2_client_id": "connectivity-tester-frontend"
+  "oauth2_client_id": "connectivity-tester-frontend",
+  "github_sponsors_url": "https://github.com/sponsors/MTRNord",
+  "liberapay_url": "https://liberapay.com/MTRNord"
 }

@@ -3,6 +3,8 @@ import { queryOptions } from '@tanstack/react-query'
 export interface AppConfig {
   api_server_url: string
   oauth2_client_id: string
+  github_sponsors_url?: string
+  liberapay_url?: string
 }
 
 function isValidConfig(data: unknown): data is AppConfig {

@@ -2,9 +2,12 @@ import './Footer.css'
 import Wordmark from '../Wordmark/Wordmark'
 import { Link } from '@tanstack/react-router'
 import { useTranslation } from 'react-i18next'
+import { useQuery } from '@tanstack/react-query'
+import { configQueryOptions } from '#/config'
 
 export default function Footer() {
   const { t } = useTranslation()
+  const { data: cfg } = useQuery(configQueryOptions)
 
   return (
     <footer className="footer">
@@ -62,20 +65,24 @@ export default function Footer() {
                 </a>
               </div>
             </div>
-            <div>
-              <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
-                {t('footer.sponsoring')}
+            {(cfg?.github_sponsors_url ?? cfg?.liberapay_url) && (
+              <div>
+                <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
+                  {t('footer.sponsoring')}
+                </div>
+                <div
+                  className="footer__row"
+                  style={{ flexDirection: 'column', gap: 8 }}
+                >
+                  {cfg?.github_sponsors_url && (
+                    <a href={cfg.github_sponsors_url}>GitHub Sponsors</a>
+                  )}
+                  {cfg?.liberapay_url && (
+                    <a href={cfg.liberapay_url}>Liberapay</a>
+                  )}
+                </div>
               </div>
-              <div
-                className="footer__row"
-                style={{ flexDirection: 'column', gap: 8 }}
-              >
-                <a href="https://github.com/sponsors/MTRNord">
-                  GitHub Sponsors
-                </a>
-                <a href="https://liberapay.com/MTRNord">Liberapay</a>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
