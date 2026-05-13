@@ -81,7 +81,9 @@ export const Route = createFileRoute('/alerts/edit')({
       })
     }
   },
-  validateSearch: (s: Record<string, unknown>): { id: number; domain: string } => ({
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): { id: number; domain: string } => ({
     id: typeof s.id === 'number' ? s.id : Number(s.id) || 0,
     domain: typeof s.domain === 'string' ? s.domain : '',
   }),
@@ -105,7 +107,9 @@ const alertEventsQueryOptions = (cfg: AppConfig | undefined, id: number) =>
   queryOptions({
     queryKey: ['alerts', 'events', id, cfg?.api_server_url] as const,
     queryFn: async () => {
-      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}/events`)
+      const res = await apiReq(
+        `${cfg!.api_server_url}/api/v2/alerts/${id}/events`,
+      )
       if (!res.ok) throw new Error('Failed to load events')
       return res.json() as Promise<AlertEventsResponse>
     },
@@ -208,12 +212,17 @@ function RouteComponent() {
   }
   const effectiveEmails: Set<string> =
     selectedEmails ?? new Set(alert?.notify_emails ?? [])
-  const effectiveQuietEnabled = quietEnabled ?? alert?.quiet_hours_enabled ?? false
+  const effectiveQuietEnabled =
+    quietEnabled ?? alert?.quiet_hours_enabled ?? false
   const effectiveQuietFrom = quietFrom ?? alert?.quiet_hours_from ?? '22:00'
   const effectiveQuietTo = quietTo ?? alert?.quiet_hours_to ?? '07:00'
 
   const toggleCheck = (k: CheckKey) => {
-    setChecks((c) => ({ ...effectiveChecks, ...c, [k]: !(c ?? effectiveChecks)[k] }))
+    setChecks((c) => ({
+      ...effectiveChecks,
+      ...c,
+      [k]: !(c ?? effectiveChecks)[k],
+    }))
   }
   const toggleEmail = (email: string) => {
     setSelectedEmails((prev) => {
@@ -249,8 +258,12 @@ function RouteComponent() {
       if (!emailsRes.ok) throw new Error('Failed to save notification emails')
     },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: alertQueryOptions(cfg, id).queryKey })
-      await queryClient.invalidateQueries({ queryKey: alertsQueryOptions(cfg).queryKey })
+      await queryClient.invalidateQueries({
+        queryKey: alertQueryOptions(cfg, id).queryKey,
+      })
+      await queryClient.invalidateQueries({
+        queryKey: alertsQueryOptions(cfg).queryKey,
+      })
       void navigate({ to: '/alerts' })
     },
   })
@@ -260,11 +273,16 @@ function RouteComponent() {
       const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}`, {
         method: 'DELETE',
       })
-      if (!res.ok && res.status !== 204) throw new Error('Failed to delete alert')
+      if (!res.ok && res.status !== 204)
+        throw new Error('Failed to delete alert')
     },
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: alertQueryOptions(cfg, id).queryKey })
-      void queryClient.invalidateQueries({ queryKey: alertsQueryOptions(cfg).queryKey })
+      queryClient.removeQueries({
+        queryKey: alertQueryOptions(cfg, id).queryKey,
+      })
+      void queryClient.invalidateQueries({
+        queryKey: alertsQueryOptions(cfg).queryKey,
+      })
       void navigate({ to: '/alerts' })
     },
   })
@@ -288,9 +306,13 @@ function RouteComponent() {
         <main id="main" className="page">
           <div className="breadcrumb">
             <Link to="/">{t('nav.home')}</Link>
-            <span className="breadcrumb__sep" aria-hidden="true">›</span>
+            <span className="breadcrumb__sep" aria-hidden="true">
+              ›
+            </span>
             <Link to="/alerts">{t('nav.alerts')}</Link>
-            <span className="breadcrumb__sep" aria-hidden="true">›</span>
+            <span className="breadcrumb__sep" aria-hidden="true">
+              ›
+            </span>
             <span>{t('alerts.edit.breadcrumb')}</span>
           </div>
           <p style={{ color: 'var(--bad-deep)' }}>{t('account.error')}</p>
@@ -507,7 +529,8 @@ function RouteComponent() {
                       fontFamily: 'var(--mono)',
                       fontSize: 13,
                       cursor: 'pointer',
-                      border: '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
+                      border:
+                        '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
                     }}
                   >
                     <input
@@ -524,14 +547,18 @@ function RouteComponent() {
             </div>
 
             {saveMutation.isError && (
-              <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+              <p
+                style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}
+              >
                 {saveMutation.error instanceof Error
                   ? saveMutation.error.message
                   : 'Failed to save'}
               </p>
             )}
             {deleteMutation.isError && (
-              <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+              <p
+                style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}
+              >
                 {deleteMutation.error instanceof Error
                   ? deleteMutation.error.message
                   : 'Failed to delete'}
@@ -550,7 +577,11 @@ function RouteComponent() {
               <Button type="submit" disabled={saveMutation.isPending}>
                 {t('alerts.edit.save')}
               </Button>
-              <Button kind="ghost" type="button" onClick={() => void navigate({ to: '/alerts' })}>
+              <Button
+                kind="ghost"
+                type="button"
+                onClick={() => void navigate({ to: '/alerts' })}
+              >
                 {t('alerts.edit.cancel')}
               </Button>
               <span style={{ flex: 1 }} />
@@ -564,12 +595,20 @@ function RouteComponent() {
                   >
                     {t('account.delete.confirmButton')}
                   </Button>
-                  <Button kind="ghost" type="button" onClick={() => setConfirmDelete(false)}>
+                  <Button
+                    kind="ghost"
+                    type="button"
+                    onClick={() => setConfirmDelete(false)}
+                  >
                     {t('account.delete.cancelButton')}
                   </Button>
                 </>
               ) : (
-                <Button kind="danger" type="button" onClick={() => setConfirmDelete(true)}>
+                <Button
+                  kind="danger"
+                  type="button"
+                  onClick={() => setConfirmDelete(true)}
+                >
                   {t('alerts.edit.delete')}
                 </Button>
               )}
@@ -741,7 +780,10 @@ function RouteComponent() {
                   </li>
                 ) : (
                   <>
-                    {(showAllEvents ? eventsData.events : eventsData.events.slice(0, 10)).map((ev, i) => (
+                    {(showAllEvents
+                      ? eventsData.events
+                      : eventsData.events.slice(0, 10)
+                    ).map((ev, i) => (
                       <li
                         key={i}
                         style={{
@@ -752,11 +794,16 @@ function RouteComponent() {
                           fontSize: 13.5,
                         }}
                       >
-                        <span className="mono" style={{ color: 'var(--ink-3)' }}>
+                        <span
+                          className="mono"
+                          style={{ color: 'var(--ink-3)' }}
+                        >
                           {fmtEventTime(ev.when)}
                         </span>
                         <span style={{ minWidth: 0 }}>
-                          <span style={{ color: 'var(--ink-2)', display: 'block' }}>
+                          <span
+                            style={{ color: 'var(--ink-2)', display: 'block' }}
+                          >
                             {ev.description}
                           </span>
                           {ev.detail && (

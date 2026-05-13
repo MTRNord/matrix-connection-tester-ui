@@ -6,10 +6,8 @@ import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Table from '#/components/Table/Table'
 import { apiReq } from '#/auth/apiReq'
-import {
-  alertsQueryOptions,
-  type AlertDto,
-} from '#/api/alertsQueryOptions'
+import { alertsQueryOptions  } from '#/api/alertsQueryOptions'
+import type {AlertDto} from '#/api/alertsQueryOptions';
 import { configQueryOptions } from '#/config'
 import type { AppConfig } from '#/config'
 import { useAuth } from '#/contexts/AuthContext'
@@ -196,7 +194,8 @@ function RouteComponent() {
   })
   // Show a loading row when authenticated but data hasn't arrived yet (includes
   // the brief window before cfg loads where `enabled` is still false).
-  const alertsLoading = isAuthenticated && (alertsFetching || (!alertsData && !alertsError))
+  const alertsLoading =
+    isAuthenticated && (alertsFetching || (!alertsData && !alertsError))
 
   // All emails the user can choose as notification recipients
   const allEmails: string[] = account

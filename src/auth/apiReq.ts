@@ -7,7 +7,10 @@ export class UnauthorizedError extends Error {
   }
 }
 
-export async function apiReq(url: string, options: RequestInit = {}): Promise<Response> {
+export async function apiReq(
+  url: string,
+  options: RequestInit = {},
+): Promise<Response> {
   const token = loadTokens()
   const res = await fetch(url, {
     ...options,

@@ -303,22 +303,42 @@ function RouteComponent() {
     mutationFn: async (timezone: string) => {
       const res = await apiReq(`${cfg!.api_server_url}/oauth2/account`, {
         method: 'PATCH',
-        body: JSON.stringify({ receives_alerts: account?.receives_alerts ?? true, timezone }),
+        body: JSON.stringify({
+          receives_alerts: account?.receives_alerts ?? true,
+          timezone,
+        }),
       })
       if (!res.ok) throw new Error('Failed to save timezone')
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg).queryKey }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      }),
   })
 
   const saveEmailTimezone = useMutation({
-    mutationFn: async ({ id, timezone, receives_alerts }: { id: string; timezone: string; receives_alerts: boolean }) => {
-      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account/emails/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({ receives_alerts, timezone }),
-      })
+    mutationFn: async ({
+      id,
+      timezone,
+      receives_alerts,
+    }: {
+      id: string
+      timezone: string
+      receives_alerts: boolean
+    }) => {
+      const res = await apiReq(
+        `${cfg!.api_server_url}/oauth2/account/emails/${id}`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify({ receives_alerts, timezone }),
+        },
+      )
       if (!res.ok) throw new Error('Failed to save timezone')
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg).queryKey }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      }),
   })
 
   const handleExport = async () => {
@@ -465,7 +485,15 @@ function RouteComponent() {
           </aside>
 
           {/* ---- Sections ---- */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32, minWidth: 0, overflow: 'hidden' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 32,
+              minWidth: 0,
+              overflow: 'hidden',
+            }}
+          >
             {/* ---- Profile ---- */}
             <section id="profile">
               <h2 style={{ marginTop: 0 }}>{ta('profile.title')}</h2>
@@ -629,7 +657,11 @@ function RouteComponent() {
                             value={tz?.[em.email] ?? em.timezone}
                             onChange={(z) => {
                               setTz((prev) => ({ ...prev, [em.email]: z }))
-                              saveEmailTimezone.mutate({ id: em.id, timezone: z, receives_alerts: em.receives_alerts })
+                              saveEmailTimezone.mutate({
+                                id: em.id,
+                                timezone: z,
+                                receives_alerts: em.receives_alerts,
+                              })
                             }}
                             ariaLabel={`Timezone for ${em.email}`}
                           />
@@ -679,17 +711,35 @@ function RouteComponent() {
               </Card>
 
               {removeEmail.error && (
-                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                <p
+                  style={{
+                    color: 'var(--bad-deep)',
+                    fontSize: 14,
+                    marginTop: 8,
+                  }}
+                >
                   {removeEmail.error.message}
                 </p>
               )}
               {resendVerification.error && (
-                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                <p
+                  style={{
+                    color: 'var(--bad-deep)',
+                    fontSize: 14,
+                    marginTop: 8,
+                  }}
+                >
                   {resendVerification.error.message}
                 </p>
               )}
               {makePrimary.error && (
-                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                <p
+                  style={{
+                    color: 'var(--bad-deep)',
+                    fontSize: 14,
+                    marginTop: 8,
+                  }}
+                >
                   {makePrimary.error.message}
                 </p>
               )}
