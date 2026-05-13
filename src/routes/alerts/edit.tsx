@@ -3,12 +3,73 @@ import Card from '#/components/Card/Card'
 import Footer from '#/components/Footer/Footer'
 import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
+import { apiReq } from '#/auth/apiReq'
 import { isTokenValid, loadTokens } from '#/auth/tokens'
-import { createFileRoute, Link, redirect } from '@tanstack/react-router'
+import { alertsQueryOptions } from '#/api/alertsQueryOptions'
+import { configQueryOptions } from '#/config'
+import type { AppConfig } from '#/config'
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+// ---- Types -------------------------------------------------------------------
+
 type CheckKey = 'uptime' | 'rename' | 'version' | 'tlsChange' | 'tlsExpiry'
+
+interface AlertDto {
+  id: number
+  server_name: string
+  verified: boolean
+  created_at: string
+  is_currently_failing: boolean
+  last_check_at: string | null
+  notify_emails: string[]
+  notify_server_name_change: boolean
+  notify_version_change: boolean
+  notify_tls_cert_change: boolean
+  notify_tls_expiry: boolean
+  quiet_hours_enabled: boolean
+  quiet_hours_from: string
+  quiet_hours_to: string
+}
+
+interface AlertEventDto {
+  when: string
+  description: string
+  detail?: string
+  kind: string
+}
+
+interface AlertEventsResponse {
+  events: AlertEventDto[]
+}
+
+interface EmailDto {
+  id: string
+  email: string
+  verified: boolean
+  receives_alerts: boolean
+  created_at: string
+}
+
+interface AccountInfo {
+  email: string
+  email_verified: boolean
+  additional_emails: EmailDto[]
+}
+
+// ---- Route -------------------------------------------------------------------
 
 export const Route = createFileRoute('/alerts/edit')({
   beforeLoad: ({ location }) => {
@@ -20,11 +81,49 @@ export const Route = createFileRoute('/alerts/edit')({
       })
     }
   },
-  validateSearch: (s: Record<string, unknown>): { domain: string } => ({
+  validateSearch: (s: Record<string, unknown>): { id: number; domain: string } => ({
+    id: typeof s.id === 'number' ? s.id : Number(s.id) || 0,
     domain: typeof s.domain === 'string' ? s.domain : '',
   }),
   component: RouteComponent,
 })
+
+// ---- Query options -----------------------------------------------------------
+
+const alertQueryOptions = (cfg: AppConfig | undefined, id: number) =>
+  queryOptions({
+    queryKey: ['alerts', 'single', id, cfg?.api_server_url] as const,
+    queryFn: async () => {
+      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}`)
+      if (!res.ok) throw new Error('Failed to load alert')
+      return res.json() as Promise<AlertDto>
+    },
+    enabled: !!cfg && id > 0,
+  })
+
+const alertEventsQueryOptions = (cfg: AppConfig | undefined, id: number) =>
+  queryOptions({
+    queryKey: ['alerts', 'events', id, cfg?.api_server_url] as const,
+    queryFn: async () => {
+      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}/events`)
+      if (!res.ok) throw new Error('Failed to load events')
+      return res.json() as Promise<AlertEventsResponse>
+    },
+    enabled: !!cfg && id > 0,
+  })
+
+const accountQueryOptions = (cfg: AppConfig | undefined) =>
+  queryOptions({
+    queryKey: ['account', 'me', cfg?.api_server_url] as const,
+    queryFn: async () => {
+      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account/me`)
+      if (!res.ok) throw new Error('Failed to load account')
+      return res.json() as Promise<AccountInfo>
+    },
+    enabled: !!cfg,
+  })
+
+// ---- Helpers -----------------------------------------------------------------
 
 const CHECK_KEYS: CheckKey[] = [
   'uptime',
@@ -34,20 +133,175 @@ const CHECK_KEYS: CheckKey[] = [
   'tlsExpiry',
 ]
 
+const fmt = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+})
+
+function safeDate(iso: string | null | undefined): Date | null {
+  if (!iso) return null
+  const d = new Date(iso)
+  return isFinite(d.getTime()) ? d : null
+}
+
+function fmtEventTime(iso: string): string {
+  const d = safeDate(iso)
+  if (!d) return '—'
+  const now = Date.now()
+  const diff = now - d.getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  return fmt.format(d)
+}
+
+// ---- Component ---------------------------------------------------------------
+
 function RouteComponent() {
   const { t } = useTranslation()
-  const { domain } = Route.useSearch()
-  const [checks, setChecks] = useState<Record<CheckKey, boolean>>({
-    uptime: true,
-    rename: true,
-    version: false,
-    tlsChange: true,
-    tlsExpiry: true,
+  const navigate = useNavigate()
+  const queryClient = useQueryClient()
+  const { id, domain } = Route.useSearch()
+
+  const { data: cfg } = useQuery(configQueryOptions)
+  const {
+    data: alert,
+    isLoading: alertLoading,
+    isError: alertError,
+  } = useQuery({ ...alertQueryOptions(cfg, id), retry: 1 })
+  const { data: eventsData } = useQuery({
+    ...alertEventsQueryOptions(cfg, id),
+    retry: 1,
   })
-  const toggle = (k: CheckKey) => setChecks((c) => ({ ...c, [k]: !c[k] }))
-  const [quietEnabled, setQuietEnabled] = useState(true)
-  const [quietFrom, setQuietFrom] = useState('22:00')
-  const [quietTo, setQuietTo] = useState('07:00')
+  const { data: account } = useQuery({ ...accountQueryOptions(cfg), retry: 1 })
+
+  // Derive available email addresses from account
+  const availableEmails: string[] = account
+    ? [
+        ...(account.email_verified ? [account.email] : []),
+        ...account.additional_emails
+          .filter((e) => e.verified)
+          .map((e) => e.email),
+      ]
+    : []
+
+  // Local state — null means "not yet modified, use server value"
+  const [checks, setChecks] = useState<Record<CheckKey, boolean> | null>(null)
+  const [selectedEmails, setSelectedEmails] = useState<Set<string> | null>(null)
+  const [quietEnabled, setQuietEnabled] = useState<boolean | null>(null)
+  const [quietFrom, setQuietFrom] = useState<string | null>(null)
+  const [quietTo, setQuietTo] = useState<string | null>(null)
+  const [confirmDelete, setConfirmDelete] = useState(false)
+  const [showAllEvents, setShowAllEvents] = useState(false)
+
+  // Effective values: fall back to loaded alert data
+  const effectiveChecks: Record<CheckKey, boolean> = checks ?? {
+    uptime: true, // always on — no API toggle yet
+    rename: alert?.notify_server_name_change ?? true,
+    version: alert?.notify_version_change ?? false,
+    tlsChange: alert?.notify_tls_cert_change ?? false,
+    tlsExpiry: alert?.notify_tls_expiry ?? true,
+  }
+  const effectiveEmails: Set<string> =
+    selectedEmails ?? new Set(alert?.notify_emails ?? [])
+  const effectiveQuietEnabled = quietEnabled ?? alert?.quiet_hours_enabled ?? false
+  const effectiveQuietFrom = quietFrom ?? alert?.quiet_hours_from ?? '22:00'
+  const effectiveQuietTo = quietTo ?? alert?.quiet_hours_to ?? '07:00'
+
+  const toggleCheck = (k: CheckKey) => {
+    setChecks((c) => ({ ...effectiveChecks, ...c, [k]: !(c ?? effectiveChecks)[k] }))
+  }
+  const toggleEmail = (email: string) => {
+    setSelectedEmails((prev) => {
+      const next = new Set(prev ?? effectiveEmails)
+      if (next.has(email)) next.delete(email)
+      else next.add(email)
+      return next
+    })
+  }
+
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      const base = `${cfg!.api_server_url}/api/v2/alerts/${id}`
+      const [settingsRes, emailsRes] = await Promise.all([
+        apiReq(`${base}/settings`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            notify_server_name_change: effectiveChecks.rename,
+            notify_version_change: effectiveChecks.version,
+            notify_tls_cert_change: effectiveChecks.tlsChange,
+            notify_tls_expiry: effectiveChecks.tlsExpiry,
+            quiet_hours_enabled: effectiveQuietEnabled,
+            quiet_hours_from: effectiveQuietFrom,
+            quiet_hours_to: effectiveQuietTo,
+          }),
+        }),
+        apiReq(`${base}/notify-emails`, {
+          method: 'PUT',
+          body: JSON.stringify({ emails: [...effectiveEmails] }),
+        }),
+      ])
+      if (!settingsRes.ok) throw new Error('Failed to save settings')
+      if (!emailsRes.ok) throw new Error('Failed to save notification emails')
+    },
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: alertQueryOptions(cfg, id).queryKey })
+      await queryClient.invalidateQueries({ queryKey: alertsQueryOptions(cfg).queryKey })
+      void navigate({ to: '/alerts' })
+    },
+  })
+
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok && res.status !== 204) throw new Error('Failed to delete alert')
+    },
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: alertQueryOptions(cfg, id).queryKey })
+      void queryClient.invalidateQueries({ queryKey: alertsQueryOptions(cfg).queryKey })
+      void navigate({ to: '/alerts' })
+    },
+  })
+
+  if (alertLoading) {
+    return (
+      <div>
+        <Navbar />
+        <main id="main" className="page">
+          <p>{t('account.loading')}</p>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (alertError && !alert) {
+    return (
+      <div>
+        <Navbar />
+        <main id="main" className="page">
+          <div className="breadcrumb">
+            <Link to="/">{t('nav.home')}</Link>
+            <span className="breadcrumb__sep" aria-hidden="true">›</span>
+            <Link to="/alerts">{t('nav.alerts')}</Link>
+            <span className="breadcrumb__sep" aria-hidden="true">›</span>
+            <span>{t('alerts.edit.breadcrumb')}</span>
+          </div>
+          <p style={{ color: 'var(--bad-deep)' }}>{t('account.error')}</p>
+          <Link to="/alerts">{t('alerts.edit.cancel')}</Link>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  const effectiveDomain = alert?.server_name ?? domain
 
   return (
     <div>
@@ -74,7 +328,7 @@ function RouteComponent() {
               fontSize: '0.78em',
             }}
           >
-            {domain}
+            {effectiveDomain}
           </span>
         </h1>
         <p className="lead">{t('alerts.edit.lead')}</p>
@@ -88,7 +342,13 @@ function RouteComponent() {
             alignItems: 'start',
           }}
         >
-          <Card as="form" onSubmit={(e) => e.preventDefault()}>
+          <Card
+            as="form"
+            onSubmit={(e) => {
+              e.preventDefault()
+              saveMutation.mutate()
+            }}
+          >
             <h2
               style={{
                 fontSize: 22,
@@ -120,7 +380,8 @@ function RouteComponent() {
               }}
             >
               {CHECK_KEYS.map((key) => {
-                const on = checks[key]
+                const on = effectiveChecks[key]
+                const disabled = key === 'uptime'
                 return (
                   <li key={key}>
                     <label
@@ -135,14 +396,16 @@ function RouteComponent() {
                         border:
                           '1.5px solid ' + (on ? 'var(--ink)' : 'var(--line)'),
                         borderRadius: 5,
-                        cursor: 'pointer',
+                        cursor: disabled ? 'default' : 'pointer',
+                        opacity: disabled ? 0.7 : 1,
                       }}
                     >
                       <input
                         id={`alert-${key}`}
                         type="checkbox"
                         checked={on}
-                        onChange={() => toggle(key)}
+                        disabled={disabled}
+                        onChange={() => !disabled && toggleCheck(key)}
                         style={{
                           marginTop: 4,
                           width: 18,
@@ -222,40 +485,58 @@ function RouteComponent() {
                 background: '#fff',
               }}
             >
-              {(
-                [
-                  ['admin@example.space', true],
-                  ['ops@example.space', false],
-                  ['security@example.space', true],
-                  ['matrix-team@example.space', false],
-                ] as [string, boolean][]
-              ).map(([addr, sel]) => (
-                <label
-                  key={addr}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 8,
-                    padding: '8px 14px',
-                    borderRadius: 999,
-                    background: sel ? 'var(--ink)' : 'var(--surface-2)',
-                    color: sel ? 'var(--surface)' : 'var(--ink)',
-                    fontFamily: 'var(--mono)',
-                    fontSize: 13,
-                    cursor: 'pointer',
-                    border: '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
-                  }}
-                >
-                  <input
-                    type="checkbox"
-                    defaultChecked={sel}
-                    style={{ display: 'none' }}
-                  />
-                  {sel ? '✓ ' : '+ '}
-                  {addr}
-                </label>
-              ))}
+              {availableEmails.length === 0 && (
+                <span style={{ fontSize: 14, color: 'var(--ink-3)' }}>
+                  No verified addresses yet.{' '}
+                  <a href="/account#emails">Add one →</a>
+                </span>
+              )}
+              {availableEmails.map((addr) => {
+                const sel = effectiveEmails.has(addr)
+                return (
+                  <label
+                    key={addr}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 8,
+                      padding: '8px 14px',
+                      borderRadius: 999,
+                      background: sel ? 'var(--ink)' : 'var(--surface-2)',
+                      color: sel ? 'var(--surface)' : 'var(--ink)',
+                      fontFamily: 'var(--mono)',
+                      fontSize: 13,
+                      cursor: 'pointer',
+                      border: '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={sel}
+                      onChange={() => toggleEmail(addr)}
+                      style={{ display: 'none' }}
+                    />
+                    {sel ? '✓ ' : '+ '}
+                    {addr}
+                  </label>
+                )
+              })}
             </div>
+
+            {saveMutation.isError && (
+              <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                {saveMutation.error instanceof Error
+                  ? saveMutation.error.message
+                  : 'Failed to save'}
+              </p>
+            )}
+            {deleteMutation.isError && (
+              <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                {deleteMutation.error instanceof Error
+                  ? deleteMutation.error.message
+                  : 'Failed to delete'}
+              </p>
+            )}
 
             <div
               style={{
@@ -266,10 +547,32 @@ function RouteComponent() {
                 flexWrap: 'wrap',
               }}
             >
-              <Button type="submit">{t('alerts.edit.save')}</Button>
-              <Button kind="ghost">{t('alerts.edit.cancel')}</Button>
+              <Button type="submit" disabled={saveMutation.isPending}>
+                {t('alerts.edit.save')}
+              </Button>
+              <Button kind="ghost" type="button" onClick={() => void navigate({ to: '/alerts' })}>
+                {t('alerts.edit.cancel')}
+              </Button>
               <span style={{ flex: 1 }} />
-              <Button kind="danger">{t('alerts.edit.delete')}</Button>
+              {confirmDelete ? (
+                <>
+                  <Button
+                    kind="danger"
+                    type="button"
+                    disabled={deleteMutation.isPending}
+                    onClick={() => deleteMutation.mutate()}
+                  >
+                    {t('account.delete.confirmButton')}
+                  </Button>
+                  <Button kind="ghost" type="button" onClick={() => setConfirmDelete(false)}>
+                    {t('account.delete.cancelButton')}
+                  </Button>
+                </>
+              ) : (
+                <Button kind="danger" type="button" onClick={() => setConfirmDelete(true)}>
+                  {t('alerts.edit.delete')}
+                </Button>
+              )}
             </div>
           </Card>
 
@@ -284,26 +587,23 @@ function RouteComponent() {
                   marginTop: 6,
                 }}
               >
-                <Pill kind="bad" dot>
-                  {t('alerts.authed.pills.failing')}
-                </Pill>
-                <span style={{ fontSize: 14, color: 'var(--ink-2)' }}>
-                  since 4 minutes ago
-                </span>
+                {alert?.is_currently_failing ? (
+                  <Pill kind="bad" dot>
+                    {t('alerts.authed.pills.failing')}
+                  </Pill>
+                ) : (
+                  <Pill kind="ok" dot>
+                    {t('alerts.authed.pills.healthy')}
+                  </Pill>
+                )}
+                {alert?.last_check_at && (
+                  <span style={{ fontSize: 14, color: 'var(--ink-2)' }}>
+                    {fmtEventTime(alert.last_check_at)}
+                  </span>
+                )}
               </div>
-              <p
-                style={{
-                  fontSize: 14,
-                  lineHeight: 1.6,
-                  margin: '14px 0 0',
-                  color: 'var(--ink-2)',
-                }}
-              >
-                Federation is timing out. The last successful check was at{' '}
-                <span className="mono">15:55 UTC</span>.
-              </p>
               <a
-                href="#"
+                href={`/results/?serverName=${encodeURIComponent(effectiveDomain)}`}
                 style={{
                   display: 'inline-block',
                   marginTop: 14,
@@ -343,7 +643,7 @@ function RouteComponent() {
               >
                 <input
                   type="checkbox"
-                  checked={quietEnabled}
+                  checked={effectiveQuietEnabled}
                   onChange={(e) => setQuietEnabled(e.target.checked)}
                   style={{ width: 18, height: 18, accentColor: 'var(--ink)' }}
                 />
@@ -352,141 +652,72 @@ function RouteComponent() {
                 </span>
               </label>
 
-              {quietEnabled && (
-                <>
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr auto 1fr',
-                      gap: 8,
-                      alignItems: 'end',
-                      marginBottom: 16,
-                    }}
-                  >
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 11,
-                          color: 'var(--ink-3)',
-                          letterSpacing: '0.06em',
-                          textTransform: 'uppercase',
-                          marginBottom: 4,
-                        }}
-                      >
-                        {t('alerts.edit.quietHours.fromLabel')}
-                      </div>
-                      <input
-                        className="field__input small"
-                        type="time"
-                        value={quietFrom}
-                        onChange={(e) => setQuietFrom(e.target.value)}
-                        style={{
-                          padding: '8px 10px',
-                          width: '100%',
-                          fontFamily: 'var(--mono)',
-                          fontSize: 14,
-                          textAlign: 'center',
-                        }}
-                      />
+              {effectiveQuietEnabled && (
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    gap: 8,
+                    alignItems: 'end',
+                    marginBottom: 16,
+                  }}
+                >
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: 'var(--ink-3)',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        marginBottom: 4,
+                      }}
+                    >
+                      {t('alerts.edit.quietHours.fromLabel')}
                     </div>
-                    <div style={{ color: 'var(--ink-3)', paddingBottom: 10 }}>
-                      –
-                    </div>
-                    <div>
-                      <div
-                        style={{
-                          fontSize: 11,
-                          color: 'var(--ink-3)',
-                          letterSpacing: '0.06em',
-                          textTransform: 'uppercase',
-                          marginBottom: 4,
-                        }}
-                      >
-                        {t('alerts.edit.quietHours.toLabel')}
-                      </div>
-                      <input
-                        className="field__input small"
-                        type="time"
-                        value={quietTo}
-                        onChange={(e) => setQuietTo(e.target.value)}
-                        style={{
-                          padding: '8px 10px',
-                          width: '100%',
-                          fontFamily: 'var(--mono)',
-                          fontSize: 14,
-                          textAlign: 'center',
-                        }}
-                      />
-                    </div>
+                    <input
+                      className="field__input small"
+                      type="time"
+                      value={effectiveQuietFrom}
+                      onChange={(e) => setQuietFrom(e.target.value)}
+                      style={{
+                        padding: '8px 10px',
+                        width: '100%',
+                        fontFamily: 'var(--mono)',
+                        fontSize: 14,
+                        textAlign: 'center',
+                      }}
+                    />
                   </div>
-
-                  <div
-                    className="eyebrow"
-                    style={{ marginBottom: 8 }}
-                  >
-                    {t('alerts.edit.quietHours.perRecipientLabel')}
+                  <div style={{ color: 'var(--ink-3)', paddingBottom: 10 }}>
+                    –
                   </div>
-                  <ul
-                    style={{
-                      listStyle: 'none',
-                      padding: 0,
-                      margin: 0,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: 6,
-                    }}
-                  >
-                    {(
-                      [
-                        ['admin@example.space', 'Europe/Berlin', `${quietFrom} – ${quietTo} CEST`],
-                        ['security@example.space', 'America/New_York', '16:00 – 01:00 EDT'],
-                      ] as [string, string, string][]
-                    ).map(([addr, zone, local]) => (
-                      <li
-                        key={addr}
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: '1fr auto',
-                          gap: 10,
-                          padding: '10px 12px',
-                          background: 'var(--surface-2)',
-                          borderRadius: 5,
-                          fontSize: 13,
-                        }}
-                      >
-                        <div>
-                          <div
-                            className="mono"
-                            style={{ color: 'var(--ink)', fontWeight: 600 }}
-                          >
-                            {addr}
-                          </div>
-                          <div
-                            style={{
-                              color: 'var(--ink-3)',
-                              marginTop: 2,
-                              fontFamily: 'var(--mono)',
-                              fontSize: 12,
-                            }}
-                          >
-                            {zone}
-                          </div>
-                        </div>
-                        <div
-                          className="mono"
-                          style={{
-                            color: 'var(--ink-2)',
-                            fontSize: 12,
-                            alignSelf: 'center',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {local}
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </>
+                  <div>
+                    <div
+                      style={{
+                        fontSize: 11,
+                        color: 'var(--ink-3)',
+                        letterSpacing: '0.06em',
+                        textTransform: 'uppercase',
+                        marginBottom: 4,
+                      }}
+                    >
+                      {t('alerts.edit.quietHours.toLabel')}
+                    </div>
+                    <input
+                      className="field__input small"
+                      type="time"
+                      value={effectiveQuietTo}
+                      onChange={(e) => setQuietTo(e.target.value)}
+                      style={{
+                        padding: '8px 10px',
+                        width: '100%',
+                        fontFamily: 'var(--mono)',
+                        fontSize: 14,
+                        textAlign: 'center',
+                      }}
+                    />
+                  </div>
+                </div>
               )}
             </Card>
 
@@ -504,44 +735,82 @@ function RouteComponent() {
                   gap: 10,
                 }}
               >
-                {(
-                  [
-                    ['16:02', 'Federation down', 'bad'],
-                    ['09:14', 'Version: 1.118.0 → 1.119.0', 'info'],
-                    ['Apr 28', 'TLS certificate renewed', 'info'],
-                    ['Apr 12', 'Federation recovered', 'ok'],
-                  ] as [string, string, string][]
-                ).map(([when, what, kind]) => (
-                  <li
-                    key={when + what}
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '64px 1fr auto',
-                      gap: 10,
-                      alignItems: 'center',
-                      fontSize: 13.5,
-                    }}
-                  >
-                    <span className="mono" style={{ color: 'var(--ink-3)' }}>
-                      {when}
-                    </span>
-                    <span style={{ color: 'var(--ink-2)' }}>{what}</span>
-                    <span
-                      style={{
-                        width: 8,
-                        height: 8,
-                        borderRadius: '50%',
-                        background:
-                          kind === 'bad'
-                            ? 'var(--bad-deep)'
-                            : kind === 'ok'
-                              ? 'var(--ok-deep)'
-                              : 'var(--ink-3)',
-                      }}
-                      aria-hidden="true"
-                    />
+                {!eventsData || eventsData.events.length === 0 ? (
+                  <li style={{ fontSize: 13.5, color: 'var(--ink-3)' }}>
+                    No events yet.
                   </li>
-                ))}
+                ) : (
+                  <>
+                    {(showAllEvents ? eventsData.events : eventsData.events.slice(0, 10)).map((ev, i) => (
+                      <li
+                        key={i}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'max-content 1fr auto',
+                          gap: 10,
+                          alignItems: 'center',
+                          fontSize: 13.5,
+                        }}
+                      >
+                        <span className="mono" style={{ color: 'var(--ink-3)' }}>
+                          {fmtEventTime(ev.when)}
+                        </span>
+                        <span style={{ minWidth: 0 }}>
+                          <span style={{ color: 'var(--ink-2)', display: 'block' }}>
+                            {ev.description}
+                          </span>
+                          {ev.detail && (
+                            <span
+                              style={{
+                                display: 'block',
+                                fontSize: 11.5,
+                                color: 'var(--ink-3)',
+                                marginTop: 1,
+                              }}
+                            >
+                              {ev.detail}
+                            </span>
+                          )}
+                        </span>
+                        <span
+                          style={{
+                            width: 8,
+                            height: 8,
+                            borderRadius: '50%',
+                            background:
+                              ev.kind === 'bad'
+                                ? 'var(--bad-deep)'
+                                : ev.kind === 'ok'
+                                  ? 'var(--ok-deep)'
+                                  : 'var(--ink-3)',
+                          }}
+                          aria-hidden="true"
+                        />
+                      </li>
+                    ))}
+                    {eventsData.events.length > 10 && (
+                      <li>
+                        <button
+                          type="button"
+                          onClick={() => setShowAllEvents((v) => !v)}
+                          style={{
+                            background: 'none',
+                            border: 'none',
+                            padding: 0,
+                            fontSize: 13,
+                            color: 'var(--ink-3)',
+                            cursor: 'pointer',
+                            textDecoration: 'underline',
+                          }}
+                        >
+                          {showAllEvents
+                            ? 'Show fewer'
+                            : `Show ${eventsData.events.length - 10} older…`}
+                        </button>
+                      </li>
+                    )}
+                  </>
+                )}
               </ul>
             </Card>
           </aside>

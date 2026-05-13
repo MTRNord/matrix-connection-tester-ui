@@ -11,7 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ResultsIndexRouteImport } from './routes/results.index'
+import { Route as ResultsIndexRouteImport } from './routes/results/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as AlertsIndexRouteImport } from './routes/alerts/index'
 import { Route as AlertsLoginRouteImport } from './routes/alerts/login'

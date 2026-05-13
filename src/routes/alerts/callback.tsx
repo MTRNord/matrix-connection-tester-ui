@@ -66,7 +66,11 @@ function CallbackComponent() {
         sessionStorage.removeItem('oauth_redirect_after')
         setToken({ ...data, expires_at: Date.now() + data.expires_in * 1000 })
         // Only follow relative paths — guards against open redirect
-        if (redirectAfter && redirectAfter.startsWith('/') && !redirectAfter.startsWith('//')) {
+        if (
+          redirectAfter &&
+          redirectAfter.startsWith('/') &&
+          !redirectAfter.startsWith('//')
+        ) {
           router.history.push(redirectAfter)
         } else {
           navigate({ to: '/alerts' })

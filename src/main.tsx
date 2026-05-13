@@ -2,12 +2,42 @@ import i18n from './i18n'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { routeTree } from './routeTree.gen'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import { StrictMode } from 'react'
 import { I18nextProvider } from 'react-i18next'
-import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { AuthProvider, resetAuthState, useAuth } from './contexts/AuthContext'
+import { UnauthorizedError } from './auth/apiReq'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      networkMode: 'always',
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  },
+  queryCache: new QueryCache({
+    onError: (error) => {
+      if (error instanceof UnauthorizedError) {
+        resetAuthState()
+        void router.navigate({ to: '/alerts/login' })
+      }
+    },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => {
+      if (error instanceof UnauthorizedError) {
+        resetAuthState()
+        void router.navigate({ to: '/alerts/login' })
+      }
+    },
+  }),
+})
 
 const router = createRouter({
   routeTree,

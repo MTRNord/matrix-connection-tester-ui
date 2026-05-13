@@ -5,34 +5,91 @@ import Footer from '#/components/Footer/Footer'
 import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Table from '#/components/Table/Table'
+import { apiReq } from '#/auth/apiReq'
+import {
+  alertsQueryOptions,
+  type AlertDto,
+} from '#/api/alertsQueryOptions'
+import { configQueryOptions } from '#/config'
+import type { AppConfig } from '#/config'
 import { useAuth } from '#/contexts/AuthContext'
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { createFileRoute, Link } from '@tanstack/react-router'
+import { useState } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
+
+// ---- Types -------------------------------------------------------------------
+
+interface EmailDto {
+  id: string
+  email: string
+  verified: boolean
+  receives_alerts: boolean
+  created_at: string
+}
+
+interface AccountInfo {
+  email: string
+  email_verified: boolean
+  additional_emails: EmailDto[]
+}
+
+// ---- Route -------------------------------------------------------------------
 
 export const Route = createFileRoute('/alerts/')({
   component: RouteComponent,
 })
 
-const rows = [
-  {
-    domain: 'matrix.example.org',
-    status: 'ok',
-    added: '2 weeks ago',
-    recipients: ['ops@example.org', 'oncall@example.org'],
-  },
-  {
-    domain: 'draupnir.example.space',
-    status: 'bad',
-    added: '4 days ago',
-    recipients: ['admin@example.space'],
-  },
-  {
-    domain: 'chat.acme.dev',
-    status: 'warn',
-    added: '1 month ago',
-    recipients: ['ops@acme.dev', 'sre-room@acme.dev', 'matrix-team@acme.dev'],
-  },
-]
+// ---- Helpers -----------------------------------------------------------------
+
+const fmt = new Intl.DateTimeFormat('en-GB', {
+  day: 'numeric',
+  month: 'short',
+  year: 'numeric',
+})
+
+function safeDate(iso: string | null | undefined): Date | null {
+  if (!iso) return null
+  const d = new Date(iso)
+  return isFinite(d.getTime()) ? d : null
+}
+
+function fmtDate(iso: string | null | undefined): string {
+  const d = safeDate(iso)
+  return d ? fmt.format(d) : '—'
+}
+
+function fmtRelative(iso: string | null | undefined): string {
+  const d = safeDate(iso)
+  if (!d) return '—'
+  const diff = Date.now() - d.getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return '< 1 min ago'
+  if (mins < 60) return `${mins} min ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  return fmt.format(d)
+}
+
+// ---- Query options -----------------------------------------------------------
+
+const accountQueryOptions = (cfg: AppConfig | undefined) =>
+  queryOptions({
+    queryKey: ['account', 'me', cfg?.api_server_url] as const,
+    queryFn: async () => {
+      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account/me`)
+      if (!res.ok) throw new Error('Failed to load account')
+      return res.json() as Promise<AccountInfo>
+    },
+  })
+
+// ---- Logged-out view ---------------------------------------------------------
+
 function LoggedOutView() {
   const { t } = useTranslation()
   const features = [
@@ -110,26 +167,146 @@ function LoggedOutView() {
   )
 }
 
+// ---- Main component ----------------------------------------------------------
+
 function RouteComponent() {
   const { isAuthenticated } = useAuth()
   const { t } = useTranslation()
+  const queryClient = useQueryClient()
+
+  const [domain, setDomain] = useState('')
+  // null = unmodified, derive from account; Set = user has explicitly chosen
+  const [selectedEmails, setSelectedEmails] = useState<Set<string> | null>(null)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
+
+  const { data: cfg } = useQuery(configQueryOptions)
+
+  const { data: account } = useQuery({
+    ...accountQueryOptions(cfg),
+    enabled: isAuthenticated && !!cfg,
+  })
+
+  const {
+    data: alertsData,
+    isFetching: alertsFetching,
+    error: alertsError,
+  } = useQuery({
+    ...alertsQueryOptions(cfg),
+    enabled: isAuthenticated && !!cfg,
+  })
+  // Show a loading row when authenticated but data hasn't arrived yet (includes
+  // the brief window before cfg loads where `enabled` is still false).
+  const alertsLoading = isAuthenticated && (alertsFetching || (!alertsData && !alertsError))
+
+  // All emails the user can choose as notification recipients
+  const allEmails: string[] = account
+    ? [
+        account.email,
+        ...account.additional_emails
+          .filter((e) => e.verified)
+          .map((e) => e.email),
+      ]
+    : []
+
+  // Active email selection: user override or default to all verified
+  const emailSet: Set<string> =
+    selectedEmails ??
+    new Set(
+      account
+        ? [
+            ...(account.email_verified ? [account.email] : []),
+            ...account.additional_emails
+              .filter((e) => e.verified)
+              .map((e) => e.email),
+          ]
+        : [],
+    )
+
+  const toggleEmail = (addr: string) => {
+    setSelectedEmails((prev) => {
+      const next = new Set(prev ?? emailSet)
+      if (next.has(addr)) next.delete(addr)
+      else next.add(addr)
+      return next
+    })
+  }
+
+  const createAlert = useMutation({
+    mutationFn: async ({
+      serverName,
+      emails,
+    }: {
+      serverName: string
+      emails: string[]
+    }) => {
+      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts`, {
+        method: 'POST',
+        body: JSON.stringify({ server_name: serverName }),
+      })
+      if (!res.ok) {
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
+        throw new Error(err.error_description ?? 'Failed to create alert')
+      }
+      const created = (await res.json()) as { id: number }
+      if (emails.length > 0) {
+        await apiReq(
+          `${cfg!.api_server_url}/api/v2/alerts/${created.id}/notify-emails`,
+          { method: 'PUT', body: JSON.stringify({ emails }) },
+        )
+      }
+    },
+    onSuccess: () => {
+      setDomain('')
+      setSelectedEmails(null)
+      queryClient.invalidateQueries({
+        queryKey: alertsQueryOptions(cfg).queryKey,
+      })
+    },
+  })
+
+  const deleteAlert = useMutation({
+    mutationFn: async (id: number) => {
+      const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts/${id}`, {
+        method: 'DELETE',
+      })
+      if (!res.ok && res.status !== 204) {
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
+        throw new Error(err.error_description ?? 'Failed to delete alert')
+      }
+    },
+    onSuccess: () => {
+      setConfirmDeleteId(null)
+      queryClient.invalidateQueries({
+        queryKey: alertsQueryOptions(cfg).queryKey,
+      })
+    },
+  })
 
   if (!isAuthenticated) return <LoggedOutView />
 
-  const pillFor = (s: string) =>
-    s === 'ok' ? (
+  const pillFor = (alert: AlertDto) => {
+    if (!alert.verified)
+      return (
+        <Pill kind="warn" dot>
+          {t('alerts.authed.pills.pending')}
+        </Pill>
+      )
+    if (alert.is_currently_failing)
+      return (
+        <Pill kind="bad" dot>
+          {t('alerts.authed.pills.failing')}
+        </Pill>
+      )
+    return (
       <Pill kind="ok" dot>
         {t('alerts.authed.pills.healthy')}
       </Pill>
-    ) : s === 'warn' ? (
-      <Pill kind="warn" dot>
-        {t('alerts.authed.pills.degraded')}
-      </Pill>
-    ) : (
-      <Pill kind="bad" dot>
-        {t('alerts.authed.pills.failing')}
-      </Pill>
     )
+  }
 
   return (
     <div>
@@ -154,7 +331,17 @@ function RouteComponent() {
             alignItems: 'start',
           }}
         >
-          <Card as="form" onSubmit={(e) => e.preventDefault()}>
+          <Card
+            as="form"
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (!domain.trim()) return
+              createAlert.mutate({
+                serverName: domain.trim(),
+                emails: [...emailSet],
+              })
+            }}
+          >
             <h2
               style={{
                 fontSize: 26,
@@ -169,6 +356,18 @@ function RouteComponent() {
               {t('alerts.authed.form.description')}
             </p>
 
+            {createAlert.error && (
+              <p
+                style={{
+                  color: 'var(--bad-deep)',
+                  fontSize: 14,
+                  margin: '0 0 16px',
+                }}
+              >
+                {createAlert.error.message}
+              </p>
+            )}
+
             <Field
               id="alert-domain"
               label={t('alerts.authed.form.domainLabel')}
@@ -179,7 +378,12 @@ function RouteComponent() {
                 />
               }
             >
-              <input className="field__input" placeholder="example.com" />
+              <input
+                className="field__input"
+                placeholder="example.com"
+                value={domain}
+                onChange={(e) => setDomain(e.target.value)}
+              />
             </Field>
 
             <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
@@ -200,43 +404,44 @@ function RouteComponent() {
                   background: '#fff',
                 }}
               >
-                {(
-                  [
-                    ['you@example.dev', true],
-                    ['ops@example.dev', true],
-                    ['oncall@example.dev', false],
-                    ['matrix-team@example.dev', false],
-                  ] as [string, boolean][]
-                ).map(([addr, sel]) => (
-                  <label
-                    key={addr}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: 8,
-                      padding: '8px 14px',
-                      borderRadius: 999,
-                      background: sel ? 'var(--ink)' : 'var(--surface-2)',
-                      color: sel ? 'var(--surface)' : 'var(--ink)',
-                      fontFamily: 'var(--mono)',
-                      fontSize: 13,
-                      cursor: 'pointer',
-                      border:
-                        '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      defaultChecked={sel}
-                      style={{ display: 'none' }}
-                    />
-                    {sel ? '✓ ' : '+ '}
-                    {addr}
-                  </label>
-                ))}
+                {allEmails.map((addr) => {
+                  const sel = emailSet.has(addr)
+                  return (
+                    <label
+                      key={addr}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: 8,
+                        padding: '8px 14px',
+                        borderRadius: 999,
+                        background: sel ? 'var(--ink)' : 'var(--surface-2)',
+                        color: sel ? 'var(--surface)' : 'var(--ink)',
+                        fontFamily: 'var(--mono)',
+                        fontSize: 13,
+                        cursor: 'pointer',
+                        border:
+                          '1px solid ' + (sel ? 'var(--ink)' : 'var(--line)'),
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        checked={sel}
+                        onChange={() => toggleEmail(addr)}
+                        style={{ display: 'none' }}
+                      />
+                      {sel ? '✓ ' : '+ '}
+                      {addr}
+                    </label>
+                  )
+                })}
               </div>
             </fieldset>
-            <Button type="submit" style={{ marginTop: 24 }}>
+            <Button
+              type="submit"
+              style={{ marginTop: 24 }}
+              disabled={createAlert.isPending || !domain.trim()}
+            >
               {t('alerts.authed.form.submit')}
             </Button>
           </Card>
@@ -255,49 +460,57 @@ function RouteComponent() {
                 gap: 8,
               }}
             >
-              {(
-                [
-                  ['you@example.dev', 'verified', true],
-                  ['ops@example.dev', 'verified', false],
-                  ['oncall@example.dev', 'verified', false],
-                  ['matrix-team@example.dev', 'pending', false],
-                ] as [string, string, boolean][]
-              ).map(([addr, state, primary]) => (
-                <li
-                  key={addr}
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 10,
-                    padding: '10px 12px',
-                    background: '#fff',
-                    borderRadius: 5,
-                    border: '1px solid var(--line)',
-                  }}
-                >
-                  <span
-                    className="mono"
-                    style={{ fontSize: 13, color: 'var(--ink)', flex: 1 }}
-                  >
-                    {addr}
-                  </span>
-                  {primary && (
-                    <Pill kind="ink">{t('alerts.authed.pills.primary')}</Pill>
-                  )}
-                  {state === 'pending' ? (
-                    <Pill kind="warn" dot>
-                      {t('alerts.authed.pills.pending')}
-                    </Pill>
-                  ) : (
-                    <Pill kind="ok" dot>
-                      {t('alerts.authed.pills.verified')}
-                    </Pill>
-                  )}
-                </li>
-              ))}
+              {account
+                ? [
+                    {
+                      addr: account.email,
+                      verified: account.email_verified,
+                      primary: true,
+                    },
+                    ...account.additional_emails.map((e) => ({
+                      addr: e.email,
+                      verified: e.verified,
+                      primary: false,
+                    })),
+                  ].map(({ addr, verified, primary }) => (
+                    <li
+                      key={addr}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 10,
+                        padding: '10px 12px',
+                        background: '#fff',
+                        borderRadius: 5,
+                        border: '1px solid var(--line)',
+                      }}
+                    >
+                      <span
+                        className="mono"
+                        style={{ fontSize: 13, color: 'var(--ink)', flex: 1 }}
+                      >
+                        {addr}
+                      </span>
+                      {primary && (
+                        <Pill kind="ink">
+                          {t('alerts.authed.pills.primary')}
+                        </Pill>
+                      )}
+                      {verified ? (
+                        <Pill kind="ok" dot>
+                          {t('alerts.authed.pills.verified')}
+                        </Pill>
+                      ) : (
+                        <Pill kind="warn" dot>
+                          {t('alerts.authed.pills.pending')}
+                        </Pill>
+                      )}
+                    </li>
+                  ))
+                : null}
             </ul>
             <a
-              href="#"
+              href="/account#emails"
               style={{
                 display: 'inline-block',
                 marginTop: 16,
@@ -311,6 +524,22 @@ function RouteComponent() {
         </div>
 
         <h2>{t('alerts.authed.headline')}</h2>
+
+        {alertsError && (
+          <p style={{ color: 'var(--bad-deep)', fontSize: 14 }}>
+            {alertsError instanceof Error
+              ? alertsError.message
+              : 'Failed to load alerts'}
+          </p>
+        )}
+        {deleteAlert.error && (
+          <p style={{ color: 'var(--bad-deep)', fontSize: 14 }}>
+            {deleteAlert.error instanceof Error
+              ? deleteAlert.error.message
+              : 'Failed to delete alert'}
+          </p>
+        )}
+
         <Card flush>
           <Table>
             <thead>
@@ -327,14 +556,24 @@ function RouteComponent() {
               </tr>
             </thead>
             <tbody>
-              {rows.map((r) => (
-                <tr key={r.domain}>
+              {alertsLoading && (
+                <tr>
+                  <td
+                    colSpan={5}
+                    style={{ color: 'var(--ink-3)', textAlign: 'center' }}
+                  >
+                    Loading…
+                  </td>
+                </tr>
+              )}
+              {alertsData?.alerts.map((alert) => (
+                <tr key={alert.id}>
                   <td>
                     <div
                       className="mono"
                       style={{ fontWeight: 600, color: 'var(--ink)' }}
                     >
-                      {r.domain}
+                      {alert.server_name}
                     </div>
                     <div
                       style={{
@@ -343,14 +582,18 @@ function RouteComponent() {
                         marginTop: 2,
                       }}
                     >
-                      {t('alerts.authed.table.added', { date: r.added })}
+                      {t('alerts.authed.table.added', {
+                        date: fmtDate(alert.created_at),
+                      })}
                     </div>
                   </td>
-                  <td>{pillFor(r.status)}</td>
-                  <td className="mono">2 min ago</td>
+                  <td>{pillFor(alert)}</td>
+                  <td className="mono" style={{ fontSize: 13 }}>
+                    {fmtRelative(alert.last_check_at)}
+                  </td>
                   <td>
                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                      {r.recipients.map((rc) => (
+                      {alert.notify_emails.map((rc) => (
                         <span
                           key={rc}
                           className="pill ink"
@@ -366,16 +609,43 @@ function RouteComponent() {
                     </div>
                   </td>
                   <td style={{ whiteSpace: 'nowrap' }}>
-                    <div style={{ display: 'flex', gap: 6 }}>
-                      <Link to="/alerts/edit" search={{ domain: r.domain }}>
-                        <Button kind="ghost" size="small" as="span">
-                          {t('alerts.authed.table.edit')}
+                    {confirmDeleteId === alert.id ? (
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        <Button
+                          kind="danger"
+                          size="small"
+                          disabled={deleteAlert.isPending}
+                          onClick={() => deleteAlert.mutate(alert.id)}
+                        >
+                          Confirm
                         </Button>
-                      </Link>
-                      <Button kind="danger" size="small">
-                        {t('alerts.authed.table.delete')}
-                      </Button>
-                    </div>
+                        <Button
+                          kind="ghost"
+                          size="small"
+                          onClick={() => setConfirmDeleteId(null)}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    ) : (
+                      <div style={{ display: 'flex', gap: 6 }}>
+                        <Link
+                          to="/alerts/edit"
+                          search={{ id: alert.id, domain: alert.server_name }}
+                        >
+                          <Button kind="ghost" size="small" as="span">
+                            {t('alerts.authed.table.edit')}
+                          </Button>
+                        </Link>
+                        <Button
+                          kind="danger"
+                          size="small"
+                          onClick={() => setConfirmDeleteId(alert.id)}
+                        >
+                          {t('alerts.authed.table.delete')}
+                        </Button>
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}

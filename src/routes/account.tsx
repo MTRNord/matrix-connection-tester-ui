@@ -5,12 +5,23 @@ import Footer from '#/components/Footer/Footer'
 import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Table from '#/components/Table/Table'
+import { apiReq } from '#/auth/apiReq'
 import { isTokenValid, loadTokens } from '#/auth/tokens'
 import { configQueryOptions } from '#/config'
 import type { AppConfig } from '#/config'
 import { useAuth } from '#/contexts/AuthContext'
-import { queryOptions, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { createFileRoute, Link, redirect, useNavigate } from '@tanstack/react-router'
+import {
+  queryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
+import {
+  createFileRoute,
+  Link,
+  redirect,
+  useNavigate,
+} from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -53,18 +64,6 @@ export const Route = createFileRoute('/account')({
 
 // ---- Helper ------------------------------------------------------------------
 
-async function apiReq(url: string, options: RequestInit = {}) {
-  const token = loadTokens()
-  return fetch(url, {
-    ...options,
-    headers: {
-      ...(options.body != null ? { 'Content-Type': 'application/json' } : {}),
-      ...options.headers,
-      Authorization: `Bearer ${token?.access_token ?? ''}`,
-    },
-  })
-}
-
 const fmt = new Intl.DateTimeFormat('en-GB', {
   day: 'numeric',
   month: 'short',
@@ -73,11 +72,36 @@ const fmt = new Intl.DateTimeFormat('en-GB', {
 
 // Mirrors server-side entropy formula: entropy = length × log2(pool_size)
 const PW_LEVELS = [
-  { max: 40, label: 'password.strength.veryWeak', color: '#d4351c', accepted: false },
-  { max: 55, label: 'password.strength.weak', color: '#f47738', accepted: false },
-  { max: 65, label: 'password.strength.fair', color: '#ffdd00', accepted: true },
-  { max: 80, label: 'password.strength.strong', color: '#00703c', accepted: true },
-  { max: Infinity, label: 'password.strength.veryStrong', color: '#005a30', accepted: true },
+  {
+    max: 40,
+    label: 'password.strength.veryWeak',
+    color: '#d4351c',
+    accepted: false,
+  },
+  {
+    max: 55,
+    label: 'password.strength.weak',
+    color: '#f47738',
+    accepted: false,
+  },
+  {
+    max: 65,
+    label: 'password.strength.fair',
+    color: '#ffdd00',
+    accepted: true,
+  },
+  {
+    max: 80,
+    label: 'password.strength.strong',
+    color: '#00703c',
+    accepted: true,
+  },
+  {
+    max: Infinity,
+    label: 'password.strength.veryStrong',
+    color: '#005a30',
+    accepted: true,
+  },
 ]
 
 function passwordEntropy(pw: string): number {
@@ -119,7 +143,8 @@ const accountQueryOptions = (cfg: AppConfig | undefined) =>
 
 function RouteComponent() {
   const { t } = useTranslation()
-  const ta = (key: string, opts?: Record<string, unknown>) => t(`account.${key}`, opts)
+  const ta = (key: string, opts?: Record<string, unknown>) =>
+    t(`account.${key}`, opts)
   const { logout } = useAuth()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
@@ -147,13 +172,17 @@ function RouteComponent() {
         body: JSON.stringify({ email }),
       })
       if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
         throw new Error(err.error_description ?? 'Failed to add email')
       }
     },
     onSuccess: () => {
       setAddEmailVal('')
-      queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg!).queryKey })
+      queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      })
     },
   })
 
@@ -164,11 +193,16 @@ function RouteComponent() {
         { method: 'DELETE' },
       )
       if (!res.ok && res.status !== 204) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
         throw new Error(err.error_description ?? 'Failed to remove email')
       }
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg!).queryKey }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      }),
   })
 
   const changePassword = useMutation({
@@ -177,12 +211,17 @@ function RouteComponent() {
       new_password: string
       confirm_new_password: string
     }) => {
-      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account/password`, {
-        method: 'PATCH',
-        body: JSON.stringify(data),
-      })
+      const res = await apiReq(
+        `${cfg!.api_server_url}/oauth2/account/password`,
+        {
+          method: 'PATCH',
+          body: JSON.stringify(data),
+        },
+      )
       if (!res.ok && res.status !== 204) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
         throw new Error(err.error_description ?? 'Failed to change password')
       }
     },
@@ -200,7 +239,9 @@ function RouteComponent() {
         { method: 'POST' },
       )
       if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
         throw new Error(err.error_description ?? 'Failed to send setup email')
       }
     },
@@ -228,11 +269,16 @@ function RouteComponent() {
         { method: 'POST' },
       )
       if (!res.ok && res.status !== 204) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
         throw new Error(err.error_description ?? 'Failed to make primary')
       }
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg!).queryKey }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      }),
   })
 
   const resendVerification = useMutation({
@@ -242,8 +288,12 @@ function RouteComponent() {
         { method: 'POST' },
       )
       if (!res.ok) {
-        const err = await res.json().catch(() => ({})) as { error_description?: string }
-        throw new Error(err.error_description ?? 'Failed to resend verification')
+        const err = (await res.json().catch(() => ({}))) as {
+          error_description?: string
+        }
+        throw new Error(
+          err.error_description ?? 'Failed to resend verification',
+        )
       }
     },
   })
@@ -430,19 +480,23 @@ function RouteComponent() {
             {/* ---- Email addresses ---- */}
             <section id="emails">
               <h2 style={{ marginTop: 0 }}>{ta('emails.title')}</h2>
-              <p style={{ maxWidth: '62ch' }}>
-                {ta('emails.description')}
-              </p>
+              <p style={{ maxWidth: '62ch' }}>{ta('emails.description')}</p>
 
               <Card flush>
                 <Table>
                   <thead>
                     <tr>
                       <th scope="col">{ta('emails.table.address')}</th>
-                      <th scope="col" style={{ width: 180 }}>{ta('emails.table.status')}</th>
-                      <th scope="col" style={{ width: 220 }}>{ta('emails.table.timezone')}</th>
+                      <th scope="col" style={{ width: 180 }}>
+                        {ta('emails.table.status')}
+                      </th>
+                      <th scope="col" style={{ width: 220 }}>
+                        {ta('emails.table.timezone')}
+                      </th>
                       <th scope="col" style={{ width: 1 }}>
-                        <span className="sr-only">{ta('emails.table.actions')}</span>
+                        <span className="sr-only">
+                          {ta('emails.table.actions')}
+                        </span>
                       </th>
                     </tr>
                   </thead>
@@ -450,78 +504,156 @@ function RouteComponent() {
                     {/* Primary */}
                     <tr>
                       <td>
-                        <div className="mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
+                        <div
+                          className="mono"
+                          style={{
+                            fontSize: 14,
+                            fontWeight: 600,
+                            color: 'var(--ink)',
+                          }}
+                        >
                           {account.email}
                         </div>
-                        <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 2 }}>
-                          {ta('emails.primarySubtext', { date: fmt.format(new Date(account.created_at)) })}
+                        <div
+                          style={{
+                            fontSize: 12,
+                            color: 'var(--ink-3)',
+                            marginTop: 2,
+                          }}
+                        >
+                          {ta('emails.primarySubtext', {
+                            date: fmt.format(new Date(account.created_at)),
+                          })}
                         </div>
                       </td>
                       <td>
-                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                        <div
+                          style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}
+                        >
                           <Pill kind="ink">{ta('emails.pills.primary')}</Pill>
                           {account.email_verified ? (
-                            <Pill kind="ok" dot>{ta('emails.pills.verified')}</Pill>
+                            <Pill kind="ok" dot>
+                              {ta('emails.pills.verified')}
+                            </Pill>
                           ) : (
-                            <Pill kind="warn" dot>{ta('emails.pills.pending')}</Pill>
+                            <Pill kind="warn" dot>
+                              {ta('emails.pills.pending')}
+                            </Pill>
                           )}
                         </div>
                       </td>
                       <td>
                         <select
                           value={tz[account.email] ?? 'UTC'}
-                          onChange={(e) => setTz((prev) => ({ ...prev, [account.email]: e.target.value }))}
+                          onChange={(e) =>
+                            setTz((prev) => ({
+                              ...prev,
+                              [account.email]: e.target.value,
+                            }))
+                          }
                           aria-label={`Timezone for ${account.email}`}
                           style={{
-                            width: '100%', padding: '7px 10px',
+                            width: '100%',
+                            padding: '7px 10px',
                             font: '400 13px/1.4 var(--mono)',
-                            background: '#fff', color: 'var(--ink)',
-                            border: '1.5px solid var(--line)', borderRadius: 'var(--r-2)',
+                            background: '#fff',
+                            color: 'var(--ink)',
+                            border: '1.5px solid var(--line)',
+                            borderRadius: 'var(--r-2)',
                             cursor: 'pointer',
                           }}
                         >
-                          {TIMEZONES.map((z) => <option key={z} value={z}>{z}</option>)}
+                          {TIMEZONES.map((z) => (
+                            <option key={z} value={z}>
+                              {z}
+                            </option>
+                          ))}
                         </select>
                       </td>
-                      <td style={{ whiteSpace: 'nowrap', color: 'var(--ink-3)', fontSize: 13 }}>—</td>
+                      <td
+                        style={{
+                          whiteSpace: 'nowrap',
+                          color: 'var(--ink-3)',
+                          fontSize: 13,
+                        }}
+                      >
+                        —
+                      </td>
                     </tr>
 
                     {/* Additional */}
                     {account.additional_emails.map((em) => (
                       <tr key={em.id}>
                         <td>
-                          <div className="mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>
+                          <div
+                            className="mono"
+                            style={{
+                              fontSize: 14,
+                              fontWeight: 600,
+                              color: 'var(--ink)',
+                            }}
+                          >
                             {em.email}
                           </div>
-                          <div style={{ fontSize: 12, color: 'var(--ink-3)', marginTop: 2 }}>
-                            {ta('emails.addedSubtext', { date: fmt.format(new Date(em.created_at)) })}
+                          <div
+                            style={{
+                              fontSize: 12,
+                              color: 'var(--ink-3)',
+                              marginTop: 2,
+                            }}
+                          >
+                            {ta('emails.addedSubtext', {
+                              date: fmt.format(new Date(em.created_at)),
+                            })}
                           </div>
                         </td>
                         <td>
                           {em.verified ? (
-                            <Pill kind="ok" dot>{ta('emails.pills.verified')}</Pill>
+                            <Pill kind="ok" dot>
+                              {ta('emails.pills.verified')}
+                            </Pill>
                           ) : (
-                            <Pill kind="warn" dot>{ta('emails.pills.pending')}</Pill>
+                            <Pill kind="warn" dot>
+                              {ta('emails.pills.pending')}
+                            </Pill>
                           )}
                         </td>
                         <td>
                           <select
                             value={tz[em.email] ?? 'UTC'}
-                            onChange={(e) => setTz((prev) => ({ ...prev, [em.email]: e.target.value }))}
+                            onChange={(e) =>
+                              setTz((prev) => ({
+                                ...prev,
+                                [em.email]: e.target.value,
+                              }))
+                            }
                             aria-label={`Timezone for ${em.email}`}
                             style={{
-                              width: '100%', padding: '7px 10px',
+                              width: '100%',
+                              padding: '7px 10px',
                               font: '400 13px/1.4 var(--mono)',
-                              background: '#fff', color: 'var(--ink)',
-                              border: '1.5px solid var(--line)', borderRadius: 'var(--r-2)',
+                              background: '#fff',
+                              color: 'var(--ink)',
+                              border: '1.5px solid var(--line)',
+                              borderRadius: 'var(--r-2)',
                               cursor: 'pointer',
                             }}
                           >
-                            {TIMEZONES.map((z) => <option key={z} value={z}>{z}</option>)}
+                            {TIMEZONES.map((z) => (
+                              <option key={z} value={z}>
+                                {z}
+                              </option>
+                            ))}
                           </select>
                         </td>
                         <td style={{ whiteSpace: 'nowrap' }}>
-                          <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+                          <div
+                            style={{
+                              display: 'flex',
+                              gap: 6,
+                              justifyContent: 'flex-end',
+                            }}
+                          >
                             {!em.verified && (
                               <Button
                                 kind="ghost"
@@ -559,14 +691,18 @@ function RouteComponent() {
               </Card>
 
               {removeEmail.error && (
-                <p
-                  style={{
-                    color: 'var(--bad-deep)',
-                    fontSize: 14,
-                    marginTop: 8,
-                  }}
-                >
+                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
                   {removeEmail.error.message}
+                </p>
+              )}
+              {resendVerification.error && (
+                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                  {resendVerification.error.message}
+                </p>
+              )}
+              {makePrimary.error && (
+                <p style={{ color: 'var(--bad-deep)', fontSize: 14, marginTop: 8 }}>
+                  {makePrimary.error.message}
                 </p>
               )}
 
@@ -681,7 +817,10 @@ function RouteComponent() {
                       </p>
                     )}
 
-                    <Field id="current-password" label={ta('password.fields.current')}>
+                    <Field
+                      id="current-password"
+                      label={ta('password.fields.current')}
+                    >
                       <input
                         className="field__input"
                         type="password"
@@ -702,62 +841,92 @@ function RouteComponent() {
                       />
                     </Field>
 
-                    {newPw.length > 0 && (() => {
-                      const entropy = passwordEntropy(newPw)
-                      const levelIdx = PW_LEVELS.findIndex((l) => entropy < l.max)
-                      const level = PW_LEVELS[levelIdx]
-                      const textColor = level.color === '#ffdd00' ? '#594d00' : level.color
-                      const issues = checkPwRequirements(newPw)
-                      return (
-                        <div
-                          aria-live="polite"
-                          style={{ maxWidth: 360, marginTop: -8, marginBottom: 20 }}
-                        >
-                          <div style={{ display: 'flex', gap: 4 }} aria-hidden="true">
-                            {[0, 1, 2, 3, 4].map((i) => (
-                              <div
-                                key={i}
-                                style={{
-                                  flex: 1,
-                                  height: 6,
-                                  borderRadius: 2,
-                                  background: i <= levelIdx ? level.color : 'var(--surface-3)',
-                                  transition: 'background 120ms ease',
-                                }}
-                              />
-                            ))}
-                          </div>
+                    {newPw.length > 0 &&
+                      (() => {
+                        const entropy = passwordEntropy(newPw)
+                        const levelIdx = PW_LEVELS.findIndex(
+                          (l) => entropy < l.max,
+                        )
+                        const level = PW_LEVELS[levelIdx]
+                        const textColor =
+                          level.color === '#ffdd00' ? '#594d00' : level.color
+                        const issues = checkPwRequirements(newPw)
+                        return (
                           <div
+                            aria-live="polite"
                             style={{
-                              marginTop: 8,
-                              display: 'flex',
-                              justifyContent: 'space-between',
-                              gap: 12,
-                              alignItems: 'baseline',
-                              flexWrap: 'wrap',
+                              maxWidth: 360,
+                              marginTop: -8,
+                              marginBottom: 20,
                             }}
                           >
-                            <span style={{ fontSize: 13, fontWeight: 600, color: textColor }}>
-                              {ta(level.label)} ({Math.round(entropy)} bits)
-                            </span>
-                            <span
+                            <div
+                              style={{ display: 'flex', gap: 4 }}
+                              aria-hidden="true"
+                            >
+                              {[0, 1, 2, 3, 4].map((i) => (
+                                <div
+                                  key={i}
+                                  style={{
+                                    flex: 1,
+                                    height: 6,
+                                    borderRadius: 2,
+                                    background:
+                                      i <= levelIdx
+                                        ? level.color
+                                        : 'var(--surface-3)',
+                                    transition: 'background 120ms ease',
+                                  }}
+                                />
+                              ))}
+                            </div>
+                            <div
                               style={{
-                                fontSize: 13,
-                                color: issues.length > 0 || !level.accepted ? '#d4351c' : '#00703c',
+                                marginTop: 8,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                gap: 12,
+                                alignItems: 'baseline',
+                                flexWrap: 'wrap',
                               }}
                             >
-                              {issues.length > 0
-                                ? ta('password.missing', { issues: issues.map((k) => ta(k)).join(', ') })
-                                : level.accepted
-                                  ? ta('password.meetsRequirements')
-                                  : ta('password.tooWeak')}
-                            </span>
+                              <span
+                                style={{
+                                  fontSize: 13,
+                                  fontWeight: 600,
+                                  color: textColor,
+                                }}
+                              >
+                                {ta(level.label)} ({Math.round(entropy)} bits)
+                              </span>
+                              <span
+                                style={{
+                                  fontSize: 13,
+                                  color:
+                                    issues.length > 0 || !level.accepted
+                                      ? '#d4351c'
+                                      : '#00703c',
+                                }}
+                              >
+                                {issues.length > 0
+                                  ? ta('password.missing', {
+                                      issues: issues
+                                        .map((k) => ta(k))
+                                        .join(', '),
+                                    })
+                                  : level.accepted
+                                    ? ta('password.meetsRequirements')
+                                    : ta('password.tooWeak')}
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      )
-                    })()}
+                        )
+                      })()}
 
-                    <Field id="confirm-password" label={ta('password.fields.confirm')}>
+                    <Field
+                      id="confirm-password"
+                      label={ta('password.fields.confirm')}
+                    >
                       <input
                         className="field__input"
                         type="password"
@@ -774,7 +943,9 @@ function RouteComponent() {
                           color: confirmPw === newPw ? '#00703c' : '#d4351c',
                         }}
                       >
-                        {confirmPw === newPw ? ta('password.passwordsMatch') : ta('password.passwordsNoMatch')}
+                        {confirmPw === newPw
+                          ? ta('password.passwordsMatch')
+                          : ta('password.passwordsNoMatch')}
                       </p>
                     )}
 
@@ -888,9 +1059,7 @@ function RouteComponent() {
                 >
                   {ta('delete.warning')}
                 </h3>
-                <p style={{ margin: '0 0 8px' }}>
-                  {ta('delete.intro')}
-                </p>
+                <p style={{ margin: '0 0 8px' }}>{ta('delete.intro')}</p>
                 <ul
                   style={{
                     margin: '0 0 16px',
@@ -969,8 +1138,7 @@ function RouteComponent() {
                       <Button
                         kind="danger"
                         disabled={
-                          deleteConfirm !== 'DELETE' ||
-                          deleteAccount.isPending
+                          deleteConfirm !== 'DELETE' || deleteAccount.isPending
                         }
                         onClick={() => deleteAccount.mutate()}
                       >

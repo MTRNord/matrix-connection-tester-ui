@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useState } from 'react'
 import type { ReactNode } from 'react'
 import {
   clearTokens,
@@ -8,6 +8,15 @@ import {
 } from '../auth/tokens'
 import type { TokenSet } from '../auth/tokens'
 import { loadConfig } from '../config'
+
+// Module-level setter — lets non-React code (QueryCache error handler) clear
+// React auth state synchronously alongside localStorage.
+let _clearReactAuth: (() => void) | null = null
+
+export function resetAuthState(): void {
+  clearTokens()
+  _clearReactAuth?.()
+}
 
 export interface AuthState {
   token: TokenSet | null
@@ -23,6 +32,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const t = loadTokens()
     return t && isTokenValid(t) ? t : null
   })
+
+  useEffect(() => {
+    _clearReactAuth = () => setTokenState(null)
+    return () => {
+      _clearReactAuth = null
+    }
+  }, [])
 
   const setToken = useCallback((t: TokenSet) => {
     saveTokens(t)
