@@ -184,6 +184,165 @@
       "disclaimer": "Der Connectivity Tester meldet sich nicht bei Matrix an; dieses Konto dient ausschließlich zur Zustellung von Benachrichtigungs-E-Mails für die Server, die du beobachtest."
     }
   },
+  "results": {
+    "breadcrumb": "Ergebnisse",
+    "title": "Ergebnisse für {{serverName}}",
+    "lead": "Verbindungsbericht für <mono>{{serverName}}</mono>.{{ipSuffix}} Sieh dir das Urteil, eventuelle Probleme und die technische Übersicht unten an.",
+    "leadIpSuffix": " {{count}} IP-Adresse gefunden.",
+    "leadIpSuffix_plural": " {{count}} IP-Adressen gefunden.",
+    "pending": {
+      "title": "Federation-Test läuft…",
+      "lead": "DNS, TLS, Signaturschlüssel und Server-Erreichbarkeit werden geprüft. Das dauert in der Regel ein paar Sekunden."
+    },
+    "error": {
+      "title": "Ergebnisse konnten nicht geladen werden",
+      "lead": "Der Federation-Test für <mono>{{serverName}}</mono> konnte nicht abgeschlossen werden.",
+      "networkTitle": "API nicht erreichbar",
+      "networkBody": "Der API-Server hat einen Fehler zurückgegeben oder war nicht erreichbar. Er ist möglicherweise vorübergehend nicht verfügbar – bitte versuche es gleich erneut.",
+      "retry": "Erneut versuchen",
+      "home": "Zurück zur Startseite"
+    },
+    "verdict": {
+      "okTitle": "Dein Homeserver sieht gesund aus.",
+      "okBody": "Federation und Client-Server-API haben wie erwartet geantwortet – du musst heute nichts beheben.",
+      "warnTitle": "Federation funktioniert, aber mit Warnungen.",
+      "warnBodyRetry": "Ein oder mehrere Endpunkte benötigten einen Wiederholungsversuch. Remote-Server könnten beim ersten Verbindungsversuch Instabilität erleben.",
+      "warnBodySplitBrain": "Federation hat geantwortet, aber well-known war über IPs hinweg inkonsistent (Split-Brain). Siehe Abschnitt Probleme unten.",
+      "badTitle": "Federation-Probleme erkannt.",
+      "badBody": "Federation-Checks sind fehlgeschlagen. Siehe Abschnitt Probleme unten für Details und Lösungsvorschläge."
+    },
+    "stats": {
+      "federation": "Federation",
+      "clientServer": "Client-Server-API",
+      "implementation": "Implementierung",
+      "matrixRtc": "MatrixRTC",
+      "fetching": "Lade…",
+      "checksPass": "alle Checks bestanden",
+      "checksFail": "Checks fehlgeschlagen",
+      "mscCount": "{{count}} MSC aktiviert",
+      "mscCount_plural": "{{count}} MSCs aktiviert",
+      "rtcSupported": "Sprach- & Videoanrufe unterstützt",
+      "rtcNotDetected": "Nicht erkannt",
+      "unavailable": "Nicht verfügbar",
+      "ipCount": "{{count}} IP",
+      "ipCount_plural": "{{count}} IPs"
+    },
+    "problems": {
+      "title": "Probleme & Lösungen",
+      "noneTitle": "Keine Probleme erkannt.",
+      "noneBody": "Falls ein zukünftiger Test ein Problem aufdeckt, erscheint es zuerst hier – mit einer Schritt-für-Schritt-Erklärung, nicht einem Stack-Trace.",
+      "federationFailed": "Federation-Checks fehlgeschlagen",
+      "connectionError": "Verbindungsfehler bei {{ip}}: {{error}}",
+      "splitBrain": "Split-Brain: well-known-Antworten über IPs inkonsistent",
+      "retryNeeded": "Ein oder mehrere Endpunkte benötigten einen Wiederholungsversuch",
+      "serverNameMismatch": "{{ip}}: Servername stimmt nicht mit Signaturschlüsseln überein",
+      "invalidCert": "{{ip}}: ungültiges TLS-Zertifikat",
+      "expiredKeys": "{{ip}}: Signaturschlüssel sind abgelaufen",
+      "noEd25519Key": "{{ip}}: kein Ed25519-Signaturschlüssel gefunden",
+      "ed25519Failed": "{{ip}}: Ed25519-Signaturverifizierung fehlgeschlagen",
+      "serverVersionParse": "{{ip}}: Serverversionstring konnte nicht geparst werden"
+    },
+    "support": {
+      "title": "Moderations- & Sicherheitskontakte",
+      "intro": "Veröffentlicht via MSC1929 durch den Homeserver-Betreiber. Bei Meldungen zu Missbrauch, Belästigung oder Sicherheitsproblemen sind dies die richtigen Adressen.",
+      "contactsFor": "Kontakte für {{serverName}}",
+      "published": "Veröffentlicht",
+      "notPublished": "Nicht veröffentlicht",
+      "copyHint": "Klicke eine Adresse, um sie zu kopieren, oder öffne sie in deinem Mail-Client.",
+      "noneFound": "Keine Support-Kontakte gefunden unter <mono>https://{{serverName}}/.well-known/matrix/support</mono>.",
+      "copy": "Kopieren",
+      "copied": "Kopiert!",
+      "open": "Öffnen ↗"
+    },
+    "overview": {
+      "title": "Server-Übersicht",
+      "srCaption": "Server-Übersicht für {{serverName}}",
+      "serverType": "Servertyp",
+      "discoveredIps": "Gefundene IP-Adressen",
+      "noIps": "Keine gefunden",
+      "clientEndpoint": "Client-Endpunkt",
+      "identityServer": "Identity-Server",
+      "latestCsVersion": "Neueste C-S-API-Version"
+    },
+    "errors": {
+      "dnsNoRecord": "DNS-Abfrage fehlgeschlagen — kein A-Record gefunden",
+      "dnsNoRecordHint": "Der A-Record (IPv4) der Domain fehlt oder wurde noch nicht propagiert. Überprüfe dein DNS-Dashboard und stelle sicher, dass ein A-Record auf deinen Server zeigt. DNS-Änderungen können bis zu 48 Stunden dauern. Überprüfe mit: <code>dig DOMAIN A</code>. <docsLink>Netzwerk-Fehlerbehebung lesen →</docsLink>",
+      "connRefused": "Verbindung abgelehnt — Server akzeptiert keine Verbindungen",
+      "connRefusedHint": "Der Server ist per DNS erreichbar, hat die Verbindung aber aktiv abgelehnt. Stelle sicher, dass dein Matrix-Server läuft und Port 8448 (oder dein delegierter Port) aus dem Internet erreichbar ist. Überprüfe deine Firewall-Regeln. <docsLink>Netzwerk-Fehlerbehebung lesen →</docsLink>",
+      "timeout": "Verbindungs-Timeout — Server hat nicht geantwortet",
+      "timeoutHint": "Der Server konnte per DNS aufgelöst werden, hat aber nicht rechtzeitig geantwortet. Er könnte überlastet sein, von außen nicht erreichbar sein oder hinter einer Firewall liegen, die Pakete stillschweigend verwirft. <docsLink>Netzwerk-Fehlerbehebung lesen →</docsLink>",
+      "tls": "TLS- / Zertifikatsfehler",
+      "tlsHint": "Überprüfe, ob dein Zertifikat gültig und nicht abgelaufen ist und die richtigen Hostnamen abdeckt. Stelle sicher, dass dein Server die vollständige Zertifikatskette vorlegt. <docsLink>Federation-Fehlerbehebung lesen →</docsLink>",
+      "unknown": "Federation-Check fehlgeschlagen",
+      "technicalDetails": "Technische Details"
+    },
+    "technical": {
+      "title": "Technische Details",
+      "intro": "Die folgenden Abschnitte sind hauptsächlich für Server-Administratoren und Protokollentwickler nützlich. Klicke auf einen Abschnitt, um ihn aufzuklappen.",
+      "csApi": {
+        "title": "Client-Server-API-Übersicht",
+        "hint": "Unterstützte API-Versionen und experimentelle Features",
+        "latestVersion": "Neueste C-S-Version",
+        "endpoint": "Endpunkt",
+        "allVersions": "Alle Versionen",
+        "featuresTitle": "Aktivierte experimentelle Features ({{count}})",
+        "featureCol": "Feature",
+        "whatCol": "Beschreibung",
+        "specCol": "Spec",
+        "unavailable": "Client-Server-API nicht verfügbar oder keine Antwort."
+      },
+      "clientDiscovery": {
+        "title": "Client-Discovery-Ergebnisse",
+        "hint": ".well-known/matrix/client Abfrage",
+        "ipCol": "IP",
+        "serverCol": "Delegierter Server",
+        "statusCol": "Status",
+        "noData": "Keine well-known-Daten verfügbar."
+      },
+      "rtc": {
+        "title": "MatrixRTC-Bereitschaft",
+        "hint": "MSC4143 — Sprach- & Videoanruf-Unterstützung",
+        "supported": "Unterstützt",
+        "notDetected": "Nicht erkannt",
+        "supportedBody": "MatrixRTC wird unterstützt. Der Server meldet <mono>org.matrix.msc4143</mono> als aktiviertes experimentelles Feature und ermöglicht Echtzeit-Sprach- und Videoanrufe via Element Call.",
+        "notDetectedBody": "MatrixRTC (<mono>org.matrix.msc4143</mono>) wurde nicht erkannt. Sprach- und Videoanrufe via Element Call werden auf diesem Server möglicherweise nicht unterstützt."
+      },
+      "resolution": {
+        "title": "Server-Auflösung",
+        "hint": "DNS / .well-known/matrix/server Abfrage",
+        "srvSkipped": "SRV-Abfrage übersprungen",
+        "resolvedAddrs": "Aufgelöste Adressen",
+        "srvTargets": "SRV-Ziele",
+        "none": "Keine",
+        "yes": "Ja",
+        "no": "Nein",
+        "prefixCol": "Präfix",
+        "targetCol": "Ziel",
+        "portCol": "Port",
+        "priorityCol": "Priorität",
+        "weightCol": "Gewicht"
+      },
+      "connectivity": {
+        "title": "Verbindungsbericht",
+        "hint": "Details zur Verbindung je Host",
+        "noReports": "Keine Verbindungsberichte verfügbar.",
+        "ok": "OK",
+        "failed": "Fehlgeschlagen",
+        "retryNeeded": "Wiederholung benötigt",
+        "tlsVersion": "TLS-Version",
+        "cipherSuite": "Cipher-Suite",
+        "serverNameMatch": "Servername stimmt überein",
+        "validCerts": "Gültige Zertifikate",
+        "keysNotExpired": "Schlüssel nicht abgelaufen",
+        "ed25519Present": "Ed25519-Schlüssel vorhanden",
+        "ed25519Valid": "Ed25519-Signatur gültig"
+      },
+      "rawJson": {
+        "title": "Roh-JSON",
+        "hint": "Vollständige maschinenlesbare Antwort"
+      }
+    }
+  },
   "sponsor": {
     "text": "Dieser Dienst ist kostenlos nutzbar. Wenn er dir Kopfschmerzen erspart hat, erwäge die Entwicklung zu unterstützen.",
     "ariaLabel": "Projekt unterstützen"

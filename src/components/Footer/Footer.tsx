@@ -67,17 +67,19 @@ export default function Footer() {
             </div>
             {(cfg?.github_sponsors_url ?? cfg?.liberapay_url) && (
               <div>
-                <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
+                <div
+                  style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}
+                >
                   {t('footer.sponsoring')}
                 </div>
                 <div
                   className="footer__row"
                   style={{ flexDirection: 'column', gap: 8 }}
                 >
-                  {cfg?.github_sponsors_url && (
+                  {cfg.github_sponsors_url && (
                     <a href={cfg.github_sponsors_url}>GitHub Sponsors</a>
                   )}
-                  {cfg?.liberapay_url && (
+                  {cfg.liberapay_url && (
                     <a href={cfg.liberapay_url}>Liberapay</a>
                   )}
                 </div>

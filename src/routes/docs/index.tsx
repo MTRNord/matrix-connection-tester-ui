@@ -37,81 +37,79 @@ function RouteComponent() {
           }}
         >
           <aside aria-activedescendant="Documentation Navigation">
-            {(
-              [
-                {
-                  heading: 'Getting started',
-                  items: [
-                    { label: 'Overview', to: '/docs/getting-started/overview' },
-                    {
-                      label: 'Federation setup',
-                      to: '/docs/getting-started/federation-setup',
-                    },
-                    {
-                      label: 'Getting help',
-                      to: '/docs/getting-started/getting-help',
-                    },
-                  ],
-                },
-                {
-                  heading: 'Configuration',
-                  items: [
-                    { label: 'CORS', to: '/docs/configuration/cors' },
-                    {
-                      label: 'TLS certificates',
-                      to: '/docs/configuration/tls-certificates',
-                    },
-                    {
-                      label: 'Federation TLS',
-                      to: '/docs/configuration/federation-tls',
-                    },
-                    {
-                      label: 'Server config',
-                      to: '/docs/configuration/server-config',
-                    },
-                  ],
-                },
-                {
-                  heading: 'API endpoints',
-                  items: [
-                    {
-                      label: 'Support endpoint',
-                      to: '/docs/api-endpoints/support-endpoint',
-                    },
-                    {
-                      label: 'Client-server API',
-                      to: '/docs/api-endpoints/client-server-api',
-                    },
-                    {
-                      label: 'Well-known delegation',
-                      to: '/docs/api-endpoints/well-known-delegation',
-                    },
-                  ],
-                },
-                {
-                  heading: 'Troubleshooting',
-                  items: [
-                    { label: 'General', to: '/docs/troubleshooting/general' },
-                    {
-                      label: 'Network issues',
-                      to: '/docs/troubleshooting/network-issues',
-                    },
-                    {
-                      label: 'Federation network',
-                      to: '/docs/troubleshooting/federation-network',
-                    },
-                    {
-                      label: 'Server logs',
-                      to: '/docs/troubleshooting/server-logs',
-                    },
-                    {
-                      label: 'Performance',
-                      to: '/docs/troubleshooting/performance',
-                    },
-                  ],
-                },
-              ]
-            ).map(({ heading, items }) => {
+            {[
+              {
+                heading: 'Getting started',
+                items: [
+                  { label: 'Overview', to: '/docs/getting-started/overview' },
+                  {
+                    label: 'Federation setup',
+                    to: '/docs/getting-started/federation-setup',
+                  },
+                  {
+                    label: 'Getting help',
+                    to: '/docs/getting-started/getting-help',
+                  },
+                ],
+              },
+              {
+                heading: 'Configuration',
+                items: [
+                  { label: 'CORS', to: '/docs/configuration/cors' },
+                  {
+                    label: 'TLS certificates',
+                    to: '/docs/configuration/tls-certificates',
+                  },
+                  {
+                    label: 'Federation TLS',
+                    to: '/docs/configuration/federation-tls',
+                  },
+                  {
+                    label: 'Server config',
+                    to: '/docs/configuration/server-config',
+                  },
+                ],
+              },
+              {
+                heading: 'API endpoints',
+                items: [
+                  {
+                    label: 'Support endpoint',
+                    to: '/docs/api-endpoints/support-endpoint',
+                  },
+                  {
+                    label: 'Client-server API',
+                    to: '/docs/api-endpoints/client-server-api',
+                  },
+                  {
+                    label: 'Well-known delegation',
+                    to: '/docs/api-endpoints/well-known-delegation',
+                  },
+                ],
+              },
+              {
+                heading: 'Troubleshooting',
+                items: [
+                  { label: 'General', to: '/docs/troubleshooting/general' },
+                  {
+                    label: 'Network issues',
+                    to: '/docs/troubleshooting/network-issues',
+                  },
+                  {
+                    label: 'Federation network',
+                    to: '/docs/troubleshooting/federation-network',
+                  },
+                  {
+                    label: 'Server logs',
+                    to: '/docs/troubleshooting/server-logs',
+                  },
+                  {
+                    label: 'Performance',
+                    to: '/docs/troubleshooting/performance',
+                  },
+                ],
+              },
+            ].map(({ heading, items }) => {
               const linkStyle = {
                 display: 'block',
                 padding: '7px 0 7px 12px',

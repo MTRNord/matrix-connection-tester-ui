@@ -294,5 +294,164 @@
       "confirmButton": "Yes, delete everything",
       "cancelButton": "Cancel"
     }
+  },
+  "results": {
+    "breadcrumb": "Results",
+    "title": "Results for {{serverName}}",
+    "lead": "Federation report for <mono>{{serverName}}</mono>.{{ipSuffix}} Check the verdict, any problems, and the full technical breakdown below.",
+    "leadIpSuffix": " Found {{count}} IP address.",
+    "leadIpSuffix_plural": " Found {{count}} IP addresses.",
+    "pending": {
+      "title": "Running federation test…",
+      "lead": "Checking DNS, TLS, signing keys and server connectivity. This usually takes a few seconds."
+    },
+    "error": {
+      "title": "Could not load results",
+      "lead": "The federation test for <mono>{{serverName}}</mono> could not complete.",
+      "networkTitle": "API unreachable",
+      "networkBody": "The API server returned an error or could not be reached. It may be temporarily unavailable — please try again in a moment.",
+      "retry": "Try again",
+      "home": "Back to home"
+    },
+    "verdict": {
+      "okTitle": "Your homeserver looks healthy.",
+      "okBody": "Federation and client-server APIs both responded as expected — there's nothing for you to fix today.",
+      "warnTitle": "Federation works, but with warnings.",
+      "warnBodyRetry": "One or more endpoints required a retry to succeed. Remote servers may experience instability on their first connection attempt.",
+      "warnBodySplitBrain": "Federation responded, but well-known was inconsistent across IPs (split-brain). Check the problems section below.",
+      "badTitle": "Federation issues detected.",
+      "badBody": "Federation checks failed. See the problems section below for details and suggested fixes."
+    },
+    "stats": {
+      "federation": "Federation",
+      "clientServer": "Client-server API",
+      "implementation": "Implementation",
+      "matrixRtc": "MatrixRTC",
+      "fetching": "Fetching…",
+      "checksPass": "all checks passed",
+      "checksFail": "checks failed",
+      "mscCount": "{{count}} MSC enabled",
+      "mscCount_plural": "{{count}} MSCs enabled",
+      "rtcSupported": "Voice & video supported",
+      "rtcNotDetected": "Not detected",
+      "unavailable": "Unavailable",
+      "ipCount": "{{count}} IP",
+      "ipCount_plural": "{{count}} IPs"
+    },
+    "problems": {
+      "title": "Problems & how to fix them",
+      "noneTitle": "No problems detected.",
+      "noneBody": "If a future test surfaces an issue, it'll show up here first — with a step-by-step explanation, not a stack trace.",
+      "federationFailed": "Federation checks failed",
+      "connectionError": "Connection error on {{ip}}: {{error}}",
+      "splitBrain": "Split-brain: well-known responses inconsistent across IPs",
+      "retryNeeded": "One or more endpoints required a retry to succeed",
+      "serverNameMismatch": "{{ip}}: server name mismatch in signing keys",
+      "invalidCert": "{{ip}}: invalid TLS certificate",
+      "expiredKeys": "{{ip}}: signing keys have expired",
+      "noEd25519Key": "{{ip}}: no Ed25519 signing key found",
+      "ed25519Failed": "{{ip}}: Ed25519 signature verification failed",
+      "serverVersionParse": "{{ip}}: server version string could not be parsed"
+    },
+    "support": {
+      "title": "Moderation & security contacts",
+      "intro": "Published via MSC1929 by the homeserver operator. If you're reporting abuse, harassment, or a security issue, these are the right addresses.",
+      "contactsFor": "Contacts for {{serverName}}",
+      "published": "Published",
+      "notPublished": "Not published",
+      "copyHint": "Click an address to copy it, or tap the email to open your mail client.",
+      "noneFound": "No support contacts found at <mono>https://{{serverName}}/.well-known/matrix/support</mono>.",
+      "copy": "Copy",
+      "copied": "Copied!",
+      "open": "Open ↗"
+    },
+    "overview": {
+      "title": "Server overview",
+      "srCaption": "Server overview for {{serverName}}",
+      "serverType": "Server type",
+      "discoveredIps": "Discovered IP addresses",
+      "noIps": "None found",
+      "clientEndpoint": "Client endpoint",
+      "identityServer": "Identity server",
+      "latestCsVersion": "Latest C-S API version"
+    },
+    "errors": {
+      "dnsNoRecord": "DNS lookup failed — no A record found",
+      "dnsNoRecordHint": "The domain's A (IPv4) record is either missing or not yet propagated. Check your DNS provider's control panel and ensure an A record exists pointing to your server. DNS changes can take up to 48 hours to propagate. Verify with: <code>dig DOMAIN A</code>. <docsLink>Read the network troubleshooting guide →</docsLink>",
+      "connRefused": "Connection refused — server is not accepting connections",
+      "connRefusedHint": "Your server is reachable by DNS but actively refused the connection. Confirm that your Matrix server process is running and that port 8448 (or your delegated port) is open and reachable from the internet. Check your firewall rules. <docsLink>Read the network troubleshooting guide →</docsLink>",
+      "timeout": "Connection timed out — server did not respond",
+      "timeoutHint": "The server could be reached by DNS but did not respond in time. It may be overloaded, unreachable from the outside, or behind a firewall that silently drops packets rather than refusing them. <docsLink>Read the network troubleshooting guide →</docsLink>",
+      "tls": "TLS / certificate error",
+      "tlsHint": "Check that your certificate is valid, not expired, and covers the correct hostnames. Make sure your server presents the full certificate chain. <docsLink>Read the federation troubleshooting guide →</docsLink>",
+      "unknown": "Federation check failed",
+      "technicalDetails": "Technical details"
+    },
+    "technical": {
+      "title": "Technical details",
+      "intro": "The sections below are mainly useful for server administrators and protocol developers. Click any one to expand.",
+      "csApi": {
+        "title": "Client-Server API overview",
+        "hint": "Supported API versions and experimental features",
+        "latestVersion": "Latest C-S version",
+        "endpoint": "Endpoint",
+        "allVersions": "All versions",
+        "featuresTitle": "Enabled experimental features ({{count}})",
+        "featureCol": "Feature",
+        "whatCol": "What it does",
+        "specCol": "Spec",
+        "unavailable": "Client-server API unavailable or did not respond."
+      },
+      "clientDiscovery": {
+        "title": "Client discovery results",
+        "hint": ".well-known/matrix/client probe",
+        "ipCol": "IP",
+        "serverCol": "Delegated server",
+        "statusCol": "Status",
+        "noData": "No well-known data available."
+      },
+      "rtc": {
+        "title": "MatrixRTC readiness",
+        "hint": "MSC4143 — voice & video call support",
+        "supported": "Supported",
+        "notDetected": "Not detected",
+        "supportedBody": "MatrixRTC is supported. The server reports <mono>org.matrix.msc4143</mono> as an enabled unstable feature, enabling real-time voice and video calls via Element Call.",
+        "notDetectedBody": "MatrixRTC (<mono>org.matrix.msc4143</mono>) was not detected. Voice and video calls via Element Call may not be supported on this server."
+      },
+      "resolution": {
+        "title": "Server resolution",
+        "hint": "DNS / .well-known/matrix/server lookup",
+        "srvSkipped": "SRV lookup skipped",
+        "resolvedAddrs": "Resolved addresses",
+        "srvTargets": "SRV targets",
+        "none": "None",
+        "yes": "Yes",
+        "no": "No",
+        "prefixCol": "Prefix",
+        "targetCol": "Target",
+        "portCol": "Port",
+        "priorityCol": "Priority",
+        "weightCol": "Weight"
+      },
+      "connectivity": {
+        "title": "Connectivity report",
+        "hint": "Per-host probe details",
+        "noReports": "No connection reports available.",
+        "ok": "OK",
+        "failed": "Failed",
+        "retryNeeded": "Retry needed",
+        "tlsVersion": "TLS version",
+        "cipherSuite": "Cipher suite",
+        "serverNameMatch": "Server name match",
+        "validCerts": "Valid certificates",
+        "keysNotExpired": "Keys not expired",
+        "ed25519Present": "Ed25519 key present",
+        "ed25519Valid": "Ed25519 signature valid"
+      },
+      "rawJson": {
+        "title": "Raw JSON",
+        "hint": "Full machine-readable response"
+      }
+    }
   }
 }

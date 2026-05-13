@@ -1,0 +1,64 @@
+/* Disclosure — white surface on the cream page, so the technical
+   detail sections read as discrete panels (matches the original design). */
+.disclosure {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: 16px 22px;
+  transition: border-color 0.12s ease;
+  /* contain children so pre/code with overflow-x:auto scrolls rather than expanding */
+  overflow: hidden;
+  min-width: 0;
+}
+.disclosure:hover {
+  border-color: var(--line-2);
+}
+.disclosure[open] {
+  padding-bottom: 22px;
+}
+.disclosure > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 4px 0;
+}
+.disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.disclosure__chevron {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-2);
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease;
+}
+.disclosure[open] .disclosure__chevron {
+  transform: rotate(90deg);
+  background: var(--surface-2);
+}
+.disclosure__title {
+  flex: 1;
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--ink);
+  letter-spacing: -0.005em;
+}
+.disclosure__hint {
+  font-size: 13px;
+  color: var(--ink-3);
+  margin-top: 2px;
+  font-weight: 400;
+}
+.disclosure__body {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}

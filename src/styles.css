@@ -147,6 +147,23 @@
     border-radius: var(--r-1);
     color: var(--ink);
   }
+  pre {
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.6;
+    background: var(--surface-2);
+    border-radius: var(--r-2);
+    padding: 16px;
+    overflow: auto;
+    margin: 0;
+    color: var(--ink);
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
 }
 
 @layer a11y {
