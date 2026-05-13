@@ -9,8 +9,13 @@ export default function Table({
   children: React.ReactNode
 } & React.HTMLAttributes<HTMLTableElement>) {
   return (
-    <table className={['table', className].filter(Boolean).join(' ')} {...rest}>
-      {children}
-    </table>
+    <div className="table-wrap">
+      <table
+        className={['table', className].filter(Boolean).join(' ')}
+        {...rest}
+      >
+        {children}
+      </table>
+    </div>
   )
 }

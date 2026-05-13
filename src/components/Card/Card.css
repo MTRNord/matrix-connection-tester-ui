@@ -22,5 +22,5 @@
 }
 .card.flush {
   padding: 0;
-  overflow: hidden;
+  overflow: clip;
 }

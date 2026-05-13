@@ -491,7 +491,6 @@ function RouteComponent() {
               flexDirection: 'column',
               gap: 32,
               minWidth: 0,
-              overflow: 'hidden',
             }}
           >
             {/* ---- Profile ---- */}
