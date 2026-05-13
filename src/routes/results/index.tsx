@@ -818,14 +818,7 @@ function ResultsBody({
         >
           {csData?.versions ? (
             <>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '220px 1fr',
-                  gap: '10px 24px',
-                  fontSize: 14,
-                }}
-              >
+              <div className="kv-grid">
                 <div style={{ fontWeight: 600 }}>
                   {t('results.technical.csApi.latestVersion')}
                 </div>
@@ -1018,15 +1011,7 @@ function ResultsBody({
           title={t('results.technical.resolution.title')}
           hint={t('results.technical.resolution.hint')}
         >
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '220px 1fr',
-              gap: '10px 24px',
-              fontSize: 14,
-              marginBottom: 16,
-            }}
-          >
+          <div className="kv-grid" style={{ marginBottom: 16 }}>
             <div style={{ fontWeight: 600 }}>
               {t('results.technical.resolution.srvSkipped')}
             </div>

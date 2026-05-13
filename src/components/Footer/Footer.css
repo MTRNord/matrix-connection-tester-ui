@@ -25,3 +25,40 @@
   max-width: 70ch;
   opacity: 0.85;
 }
+
+.footer__body {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.footer__brand {
+  flex: 0 0 280px;
+}
+
+.footer__links {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 700px) {
+  .footer__brand {
+    flex: 0 0 100%;
+  }
+  .footer__links {
+    grid-template-columns: repeat(2, 1fr);
+    flex: 0 0 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer__inner {
+    padding: 32px 16px;
+  }
+  .footer__links {
+    grid-template-columns: 1fr;
+  }
+}

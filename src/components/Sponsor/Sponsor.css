@@ -33,6 +33,7 @@
   border-radius: 999px;
   color: var(--ink);
   text-decoration: none;
+  white-space: nowrap;
 }
 .sponsor__link:hover {
   background: var(--ink);
@@ -43,4 +44,14 @@
   background: var(--ink);
   color: var(--surface);
   border-color: var(--ink);
+}
+
+@media (max-width: 540px) {
+  .sponsor {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .sponsor__links {
+    margin-left: 0;
+  }
 }

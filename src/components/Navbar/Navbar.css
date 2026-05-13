@@ -108,3 +108,37 @@
 .chrome__signout:focus-visible {
   outline-offset: 2px;
 }
+
+@media (max-width: 700px) {
+  .chrome__inner {
+    flex-wrap: wrap;
+    padding: 12px 20px;
+    column-gap: 16px;
+    row-gap: 8px;
+  }
+  /* wordmark stays on row 1 (order 1, default) */
+  .chrome__lang {
+    order: 2;
+    margin-left: auto;
+  }
+  .chrome__signout {
+    order: 2;
+  }
+  /* nav links drop to their own full-width row */
+  .chrome__nav {
+    order: 3;
+    margin-left: 0;
+    width: 100%;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .chrome__inner {
+    padding: 10px 16px;
+  }
+  .chrome__nav a {
+    font-size: 14px;
+  }
+}

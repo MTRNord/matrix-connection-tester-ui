@@ -1,0 +1,27 @@
+.home-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.home-h1 {
+  font-size: 64px;
+  line-height: 1;
+}
+
+@media (max-width: 860px) {
+  .home-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .home-h1 {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-h1 {
+    font-size: 36px;
+  }
+}

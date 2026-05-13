@@ -7,6 +7,7 @@ import Step from '#/components/Step/Step'
 import Navbar from '../components/Navbar/Navbar'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Trans, useTranslation } from 'react-i18next'
+import './index.css'
 
 export const Route = createFileRoute('/')({ component: Home })
 
@@ -18,19 +19,10 @@ function Home() {
     <div>
       <Navbar />
       <main id="main" className="page">
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.3fr 0.7fr',
-            gap: 56,
-            alignItems: 'start',
-          }}
-        >
+        <div className="home-grid">
           <div>
             <div className="eyebrow">{t('home.eyebrow')}</div>
-            <h1 style={{ fontSize: 64, lineHeight: 1.0 }}>
-              {t('home.headline')}
-            </h1>
+            <h1 className="home-h1">{t('home.headline')}</h1>
             <p className="lead" style={{ fontSize: 19, marginTop: 24 }}>
               {t('home.lead')}
             </p>

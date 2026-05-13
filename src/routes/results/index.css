@@ -110,3 +110,24 @@
     gap: 8px;
   }
 }
+
+/* Key-value metadata grid used in technical detail sections */
+.kv-grid {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 10px 24px;
+  font-size: 14px;
+}
+
+@media (max-width: 640px) {
+  .kv-grid {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .kv-grid > *:nth-child(odd) {
+    margin-top: 10px;
+  }
+  .kv-grid > *:nth-child(odd):first-child {
+    margin-top: 0;
+  }
+}

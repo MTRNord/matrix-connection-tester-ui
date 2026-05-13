@@ -26,7 +26,7 @@ export default function Sponsor({
       role="complementary"
       aria-label={t('sponsor.ariaLabel')}
     >
-      <HeartIcon />
+      <HeartIcon className="sponsor__heart" />
       <span>{text ?? t('sponsor.text')}</span>
       <span className="sponsor__links">
         {links.map((l) => (

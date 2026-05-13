@@ -206,6 +206,24 @@
     padding: 56px 32px 80px;
   }
 
+  @media (max-width: 860px) {
+    .page {
+      padding: 40px 24px 64px;
+    }
+    .container {
+      padding: 0 24px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .page {
+      padding: 28px 16px 48px;
+    }
+    .container {
+      padding: 0 16px;
+    }
+  }
+
   .eyebrow {
     font: 600 12px/1 var(--sans);
     text-transform: uppercase;

@@ -12,28 +12,14 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="footer__inner">
-        <div
-          style={{
-            display: 'flex',
-            gap: 32,
-            flexWrap: 'wrap',
-            alignItems: 'flex-start',
-          }}
-        >
-          <div style={{ flex: '0 0 280px' }}>
+        <div className="footer__body">
+          <div className="footer__brand">
             <Wordmark size={22} light />
             <p className="footer__meta" style={{ marginTop: 16 }}>
               {t('footer.meta')}
             </p>
           </div>
-          <div
-            style={{
-              flex: 1,
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: 24,
-            }}
-          >
+          <div className="footer__links">
             <div>
               <div style={{ fontWeight: 600, marginBottom: 12, fontSize: 14 }}>
                 {t('footer.project')}

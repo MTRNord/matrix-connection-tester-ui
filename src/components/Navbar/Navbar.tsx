@@ -62,11 +62,16 @@ export default function Navbar({
         btnRef.current?.focus()
       }
     }
+    const onResize = () => {
+      if (btnRef.current) setAnchorRect(btnRef.current.getBoundingClientRect())
+    }
     document.addEventListener('pointerdown', onDown, true)
     document.addEventListener('keydown', onKey)
+    window.addEventListener('resize', onResize)
     return () => {
       document.removeEventListener('pointerdown', onDown, true)
       document.removeEventListener('keydown', onKey)
+      window.removeEventListener('resize', onResize)
     }
   }, [open])
 
@@ -118,21 +123,40 @@ export default function Navbar({
       {open &&
         anchorRect &&
         createPortal(
-          <div
-            ref={popoverRef}
-            className="chrome__lang-popover"
-            style={{
-              top: anchorRect.bottom + 10,
-              right: window.innerWidth - anchorRect.right,
-            }}
-          >
-            <div className="chrome__lang-arrow" aria-hidden="true" />
-            <LanguageMenu
-              currentLang={langCode}
-              onPick={handlePick}
-              onClose={() => setOpen(false)}
-            />
-          </div>,
+          (() => {
+            const POPOVER_WIDTH = 280
+            const EDGE_MARGIN = 8
+            const rawRight = window.innerWidth - anchorRect.right
+            const safeRight = Math.min(
+              Math.max(rawRight, EDGE_MARGIN),
+              window.innerWidth - POPOVER_WIDTH - EDGE_MARGIN,
+            )
+            // keep the arrow tip over the button's horizontal centre
+            const popoverRightEdgeX = window.innerWidth - safeRight
+            const btnCenterX = anchorRect.left + anchorRect.width / 2
+            const arrowRight = Math.max(
+              8,
+              Math.min(popoverRightEdgeX - btnCenterX - 6, POPOVER_WIDTH - 24),
+            )
+            return (
+              <div
+                ref={popoverRef}
+                className="chrome__lang-popover"
+                style={{ top: anchorRect.bottom + 10, right: safeRight }}
+              >
+                <div
+                  className="chrome__lang-arrow"
+                  aria-hidden="true"
+                  style={{ right: arrowRight }}
+                />
+                <LanguageMenu
+                  currentLang={langCode}
+                  onPick={handlePick}
+                  onClose={() => setOpen(false)}
+                />
+              </div>
+            )
+          })(),
           document.body,
         )}
 
