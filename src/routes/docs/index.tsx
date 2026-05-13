@@ -37,35 +37,81 @@ function RouteComponent() {
           }}
         >
           <aside aria-activedescendant="Documentation Navigation">
-            {[
+            {(
               [
-                'Getting started',
-                ['Overview', 'Federation setup', 'Getting help'],
-              ],
-              [
-                'Configuration',
-                ['CORS', 'TLS certificates', 'Federation TLS', 'Server config'],
-              ],
-              [
-                'API endpoints',
-                [
-                  'Support endpoint',
-                  'Client-server API',
-                  'Well-known delegation',
-                ],
-              ],
-              [
-                'Troubleshooting',
-                [
-                  'General',
-                  'Network issues',
-                  'Federation network',
-                  'Server logs',
-                  'Performance',
-                ],
-              ],
-            ].map((item) => {
-              const [heading, items] = item as [string, string[]]
+                {
+                  heading: 'Getting started',
+                  items: [
+                    { label: 'Overview', to: '/docs/getting-started/overview' },
+                    {
+                      label: 'Federation setup',
+                      to: '/docs/getting-started/federation-setup',
+                    },
+                    {
+                      label: 'Getting help',
+                      to: '/docs/getting-started/getting-help',
+                    },
+                  ],
+                },
+                {
+                  heading: 'Configuration',
+                  items: [
+                    { label: 'CORS', to: '/docs/configuration/cors' },
+                    {
+                      label: 'TLS certificates',
+                      to: '/docs/configuration/tls-certificates',
+                    },
+                    {
+                      label: 'Federation TLS',
+                      to: '/docs/configuration/federation-tls',
+                    },
+                    {
+                      label: 'Server config',
+                      to: '/docs/configuration/server-config',
+                    },
+                  ],
+                },
+                {
+                  heading: 'API endpoints',
+                  items: [
+                    {
+                      label: 'Support endpoint',
+                      to: '/docs/api-endpoints/support-endpoint',
+                    },
+                    {
+                      label: 'Client-server API',
+                      to: '/docs/api-endpoints/client-server-api',
+                    },
+                    {
+                      label: 'Well-known delegation',
+                      to: '/docs/api-endpoints/well-known-delegation',
+                    },
+                  ],
+                },
+                {
+                  heading: 'Troubleshooting',
+                  items: [
+                    { label: 'General', to: '/docs/troubleshooting/general' },
+                    {
+                      label: 'Network issues',
+                      to: '/docs/troubleshooting/network-issues',
+                    },
+                    {
+                      label: 'Federation network',
+                      to: '/docs/troubleshooting/federation-network',
+                    },
+                    {
+                      label: 'Server logs',
+                      to: '/docs/troubleshooting/server-logs',
+                    },
+                    {
+                      label: 'Performance',
+                      to: '/docs/troubleshooting/performance',
+                    },
+                  ],
+                },
+              ]
+            ).map(({ heading, items }) => {
               const linkStyle = {
                 display: 'block',
                 padding: '7px 0 7px 12px',
@@ -83,7 +129,7 @@ function RouteComponent() {
                     {heading}
                   </div>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-                    {items.map((it, i) => (
+                    {items.map(({ label, to }) => (
                       <Link
                         activeProps={{
                           style: {
@@ -93,11 +139,11 @@ function RouteComponent() {
                             borderLeft: '2px solid var(--ink)',
                           },
                         }}
-                        key={it}
-                        to={`/docs/${heading.toLowerCase().replace(/ /g, '-')}/${it.toLowerCase().replace(/ /g, '-')}`}
+                        key={to}
+                        to={to as any}
                         style={linkStyle}
                       >
-                        {it}
+                        {label}
                       </Link>
                     ))}
                   </ul>

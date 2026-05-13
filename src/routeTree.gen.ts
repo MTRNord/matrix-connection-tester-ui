@@ -17,6 +17,21 @@ import { Route as AlertsIndexRouteImport } from './routes/alerts/index'
 import { Route as AlertsLoginRouteImport } from './routes/alerts/login'
 import { Route as AlertsEditRouteImport } from './routes/alerts/edit'
 import { Route as AlertsCallbackRouteImport } from './routes/alerts/callback'
+import { Route as DocsTroubleshootingServerLogsRouteImport } from './routes/docs/troubleshooting/server-logs'
+import { Route as DocsTroubleshootingPerformanceRouteImport } from './routes/docs/troubleshooting/performance'
+import { Route as DocsTroubleshootingNetworkIssuesRouteImport } from './routes/docs/troubleshooting/network-issues'
+import { Route as DocsTroubleshootingGeneralRouteImport } from './routes/docs/troubleshooting/general'
+import { Route as DocsTroubleshootingFederationNetworkRouteImport } from './routes/docs/troubleshooting/federation-network'
+import { Route as DocsGettingStartedOverviewRouteImport } from './routes/docs/getting-started/overview'
+import { Route as DocsGettingStartedGettingHelpRouteImport } from './routes/docs/getting-started/getting-help'
+import { Route as DocsGettingStartedFederationSetupRouteImport } from './routes/docs/getting-started/federation-setup'
+import { Route as DocsConfigurationTlsCertificatesRouteImport } from './routes/docs/configuration/tls-certificates'
+import { Route as DocsConfigurationServerConfigRouteImport } from './routes/docs/configuration/server-config'
+import { Route as DocsConfigurationFederationTlsRouteImport } from './routes/docs/configuration/federation-tls'
+import { Route as DocsConfigurationCorsRouteImport } from './routes/docs/configuration/cors'
+import { Route as DocsApiEndpointsWellKnownDelegationRouteImport } from './routes/docs/api-endpoints/well-known-delegation'
+import { Route as DocsApiEndpointsSupportEndpointRouteImport } from './routes/docs/api-endpoints/support-endpoint'
+import { Route as DocsApiEndpointsClientServerApiRouteImport } from './routes/docs/api-endpoints/client-server-api'
 
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
@@ -58,6 +73,95 @@ const AlertsCallbackRoute = AlertsCallbackRouteImport.update({
   path: '/alerts/callback',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsTroubleshootingServerLogsRoute =
+  DocsTroubleshootingServerLogsRouteImport.update({
+    id: '/docs/troubleshooting/server-logs',
+    path: '/docs/troubleshooting/server-logs',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsTroubleshootingPerformanceRoute =
+  DocsTroubleshootingPerformanceRouteImport.update({
+    id: '/docs/troubleshooting/performance',
+    path: '/docs/troubleshooting/performance',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsTroubleshootingNetworkIssuesRoute =
+  DocsTroubleshootingNetworkIssuesRouteImport.update({
+    id: '/docs/troubleshooting/network-issues',
+    path: '/docs/troubleshooting/network-issues',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsTroubleshootingGeneralRoute =
+  DocsTroubleshootingGeneralRouteImport.update({
+    id: '/docs/troubleshooting/general',
+    path: '/docs/troubleshooting/general',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsTroubleshootingFederationNetworkRoute =
+  DocsTroubleshootingFederationNetworkRouteImport.update({
+    id: '/docs/troubleshooting/federation-network',
+    path: '/docs/troubleshooting/federation-network',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsGettingStartedOverviewRoute =
+  DocsGettingStartedOverviewRouteImport.update({
+    id: '/docs/getting-started/overview',
+    path: '/docs/getting-started/overview',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsGettingStartedGettingHelpRoute =
+  DocsGettingStartedGettingHelpRouteImport.update({
+    id: '/docs/getting-started/getting-help',
+    path: '/docs/getting-started/getting-help',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsGettingStartedFederationSetupRoute =
+  DocsGettingStartedFederationSetupRouteImport.update({
+    id: '/docs/getting-started/federation-setup',
+    path: '/docs/getting-started/federation-setup',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsConfigurationTlsCertificatesRoute =
+  DocsConfigurationTlsCertificatesRouteImport.update({
+    id: '/docs/configuration/tls-certificates',
+    path: '/docs/configuration/tls-certificates',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsConfigurationServerConfigRoute =
+  DocsConfigurationServerConfigRouteImport.update({
+    id: '/docs/configuration/server-config',
+    path: '/docs/configuration/server-config',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsConfigurationFederationTlsRoute =
+  DocsConfigurationFederationTlsRouteImport.update({
+    id: '/docs/configuration/federation-tls',
+    path: '/docs/configuration/federation-tls',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsConfigurationCorsRoute = DocsConfigurationCorsRouteImport.update({
+  id: '/docs/configuration/cors',
+  path: '/docs/configuration/cors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsApiEndpointsWellKnownDelegationRoute =
+  DocsApiEndpointsWellKnownDelegationRouteImport.update({
+    id: '/docs/api-endpoints/well-known-delegation',
+    path: '/docs/api-endpoints/well-known-delegation',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsApiEndpointsSupportEndpointRoute =
+  DocsApiEndpointsSupportEndpointRouteImport.update({
+    id: '/docs/api-endpoints/support-endpoint',
+    path: '/docs/api-endpoints/support-endpoint',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const DocsApiEndpointsClientServerApiRoute =
+  DocsApiEndpointsClientServerApiRouteImport.update({
+    id: '/docs/api-endpoints/client-server-api',
+    path: '/docs/api-endpoints/client-server-api',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -68,6 +172,21 @@ export interface FileRoutesByFullPath {
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
+  '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
+  '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
+  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
+  '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
+  '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
+  '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
+  '/docs/getting-started/getting-help': typeof DocsGettingStartedGettingHelpRoute
+  '/docs/getting-started/overview': typeof DocsGettingStartedOverviewRoute
+  '/docs/troubleshooting/federation-network': typeof DocsTroubleshootingFederationNetworkRoute
+  '/docs/troubleshooting/general': typeof DocsTroubleshootingGeneralRoute
+  '/docs/troubleshooting/network-issues': typeof DocsTroubleshootingNetworkIssuesRoute
+  '/docs/troubleshooting/performance': typeof DocsTroubleshootingPerformanceRoute
+  '/docs/troubleshooting/server-logs': typeof DocsTroubleshootingServerLogsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -78,6 +197,21 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsIndexRoute
   '/docs': typeof DocsIndexRoute
   '/results': typeof ResultsIndexRoute
+  '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
+  '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
+  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
+  '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
+  '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
+  '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
+  '/docs/getting-started/getting-help': typeof DocsGettingStartedGettingHelpRoute
+  '/docs/getting-started/overview': typeof DocsGettingStartedOverviewRoute
+  '/docs/troubleshooting/federation-network': typeof DocsTroubleshootingFederationNetworkRoute
+  '/docs/troubleshooting/general': typeof DocsTroubleshootingGeneralRoute
+  '/docs/troubleshooting/network-issues': typeof DocsTroubleshootingNetworkIssuesRoute
+  '/docs/troubleshooting/performance': typeof DocsTroubleshootingPerformanceRoute
+  '/docs/troubleshooting/server-logs': typeof DocsTroubleshootingServerLogsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -89,6 +223,21 @@ export interface FileRoutesById {
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
+  '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
+  '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
+  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
+  '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
+  '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
+  '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
+  '/docs/getting-started/getting-help': typeof DocsGettingStartedGettingHelpRoute
+  '/docs/getting-started/overview': typeof DocsGettingStartedOverviewRoute
+  '/docs/troubleshooting/federation-network': typeof DocsTroubleshootingFederationNetworkRoute
+  '/docs/troubleshooting/general': typeof DocsTroubleshootingGeneralRoute
+  '/docs/troubleshooting/network-issues': typeof DocsTroubleshootingNetworkIssuesRoute
+  '/docs/troubleshooting/performance': typeof DocsTroubleshootingPerformanceRoute
+  '/docs/troubleshooting/server-logs': typeof DocsTroubleshootingServerLogsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +250,21 @@ export interface FileRouteTypes {
     | '/alerts/'
     | '/docs/'
     | '/results/'
+    | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/well-known-delegation'
+    | '/docs/configuration/cors'
+    | '/docs/configuration/federation-tls'
+    | '/docs/configuration/server-config'
+    | '/docs/configuration/tls-certificates'
+    | '/docs/getting-started/federation-setup'
+    | '/docs/getting-started/getting-help'
+    | '/docs/getting-started/overview'
+    | '/docs/troubleshooting/federation-network'
+    | '/docs/troubleshooting/general'
+    | '/docs/troubleshooting/network-issues'
+    | '/docs/troubleshooting/performance'
+    | '/docs/troubleshooting/server-logs'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +275,21 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/docs'
     | '/results'
+    | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/well-known-delegation'
+    | '/docs/configuration/cors'
+    | '/docs/configuration/federation-tls'
+    | '/docs/configuration/server-config'
+    | '/docs/configuration/tls-certificates'
+    | '/docs/getting-started/federation-setup'
+    | '/docs/getting-started/getting-help'
+    | '/docs/getting-started/overview'
+    | '/docs/troubleshooting/federation-network'
+    | '/docs/troubleshooting/general'
+    | '/docs/troubleshooting/network-issues'
+    | '/docs/troubleshooting/performance'
+    | '/docs/troubleshooting/server-logs'
   id:
     | '__root__'
     | '/'
@@ -121,6 +300,21 @@ export interface FileRouteTypes {
     | '/alerts/'
     | '/docs/'
     | '/results/'
+    | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/well-known-delegation'
+    | '/docs/configuration/cors'
+    | '/docs/configuration/federation-tls'
+    | '/docs/configuration/server-config'
+    | '/docs/configuration/tls-certificates'
+    | '/docs/getting-started/federation-setup'
+    | '/docs/getting-started/getting-help'
+    | '/docs/getting-started/overview'
+    | '/docs/troubleshooting/federation-network'
+    | '/docs/troubleshooting/general'
+    | '/docs/troubleshooting/network-issues'
+    | '/docs/troubleshooting/performance'
+    | '/docs/troubleshooting/server-logs'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -132,6 +326,21 @@ export interface RootRouteChildren {
   AlertsIndexRoute: typeof AlertsIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   ResultsIndexRoute: typeof ResultsIndexRoute
+  DocsApiEndpointsClientServerApiRoute: typeof DocsApiEndpointsClientServerApiRoute
+  DocsApiEndpointsSupportEndpointRoute: typeof DocsApiEndpointsSupportEndpointRoute
+  DocsApiEndpointsWellKnownDelegationRoute: typeof DocsApiEndpointsWellKnownDelegationRoute
+  DocsConfigurationCorsRoute: typeof DocsConfigurationCorsRoute
+  DocsConfigurationFederationTlsRoute: typeof DocsConfigurationFederationTlsRoute
+  DocsConfigurationServerConfigRoute: typeof DocsConfigurationServerConfigRoute
+  DocsConfigurationTlsCertificatesRoute: typeof DocsConfigurationTlsCertificatesRoute
+  DocsGettingStartedFederationSetupRoute: typeof DocsGettingStartedFederationSetupRoute
+  DocsGettingStartedGettingHelpRoute: typeof DocsGettingStartedGettingHelpRoute
+  DocsGettingStartedOverviewRoute: typeof DocsGettingStartedOverviewRoute
+  DocsTroubleshootingFederationNetworkRoute: typeof DocsTroubleshootingFederationNetworkRoute
+  DocsTroubleshootingGeneralRoute: typeof DocsTroubleshootingGeneralRoute
+  DocsTroubleshootingNetworkIssuesRoute: typeof DocsTroubleshootingNetworkIssuesRoute
+  DocsTroubleshootingPerformanceRoute: typeof DocsTroubleshootingPerformanceRoute
+  DocsTroubleshootingServerLogsRoute: typeof DocsTroubleshootingServerLogsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -192,6 +401,111 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AlertsCallbackRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/troubleshooting/server-logs': {
+      id: '/docs/troubleshooting/server-logs'
+      path: '/docs/troubleshooting/server-logs'
+      fullPath: '/docs/troubleshooting/server-logs'
+      preLoaderRoute: typeof DocsTroubleshootingServerLogsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/troubleshooting/performance': {
+      id: '/docs/troubleshooting/performance'
+      path: '/docs/troubleshooting/performance'
+      fullPath: '/docs/troubleshooting/performance'
+      preLoaderRoute: typeof DocsTroubleshootingPerformanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/troubleshooting/network-issues': {
+      id: '/docs/troubleshooting/network-issues'
+      path: '/docs/troubleshooting/network-issues'
+      fullPath: '/docs/troubleshooting/network-issues'
+      preLoaderRoute: typeof DocsTroubleshootingNetworkIssuesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/troubleshooting/general': {
+      id: '/docs/troubleshooting/general'
+      path: '/docs/troubleshooting/general'
+      fullPath: '/docs/troubleshooting/general'
+      preLoaderRoute: typeof DocsTroubleshootingGeneralRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/troubleshooting/federation-network': {
+      id: '/docs/troubleshooting/federation-network'
+      path: '/docs/troubleshooting/federation-network'
+      fullPath: '/docs/troubleshooting/federation-network'
+      preLoaderRoute: typeof DocsTroubleshootingFederationNetworkRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/getting-started/overview': {
+      id: '/docs/getting-started/overview'
+      path: '/docs/getting-started/overview'
+      fullPath: '/docs/getting-started/overview'
+      preLoaderRoute: typeof DocsGettingStartedOverviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/getting-started/getting-help': {
+      id: '/docs/getting-started/getting-help'
+      path: '/docs/getting-started/getting-help'
+      fullPath: '/docs/getting-started/getting-help'
+      preLoaderRoute: typeof DocsGettingStartedGettingHelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/getting-started/federation-setup': {
+      id: '/docs/getting-started/federation-setup'
+      path: '/docs/getting-started/federation-setup'
+      fullPath: '/docs/getting-started/federation-setup'
+      preLoaderRoute: typeof DocsGettingStartedFederationSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/configuration/tls-certificates': {
+      id: '/docs/configuration/tls-certificates'
+      path: '/docs/configuration/tls-certificates'
+      fullPath: '/docs/configuration/tls-certificates'
+      preLoaderRoute: typeof DocsConfigurationTlsCertificatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/configuration/server-config': {
+      id: '/docs/configuration/server-config'
+      path: '/docs/configuration/server-config'
+      fullPath: '/docs/configuration/server-config'
+      preLoaderRoute: typeof DocsConfigurationServerConfigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/configuration/federation-tls': {
+      id: '/docs/configuration/federation-tls'
+      path: '/docs/configuration/federation-tls'
+      fullPath: '/docs/configuration/federation-tls'
+      preLoaderRoute: typeof DocsConfigurationFederationTlsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/configuration/cors': {
+      id: '/docs/configuration/cors'
+      path: '/docs/configuration/cors'
+      fullPath: '/docs/configuration/cors'
+      preLoaderRoute: typeof DocsConfigurationCorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/api-endpoints/well-known-delegation': {
+      id: '/docs/api-endpoints/well-known-delegation'
+      path: '/docs/api-endpoints/well-known-delegation'
+      fullPath: '/docs/api-endpoints/well-known-delegation'
+      preLoaderRoute: typeof DocsApiEndpointsWellKnownDelegationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/api-endpoints/support-endpoint': {
+      id: '/docs/api-endpoints/support-endpoint'
+      path: '/docs/api-endpoints/support-endpoint'
+      fullPath: '/docs/api-endpoints/support-endpoint'
+      preLoaderRoute: typeof DocsApiEndpointsSupportEndpointRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/api-endpoints/client-server-api': {
+      id: '/docs/api-endpoints/client-server-api'
+      path: '/docs/api-endpoints/client-server-api'
+      fullPath: '/docs/api-endpoints/client-server-api'
+      preLoaderRoute: typeof DocsApiEndpointsClientServerApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -204,6 +518,24 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsIndexRoute: AlertsIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   ResultsIndexRoute: ResultsIndexRoute,
+  DocsApiEndpointsClientServerApiRoute: DocsApiEndpointsClientServerApiRoute,
+  DocsApiEndpointsSupportEndpointRoute: DocsApiEndpointsSupportEndpointRoute,
+  DocsApiEndpointsWellKnownDelegationRoute:
+    DocsApiEndpointsWellKnownDelegationRoute,
+  DocsConfigurationCorsRoute: DocsConfigurationCorsRoute,
+  DocsConfigurationFederationTlsRoute: DocsConfigurationFederationTlsRoute,
+  DocsConfigurationServerConfigRoute: DocsConfigurationServerConfigRoute,
+  DocsConfigurationTlsCertificatesRoute: DocsConfigurationTlsCertificatesRoute,
+  DocsGettingStartedFederationSetupRoute:
+    DocsGettingStartedFederationSetupRoute,
+  DocsGettingStartedGettingHelpRoute: DocsGettingStartedGettingHelpRoute,
+  DocsGettingStartedOverviewRoute: DocsGettingStartedOverviewRoute,
+  DocsTroubleshootingFederationNetworkRoute:
+    DocsTroubleshootingFederationNetworkRoute,
+  DocsTroubleshootingGeneralRoute: DocsTroubleshootingGeneralRoute,
+  DocsTroubleshootingNetworkIssuesRoute: DocsTroubleshootingNetworkIssuesRoute,
+  DocsTroubleshootingPerformanceRoute: DocsTroubleshootingPerformanceRoute,
+  DocsTroubleshootingServerLogsRoute: DocsTroubleshootingServerLogsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
