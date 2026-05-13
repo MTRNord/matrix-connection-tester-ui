@@ -5,6 +5,7 @@ import Footer from '#/components/Footer/Footer'
 import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Table from '#/components/Table/Table'
+import TimezoneSelect from '#/components/TimezoneSelect/TimezoneSelect'
 import { apiReq } from '#/auth/apiReq'
 import { isTokenValid, loadTokens } from '#/auth/tokens'
 import { configQueryOptions } from '#/config'
@@ -32,6 +33,7 @@ interface EmailDto {
   email: string
   verified: boolean
   receives_alerts: boolean
+  timezone: string
   created_at: string
 }
 
@@ -40,6 +42,7 @@ interface AccountInfo {
   email: string
   email_verified: boolean
   receives_alerts: boolean
+  timezone: string
   has_password: boolean
   created_at: string
   last_login_at?: string | null
@@ -115,8 +118,6 @@ function passwordEntropy(pw: string): number {
   return pw.length * Math.log2(pool)
 }
 
-const TIMEZONES: string[] = Intl.supportedValuesOf('timeZone')
-
 function checkPwRequirements(pw: string): string[] {
   const issues: string[] = []
   if (pw.length < 8) issues.push('password.requirements.length')
@@ -155,7 +156,7 @@ function RouteComponent() {
   const [confirmPw, setConfirmPw] = useState('')
   const [showDelete, setShowDelete] = useState(false)
   const [deleteConfirm, setDeleteConfirm] = useState('')
-  const [tz, setTz] = useState<Record<string, string>>({})
+  const [tz, setTz] = useState<Record<string, string> | null>(null)
 
   const { data: cfg } = useQuery(configQueryOptions)
 
@@ -298,6 +299,28 @@ function RouteComponent() {
     },
   })
 
+  const savePrimaryTimezone = useMutation({
+    mutationFn: async (timezone: string) => {
+      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account`, {
+        method: 'PATCH',
+        body: JSON.stringify({ receives_alerts: account?.receives_alerts ?? true, timezone }),
+      })
+      if (!res.ok) throw new Error('Failed to save timezone')
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg).queryKey }),
+  })
+
+  const saveEmailTimezone = useMutation({
+    mutationFn: async ({ id, timezone, receives_alerts }: { id: string; timezone: string; receives_alerts: boolean }) => {
+      const res = await apiReq(`${cfg!.api_server_url}/oauth2/account/emails/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify({ receives_alerts, timezone }),
+      })
+      if (!res.ok) throw new Error('Failed to save timezone')
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: accountQueryOptions(cfg).queryKey }),
+  })
+
   const handleExport = async () => {
     if (!cfg) return
     const res = await apiReq(`${cfg.api_server_url}/oauth2/account/export`)
@@ -388,6 +411,7 @@ function RouteComponent() {
             gap: 56,
             marginTop: 32,
             alignItems: 'start',
+            minWidth: 0,
           }}
         >
           {/* ---- Sidebar nav ---- */}
@@ -441,7 +465,7 @@ function RouteComponent() {
           </aside>
 
           {/* ---- Sections ---- */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32, minWidth: 0, overflow: 'hidden' }}>
             {/* ---- Profile ---- */}
             <section id="profile">
               <h2 style={{ marginTop: 0 }}>{ta('profile.title')}</h2>
@@ -543,32 +567,14 @@ function RouteComponent() {
                         </div>
                       </td>
                       <td>
-                        <select
-                          value={tz[account.email] ?? 'UTC'}
-                          onChange={(e) =>
-                            setTz((prev) => ({
-                              ...prev,
-                              [account.email]: e.target.value,
-                            }))
-                          }
-                          aria-label={`Timezone for ${account.email}`}
-                          style={{
-                            width: '100%',
-                            padding: '7px 10px',
-                            font: '400 13px/1.4 var(--mono)',
-                            background: '#fff',
-                            color: 'var(--ink)',
-                            border: '1.5px solid var(--line)',
-                            borderRadius: 'var(--r-2)',
-                            cursor: 'pointer',
+                        <TimezoneSelect
+                          value={tz?.[account.email] ?? account.timezone}
+                          onChange={(z) => {
+                            setTz((prev) => ({ ...prev, [account.email]: z }))
+                            savePrimaryTimezone.mutate(z)
                           }}
-                        >
-                          {TIMEZONES.map((z) => (
-                            <option key={z} value={z}>
-                              {z}
-                            </option>
-                          ))}
-                        </select>
+                          ariaLabel={`Timezone for ${account.email}`}
+                        />
                       </td>
                       <td
                         style={{
@@ -619,32 +625,14 @@ function RouteComponent() {
                           )}
                         </td>
                         <td>
-                          <select
-                            value={tz[em.email] ?? 'UTC'}
-                            onChange={(e) =>
-                              setTz((prev) => ({
-                                ...prev,
-                                [em.email]: e.target.value,
-                              }))
-                            }
-                            aria-label={`Timezone for ${em.email}`}
-                            style={{
-                              width: '100%',
-                              padding: '7px 10px',
-                              font: '400 13px/1.4 var(--mono)',
-                              background: '#fff',
-                              color: 'var(--ink)',
-                              border: '1.5px solid var(--line)',
-                              borderRadius: 'var(--r-2)',
-                              cursor: 'pointer',
+                          <TimezoneSelect
+                            value={tz?.[em.email] ?? em.timezone}
+                            onChange={(z) => {
+                              setTz((prev) => ({ ...prev, [em.email]: z }))
+                              saveEmailTimezone.mutate({ id: em.id, timezone: z, receives_alerts: em.receives_alerts })
                             }}
-                          >
-                            {TIMEZONES.map((z) => (
-                              <option key={z} value={z}>
-                                {z}
-                              </option>
-                            ))}
-                          </select>
+                            ariaLabel={`Timezone for ${em.email}`}
+                          />
                         </td>
                         <td style={{ whiteSpace: 'nowrap' }}>
                           <div
