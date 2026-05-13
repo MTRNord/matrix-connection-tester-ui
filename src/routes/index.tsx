@@ -5,7 +5,7 @@ import Footer from '#/components/Footer/Footer'
 import Sponsor from '#/components/Sponsor/Sponsor'
 import Step from '#/components/Step/Step'
 import Navbar from '../components/Navbar/Navbar'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { Trans, useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/')({ component: Home })
@@ -178,9 +178,9 @@ function Home() {
               >
                 {t('home.help.body')}
               </p>
-              <a href="#" style={{ fontSize: 14, fontWeight: 500 }}>
+              <Link to="/docs" style={{ fontSize: 14, fontWeight: 500 }}>
                 {t('home.help.link')}
-              </a>
+              </Link>
             </Card>
           </aside>
         </div>
