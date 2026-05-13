@@ -16,6 +16,9 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/alerts/login')({
+  validateSearch: (s: Record<string, unknown>): { redirect?: string } => ({
+    redirect: typeof s.redirect === 'string' ? s.redirect : undefined,
+  }),
   component: RouteComponent,
 })
 
@@ -30,7 +33,14 @@ function RouteComponent() {
   const [tab, setTab] = useState<'password' | 'magic'>('password')
   const [pkce, setPkce] = useState<PkceParams | null>(null)
   const { isAuthenticated } = useAuth()
+  const { redirect: redirectAfter } = Route.useSearch()
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (redirectAfter) {
+      sessionStorage.setItem('oauth_redirect_after', redirectAfter)
+    }
+  }, [redirectAfter])
 
   const { data: cfg } = useQuery(configQueryOptions)
 

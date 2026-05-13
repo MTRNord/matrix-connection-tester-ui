@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsIndexRouteImport } from './routes/results.index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
@@ -17,6 +18,11 @@ import { Route as AlertsLoginRouteImport } from './routes/alerts/login'
 import { Route as AlertsEditRouteImport } from './routes/alerts/edit'
 import { Route as AlertsCallbackRouteImport } from './routes/alerts/callback'
 
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -55,6 +61,7 @@ const AlertsCallbackRoute = AlertsCallbackRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
@@ -64,6 +71,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
@@ -74,6 +82,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
@@ -85,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/account'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
@@ -94,6 +104,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/account'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
@@ -103,6 +114,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/account'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
@@ -113,6 +125,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
   AlertsCallbackRoute: typeof AlertsCallbackRoute
   AlertsEditRoute: typeof AlertsEditRoute
   AlertsLoginRoute: typeof AlertsLoginRoute
@@ -123,6 +136,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -177,6 +197,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
   AlertsCallbackRoute: AlertsCallbackRoute,
   AlertsEditRoute: AlertsEditRoute,
   AlertsLoginRoute: AlertsLoginRoute,

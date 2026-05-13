@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, useRouter } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useAuth } from '#/contexts/AuthContext'
 import { loadConfig } from '#/config'
@@ -19,6 +19,7 @@ function CallbackComponent() {
   const { code, state, error } = Route.useSearch()
   const { setToken } = useAuth()
   const navigate = useNavigate()
+  const router = useRouter()
   const ran = useRef(false)
 
   useEffect(() => {
@@ -61,8 +62,15 @@ function CallbackComponent() {
           return
         }
         const data = (await res.json()) as Omit<TokenSet, 'expires_at'>
+        const redirectAfter = sessionStorage.getItem('oauth_redirect_after')
+        sessionStorage.removeItem('oauth_redirect_after')
         setToken({ ...data, expires_at: Date.now() + data.expires_in * 1000 })
-        navigate({ to: '/alerts' })
+        // Only follow relative paths — guards against open redirect
+        if (redirectAfter && redirectAfter.startsWith('/') && !redirectAfter.startsWith('//')) {
+          router.history.push(redirectAfter)
+        } else {
+          navigate({ to: '/alerts' })
+        }
       } catch {
         navigate({ to: '/alerts/login' })
       }

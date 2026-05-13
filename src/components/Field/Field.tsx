@@ -10,7 +10,7 @@ export default function Field({
 }: {
   id?: string
   label?: string
-  hint?: ReactElement
+  hint?: ReactElement | string
   children: ReactElement<HTMLAttributes<HTMLElement>>
 }) {
   return (

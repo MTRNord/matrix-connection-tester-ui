@@ -156,8 +156,11 @@
       },
       "quietHours": {
         "eyebrow": "Quiet hours",
-        "description": "Defer notifications outside working hours. Critical downtime always sends.",
-        "checkboxLabel": "Don't email between {{from}}–{{to}} {{timezone}}"
+        "description": "Hold notifications during this window, applied to each recipient in their own timezone. Critical downtime always sends regardless. Each recipient's timezone comes from their account email settings.",
+        "enableLabel": "Enable quiet hours",
+        "fromLabel": "From",
+        "toLabel": "Until",
+        "perRecipientLabel": "Applied per recipient"
       },
       "recentEvents": {
         "eyebrow": "Recent events"
@@ -184,5 +187,112 @@
   "sponsor": {
     "text": "This service is free to use. If it's saved you a headache, consider supporting development.",
     "ariaLabel": "Support the project"
+  },
+  "account": {
+    "loading": "Loading…",
+    "error": "Could not load account.",
+    "breadcrumb": {
+      "home": "Home",
+      "account": "Your account"
+    },
+    "title": "Your account",
+    "leadBefore": "Signed in as",
+    "leadAfter": ". This account is used only to deliver homeserver downtime alerts — it is not a Matrix account and never talks to your homeserver.",
+    "nav": {
+      "onThisPage": "On this page",
+      "profile": "Profile",
+      "emails": "Email addresses",
+      "password": "Password",
+      "export": "Download data",
+      "delete": "Delete account",
+      "signOut": "Sign out"
+    },
+    "profile": {
+      "title": "Profile",
+      "memberSince": "Member since",
+      "alerts": "Alerts",
+      "manageAlerts": "Manage alerts →"
+    },
+    "emails": {
+      "title": "Email addresses",
+      "description": "Your primary address is used to sign in. Any verified address can be picked as a recipient when configuring an alert. Adding an address sends a one-click verification email; it stays in a pending state until you click the link.",
+      "table": {
+        "address": "Address",
+        "status": "Status",
+        "timezone": "Timezone",
+        "actions": "Actions"
+      },
+      "primarySubtext": "Used for sign-in · added {{date}}",
+      "addedSubtext": "Added {{date}}",
+      "pills": {
+        "primary": "Primary",
+        "verified": "Verified",
+        "pending": "Pending"
+      },
+      "resend": "Resend",
+      "makePrimary": "Make primary",
+      "remove": "Remove",
+      "addTitle": "Add another address",
+      "addDescription": "We'll send a verification link valid for 24 hours.",
+      "emailLabel": "Email address",
+      "emailPlaceholder": "you@example.com",
+      "addButton": "Add and verify"
+    },
+    "password": {
+      "title": "Password",
+      "hasPasswordDescription": "Change the password used for email-and-password sign-in. We use this alongside magic links — either is enough on its own to get in.",
+      "noPasswordDescription": "You're currently using magic links only. Set up a password to enable email-and-password sign-in.",
+      "fields": {
+        "current": "Current password",
+        "new": "New password",
+        "confirm": "Confirm new password"
+      },
+      "strength": {
+        "veryWeak": "Very weak",
+        "weak": "Weak",
+        "fair": "Fair",
+        "strong": "Strong",
+        "veryStrong": "Very strong"
+      },
+      "requirements": {
+        "length": "at least 8 characters",
+        "uppercase": "one uppercase letter",
+        "lowercase": "one lowercase letter",
+        "number": "one number",
+        "special": "one special character"
+      },
+      "missing": "✗ Missing: {{issues}}",
+      "meetsRequirements": "✓ Meets all requirements",
+      "tooWeak": "✗ Too weak — aim for at least Fair",
+      "passwordsMatch": "✓ Passwords match",
+      "passwordsNoMatch": "✗ Passwords do not match",
+      "changeButton": "Change password",
+      "cancelButton": "Cancel",
+      "setupButton": "Send password setup email",
+      "changeSuccess": "Password changed successfully.",
+      "setupSuccess": "Check your email — a setup link has been sent."
+    },
+    "export": {
+      "title": "Download your data",
+      "description": "A single JSON file containing everything we hold about you: account record, email addresses, alert subscriptions and notification history.",
+      "gdpr": "Provided under GDPR Article 20 · Generated on demand · Typically < 50 KB.",
+      "button": "Download"
+    },
+    "delete": {
+      "title": "Delete account",
+      "warning": "This can't be undone.",
+      "intro": "Deleting your account immediately removes:",
+      "items": {
+        "profile": "your profile and all email addresses;",
+        "alerts": "every alert you've configured;",
+        "history": "your notification history."
+      },
+      "statsNote": "Public, aggregated statistics you opted into are anonymous and remain in place.",
+      "deleteButton": "Delete my account",
+      "confirmPrompt": "Type DELETE to confirm.",
+      "confirmPlaceholder": "DELETE",
+      "confirmButton": "Yes, delete everything",
+      "cancelButton": "Cancel"
+    }
   }
 }

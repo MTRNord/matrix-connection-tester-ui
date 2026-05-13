@@ -156,8 +156,11 @@
       },
       "quietHours": {
         "eyebrow": "Ruhestunden",
-        "description": "Benachrichtigungen außerhalb der Arbeitszeiten verschieben. Kritische Ausfälle werden immer gesendet.",
-        "checkboxLabel": "Keine E-Mails zwischen {{from}}–{{to}} {{timezone}}"
+        "description": "Benachrichtigungen werden in diesem Zeitfenster zurückgehalten, je nach Zeitzone des Empfängers. Kritische Ausfälle werden unabhängig davon immer gesendet.",
+        "enableLabel": "Ruhestunden aktivieren",
+        "fromLabel": "Von",
+        "toLabel": "Bis",
+        "perRecipientLabel": "Pro Empfänger angewendet"
       },
       "recentEvents": {
         "eyebrow": "Letzte Ereignisse"
@@ -184,5 +187,112 @@
   "sponsor": {
     "text": "Dieser Dienst ist kostenlos nutzbar. Wenn er dir Kopfschmerzen erspart hat, erwäge die Entwicklung zu unterstützen.",
     "ariaLabel": "Projekt unterstützen"
+  },
+  "account": {
+    "loading": "Laden…",
+    "error": "Konto konnte nicht geladen werden.",
+    "breadcrumb": {
+      "home": "Startseite",
+      "account": "Dein Konto"
+    },
+    "title": "Dein Konto",
+    "leadBefore": "Angemeldet als",
+    "leadAfter": ". Dieses Konto dient ausschließlich zur Zustellung von Homeserver-Ausfallbenachrichtigungen — es ist kein Matrix-Konto und kommuniziert nie mit deinem Homeserver.",
+    "nav": {
+      "onThisPage": "Auf dieser Seite",
+      "profile": "Profil",
+      "emails": "E-Mail-Adressen",
+      "password": "Passwort",
+      "export": "Daten herunterladen",
+      "delete": "Konto löschen",
+      "signOut": "Abmelden"
+    },
+    "profile": {
+      "title": "Profil",
+      "memberSince": "Mitglied seit",
+      "alerts": "Benachrichtigungen",
+      "manageAlerts": "Benachrichtigungen verwalten →"
+    },
+    "emails": {
+      "title": "E-Mail-Adressen",
+      "description": "Deine primäre Adresse wird zur Anmeldung verwendet. Jede verifizierte Adresse kann als Empfänger beim Einrichten einer Benachrichtigung ausgewählt werden. Das Hinzufügen einer Adresse sendet eine Bestätigungs-E-Mail; sie bleibt ausstehend, bis du den Link klickst.",
+      "table": {
+        "address": "Adresse",
+        "status": "Status",
+        "timezone": "Zeitzone",
+        "actions": "Aktionen"
+      },
+      "primarySubtext": "Wird zur Anmeldung verwendet · hinzugefügt {{date}}",
+      "addedSubtext": "Hinzugefügt {{date}}",
+      "pills": {
+        "primary": "Primär",
+        "verified": "Verifiziert",
+        "pending": "Ausstehend"
+      },
+      "resend": "Erneut senden",
+      "makePrimary": "Als primär festlegen",
+      "remove": "Entfernen",
+      "addTitle": "Weitere Adresse hinzufügen",
+      "addDescription": "Wir senden dir einen Bestätigungslink, der 24 Stunden gültig ist.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailPlaceholder": "du@beispiel.de",
+      "addButton": "Hinzufügen und verifizieren"
+    },
+    "password": {
+      "title": "Passwort",
+      "hasPasswordDescription": "Ändere das Passwort für die E-Mail-und-Passwort-Anmeldung. Wir verwenden es zusammen mit Magic Links — jedes reicht allein zum Einloggen.",
+      "noPasswordDescription": "Du verwendest derzeit nur Magic Links. Richte ein Passwort ein, um die E-Mail-und-Passwort-Anmeldung zu aktivieren.",
+      "fields": {
+        "current": "Aktuelles Passwort",
+        "new": "Neues Passwort",
+        "confirm": "Neues Passwort bestätigen"
+      },
+      "strength": {
+        "veryWeak": "Sehr schwach",
+        "weak": "Schwach",
+        "fair": "Akzeptabel",
+        "strong": "Stark",
+        "veryStrong": "Sehr stark"
+      },
+      "requirements": {
+        "length": "mindestens 8 Zeichen",
+        "uppercase": "ein Großbuchstabe",
+        "lowercase": "ein Kleinbuchstabe",
+        "number": "eine Zahl",
+        "special": "ein Sonderzeichen"
+      },
+      "missing": "✗ Fehlend: {{issues}}",
+      "meetsRequirements": "✓ Erfüllt alle Anforderungen",
+      "tooWeak": "✗ Zu schwach — mindestens Akzeptabel anstreben",
+      "passwordsMatch": "✓ Passwörter stimmen überein",
+      "passwordsNoMatch": "✗ Passwörter stimmen nicht überein",
+      "changeButton": "Passwort ändern",
+      "cancelButton": "Abbrechen",
+      "setupButton": "Passwort-Einrichtungs-E-Mail senden",
+      "changeSuccess": "Passwort erfolgreich geändert.",
+      "setupSuccess": "Schau in deine E-Mails — ein Einrichtungslink wurde gesendet."
+    },
+    "export": {
+      "title": "Deine Daten herunterladen",
+      "description": "Eine einzelne JSON-Datei mit allem, was wir über dich gespeichert haben: Kontodaten, E-Mail-Adressen, Benachrichtigungsabonnements und Benachrichtigungsverlauf.",
+      "gdpr": "Bereitgestellt gemäß DSGVO Artikel 20 · Auf Anfrage erstellt · Typischerweise < 50 KB.",
+      "button": "Herunterladen"
+    },
+    "delete": {
+      "title": "Konto löschen",
+      "warning": "Dies kann nicht rückgängig gemacht werden.",
+      "intro": "Das Löschen deines Kontos entfernt sofort:",
+      "items": {
+        "profile": "dein Profil und alle E-Mail-Adressen;",
+        "alerts": "alle konfigurierten Benachrichtigungen;",
+        "history": "deinen Benachrichtigungsverlauf."
+      },
+      "statsNote": "Öffentliche, aggregierte Statistiken, in die du eingewilligt hast, sind anonym und bleiben bestehen.",
+      "deleteButton": "Mein Konto löschen",
+      "confirmPrompt": "Tippe DELETE zur Bestätigung.",
+      "confirmPlaceholder": "DELETE",
+      "confirmButton": "Ja, alles löschen",
+      "cancelButton": "Abbrechen"
+    }
   }
 }

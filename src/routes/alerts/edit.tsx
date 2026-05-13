@@ -3,13 +3,23 @@ import Card from '#/components/Card/Card'
 import Footer from '#/components/Footer/Footer'
 import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { isTokenValid, loadTokens } from '#/auth/tokens'
+import { createFileRoute, Link, redirect } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 type CheckKey = 'uptime' | 'rename' | 'version' | 'tlsChange' | 'tlsExpiry'
 
 export const Route = createFileRoute('/alerts/edit')({
+  beforeLoad: ({ location }) => {
+    const token = loadTokens()
+    if (!token || !isTokenValid(token)) {
+      throw redirect({
+        to: '/alerts/login',
+        search: { redirect: location.pathname + location.searchStr },
+      })
+    }
+  },
   validateSearch: (s: Record<string, unknown>): { domain: string } => ({
     domain: typeof s.domain === 'string' ? s.domain : '',
   }),
@@ -35,6 +45,9 @@ function RouteComponent() {
     tlsExpiry: true,
   })
   const toggle = (k: CheckKey) => setChecks((c) => ({ ...c, [k]: !c[k] }))
+  const [quietEnabled, setQuietEnabled] = useState(true)
+  const [quietFrom, setQuietFrom] = useState('22:00')
+  const [quietTo, setQuietTo] = useState('07:00')
 
   return (
     <div>
@@ -310,35 +323,171 @@ function RouteComponent() {
                 style={{
                   fontSize: 14,
                   lineHeight: 1.6,
-                  margin: '6px 0 12px',
+                  margin: '6px 0 14px',
                   color: 'var(--ink-2)',
                 }}
               >
                 {t('alerts.edit.quietHours.description')}
               </p>
+
               <label
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
                   fontSize: 14,
-                  color: 'var(--ink-2)',
+                  color: 'var(--ink)',
                   cursor: 'pointer',
+                  marginBottom: 14,
                 }}
               >
                 <input
                   type="checkbox"
-                  defaultChecked
+                  checked={quietEnabled}
+                  onChange={(e) => setQuietEnabled(e.target.checked)}
                   style={{ width: 18, height: 18, accentColor: 'var(--ink)' }}
                 />
-                <span>
-                  {t('alerts.edit.quietHours.checkboxLabel', {
-                    from: '22:00',
-                    to: '07:00',
-                    timezone: 'Europe/Berlin',
-                  })}
+                <span style={{ fontWeight: 600 }}>
+                  {t('alerts.edit.quietHours.enableLabel')}
                 </span>
               </label>
+
+              {quietEnabled && (
+                <>
+                  <div
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr auto 1fr',
+                      gap: 8,
+                      alignItems: 'end',
+                      marginBottom: 16,
+                    }}
+                  >
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: 'var(--ink-3)',
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          marginBottom: 4,
+                        }}
+                      >
+                        {t('alerts.edit.quietHours.fromLabel')}
+                      </div>
+                      <input
+                        className="field__input small"
+                        type="time"
+                        value={quietFrom}
+                        onChange={(e) => setQuietFrom(e.target.value)}
+                        style={{
+                          padding: '8px 10px',
+                          width: '100%',
+                          fontFamily: 'var(--mono)',
+                          fontSize: 14,
+                          textAlign: 'center',
+                        }}
+                      />
+                    </div>
+                    <div style={{ color: 'var(--ink-3)', paddingBottom: 10 }}>
+                      –
+                    </div>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 11,
+                          color: 'var(--ink-3)',
+                          letterSpacing: '0.06em',
+                          textTransform: 'uppercase',
+                          marginBottom: 4,
+                        }}
+                      >
+                        {t('alerts.edit.quietHours.toLabel')}
+                      </div>
+                      <input
+                        className="field__input small"
+                        type="time"
+                        value={quietTo}
+                        onChange={(e) => setQuietTo(e.target.value)}
+                        style={{
+                          padding: '8px 10px',
+                          width: '100%',
+                          fontFamily: 'var(--mono)',
+                          fontSize: 14,
+                          textAlign: 'center',
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div
+                    className="eyebrow"
+                    style={{ marginBottom: 8 }}
+                  >
+                    {t('alerts.edit.quietHours.perRecipientLabel')}
+                  </div>
+                  <ul
+                    style={{
+                      listStyle: 'none',
+                      padding: 0,
+                      margin: 0,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: 6,
+                    }}
+                  >
+                    {(
+                      [
+                        ['admin@example.space', 'Europe/Berlin', `${quietFrom} – ${quietTo} CEST`],
+                        ['security@example.space', 'America/New_York', '16:00 – 01:00 EDT'],
+                      ] as [string, string, string][]
+                    ).map(([addr, zone, local]) => (
+                      <li
+                        key={addr}
+                        style={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr auto',
+                          gap: 10,
+                          padding: '10px 12px',
+                          background: 'var(--surface-2)',
+                          borderRadius: 5,
+                          fontSize: 13,
+                        }}
+                      >
+                        <div>
+                          <div
+                            className="mono"
+                            style={{ color: 'var(--ink)', fontWeight: 600 }}
+                          >
+                            {addr}
+                          </div>
+                          <div
+                            style={{
+                              color: 'var(--ink-3)',
+                              marginTop: 2,
+                              fontFamily: 'var(--mono)',
+                              fontSize: 12,
+                            }}
+                          >
+                            {zone}
+                          </div>
+                        </div>
+                        <div
+                          className="mono"
+                          style={{
+                            color: 'var(--ink-2)',
+                            fontSize: 12,
+                            alignSelf: 'center',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {local}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </Card>
 
             <Card>

@@ -9,7 +9,7 @@ import {
 import type { TokenSet } from '../auth/tokens'
 import { loadConfig } from '../config'
 
-interface AuthState {
+export interface AuthState {
   token: TokenSet | null
   isAuthenticated: boolean
   setToken: (t: TokenSet) => void

@@ -5,6 +5,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import { ReactQueryDevtoolsPanel } from '@tanstack/react-query-devtools'
 import { configQueryOptions } from '#/config'
+import type { AuthState } from '#/contexts/AuthContext'
 import SkipToContent from '#/components/SkipToContent/SkipToContent'
 
 import '../inter.css'
@@ -12,6 +13,7 @@ import '../styles.css'
 
 export const Route = createRootRouteWithContext<{
   queryClient: QueryClient
+  auth: AuthState
 }>()({
   component: RootComponent,
 })
