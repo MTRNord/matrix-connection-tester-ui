@@ -58,7 +58,6 @@ function Home() {
                     name="domain-input"
                     type="text"
                     placeholder="example.com"
-                    defaultValue="matrix.org"
                     autoComplete="off"
                     spellCheck="false"
                   />
