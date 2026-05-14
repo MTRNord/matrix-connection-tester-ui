@@ -299,8 +299,8 @@
     "breadcrumb": "Results",
     "title": "Results for {{serverName}}",
     "lead": "Federation report for <mono>{{serverName}}</mono>.{{ipSuffix}} Check the verdict, any problems, and the full technical breakdown below.",
-    "leadIpSuffix": " Found {{count}} IP address.",
-    "leadIpSuffix_plural": " Found {{count}} IP addresses.",
+    "leadIpSuffix_one": " Found {{count}} IP address.",
+    "leadIpSuffix_other": " Found {{count}} IP addresses.",
     "pending": {
       "title": "Running federation test…",
       "lead": "Checking DNS, TLS, signing keys and server connectivity. This usually takes a few seconds."
@@ -330,13 +330,13 @@
       "fetching": "Fetching…",
       "checksPass": "all checks passed",
       "checksFail": "checks failed",
-      "mscCount": "{{count}} MSC enabled",
-      "mscCount_plural": "{{count}} MSCs enabled",
+      "mscCount_one": "{{count}} MSC enabled",
+      "mscCount_other": "{{count}} MSCs enabled",
       "rtcSupported": "Voice & video supported",
       "rtcNotDetected": "Not detected",
       "unavailable": "Unavailable",
-      "ipCount": "{{count}} IP",
-      "ipCount_plural": "{{count}} IPs"
+      "ipCount_one": "{{count}} IP",
+      "ipCount_other": "{{count}} IPs"
     },
     "problems": {
       "title": "Problems & how to fix them",

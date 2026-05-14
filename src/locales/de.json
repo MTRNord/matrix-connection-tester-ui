@@ -188,8 +188,8 @@
     "breadcrumb": "Ergebnisse",
     "title": "Ergebnisse für {{serverName}}",
     "lead": "Verbindungsbericht für <mono>{{serverName}}</mono>.{{ipSuffix}} Sieh dir das Urteil, eventuelle Probleme und die technische Übersicht unten an.",
-    "leadIpSuffix": " {{count}} IP-Adresse gefunden.",
-    "leadIpSuffix_plural": " {{count}} IP-Adressen gefunden.",
+    "leadIpSuffix_one": " {{count}} IP-Adresse gefunden.",
+    "leadIpSuffix_other": " {{count}} IP-Adressen gefunden.",
     "pending": {
       "title": "Federation-Test läuft…",
       "lead": "DNS, TLS, Signaturschlüssel und Server-Erreichbarkeit werden geprüft. Das dauert in der Regel ein paar Sekunden."
@@ -219,13 +219,13 @@
       "fetching": "Lade…",
       "checksPass": "alle Checks bestanden",
       "checksFail": "Checks fehlgeschlagen",
-      "mscCount": "{{count}} MSC aktiviert",
-      "mscCount_plural": "{{count}} MSCs aktiviert",
+      "mscCount_one": "{{count}} MSC aktiviert",
+      "mscCount_other": "{{count}} MSCs aktiviert",
       "rtcSupported": "Sprach- & Videoanrufe unterstützt",
       "rtcNotDetected": "Nicht erkannt",
       "unavailable": "Nicht verfügbar",
-      "ipCount": "{{count}} IP",
-      "ipCount_plural": "{{count}} IPs"
+      "ipCount_one": "{{count}} IP",
+      "ipCount_other": "{{count}} IPs"
     },
     "problems": {
       "title": "Probleme & Lösungen",
