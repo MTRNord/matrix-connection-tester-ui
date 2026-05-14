@@ -24,3 +24,7 @@
   padding: 0;
   overflow: clip;
 }
+
+.card > :first-child {
+  margin-top: 0;
+}

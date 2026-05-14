@@ -1,5 +1,5 @@
-/* eslint-disable i18next/no-literal-string -- docs content not yet i18n-ready */
 import { createFileRoute } from '@tanstack/react-router'
+import DocsLayout from '#/components/DocsLayout/DocsLayout'
 
 export const Route = createFileRoute(
   '/docs/api-endpoints/well-known-delegation',
@@ -8,5 +8,5 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  return <div>Hello "/docs/api-endpoints/well-known-delegation"!</div>
+  return <DocsLayout docPath="api-endpoints/well-known-delegation" />
 }

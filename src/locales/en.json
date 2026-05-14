@@ -478,5 +478,30 @@
         "hint": "Full machine-readable response"
       }
     }
+  },
+  "docs": {
+    "nav": {
+      "title": "Documentation",
+      "ariaLabel": "Documentation navigation",
+      "gettingStarted": "Getting started",
+      "overview": "Overview",
+      "federationSetup": "Federation setup",
+      "gettingHelp": "Getting help",
+      "configuration": "Configuration",
+      "cors": "CORS",
+      "tlsCertificates": "TLS certificates",
+      "federationTls": "Federation TLS",
+      "serverConfig": "Server config",
+      "apiEndpoints": "API endpoints",
+      "supportEndpoint": "Support endpoint",
+      "clientServerApi": "Client-server API",
+      "wellKnownDelegation": "Well-known delegation",
+      "troubleshooting": "Troubleshooting",
+      "general": "General",
+      "networkIssues": "Network issues",
+      "federationNetwork": "Federation network",
+      "serverLogs": "Server logs",
+      "performance": "Performance"
+    }
   }
 }

@@ -478,5 +478,30 @@
       "confirmButton": "Ja, alles löschen",
       "cancelButton": "Abbrechen"
     }
+  },
+  "docs": {
+    "nav": {
+      "title": "Dokumentation",
+      "ariaLabel": "Dokumentationsnavigation",
+      "gettingStarted": "Erste Schritte",
+      "overview": "Übersicht",
+      "federationSetup": "Föderations-Setup",
+      "gettingHelp": "Hilfe erhalten",
+      "configuration": "Konfiguration",
+      "cors": "CORS",
+      "tlsCertificates": "TLS-Zertifikate",
+      "federationTls": "Föderations-TLS",
+      "serverConfig": "Server-Konfiguration",
+      "apiEndpoints": "API-Endpunkte",
+      "supportEndpoint": "Support-Endpunkt",
+      "clientServerApi": "Client-Server-API",
+      "wellKnownDelegation": "Well-known-Delegation",
+      "troubleshooting": "Fehlerbehebung",
+      "general": "Allgemein",
+      "networkIssues": "Netzwerkprobleme",
+      "federationNetwork": "Föderationsnetzwerk",
+      "serverLogs": "Server-Logs",
+      "performance": "Performance"
+    }
   }
 }
