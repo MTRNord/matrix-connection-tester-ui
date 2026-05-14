@@ -117,6 +117,7 @@ export interface ClientServerData {
   baseUrl: string
   wellKnown: WellKnownClient | null
   versions: ClientVersions | null
+  msc3266Supported: boolean
 }
 
 // ── MSC1929 support types ─────────────────────────────────────────────────────
@@ -130,6 +131,38 @@ export interface SupportContact {
 export interface SupportInfo {
   contacts?: SupportContact[]
   support_page?: string
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function hasMatrixVersion(versions: string[], major: number, minor: number): boolean {
+  return versions.some((v) => {
+    const m = v.match(/^v(\d+)\.(\d+)/)
+    if (!m) return false
+    const ma = parseInt(m[1]), mi = parseInt(m[2])
+    return ma > major || (ma === major && mi >= minor)
+  })
+}
+
+async function probeMsc3266(baseUrl: string, serverName: string): Promise<boolean> {
+  const roomId = encodeURIComponent(`!probe:${serverName}`)
+  const via = encodeURIComponent(serverName)
+  for (const path of [
+    `/_matrix/client/v1/room_summary/${roomId}?via=${via}`,
+    `/_matrix/client/unstable/im.nheko.summary/summary/${roomId}?via=${via}`,
+  ]) {
+    try {
+      const resp = await fetch(`${baseUrl}${path}`)
+      if (resp.status === 200) return true
+      if (resp.status === 404) {
+        const body = await resp.json().catch(() => null)
+        if (body?.errcode === 'M_NOT_FOUND') return true
+      }
+    } catch {
+      // CORS or network — try next path
+    }
+  }
+  return false
 }
 
 // ── Query factories ───────────────────────────────────────────────────────────
@@ -175,7 +208,15 @@ export const clientServerQueryOptions = (serverName: string) =>
         // unavailable
       }
 
-      return { baseUrl, wellKnown, versions }
+      // MSC3266 / room summary: stable in v1.15+, or advertised unstable flag,
+      // or detected by probing (catches servers that support it but don't advertise it)
+      const versionList = versions?.versions ?? []
+      const msc3266Supported =
+        hasMatrixVersion(versionList, 1, 15) ||
+        versions?.unstable_features?.['org.matrix.msc3266'] === true ||
+        (await probeMsc3266(baseUrl, serverName))
+
+      return { baseUrl, wellKnown, versions, msc3266Supported }
     },
     staleTime: 120_000,
     retry: false,

@@ -523,6 +523,16 @@ function ResultsBody({
       info: unstableFeatures[key],
     }))
 
+  // Inject MSC3266 if detected via stable version or probe but not already listed
+  const msc3266AlreadyListed =
+    csData?.versions?.unstable_features?.['org.matrix.msc3266'] === true
+  if (csData?.msc3266Supported && !msc3266AlreadyListed) {
+    enabledFeatures.push({
+      key: 'org.matrix.msc3266',
+      info: unstableFeatures['org.matrix.msc3266'],
+    })
+  }
+
   // Lead IP suffix
   const ipSuffix =
     ipAddrs.length > 0
