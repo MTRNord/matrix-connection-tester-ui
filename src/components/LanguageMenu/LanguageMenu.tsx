@@ -34,7 +34,9 @@ export default function LanguageMenu({
           <span>{l.native}</span>
           {l.code === currentLang && (
             // eslint-disable-next-line i18next/no-literal-string
-            <span className="langmenu__check" aria-hidden="true">✓</span>
+            <span className="langmenu__check" aria-hidden="true">
+              ✓
+            </span>
           )}
         </a>
       ))}

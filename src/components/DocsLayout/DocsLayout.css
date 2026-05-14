@@ -18,7 +18,9 @@
   font-weight: 400;
   border-left: 2px solid transparent;
   margin-left: -12px;
-  transition: color 0.12s ease, border-color 0.12s ease;
+  transition:
+    color 0.12s ease,
+    border-color 0.12s ease;
 }
 
 .docs-nav__link:hover {
@@ -34,8 +36,6 @@
 .docs-article {
   min-width: 0;
 }
-
-
 
 .docs-article pre {
   margin: 16px 0;

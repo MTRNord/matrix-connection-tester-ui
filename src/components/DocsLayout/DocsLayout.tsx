@@ -14,35 +14,71 @@ const NAV_SECTIONS: NavSection[] = [
     headingKey: 'docs.nav.gettingStarted',
     items: [
       { labelKey: 'docs.nav.overview', to: '/docs/getting-started/overview' },
-      { labelKey: 'docs.nav.federationSetup', to: '/docs/getting-started/federation-setup' },
-      { labelKey: 'docs.nav.gettingHelp', to: '/docs/getting-started/getting-help' },
+      {
+        labelKey: 'docs.nav.federationSetup',
+        to: '/docs/getting-started/federation-setup',
+      },
+      {
+        labelKey: 'docs.nav.gettingHelp',
+        to: '/docs/getting-started/getting-help',
+      },
     ],
   },
   {
     headingKey: 'docs.nav.configuration',
     items: [
       { labelKey: 'docs.nav.cors', to: '/docs/configuration/cors' },
-      { labelKey: 'docs.nav.tlsCertificates', to: '/docs/configuration/tls-certificates' },
-      { labelKey: 'docs.nav.federationTls', to: '/docs/configuration/federation-tls' },
-      { labelKey: 'docs.nav.serverConfig', to: '/docs/configuration/server-config' },
+      {
+        labelKey: 'docs.nav.tlsCertificates',
+        to: '/docs/configuration/tls-certificates',
+      },
+      {
+        labelKey: 'docs.nav.federationTls',
+        to: '/docs/configuration/federation-tls',
+      },
+      {
+        labelKey: 'docs.nav.serverConfig',
+        to: '/docs/configuration/server-config',
+      },
     ],
   },
   {
     headingKey: 'docs.nav.apiEndpoints',
     items: [
-      { labelKey: 'docs.nav.supportEndpoint', to: '/docs/api-endpoints/support-endpoint' },
-      { labelKey: 'docs.nav.clientServerApi', to: '/docs/api-endpoints/client-server-api' },
-      { labelKey: 'docs.nav.wellKnownDelegation', to: '/docs/api-endpoints/well-known-delegation' },
+      {
+        labelKey: 'docs.nav.supportEndpoint',
+        to: '/docs/api-endpoints/support-endpoint',
+      },
+      {
+        labelKey: 'docs.nav.clientServerApi',
+        to: '/docs/api-endpoints/client-server-api',
+      },
+      {
+        labelKey: 'docs.nav.wellKnownDelegation',
+        to: '/docs/api-endpoints/well-known-delegation',
+      },
     ],
   },
   {
     headingKey: 'docs.nav.troubleshooting',
     items: [
       { labelKey: 'docs.nav.general', to: '/docs/troubleshooting/general' },
-      { labelKey: 'docs.nav.networkIssues', to: '/docs/troubleshooting/network-issues' },
-      { labelKey: 'docs.nav.federationNetwork', to: '/docs/troubleshooting/federation-network' },
-      { labelKey: 'docs.nav.serverLogs', to: '/docs/troubleshooting/server-logs' },
-      { labelKey: 'docs.nav.performance', to: '/docs/troubleshooting/performance' },
+      {
+        labelKey: 'docs.nav.networkIssues',
+        to: '/docs/troubleshooting/network-issues',
+      },
+      {
+        labelKey: 'docs.nav.federationNetwork',
+        to: '/docs/troubleshooting/federation-network',
+      },
+      {
+        labelKey: 'docs.nav.serverLogs',
+        to: '/docs/troubleshooting/server-logs',
+      },
+      {
+        labelKey: 'docs.nav.performance',
+        to: '/docs/troubleshooting/performance',
+      },
     ],
   },
 ]
@@ -56,7 +92,9 @@ export default function DocsLayout({ docPath }: { docPath: string }) {
       <main id="main" className="page">
         <div className="breadcrumb">
           <Link to="/">{t('nav.home')}</Link>
-          <span className="breadcrumb__sep" aria-hidden="true">›</span>
+          <span className="breadcrumb__sep" aria-hidden="true">
+            ›
+          </span>
           <span>{t('docs.nav.title')}</span>
         </div>
         <h1>{t('docs.nav.title')}</h1>

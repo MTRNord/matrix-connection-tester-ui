@@ -8,13 +8,13 @@ Server hast, gibt es mehrere Anlaufstellen für Hilfe.
 Tritt diesen Matrix-Räumen bei, um Fragen zu stellen und Unterstützung von der
 Community zu erhalten:
 
-| Raum | Zweck |
-| ---- | ----- |
-| [#synapse:matrix.org](https://matrix.to/#/#synapse:matrix.org) | Support für Synapse-Homeserver-Benutzer und -Administratoren |
-| [#continuwuity:continuwuity.org](https://matrix.to/#/#continuwuity:continuwuity.org) | Support für Continuwuity-Homeserver |
-| [#matrix:matrix.org](https://matrix.to/#/#matrix:matrix.org) | Allgemeine Matrix-Fragen und Diskussionen |
-| [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org) | Fragen zur Matrix-Spezifikation |
-| [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org) | Wöchentliche Matrix-Neuigkeiten und Updates |
+| Raum                                                                                 | Zweck                                                        |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------ |
+| [#synapse:matrix.org](https://matrix.to/#/#synapse:matrix.org)                       | Support für Synapse-Homeserver-Benutzer und -Administratoren |
+| [#continuwuity:continuwuity.org](https://matrix.to/#/#continuwuity:continuwuity.org) | Support für Continuwuity-Homeserver                          |
+| [#matrix:matrix.org](https://matrix.to/#/#matrix:matrix.org)                         | Allgemeine Matrix-Fragen und Diskussionen                    |
+| [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org)               | Fragen zur Matrix-Spezifikation                              |
+| [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org)     | Wöchentliche Matrix-Neuigkeiten und Updates                  |
 
 :::banner{kind="info" title="Tipp"}
 Wenn du um Hilfe bittest, gib folgende Informationen an:
@@ -23,7 +23,7 @@ Wenn du um Hilfe bittest, gib folgende Informationen an:
 - Relevante Fehlermeldungen aus den Logs
 - Was du bereits versucht hast
 - Ergebnisse des Konnektivitätstests (falls zutreffend)
-:::
+  :::
 
 ## Offizielle Dokumentation
 

@@ -7,13 +7,13 @@ server, there are several places to get help.
 
 Join these Matrix rooms to ask questions and get support from the community:
 
-| Room | Purpose |
-| ---- | ------- |
-| [#synapse:matrix.org](https://matrix.to/#/#synapse:matrix.org) | Support for Synapse homeserver users and administrators |
-| [#continuwuity:continuwuity.org](https://matrix.to/#/#continuwuity:continuwuity.org) | Support for Continuwuity homeserver |
-| [#matrix:matrix.org](https://matrix.to/#/#matrix:matrix.org) | General Matrix questions and discussion |
-| [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org) | Questions about the Matrix specification |
-| [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org) | Weekly Matrix news and updates |
+| Room                                                                                 | Purpose                                                 |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------- |
+| [#synapse:matrix.org](https://matrix.to/#/#synapse:matrix.org)                       | Support for Synapse homeserver users and administrators |
+| [#continuwuity:continuwuity.org](https://matrix.to/#/#continuwuity:continuwuity.org) | Support for Continuwuity homeserver                     |
+| [#matrix:matrix.org](https://matrix.to/#/#matrix:matrix.org)                         | General Matrix questions and discussion                 |
+| [#matrix-spec:matrix.org](https://matrix.to/#/#matrix-spec:matrix.org)               | Questions about the Matrix specification                |
+| [#thisweekinmatrix:matrix.org](https://matrix.to/#/#thisweekinmatrix:matrix.org)     | Weekly Matrix news and updates                          |
 
 :::banner{kind="info" title="Tip"}
 When asking for help, include:
@@ -22,7 +22,7 @@ When asking for help, include:
 - Relevant error messages from logs
 - What you've already tried
 - Results from the connectivity tester (if applicable)
-:::
+  :::
 
 ## Official Documentation
 

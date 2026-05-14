@@ -79,7 +79,9 @@ export default function Navbar({
     <>
       <header className="chrome">
         <div className="chrome__inner">
-          <Wordmark size={20} />
+          <Link to="/" style={{ textDecoration: 'none' }}>
+            <Wordmark size={20} />
+          </Link>
           <nav className="chrome__nav" aria-label="Primary navigation">
             {NAV_LINKS(isAuthenticated).map((item) => (
               <Link
@@ -101,7 +103,9 @@ export default function Navbar({
           >
             <span>{currentLang.native}</span>
             {/* eslint-disable-next-line i18next/no-literal-string */}
-            <span className="caret" aria-hidden="true">▾</span>
+            <span className="caret" aria-hidden="true">
+              ▾
+            </span>
           </button>
 
           {isAuthenticated && (

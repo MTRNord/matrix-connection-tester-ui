@@ -7,6 +7,7 @@ A Matrix homeserver needs to be reachable in two distinct ways: by other homeser
 Most issues fall into one of three buckets: a missing DNS record, a TLS certificate the wider internet doesn't trust, or a reverse proxy that isn't forwarding the right path. The pages below walk through each in plain language.
 
 :::card
+
 ### If you're new to running a homeserver
 
 Start with these four pages, in order. Each one takes about ten minutes to read.
@@ -15,7 +16,7 @@ Start with these four pages, in order. Each one takes about ten minutes to read.
 2. [TLS certificates](/docs/configuration/tls-certificates) — set up secure connections
 3. [Well-known delegation](/docs/api-endpoints/well-known-delegation) — configure discovery
 4. [CORS configuration](/docs/configuration/cors) — enable web clients
-:::
+   :::
 
 ## Need help?
 

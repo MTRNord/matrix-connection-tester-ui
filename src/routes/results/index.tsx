@@ -688,7 +688,9 @@ function ResultsBody({
                       className="support__row"
                       style={{ gridColumn: '1 / -1' }}
                     >
-                      <span className="support__role">{t('results.support.supportPage')}</span>
+                      <span className="support__role">
+                        {t('results.support.supportPage')}
+                      </span>
                       <a href={supportPage} className="support__email">
                         {supportPage}
                       </a>
@@ -953,7 +955,9 @@ function ResultsBody({
                       </td>
                       <td>
                         {wk.Error ? (
-                          <Pill kind="bad">{t('results.technical.connectivity.error')}</Pill>
+                          <Pill kind="bad">
+                            {t('results.technical.connectivity.error')}
+                          </Pill>
                         ) : (
                           <Pill kind="ok" dot>
                             OK

@@ -934,7 +934,10 @@ function RouteComponent() {
                                   color: textColor,
                                 }}
                               >
-                                {ta(level.label)} {ta('password.entropyDisplay', { entropy: Math.round(entropy) })}
+                                {ta(level.label)}{' '}
+                                {ta('password.entropyDisplay', {
+                                  entropy: Math.round(entropy),
+                                })}
                               </span>
                               <span
                                 style={{
@@ -1066,9 +1069,16 @@ function RouteComponent() {
                     </p>
                   </div>
                   <Button onClick={handleExport}>
-                    {ta('export.button')}{' '}
-                    {/* eslint-disable-next-line i18next/no-literal-string -- file extension */}
-                    <span className="mono" style={{ fontSize: '0.85em', marginLeft: 4 }}>.json</span>
+                    {ta('export.button')} {}
+                    {}
+                    {/* eslint-disable i18next/no-literal-string -- file extension */}
+                    <span
+                      className="mono"
+                      style={{ fontSize: '0.85em', marginLeft: 4 }}
+                    >
+                      .json
+                    </span>
+                    {/* eslint-enable i18next/no-literal-string */}
                   </Button>
                 </div>
               </Card>

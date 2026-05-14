@@ -99,7 +99,9 @@ export default function TimezoneSelect({
       >
         <span className="tzselect__value">{value}</span>
         {/* eslint-disable-next-line i18next/no-literal-string */}
-        <span className="tzselect__caret" aria-hidden="true">▾</span>
+        <span className="tzselect__caret" aria-hidden="true">
+          ▾
+        </span>
       </button>
 
       {open &&
@@ -127,7 +129,9 @@ export default function TimezoneSelect({
               aria-label={ariaLabel}
             >
               {filtered.length === 0 ? (
-                <div className="tzselect__empty">{t('timezoneSelect.noResults')}</div>
+                <div className="tzselect__empty">
+                  {t('timezoneSelect.noResults')}
+                </div>
               ) : (
                 filtered.map((z) => (
                   <button
@@ -147,7 +151,9 @@ export default function TimezoneSelect({
                     {z}
                     {z === value && (
                       // eslint-disable-next-line i18next/no-literal-string
-                      <span className="tzselect__check" aria-hidden="true">✓</span>
+                      <span className="tzselect__check" aria-hidden="true">
+                        ✓
+                      </span>
                     )}
                   </button>
                 ))

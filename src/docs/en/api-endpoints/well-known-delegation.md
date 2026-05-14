@@ -45,6 +45,7 @@ what happens:
    location
 
 :::card
+
 ### Example: Discovery process
 
 **Scenario:** A user wants to send a message to `@alice:example.com`
@@ -53,7 +54,7 @@ what happens:
 2. Well-known file responds:
    `{ "m.homeserver": { "base_url": "https://matrix.example.com" } }`
 3. Client connects to `https://matrix.example.com`
-:::
+   :::
 
 ## Two Types of Well-Known Files
 
