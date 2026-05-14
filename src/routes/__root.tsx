@@ -14,6 +14,7 @@ import SkipToContent from '#/components/SkipToContent/SkipToContent'
 import Navbar from '#/components/Navbar/Navbar'
 import Footer from '#/components/Footer/Footer'
 import Banner from '#/components/Banner/Banner'
+import { useTranslation } from 'react-i18next'
 
 import '../inter.css'
 import '../styles.css'
@@ -34,20 +35,18 @@ function GlobalErrorComponent({
   reset: () => void
 }) {
   const router = useRouter()
+  const { t } = useTranslation()
   const message =
-    error instanceof Error ? error.message : 'An unexpected error occurred.'
+    error instanceof Error ? error.message : t('globalError.configLoadFailed')
 
   return (
     <>
       <SkipToContent />
       <Navbar />
       <main id="main" className="page">
-        <h1>Something went wrong</h1>
-        <p className="lead">
-          An unexpected error occurred. You can try going back or reloading the
-          page.
-        </p>
-        <Banner kind="bad" title="Unexpected error">
+        <h1>{t('globalError.title')}</h1>
+        <p className="lead">{t('globalError.lead')}</p>
+        <Banner kind="bad" title={t('globalError.bannerTitle')}>
           {message}
         </Banner>
         <div
@@ -61,10 +60,10 @@ function GlobalErrorComponent({
               router.invalidate()
             }}
           >
-            Try again
+            {t('globalError.tryAgain')}
           </button>
           <a href="/" className="btn ghost">
-            Back to home
+            {t('globalError.backToHome')}
           </a>
         </div>
       </main>
@@ -75,17 +74,20 @@ function GlobalErrorComponent({
 
 function RootComponent() {
   const { error: configError } = useQuery(configQueryOptions)
+  const { t } = useTranslation()
 
   return (
     <>
       <SkipToContent />
       {configError && (
         <div className="config-errorbar" role="alert">
-          <span className="config-errorbar__label">Instance misconfigured</span>
+          <span className="config-errorbar__label">
+            {t('globalError.misconfigured')}
+          </span>
           <span className="config-errorbar__msg">
             {configError instanceof Error
               ? configError.message
-              : 'Could not load /config.json'}
+              : t('globalError.configLoadFailed')}
           </span>
         </div>
       )}

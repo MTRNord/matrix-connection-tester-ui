@@ -1,4 +1,16 @@
 {
+  "globalError": {
+    "title": "Something went wrong",
+    "lead": "An unexpected error occurred. You can try going back or reloading the page.",
+    "bannerTitle": "Unexpected error",
+    "tryAgain": "Try again",
+    "backToHome": "Back to home",
+    "misconfigured": "Instance misconfigured",
+    "configLoadFailed": "Could not load /config.json"
+  },
+  "timezoneSelect": {
+    "noResults": "No results"
+  },
   "nav": {
     "home": "Home",
     "alerts": "Alerts",
@@ -84,6 +96,7 @@
         "domainHint": "For example, <code>example.com</code>.",
         "notifyLegend": "Notify these addresses",
         "notifyHint": "Pick one or more. Add additional addresses from your account settings.",
+        "noAddresses": "No verified addresses yet. <addLink>Add one →</addLink>",
         "submit": "Add alert"
       },
       "addresses": {
@@ -107,6 +120,9 @@
         "added": "Added {{date}}",
         "edit": "Edit",
         "delete": "Delete",
+        "loading": "Loading…",
+        "confirmDelete": "Confirm",
+        "cancelDelete": "Cancel",
         "footerNote": "One address can be on any number of alerts. Removing an alert never deletes the address itself."
       }
     },
@@ -163,8 +179,12 @@
         "perRecipientLabel": "Applied per recipient"
       },
       "recentEvents": {
-        "eyebrow": "Recent events"
+        "eyebrow": "Recent events",
+        "noEvents": "No events yet."
       }
+    },
+    "callback": {
+      "signingIn": "Signing you in…"
     },
     "login": {
       "eyebrow": "Sign in to manage alerts",
@@ -263,6 +283,7 @@
       },
       "missing": "✗ Missing: {{issues}}",
       "meetsRequirements": "✓ Meets all requirements",
+      "entropyDisplay": "({{entropy}} bits)",
       "tooWeak": "✗ Too weak — aim for at least Fair",
       "passwordsMatch": "✓ Passwords match",
       "passwordsNoMatch": "✗ Passwords do not match",
@@ -363,7 +384,8 @@
       "noneFound": "No support contacts found at <mono>https://{{serverName}}/.well-known/matrix/support</mono>.",
       "copy": "Copy",
       "copied": "Copied!",
-      "open": "Open ↗"
+      "open": "Open ↗",
+      "supportPage": "Support page"
     },
     "overview": {
       "title": "Server overview",
@@ -373,7 +395,8 @@
       "noIps": "None found",
       "clientEndpoint": "Client endpoint",
       "identityServer": "Identity server",
-      "latestCsVersion": "Latest C-S API version"
+      "latestCsVersion": "Latest C-S API version",
+      "atVersion": "at <mono>{{version}}</mono>"
     },
     "errors": {
       "dnsNoRecord": "DNS lookup failed — no A record found",
@@ -439,6 +462,8 @@
         "noReports": "No connection reports available.",
         "ok": "OK",
         "failed": "Failed",
+        "error": "Error",
+        "na": "N/A",
         "retryNeeded": "Retry needed",
         "tlsVersion": "TLS version",
         "cipherSuite": "Cipher suite",

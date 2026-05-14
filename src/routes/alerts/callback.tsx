@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react'
 import { useAuth } from '#/contexts/AuthContext'
 import { loadConfig } from '#/config'
 import type { TokenSet } from '#/auth/tokens'
+import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/alerts/callback')({
   validateSearch: (
@@ -21,6 +22,7 @@ function CallbackComponent() {
   const navigate = useNavigate()
   const router = useRouter()
   const ran = useRef(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (ran.current) return
@@ -94,7 +96,7 @@ function CallbackComponent() {
         color: 'var(--ink-3)',
       }}
     >
-      Signing you in…
+      {t('alerts.callback.signingIn')}
     </div>
   )
 }

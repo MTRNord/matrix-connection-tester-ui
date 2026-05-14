@@ -561,7 +561,7 @@ function RouteComponent() {
                     colSpan={5}
                     style={{ color: 'var(--ink-3)', textAlign: 'center' }}
                   >
-                    Loading…
+                    {t('alerts.authed.table.loading')}
                   </td>
                 </tr>
               )}
@@ -616,14 +616,14 @@ function RouteComponent() {
                           disabled={deleteAlert.isPending}
                           onClick={() => deleteAlert.mutate(alert.id)}
                         >
-                          Confirm
+                          {t('alerts.authed.table.confirmDelete')}
                         </Button>
                         <Button
                           kind="ghost"
                           size="small"
                           onClick={() => setConfirmDeleteId(null)}
                         >
-                          Cancel
+                          {t('alerts.authed.table.cancelDelete')}
                         </Button>
                       </div>
                     ) : (

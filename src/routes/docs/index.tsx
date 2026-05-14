@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string -- docs content not yet i18n-ready */
 import Navbar from '#/components/Navbar/Navbar'
 import Footer from '#/components/Footer/Footer'
 import { createFileRoute, Link } from '@tanstack/react-router'

@@ -605,7 +605,7 @@ function ResultsBody({
             }}
             aria-hidden="true"
           >
-            ✓
+            {'✓'}
           </div>
           <div>
             <h3 style={{ margin: 0, fontSize: 19 }}>
@@ -688,7 +688,7 @@ function ResultsBody({
                       className="support__row"
                       style={{ gridColumn: '1 / -1' }}
                     >
-                      <span className="support__role">Support page</span>
+                      <span className="support__role">{t('results.support.supportPage')}</span>
                       <a href={supportPage} className="support__email">
                         {supportPage}
                       </a>
@@ -737,7 +737,11 @@ function ResultsBody({
                     )}{' '}
                     {serverVersion && (
                       <>
-                        at <span className="mono">{serverVersion}</span>{' '}
+                        <Trans
+                          i18nKey="results.overview.atVersion"
+                          values={{ version: serverVersion }}
+                          components={{ mono: <span className="mono" /> }}
+                        />{' '}
                       </>
                     )}
                     <Pill kind={maturityPillKind(serverInfo.maturity)} dot>
@@ -812,7 +816,7 @@ function ResultsBody({
                 OK
               </Pill>
             ) : csData === undefined ? undefined : (
-              <Pill kind="ink">N/A</Pill>
+              <Pill kind="ink">{t('results.technical.connectivity.na')}</Pill>
             )
           }
         >
@@ -949,7 +953,7 @@ function ResultsBody({
                       </td>
                       <td>
                         {wk.Error ? (
-                          <Pill kind="bad">Error</Pill>
+                          <Pill kind="bad">{t('results.technical.connectivity.error')}</Pill>
                         ) : (
                           <Pill kind="ok" dot>
                             OK
@@ -1206,11 +1210,12 @@ function ResultsBody({
 // ── Small helpers ─────────────────────────────────────────────────────────────
 
 function CheckBadge({ ok }: { ok: boolean }) {
+  const { t } = useTranslation()
   return ok ? (
     <Pill kind="ok" dot>
-      OK
+      {t('results.technical.connectivity.ok')}
     </Pill>
   ) : (
-    <Pill kind="bad">Failed</Pill>
+    <Pill kind="bad">{t('results.technical.connectivity.failed')}</Pill>
   )
 }

@@ -21,7 +21,7 @@ import {
   useNavigate,
 } from '@tanstack/react-router'
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 
 // ---- Types -------------------------------------------------------------------
 
@@ -509,8 +509,10 @@ function RouteComponent() {
             >
               {availableEmails.length === 0 && (
                 <span style={{ fontSize: 14, color: 'var(--ink-3)' }}>
-                  No verified addresses yet.{' '}
-                  <a href="/account#emails">Add one →</a>
+                  <Trans
+                    i18nKey="alerts.authed.form.noAddresses"
+                    components={{ addLink: <a href="/account#emails" /> }}
+                  />
                 </span>
               )}
               {availableEmails.map((addr) => {
@@ -776,7 +778,7 @@ function RouteComponent() {
               >
                 {!eventsData || eventsData.events.length === 0 ? (
                   <li style={{ fontSize: 13.5, color: 'var(--ink-3)' }}>
-                    No events yet.
+                    {t('alerts.edit.recentEvents.noEvents')}
                   </li>
                 ) : (
                   <>

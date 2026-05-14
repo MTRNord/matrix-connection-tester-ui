@@ -17,9 +17,8 @@ export default function Wordmark({
         <span style={{ background: light ? 'var(--surface)' : undefined }} />
         <span style={{ background: light ? 'var(--surface)' : undefined }} />
       </span>
-      <span className="name">
-        Connectivity <em>Tester</em>
-      </span>
+      {/* eslint-disable-next-line i18next/no-literal-string -- product name */}
+      <span className="name">Connectivity <em>Tester</em></span>
     </span>
   )
 }

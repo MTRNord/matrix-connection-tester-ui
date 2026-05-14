@@ -45,6 +45,7 @@ export default function Footer() {
                 className="footer__row"
                 style={{ flexDirection: 'column', gap: 8 }}
               >
+                {/* eslint-disable-next-line i18next/no-literal-string -- brand name */}
                 <a href="https://matrix.org">Matrix.org</a>
                 <a href="https://spec.matrix.org">
                   {t('footer.specification')}
@@ -63,9 +64,11 @@ export default function Footer() {
                   style={{ flexDirection: 'column', gap: 8 }}
                 >
                   {cfg.github_sponsors_url && (
+                    // eslint-disable-next-line i18next/no-literal-string -- brand name
                     <a href={cfg.github_sponsors_url}>GitHub Sponsors</a>
                   )}
                   {cfg.liberapay_url && (
+                    // eslint-disable-next-line i18next/no-literal-string -- brand name
                     <a href={cfg.liberapay_url}>Liberapay</a>
                   )}
                 </div>

@@ -1,4 +1,16 @@
 {
+  "globalError": {
+    "title": "Etwas ist schiefgelaufen",
+    "lead": "Ein unerwarteter Fehler ist aufgetreten. Du kannst es erneut versuchen oder die Seite neu laden.",
+    "bannerTitle": "Unerwarteter Fehler",
+    "tryAgain": "Erneut versuchen",
+    "backToHome": "Zur Startseite",
+    "misconfigured": "Instanz falsch konfiguriert",
+    "configLoadFailed": "Konnte /config.json nicht laden"
+  },
+  "timezoneSelect": {
+    "noResults": "Keine Ergebnisse"
+  },
   "nav": {
     "home": "Startseite",
     "alerts": "Benachrichtigungen",
@@ -84,6 +96,7 @@
         "domainHint": "Zum Beispiel <code>example.com</code>.",
         "notifyLegend": "Diese Adressen benachrichtigen",
         "notifyHint": "Wähle eine oder mehrere. Weitere Adressen kannst du in den Kontoeinstellungen hinzufügen.",
+        "noAddresses": "Noch keine verifizierten Adressen. <addLink>Eine hinzufügen →</addLink>",
         "submit": "Benachrichtigung hinzufügen"
       },
       "addresses": {
@@ -107,6 +120,9 @@
         "added": "Hinzugefügt {{date}}",
         "edit": "Bearbeiten",
         "delete": "Löschen",
+        "loading": "Laden…",
+        "confirmDelete": "Bestätigen",
+        "cancelDelete": "Abbrechen",
         "footerNote": "Eine Adresse kann auf beliebig vielen Benachrichtigungen stehen. Das Entfernen einer Benachrichtigung löscht die Adresse nicht."
       }
     },
@@ -163,8 +179,12 @@
         "perRecipientLabel": "Pro Empfänger angewendet"
       },
       "recentEvents": {
-        "eyebrow": "Letzte Ereignisse"
+        "eyebrow": "Letzte Ereignisse",
+        "noEvents": "Noch keine Ereignisse."
       }
+    },
+    "callback": {
+      "signingIn": "Du wirst angemeldet…"
     },
     "login": {
       "eyebrow": "Anmelden, um Benachrichtigungen zu verwalten",
@@ -252,7 +272,8 @@
       "noneFound": "Keine Support-Kontakte gefunden unter <mono>https://{{serverName}}/.well-known/matrix/support</mono>.",
       "copy": "Kopieren",
       "copied": "Kopiert!",
-      "open": "Öffnen ↗"
+      "open": "Öffnen ↗",
+      "supportPage": "Support-Seite"
     },
     "overview": {
       "title": "Server-Übersicht",
@@ -262,7 +283,8 @@
       "noIps": "Keine gefunden",
       "clientEndpoint": "Client-Endpunkt",
       "identityServer": "Identity-Server",
-      "latestCsVersion": "Neueste C-S-API-Version"
+      "latestCsVersion": "Neueste C-S-API-Version",
+      "atVersion": "bei <mono>{{version}}</mono>"
     },
     "errors": {
       "dnsNoRecord": "DNS-Abfrage fehlgeschlagen — kein A-Record gefunden",
@@ -328,6 +350,8 @@
         "noReports": "Keine Verbindungsberichte verfügbar.",
         "ok": "OK",
         "failed": "Fehlgeschlagen",
+        "error": "Fehler",
+        "na": "N/A",
         "retryNeeded": "Wiederholung benötigt",
         "tlsVersion": "TLS-Version",
         "cipherSuite": "Cipher-Suite",
@@ -422,6 +446,7 @@
       },
       "missing": "✗ Fehlend: {{issues}}",
       "meetsRequirements": "✓ Erfüllt alle Anforderungen",
+      "entropyDisplay": "({{entropy}} Bits)",
       "tooWeak": "✗ Zu schwach — mindestens Akzeptabel anstreben",
       "passwordsMatch": "✓ Passwörter stimmen überein",
       "passwordsNoMatch": "✗ Passwörter stimmen nicht überein",

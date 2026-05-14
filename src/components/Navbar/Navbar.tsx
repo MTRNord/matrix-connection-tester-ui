@@ -100,9 +100,8 @@ export default function Navbar({
             onClick={handleToggle}
           >
             <span>{currentLang.native}</span>
-            <span className="caret" aria-hidden="true">
-              ▾
-            </span>
+            {/* eslint-disable-next-line i18next/no-literal-string */}
+            <span className="caret" aria-hidden="true">▾</span>
           </button>
 
           {isAuthenticated && (

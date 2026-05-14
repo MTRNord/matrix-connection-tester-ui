@@ -2,10 +2,12 @@
 
 import { tanstackConfig } from '@tanstack/eslint-config'
 import pluginQuery from '@tanstack/eslint-plugin-query'
+import i18next from 'eslint-plugin-i18next'
 
 export default [
   ...tanstackConfig,
   ...pluginQuery.configs['flat/recommended-strict'],
+  i18next.configs['flat/recommended'],
   {
     rules: {
       'import/no-cycle': 'off',

@@ -1,6 +1,7 @@
 import './TimezoneSelect.css'
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 
 const ALL_TIMEZONES = Intl.supportedValuesOf('timeZone')
 
@@ -13,6 +14,7 @@ export default function TimezoneSelect({
   onChange: (tz: string) => void
   ariaLabel?: string
 }) {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [anchorRect, setAnchorRect] = useState<DOMRect | null>(null)
@@ -96,9 +98,8 @@ export default function TimezoneSelect({
         onClick={handleToggle}
       >
         <span className="tzselect__value">{value}</span>
-        <span className="tzselect__caret" aria-hidden="true">
-          ▾
-        </span>
+        {/* eslint-disable-next-line i18next/no-literal-string */}
+        <span className="tzselect__caret" aria-hidden="true">▾</span>
       </button>
 
       {open &&
@@ -126,7 +127,7 @@ export default function TimezoneSelect({
               aria-label={ariaLabel}
             >
               {filtered.length === 0 ? (
-                <div className="tzselect__empty">No results</div>
+                <div className="tzselect__empty">{t('timezoneSelect.noResults')}</div>
               ) : (
                 filtered.map((z) => (
                   <button
@@ -145,9 +146,8 @@ export default function TimezoneSelect({
                   >
                     {z}
                     {z === value && (
-                      <span className="tzselect__check" aria-hidden="true">
-                        ✓
-                      </span>
+                      // eslint-disable-next-line i18next/no-literal-string
+                      <span className="tzselect__check" aria-hidden="true">✓</span>
                     )}
                   </button>
                 ))
