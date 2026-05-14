@@ -113,11 +113,22 @@ export interface WellKnownClient {
   'org.matrix.msc4143.rtc_foci'?: unknown[]
 }
 
+export interface RtcTransport {
+  type: string
+  [key: string]: unknown
+}
+
+export interface RtcTransportsResult {
+  transports: RtcTransport[]
+  endpoint: string
+}
+
 export interface ClientServerData {
   baseUrl: string
   wellKnown: WellKnownClient | null
   versions: ClientVersions | null
   msc3266Supported: boolean
+  rtcTransports: RtcTransportsResult | null
 }
 
 // ── MSC1929 support types ─────────────────────────────────────────────────────
@@ -135,16 +146,49 @@ export interface SupportInfo {
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function hasMatrixVersion(versions: string[], major: number, minor: number): boolean {
+function hasMatrixVersion(
+  versions: string[],
+  major: number,
+  minor: number,
+): boolean {
   return versions.some((v) => {
     const m = v.match(/^v(\d+)\.(\d+)/)
     if (!m) return false
-    const ma = parseInt(m[1]), mi = parseInt(m[2])
+    const ma = parseInt(m[1]),
+      mi = parseInt(m[2])
     return ma > major || (ma === major && mi >= minor)
   })
 }
 
-async function probeMsc3266(baseUrl: string, serverName: string): Promise<boolean> {
+async function probeRtcTransports(
+  baseUrl: string,
+): Promise<RtcTransportsResult | null> {
+  for (const path of [
+    '/_matrix/client/v1/rtc/transports',
+    '/_matrix/client/unstable/org.matrix.msc4143/rtc/transports',
+  ]) {
+    try {
+      const resp = await fetch(`${baseUrl}${path}`)
+      if (resp.ok) {
+        const json = await resp.json().catch(() => null)
+        if (json && Array.isArray(json.rtc_transports)) {
+          return {
+            transports: json.rtc_transports as RtcTransport[],
+            endpoint: `${baseUrl}${path}`,
+          }
+        }
+      }
+    } catch {
+      // CORS or network — try next path
+    }
+  }
+  return null
+}
+
+async function probeMsc3266(
+  baseUrl: string,
+  serverName: string,
+): Promise<boolean> {
   const roomId = encodeURIComponent(`!probe:${serverName}`)
   const via = encodeURIComponent(serverName)
   for (const path of [
@@ -208,15 +252,18 @@ export const clientServerQueryOptions = (serverName: string) =>
         // unavailable
       }
 
-      // MSC3266 / room summary: stable in v1.15+, or advertised unstable flag,
-      // or detected by probing (catches servers that support it but don't advertise it)
       const versionList = versions?.versions ?? []
-      const msc3266Supported =
-        hasMatrixVersion(versionList, 1, 15) ||
-        versions?.unstable_features?.['org.matrix.msc3266'] === true ||
-        (await probeMsc3266(baseUrl, serverName))
 
-      return { baseUrl, wellKnown, versions, msc3266Supported }
+      // Run both probes concurrently to keep total latency down
+      const [msc3266Supported, rtcTransports] = await Promise.all([
+        hasMatrixVersion(versionList, 1, 15) ||
+        versions?.unstable_features?.['org.matrix.msc3266'] === true
+          ? Promise.resolve(true)
+          : probeMsc3266(baseUrl, serverName),
+        probeRtcTransports(baseUrl),
+      ])
+
+      return { baseUrl, wellKnown, versions, msc3266Supported, rtcTransports }
     },
     staleTime: 120_000,
     retry: false,

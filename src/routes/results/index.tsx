@@ -447,10 +447,18 @@ function ResultsBody({
   ) : undefined
 
   // Stat: MatrixRTC
-  const rtcFoci = csData?.wellKnown?.['org.matrix.msc4143.rtc_foci']
+  const legacyFoci = Object.entries(csData?.wellKnown ?? {}).filter(
+    ([key]) =>
+      key.startsWith('org.matrix.msc4143.') || key.startsWith('m.rtc.'),
+  )
+  const hasMsc4143Flag =
+    csData?.versions?.unstable_features?.['org.matrix.msc4143'] === true
+  const hasMsc4140 =
+    csData?.versions?.unstable_features?.['org.matrix.msc4140'] === true
   const hasRTC =
-    csData?.versions?.unstable_features?.['org.matrix.msc4143'] === true ||
-    (Array.isArray(rtcFoci) && rtcFoci.length > 0)
+    (csData !== undefined && csData.rtcTransports !== null) ||
+    legacyFoci.length > 0 ||
+    hasMsc4143Flag
   const rtcValue = csData === undefined ? '…' : hasRTC ? 'OK' : 'N/A'
   const rtcColor = hasRTC ? 'var(--ok-deep)' : undefined
   const rtcHint =
@@ -1004,23 +1012,133 @@ function ResultsBody({
             <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>
               {t('results.stats.fetching')}
             </p>
-          ) : hasRTC ? (
-            <p style={{ fontSize: 14 }}>
-              <Trans
-                i18nKey="results.technical.rtc.supportedBody"
-                components={{
-                  mono: <span className="mono" />,
-                  strong: <strong />,
-                }}
-              />
-            </p>
           ) : (
-            <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>
-              <Trans
-                i18nKey="results.technical.rtc.notDetectedBody"
-                components={{ mono: <span className="mono" /> }}
-              />
-            </p>
+            <div className="kv-grid">
+              {/* RTC transports endpoint */}
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.rtc.transportsEndpoint')}
+              </div>
+              <div>
+                {csData.rtcTransports ? (
+                  <>
+                    <Pill kind="ok" dot>
+                      {t('results.technical.rtc.supported')}
+                    </Pill>
+                    <div
+                      className="mono"
+                      style={{
+                        fontSize: 12,
+                        color: 'var(--ink-3)',
+                        marginTop: 4,
+                      }}
+                    >
+                      {csData.rtcTransports.endpoint}
+                    </div>
+                    {csData.rtcTransports.transports.length > 0 ? (
+                      <div style={{ marginTop: 4 }}>
+                        {csData.rtcTransports.transports.map((tr) => (
+                          <span
+                            key={tr.type}
+                            className="mono"
+                            style={{
+                              fontSize: 12,
+                              display: 'block',
+                              color: 'var(--ink-2)',
+                            }}
+                          >
+                            {tr.type}
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          fontSize: 12,
+                          color: 'var(--ink-3)',
+                          marginTop: 4,
+                        }}
+                      >
+                        {t('results.technical.rtc.transportsEmpty')}
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <Pill kind="ink">
+                    {t('results.technical.rtc.notDetected')}
+                  </Pill>
+                )}
+              </div>
+
+              {/* Legacy focus config from .well-known */}
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.rtc.legacyFoci')}
+                <div
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 400,
+                    color: 'var(--ink-3)',
+                    marginTop: 2,
+                  }}
+                >
+                  {t('results.technical.rtc.legacyFociHint')}
+                </div>
+              </div>
+              <div>
+                {legacyFoci.length > 0 ? (
+                  <>
+                    <Pill kind="ok" dot>
+                      {t('results.technical.rtc.configured')}
+                    </Pill>
+                    <div style={{ marginTop: 4 }}>
+                      {legacyFoci.map(([key]) => (
+                        <span
+                          key={key}
+                          className="mono"
+                          style={{
+                            fontSize: 12,
+                            display: 'block',
+                            color: 'var(--ink-2)',
+                          }}
+                        >
+                          {key}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <Pill kind="ink">
+                    {t('results.technical.rtc.notConfigured')}
+                  </Pill>
+                )}
+              </div>
+
+              {/* MSC4140 — delayed events */}
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.rtc.msc4140')}
+              </div>
+              <div>
+                <Pill kind={hasMsc4140 ? 'ok' : 'ink'} dot={hasMsc4140}>
+                  {hasMsc4140
+                    ? t('results.technical.rtc.supported')
+                    : t('results.technical.rtc.notDetected')}
+                </Pill>
+              </div>
+
+              {/* MSC3266 — room summaries */}
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.rtc.msc3266')}
+              </div>
+              <div>
+                <Pill
+                  kind={csData.msc3266Supported ? 'ok' : 'ink'}
+                  dot={csData.msc3266Supported}
+                >
+                  {csData.msc3266Supported
+                    ? t('results.technical.rtc.supported')
+                    : t('results.technical.rtc.notDetected')}
+                </Pill>
+              </div>
+            </div>
           )}
         </Disclosure>
 

@@ -438,8 +438,14 @@
         "hint": "MSC4143 — voice & video call support",
         "supported": "Supported",
         "notDetected": "Not detected",
-        "supportedBody": "MatrixRTC is supported. The server reports <mono>org.matrix.msc4143</mono> as an enabled unstable feature, enabling real-time voice and video calls via Element Call.",
-        "notDetectedBody": "MatrixRTC (<mono>org.matrix.msc4143</mono>) was not detected. Voice and video calls via Element Call may not be supported on this server."
+        "configured": "Configured",
+        "notConfigured": "Not configured",
+        "transportsEndpoint": "RTC transports endpoint",
+        "transportsEmpty": "Endpoint responds but lists no transport types",
+        "legacyFoci": "Legacy focus config",
+        "legacyFociHint": "org.matrix.msc4143.* or m.rtc.* keys in .well-known/matrix/client",
+        "msc4140": "Delayed events (MSC4140)",
+        "msc3266": "Room summaries (MSC3266)"
       },
       "resolution": {
         "title": "Server resolution",
