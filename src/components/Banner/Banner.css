@@ -31,6 +31,9 @@
   line-height: 1.55;
   color: var(--ink-2);
 }
+.banner__body > p {
+  margin: 0;
+}
 .banner.ok {
   background: var(--ok-tint);
   border-color: var(--ok-deep);

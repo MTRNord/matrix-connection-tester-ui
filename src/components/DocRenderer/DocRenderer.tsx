@@ -10,7 +10,7 @@ import Table from '#/components/Table/Table'
 
 type BannerKind = 'ok' | 'warn' | 'bad' | 'info'
 
-const SUPPORTED_DIRECTIVES = new Set(['banner', 'card'])
+const SUPPORTED_DIRECTIVES = new Set(['banner', 'card', 'lead'])
 
 // Converts only known :::directive{attr=val} blocks into named hast elements.
 // Unknown text directives (e.g. :matrix parsed out of #room:matrix.org) are
@@ -58,6 +58,10 @@ const components: any = {
   // :::card
   card({ children }: { children?: React.ReactNode }) {
     return <Card style={{ marginTop: 24 }}>{children}</Card>
+  },
+  // :::lead
+  lead({ children }: { children?: React.ReactNode }) {
+    return <p className="lead">{children}</p>
   },
   table({ children }: { children?: React.ReactNode }) {
     return (

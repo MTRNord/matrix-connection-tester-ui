@@ -37,6 +37,10 @@
   min-width: 0;
 }
 
+.docs-article > :first-child {
+  margin-top: 0;
+}
+
 .docs-article pre {
   margin: 16px 0;
 }

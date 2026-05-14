@@ -83,7 +83,13 @@ const NAV_SECTIONS: NavSection[] = [
   },
 ]
 
-export default function DocsLayout({ docPath }: { docPath: string }) {
+export default function DocsLayout({
+  docPath,
+  lead,
+}: {
+  docPath: string
+  lead?: string
+}) {
   const { t } = useTranslation()
 
   return (
@@ -98,6 +104,7 @@ export default function DocsLayout({ docPath }: { docPath: string }) {
           <span>{t('docs.nav.title')}</span>
         </div>
         <h1>{t('docs.nav.title')}</h1>
+        {lead && <p className="lead">{lead}</p>}
 
         <div className="docs-layout">
           <aside aria-label={t('docs.nav.ariaLabel')}>
