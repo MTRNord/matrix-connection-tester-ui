@@ -5,9 +5,11 @@ import de from './locales/de.json'
 import { LANGS } from './locales/languages'
 
 const supportedCodes = LANGS.map((l) => l.code)
+const stored = localStorage.getItem('language')
 const detected = navigator.language.split('-')[0]
-const lng = supportedCodes.includes(detected as (typeof supportedCodes)[number])
-  ? detected
+const resolved = stored ?? detected
+const lng = supportedCodes.includes(resolved as (typeof supportedCodes)[number])
+  ? resolved
   : 'en'
 
 i18n.use(initReactI18next).init({

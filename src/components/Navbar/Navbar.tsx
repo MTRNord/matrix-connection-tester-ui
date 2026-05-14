@@ -42,6 +42,7 @@ export default function Navbar({
   }
 
   const handlePick = (code: string) => {
+    localStorage.setItem('language', code)
     i18n.changeLanguage(code)
   }
 
