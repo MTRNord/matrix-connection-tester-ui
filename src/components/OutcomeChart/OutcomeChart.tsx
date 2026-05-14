@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface OutcomeDay {
@@ -28,10 +28,32 @@ export default function OutcomeChart({
 }) {
   const { t } = useTranslation()
   const [tooltip, setTooltip] = useState<TooltipInfo | null>(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const [containerW, setContainerW] = useState(W)
+
+  useEffect(() => {
+    const el = wrapperRef.current
+    if (!el) return
+    const ro = new ResizeObserver(([entry]) => {
+      setContainerW(entry.contentRect.width)
+    })
+    ro.observe(el)
+    return () => ro.disconnect()
+  }, [])
 
   if (data.length === 0) return null
 
+  // compensate for viewBox scaling so text always renders at ~11px
+  const scale = containerW / W
+  const tickFontSize = Math.round(11 / scale)
+
   const innerH = height - PAD.t - PAD.b
+
+  // keep a consistent ~12px gap between chart bottom and x-axis label cap-top;
+  // extend the viewBox height when the compensated font needs more room than PAD.b allows
+  const labelGapVB = 12 / scale
+  const labelY = PAD.t + innerH + labelGapVB + tickFontSize * 0.75
+  const viewBoxH = Math.ceil(Math.max(height, labelY + tickFontSize * 0.25 + 2))
   const bw = INNER_W / data.length - 6
 
   const maxTotal = Math.max(...data.map((d) => d.pass + d.fail), 1)
@@ -43,11 +65,15 @@ export default function OutcomeChart({
   const hideTooltip = () => setTooltip(null)
 
   return (
-    <div style={{ position: 'relative' }} onTouchStart={hideTooltip}>
+    <div
+      ref={wrapperRef}
+      style={{ position: 'relative', aspectRatio: `${W} / ${viewBoxH}` }}
+      onTouchStart={hideTooltip}
+    >
       <svg
-        viewBox={`0 0 ${W} ${height}`}
+        viewBox={`0 0 ${W} ${viewBoxH}`}
         width="100%"
-        height={height}
+        height="100%"
         role="img"
         aria-label={t('statistics.chartTitle')}
       >
@@ -68,7 +94,7 @@ export default function OutcomeChart({
                 x={PAD.l - 8}
                 y={y + 4}
                 textAnchor="end"
-                fontSize="11"
+                fontSize={tickFontSize}
                 fill="#4D4844"
                 fontFamily="JetBrains Mono, monospace"
               >
@@ -147,9 +173,9 @@ export default function OutcomeChart({
               {label && (
                 <text
                   x={x + bw / 2}
-                  y={height - 8}
+                  y={labelY}
                   textAnchor="middle"
-                  fontSize="11"
+                  fontSize={tickFontSize}
                   fill="#4D4844"
                   fontFamily="Inter, sans-serif"
                 >

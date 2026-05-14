@@ -1,3 +1,4 @@
+import './statistics.css'
 import Banner from '#/components/Banner/Banner'
 import Card from '#/components/Card/Card'
 import Footer from '#/components/Footer/Footer'
@@ -53,14 +54,7 @@ function Statistics() {
 
         {stats != null && (
           <>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 16,
-                marginTop: 32,
-              }}
-            >
+            <div className="stats-grid">
               <Stat
                 label={t('statistics.totalTests')}
                 value={fmtNum(stats.totalTests)}
