@@ -479,6 +479,33 @@
       }
     }
   },
+  "statistics": {
+    "title": "Statistics",
+    "lead": "A look at how this instance is being used. Only servers whose owners opted in show up here. Domain names are stored as one-way hashes.",
+    "loading": "Loading statistics…",
+    "errorTitle": "Could not load statistics",
+    "errorBody": "The metrics endpoint returned an error. It may be temporarily unavailable — please try again in a moment.",
+    "disabledTitle": "Statistics not available",
+    "disabledBody": "The statistics feature is not enabled on this instance.",
+    "totalTests": "Total tests",
+    "totalTestsHint": "Opted-in requests",
+    "uniqueServers": "Unique servers",
+    "uniqueServersHint": "Distinct hashes",
+    "successRate": "Success rate",
+    "successRateHint": "Tests that passed",
+    "softwareTitle": "Server software in use",
+    "colSoftware": "Server software",
+    "colTests": "Tests",
+    "colShare": "Share",
+    "colBar": "Bar",
+    "other": "Other",
+    "chartTitle": "Test outcomes — last 14 days",
+    "chartPassed": "Passed",
+    "chartFailed": "Failed",
+    "chartBarLabel": "{{date}}: {{pass}} passed, {{fail}} failed",
+    "privacyTitle": "A note on these numbers.",
+    "privacyBody": "Server software with five tests or fewer is grouped as \"Other\" so we can't accidentally identify small homeservers. Failed tests count toward totals but don't appear in the software distribution."
+  },
   "docs": {
     "nav": {
       "title": "Documentation",

@@ -14,6 +14,7 @@ import SkipToContent from '#/components/SkipToContent/SkipToContent'
 import Navbar from '#/components/Navbar/Navbar'
 import Footer from '#/components/Footer/Footer'
 import Banner from '#/components/Banner/Banner'
+import Button from '#/components/Button/Button'
 import { useTranslation } from 'react-i18next'
 
 import '../inter.css'
@@ -52,16 +53,15 @@ function GlobalErrorComponent({
         <div
           style={{ display: 'flex', gap: 12, marginTop: 24, flexWrap: 'wrap' }}
         >
-          <button
+          <Button
             type="button"
-            className="btn"
             onClick={() => {
               reset()
               router.invalidate()
             }}
           >
             {t('globalError.tryAgain')}
-          </button>
+          </Button>
           <a href="/" className="btn ghost">
             {t('globalError.backToHome')}
           </a>

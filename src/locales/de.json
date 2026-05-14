@@ -479,6 +479,33 @@
       "cancelButton": "Abbrechen"
     }
   },
+  "statistics": {
+    "title": "Statistiken",
+    "lead": "Ein Blick darauf, wie diese Instanz genutzt wird. Nur Server, deren Betreiber zugestimmt haben, erscheinen hier. Domainnamen werden als Einweg-Hashes gespeichert.",
+    "loading": "Statistiken werden geladen…",
+    "errorTitle": "Statistiken konnten nicht geladen werden",
+    "errorBody": "Der Metrik-Endpunkt hat einen Fehler zurückgegeben. Er ist möglicherweise vorübergehend nicht verfügbar – bitte versuche es in einem Moment erneut.",
+    "disabledTitle": "Statistiken nicht verfügbar",
+    "disabledBody": "Die Statistikfunktion ist auf dieser Instanz nicht aktiviert.",
+    "totalTests": "Tests gesamt",
+    "totalTestsHint": "Zugestimmte Anfragen",
+    "uniqueServers": "Einzigartige Server",
+    "uniqueServersHint": "Unterschiedliche Hashes",
+    "successRate": "Erfolgsrate",
+    "successRateHint": "Tests, die bestanden haben",
+    "softwareTitle": "Verwendete Serversoftware",
+    "colSoftware": "Serversoftware",
+    "colTests": "Tests",
+    "colShare": "Anteil",
+    "colBar": "Balken",
+    "other": "Sonstige",
+    "chartTitle": "Testergebnisse — letzte 14 Tage",
+    "chartPassed": "Bestanden",
+    "chartFailed": "Fehlgeschlagen",
+    "chartBarLabel": "{{date}}: {{pass}} bestanden, {{fail}} fehlgeschlagen",
+    "privacyTitle": "Ein Hinweis zu diesen Zahlen.",
+    "privacyBody": "Serversoftware mit fünf oder weniger Tests wird als \"Sonstige\" zusammengefasst, damit kleine Homeserver nicht versehentlich identifiziert werden können. Fehlgeschlagene Tests zählen zu den Gesamtzahlen, erscheinen aber nicht in der Softwareverteilung."
+  },
   "docs": {
     "nav": {
       "title": "Dokumentation",
