@@ -10,11 +10,13 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StatisticsRouteImport } from './routes/statistics'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ResultsIndexRouteImport } from './routes/results/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as AlertsIndexRouteImport } from './routes/alerts/index'
+import { Route as AlertsRegisterRouteImport } from './routes/alerts/register'
 import { Route as AlertsLoginRouteImport } from './routes/alerts/login'
 import { Route as AlertsEditRouteImport } from './routes/alerts/edit'
 import { Route as AlertsCallbackRouteImport } from './routes/alerts/callback'
@@ -37,6 +39,11 @@ import { Route as DocsApiEndpointsClientServerApiRouteImport } from './routes/do
 const StatisticsRoute = StatisticsRouteImport.update({
   id: '/statistics',
   path: '/statistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -62,6 +69,11 @@ const DocsIndexRoute = DocsIndexRouteImport.update({
 const AlertsIndexRoute = AlertsIndexRouteImport.update({
   id: '/alerts/',
   path: '/alerts/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsRegisterRoute = AlertsRegisterRouteImport.update({
+  id: '/alerts/register',
+  path: '/alerts/register',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AlertsLoginRoute = AlertsLoginRouteImport.update({
@@ -172,10 +184,12 @@ const DocsApiEndpointsClientServerApiRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/privacy': typeof PrivacyRoute
   '/statistics': typeof StatisticsRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
+  '/alerts/register': typeof AlertsRegisterRoute
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
@@ -198,10 +212,12 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/privacy': typeof PrivacyRoute
   '/statistics': typeof StatisticsRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
+  '/alerts/register': typeof AlertsRegisterRoute
   '/alerts': typeof AlertsIndexRoute
   '/docs': typeof DocsIndexRoute
   '/results': typeof ResultsIndexRoute
@@ -225,10 +241,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/privacy': typeof PrivacyRoute
   '/statistics': typeof StatisticsRoute
   '/alerts/callback': typeof AlertsCallbackRoute
   '/alerts/edit': typeof AlertsEditRoute
   '/alerts/login': typeof AlertsLoginRoute
+  '/alerts/register': typeof AlertsRegisterRoute
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
@@ -253,10 +271,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/privacy'
     | '/statistics'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
+    | '/alerts/register'
     | '/alerts/'
     | '/docs/'
     | '/results/'
@@ -279,10 +299,12 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/privacy'
     | '/statistics'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
+    | '/alerts/register'
     | '/alerts'
     | '/docs'
     | '/results'
@@ -305,10 +327,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/privacy'
     | '/statistics'
     | '/alerts/callback'
     | '/alerts/edit'
     | '/alerts/login'
+    | '/alerts/register'
     | '/alerts/'
     | '/docs/'
     | '/results/'
@@ -332,10 +356,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  PrivacyRoute: typeof PrivacyRoute
   StatisticsRoute: typeof StatisticsRoute
   AlertsCallbackRoute: typeof AlertsCallbackRoute
   AlertsEditRoute: typeof AlertsEditRoute
   AlertsLoginRoute: typeof AlertsLoginRoute
+  AlertsRegisterRoute: typeof AlertsRegisterRoute
   AlertsIndexRoute: typeof AlertsIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   ResultsIndexRoute: typeof ResultsIndexRoute
@@ -363,6 +389,13 @@ declare module '@tanstack/react-router' {
       path: '/statistics'
       fullPath: '/statistics'
       preLoaderRoute: typeof StatisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -398,6 +431,13 @@ declare module '@tanstack/react-router' {
       path: '/alerts'
       fullPath: '/alerts/'
       preLoaderRoute: typeof AlertsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts/register': {
+      id: '/alerts/register'
+      path: '/alerts/register'
+      fullPath: '/alerts/register'
+      preLoaderRoute: typeof AlertsRegisterRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/alerts/login': {
@@ -532,10 +572,12 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  PrivacyRoute: PrivacyRoute,
   StatisticsRoute: StatisticsRoute,
   AlertsCallbackRoute: AlertsCallbackRoute,
   AlertsEditRoute: AlertsEditRoute,
   AlertsLoginRoute: AlertsLoginRoute,
+  AlertsRegisterRoute: AlertsRegisterRoute,
   AlertsIndexRoute: AlertsIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   ResultsIndexRoute: ResultsIndexRoute,

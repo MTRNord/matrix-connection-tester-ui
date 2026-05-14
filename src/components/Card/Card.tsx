@@ -14,7 +14,8 @@ export default function Card({
   as?: React.ElementType
   className?: string
 }> &
-  React.HTMLAttributes<HTMLElement>) {
+  React.HTMLAttributes<HTMLElement> &
+  React.FormHTMLAttributes<HTMLFormElement>) {
   const cls = ['card', variant, flush && 'flush', className]
     .filter(Boolean)
     .join(' ')

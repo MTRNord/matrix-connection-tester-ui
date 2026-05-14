@@ -5,6 +5,24 @@ export interface AppConfig {
   oauth2_client_id: string
   github_sponsors_url?: string
   liberapay_url?: string
+  /** Display name of the data controller shown in the privacy policy. */
+  privacy_controller_name?: string
+  /** Contact email of the data controller shown in the privacy policy. */
+  privacy_controller_email?: string
+  /** Public hostname of this instance (e.g. "matrix-connection-tester.example.com"). */
+  instance_domain?: string
+  /**
+   * How many days the email notification log is retained (matches the backend
+   * `email_log_retention_days` config). Shown in the privacy policy.
+   * Defaults to 7 when not set.
+   */
+  email_log_retention_days?: number
+  /**
+   * How many days raw anonymised statistics are retained (matches the backend
+   * `statistics.raw_retention_days` config). Shown in the privacy policy.
+   * Defaults to 30 when not set.
+   */
+  statistics_raw_retention_days?: number
 }
 
 function isValidConfig(data: unknown): data is AppConfig {

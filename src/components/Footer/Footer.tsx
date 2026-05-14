@@ -35,6 +35,7 @@ export default function Footer() {
                   {t('footer.apiSource')}
                 </a>
                 <Link to="/docs">{t('footer.documentation')}</Link>
+                <Link to="/privacy">{t('footer.privacy')}</Link>
               </div>
             </div>
             <div>

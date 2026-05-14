@@ -79,7 +79,7 @@ function Home() {
                     id="opt-in-stats"
                     name="contribute-statistics"
                     type="checkbox"
-                    defaultChecked
+                    defaultChecked={false}
                     style={{
                       marginTop: 4,
                       width: 20,

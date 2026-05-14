@@ -59,6 +59,7 @@
     "uiSource": "UI source code",
     "apiSource": "API source code",
     "documentation": "Documentation",
+    "privacy": "Privacy Policy",
     "matrix": "Matrix",
     "specification": "Specification",
     "sponsoring": "Sponsoring"
@@ -185,6 +186,42 @@
     },
     "callback": {
       "signingIn": "Signing you in…"
+    },
+    "register": {
+      "eyebrow": "Create an account · for alert notifications",
+      "headline": "Set up alerts in two minutes.",
+      "lead": "An account is only used to deliver downtime alerts for the homeservers you watch. It never talks to Matrix and never sees the contents of your rooms.",
+      "emailLabel": "Email address",
+      "emailHint": "We'll send a verification link here. Your primary contact for everything alert-related.",
+      "passwordLabel": "Password",
+      "passwordHint": "At least 8 characters with an uppercase letter, lowercase letter, number and one special character.",
+      "confirmLabel": "Confirm password",
+      "submit": "Create account →",
+      "strength": {
+        "tooShort": {
+          "label": "Too short",
+          "hint": "Use at least 8 characters."
+        },
+        "weak": {
+          "label": "Weak",
+          "hint": "Add a number and a special character."
+        },
+        "fair": {
+          "label": "Fair",
+          "hint": "Mix in uppercase letters to strengthen it."
+        },
+        "good": {
+          "label": "Good",
+          "hint": "Looks reasonable. A few more characters helps."
+        },
+        "strong": {
+          "label": "Strong",
+          "hint": "Great — this password is hard to guess."
+        }
+      },
+      "privacyNote": "By continuing you agree to the <privacyLink>privacy policy</privacyLink>. No marketing email, ever — only the alerts you configure.",
+      "alreadyHaveAccount": "Already have an account?",
+      "signInLink": "Sign in →"
     },
     "login": {
       "eyebrow": "Sign in to manage alerts",
@@ -511,6 +548,91 @@
     "chartBarLabel": "{{date}}: {{pass}} passed, {{fail}} failed",
     "privacyTitle": "A note on these numbers.",
     "privacyBody": "Server software with five tests or fewer is grouped as \"Other\" so we can't accidentally identify small homeservers. Failed tests count toward totals but don't appear in the software distribution."
+  },
+  "privacy": {
+    "breadcrumb": "Privacy Policy",
+    "eyebrow": "Legal",
+    "title": "Privacy Policy",
+    "lead": "This policy describes what data the Matrix Connection Tester collects, why it collects it, and what rights you have over it.",
+    "lastUpdated": "Last updated: May 2026",
+    "s1": {
+      "title": "1. Who is the data controller?",
+      "p1": "The Matrix Connection Tester is free, open-source software (AGPL-3.0) that anyone can self-host. The data controller is the operator of the specific instance you are using.",
+      "instanceAt": "For the instance at <strong>{{domain}}</strong>,",
+      "controllerIs": "the controller is <strong>{{name}}</strong>.",
+      "controllerIsEmail": "the controller is <strong>{{name}}</strong>, reachable at <a>{{email}}</a>.",
+      "controllerEmailOnly": "the controller can be reached at <a>{{email}}</a>.",
+      "controllerUnknown": "contact the administrator for controller details.",
+      "noInfo": "If you are unsure who operates this instance, check the footer links or contact the site administrator."
+    },
+    "s2": {
+      "title": "2. What we collect and why",
+      "s21": {
+        "title": "2.1 Federation tests — no account required",
+        "p1": "When you enter a homeserver domain and run a test, the domain is sent to the API server to perform federation checks. We do <strong>not</strong> store the raw domain name.",
+        "p2": "If you tick \"contribute to public statistics\" on the home page (the checkbox is <strong>off by default</strong>), we record the result (pass / fail) and software version information. The domain name is <strong>always</strong> stored as a salted BLAKE3 hash — keyed with a server-side secret salt and irreversible. The raw domain is never written to storage."
+      },
+      "s22": {
+        "title": "2.2 Alert account",
+        "p1": "Creating an account to receive downtime alerts involves processing the following data:",
+        "email": "<strong>Email address(es)</strong> — your primary address is used for account verification, magic-link sign-in, password reset, and alert notifications. You may add additional addresses, each with its own notification preference.",
+        "name": "<strong>Display name</strong> (optional) — shown in the UI only.",
+        "password": "<strong>Password</strong> — stored as an Argon2id hash. Your plaintext password is never stored or transmitted after hashing.",
+        "timezone": "<strong>Timezone</strong> — an IANA timezone name (e.g. <code>Europe/Berlin</code>) used to interpret your quiet-hours settings.",
+        "alerts": "<strong>Alert configurations</strong> — the homeserver domains you choose to watch, together with notification preferences and quiet hours.",
+        "history": "<strong>Notification history</strong> — a rolling log of the last 50 events per alert (failures, recoveries, and similar).",
+        "footer": "We use this data solely to deliver the notifications you configure. We never send marketing email."
+      },
+      "s23": {
+        "title": "2.3 Technical / server logs",
+        "p1": "The server may record IP addresses in access logs for security and operational purposes. Log retention period is configured by the operator."
+      }
+    },
+    "s3": {
+      "title": "3. Legal basis (GDPR)",
+      "noWarranty": "This service is provided on a best-effort, no-warranty basis. No uptime guarantees are made or implied.",
+      "accountData": "<strong>Account and alert data</strong>: your consent, given when you create an account and configure alerts. You may withdraw consent at any time by deleting your account.",
+      "statsOptIn": "<strong>Statistics opt-in</strong>: your explicit consent (you tick the checkbox per test run; the default is off).",
+      "serverLogs": "<strong>Server access logs</strong>: legitimate interest in security and operational stability."
+    },
+    "s4": {
+      "title": "4. Third-party processors",
+      "p1": "We do not sell or share personal data with third parties. Email notifications are routed through an email delivery provider configured by the operator; only your email address and the notification content are transmitted for each delivery.",
+      "p2": "No third-party analytics, advertising networks, or tracking pixels are present on this site."
+    },
+    "s5": {
+      "title": "5. Cookies and browser storage",
+      "p1": "This site does <strong>not</strong> use cookies. During the sign-in and registration flow, OAuth2 PKCE parameters (a one-time code verifier and state token) are held in <code>sessionStorage</code> for the duration of the browser tab session and are cleared when the tab is closed.",
+      "p2": "Your selected UI language is saved in <code>localStorage</code> so the site remembers your preference across visits. No personal data is stored there."
+    },
+    "s6": {
+      "title": "6. Data retention",
+      "accountData": "<strong>Account data</strong> (email addresses, display name, timezone, alert configurations): retained until you delete your account.",
+      "alertHistory": "<strong>Alert event history</strong>: rolling window of the last 50 events per alert; deleted with your account.",
+      "emailLog": "<strong>Email notification log</strong>: a record of each notification sent (type, server, timestamp) is automatically pruned after {{emailLogDays}} days and deleted immediately when you delete your account.",
+      "anonStats": "<strong>Anonymised statistics</strong> (salted BLAKE3 hash + pass/fail + software version): retained for {{statsDays}} days; they cannot be linked back to you or your account.",
+      "serverLogs": "<strong>Server access logs</strong>: retention period set by the operator."
+    },
+    "s7": {
+      "title": "7. Your rights",
+      "p1": "Under GDPR (and equivalent legislation) you have the right to:",
+      "access": "<strong>Access</strong> — download everything we hold about you from Account → Download data. The export is a machine-readable JSON file (GDPR Article 20).",
+      "deletion": "<strong>Deletion</strong> — permanently delete your account and all associated data from Account → Delete account. This is irreversible. Anonymised statistics (hashed domain, pass/fail) are not linked to your account and remain in place.",
+      "correction": "<strong>Correction</strong> — update or add email addresses from Account → Email addresses.",
+      "portability": "<strong>Portability</strong> — the JSON export (Account → Download data) covers all structured personal data we hold.",
+      "withdrawConsent": "<strong>Withdraw consent</strong> — statistics consent is given per test run via the checkbox on the home page; simply leave it unticked on future runs.",
+      "objectOrRestrict": "<strong>Object or restrict</strong> — contact the operator if you believe processing is unlawful or want to raise a concern.",
+      "complaint": "You also have the right to lodge a complaint with your national data protection authority."
+    },
+    "s8": {
+      "title": "8. Changes to this policy",
+      "p1": "We may update this policy when the service changes. The \"last updated\" date at the top of this page will reflect any revision. Continued use of the service after a change constitutes acceptance of the updated policy."
+    },
+    "s9": {
+      "title": "9. Contact",
+      "p1": "For privacy enquiries or to exercise your rights, contact the operator of this instance.",
+      "controllerEmail": "The controller for this instance can be reached at <a>{{email}}</a>."
+    }
   },
   "docs": {
     "nav": {

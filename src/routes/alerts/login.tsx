@@ -11,7 +11,7 @@ import {
 import { configQueryOptions } from '#/config'
 import { useAuth } from '#/contexts/AuthContext'
 import { useQuery } from '@tanstack/react-query'
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -73,11 +73,6 @@ function RouteComponent() {
   const magicAction = cfg
     ? `${cfg.api_server_url}/oauth2/magic-link`
     : undefined
-
-  const registerUrl =
-    cfg && pkce
-      ? `${cfg.api_server_url}/oauth2/register?response_type=code&client_id=${cfg.oauth2_client_id}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=openid+email+alerts%3Aread+alerts%3Awrite&state=${pkce.state}&code_challenge=${pkce.codeChallenge}&code_challenge_method=S256&nonce=${pkce.nonce}`
-      : '#'
 
   const resetUrl = cfg ? `${cfg.api_server_url}/oauth2/password-reset` : '#'
 
@@ -202,7 +197,9 @@ function RouteComponent() {
                     fontSize: 14,
                   }}
                 >
-                  <a href={registerUrl}>{t('alerts.login.createAccount')}</a>
+                  <Link to="/alerts/register">
+                    {t('alerts.login.createAccount')}
+                  </Link>
                   <a href={resetUrl}>{t('alerts.login.forgotPassword')}</a>
                 </div>
               </>
@@ -223,9 +220,9 @@ function RouteComponent() {
                   {t('alerts.login.submitMagic')}
                 </Button>
                 <div style={{ marginTop: 20, fontSize: 14 }}>
-                  <a href={registerUrl}>
+                  <Link to="/alerts/register">
                     {t('alerts.login.createAccountMagic')}
-                  </a>
+                  </Link>
                 </div>
               </>
             )}

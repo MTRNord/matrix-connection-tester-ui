@@ -59,6 +59,7 @@
     "uiSource": "UI-Quellcode",
     "apiSource": "API-Quellcode",
     "documentation": "Dokumentation",
+    "privacy": "Datenschutzrichtlinie",
     "matrix": "Matrix",
     "specification": "Spezifikation",
     "sponsoring": "Unterstützen"
@@ -185,6 +186,42 @@
     },
     "callback": {
       "signingIn": "Du wirst angemeldet…"
+    },
+    "register": {
+      "eyebrow": "Konto erstellen · für Benachrichtigungen",
+      "headline": "Benachrichtigungen in zwei Minuten einrichten.",
+      "lead": "Ein Konto wird ausschließlich zur Zustellung von Ausfallbenachrichtigungen für die von dir beobachteten Homeserver verwendet. Es kommuniziert nie mit Matrix und sieht nie den Inhalt deiner Räume.",
+      "emailLabel": "E-Mail-Adresse",
+      "emailHint": "Wir schicken dir einen Bestätigungslink. Deine primäre Kontaktadresse für alles rund um Benachrichtigungen.",
+      "passwordLabel": "Passwort",
+      "passwordHint": "Mindestens 8 Zeichen mit einem Großbuchstaben, einem Kleinbuchstaben, einer Zahl und einem Sonderzeichen.",
+      "confirmLabel": "Passwort bestätigen",
+      "submit": "Konto erstellen →",
+      "strength": {
+        "tooShort": {
+          "label": "Zu kurz",
+          "hint": "Verwende mindestens 8 Zeichen."
+        },
+        "weak": {
+          "label": "Schwach",
+          "hint": "Füge eine Zahl und ein Sonderzeichen hinzu."
+        },
+        "fair": {
+          "label": "Mittelmäßig",
+          "hint": "Mische Großbuchstaben hinein, um es zu stärken."
+        },
+        "good": {
+          "label": "Gut",
+          "hint": "Sieht vernünftig aus. Ein paar mehr Zeichen helfen."
+        },
+        "strong": {
+          "label": "Stark",
+          "hint": "Großartig — dieses Passwort ist schwer zu erraten."
+        }
+      },
+      "privacyNote": "Mit dem Fortfahren stimmst du der <privacyLink>Datenschutzrichtlinie</privacyLink> zu. Keine Marketing-E-Mails, nie — nur die Benachrichtigungen, die du konfigurierst.",
+      "alreadyHaveAccount": "Bereits ein Konto?",
+      "signInLink": "Anmelden →"
     },
     "login": {
       "eyebrow": "Anmelden, um Benachrichtigungen zu verwalten",
@@ -511,6 +548,91 @@
     "chartBarLabel": "{{date}}: {{pass}} bestanden, {{fail}} fehlgeschlagen",
     "privacyTitle": "Ein Hinweis zu diesen Zahlen.",
     "privacyBody": "Serversoftware mit fünf oder weniger Tests wird als \"Sonstige\" zusammengefasst, damit kleine Homeserver nicht versehentlich identifiziert werden können. Fehlgeschlagene Tests zählen zu den Gesamtzahlen, erscheinen aber nicht in der Softwareverteilung."
+  },
+  "privacy": {
+    "breadcrumb": "Datenschutzerklärung",
+    "eyebrow": "Rechtliches",
+    "title": "Datenschutzerklärung",
+    "lead": "Diese Erklärung beschreibt, welche Daten der Matrix Connection Tester erhebt, warum er sie erhebt und welche Rechte du darüber hast.",
+    "lastUpdated": "Zuletzt aktualisiert: Mai 2026",
+    "s1": {
+      "title": "1. Wer ist der Verantwortliche?",
+      "p1": "Der Matrix Connection Tester ist freie, quelloffene Software (AGPL-3.0), die jeder selbst hosten kann. Der Verantwortliche im Sinne der DSGVO ist der Betreiber der jeweiligen Instanz, die du nutzt.",
+      "instanceAt": "Für die Instanz unter <strong>{{domain}}</strong>",
+      "controllerIs": "ist der Verantwortliche <strong>{{name}}</strong>.",
+      "controllerIsEmail": "ist der Verantwortliche <strong>{{name}}</strong>, erreichbar unter <a>{{email}}</a>.",
+      "controllerEmailOnly": "ist der Verantwortliche erreichbar unter <a>{{email}}</a>.",
+      "controllerUnknown": "wende dich an den Administrator für weitere Angaben.",
+      "noInfo": "Falls du nicht weißt, wer diese Instanz betreibt, schaue in die Links im Footer oder wende dich an den Administrator."
+    },
+    "s2": {
+      "title": "2. Was wir erheben und warum",
+      "s21": {
+        "title": "2.1 Föderationstests — kein Konto erforderlich",
+        "p1": "Wenn du eine Homeserver-Domain eingibst und einen Test startest, wird die Domain zur Durchführung von Föderationsprüfungen an den API-Server übermittelt. Wir speichern <strong>nicht</strong> die rohe Domain.",
+        "p2": "Wenn du auf der Startseite \"Zu den öffentlichen Statistiken beitragen\" anhakst (standardmäßig <strong>deaktiviert</strong>), erfassen wir das Ergebnis (bestanden / fehlgeschlagen) sowie Informationen zur Serversoftware. Der Domainname wird <strong>stets</strong> als BLAKE3-Hash mit serverseitigem Salz gespeichert — dieser ist nicht umkehrbar. Die rohe Domain wird niemals gespeichert."
+      },
+      "s22": {
+        "title": "2.2 Alert-Konto",
+        "p1": "Für die Erstellung eines Kontos zum Empfang von Ausfallbenachrichtigungen werden folgende Daten verarbeitet:",
+        "email": "<strong>E-Mail-Adresse(n)</strong> — deine primäre Adresse wird für Kontobestätigung, Magic-Link-Anmeldung, Passwortzurücksetzung und Benachrichtigungen genutzt. Du kannst weitere Adressen hinzufügen, jede mit eigener Benachrichtigungseinstellung.",
+        "name": "<strong>Anzeigename</strong> (optional) — wird nur in der Benutzeroberfläche angezeigt.",
+        "password": "<strong>Passwort</strong> — als Argon2id-Hash gespeichert. Dein Klartextpasswort wird nach dem Hashing weder gespeichert noch übertragen.",
+        "timezone": "<strong>Zeitzone</strong> — ein IANA-Zeitzonenname (z. B. <code>Europe/Berlin</code>), der zur Interpretation deiner Ruhezeiten-Einstellungen verwendet wird.",
+        "alerts": "<strong>Alert-Konfigurationen</strong> — die Homeserver-Domains, die du beobachtest, zusammen mit Benachrichtigungseinstellungen und Ruhezeiten.",
+        "history": "<strong>Benachrichtigungsverlauf</strong> — ein laufendes Protokoll der letzten 50 Ereignisse pro Alert (Ausfälle, Wiederherstellungen u. ä.).",
+        "footer": "Diese Daten verwenden wir ausschließlich zur Zustellung der von dir konfigurierten Benachrichtigungen. Wir versenden keine Werbe-E-Mails."
+      },
+      "s23": {
+        "title": "2.3 Technische / Server-Logs",
+        "p1": "Der Server kann IP-Adressen in Zugriffslogs zu Sicherheits- und Betriebszwecken aufzeichnen. Die Aufbewahrungsfrist wird vom Betreiber festgelegt."
+      }
+    },
+    "s3": {
+      "title": "3. Rechtsgrundlage (DSGVO)",
+      "noWarranty": "Dieser Dienst wird nach bestem Bemühen und ohne Gewähr bereitgestellt. Es werden keine Verfügbarkeitsgarantien gemacht oder impliziert.",
+      "accountData": "<strong>Konto- und Alert-Daten</strong>: deine Einwilligung, die du bei der Kontoerstellung und Konfiguration von Alerts erteilst. Du kannst die Einwilligung jederzeit durch Löschen deines Kontos widerrufen.",
+      "statsOptIn": "<strong>Statistiken (opt-in)</strong>: deine ausdrückliche Einwilligung (du hakst das Kästchen pro Testlauf an; Standard ist deaktiviert).",
+      "serverLogs": "<strong>Server-Zugriffslogs</strong>: berechtigtes Interesse an Sicherheit und Betriebsstabilität."
+    },
+    "s4": {
+      "title": "4. Drittanbieter und Auftragsverarbeiter",
+      "p1": "Wir verkaufen oder teilen keine personenbezogenen Daten mit Dritten. E-Mail-Benachrichtigungen werden über einen vom Betreiber konfigurierten E-Mail-Dienst versendet; dabei werden nur deine E-Mail-Adresse und der Benachrichtigungsinhalt übermittelt.",
+      "p2": "Diese Website enthält keine Analyse-Tools, Werbenetzwerke oder Tracking-Pixel von Drittanbietern."
+    },
+    "s5": {
+      "title": "5. Cookies und Browser-Speicher",
+      "p1": "Diese Website verwendet <strong>keine</strong> Cookies. Während der Anmeldung und Registrierung werden OAuth2-PKCE-Parameter (einmaliger Code-Verifier und State-Token) für die Dauer der Browser-Tab-Sitzung in <code>sessionStorage</code> gehalten und beim Schließen des Tabs gelöscht.",
+      "p2": "Deine gewählte Sprache wird in <code>localStorage</code> gespeichert, damit die Website deine Präferenz bei Folgebesuchen kennt. Es werden keine personenbezogenen Daten dort gespeichert."
+    },
+    "s6": {
+      "title": "6. Datenspeicherung",
+      "accountData": "<strong>Kontodaten</strong> (E-Mail-Adressen, Anzeigename, Zeitzone, Alert-Konfigurationen): bis zur Löschung deines Kontos.",
+      "alertHistory": "<strong>Alert-Ereignisverlauf</strong>: laufendes Fenster der letzten 50 Ereignisse pro Alert; wird mit deinem Konto gelöscht.",
+      "emailLog": "<strong>E-Mail-Benachrichtigungsprotokoll</strong>: eine Aufzeichnung jeder gesendeten Benachrichtigung (Typ, Server, Zeitstempel) wird nach {{emailLogDays}} Tagen automatisch gelöscht und sofort entfernt, wenn du dein Konto löschst.",
+      "anonStats": "<strong>Anonymisierte Statistiken</strong> (BLAKE3-Hash mit Salz + Bestanden/Fehlgeschlagen + Softwareversion): Aufbewahrung für {{statsDays}} Tage; sie können nicht mit dir oder deinem Konto verknüpft werden.",
+      "serverLogs": "<strong>Server-Zugriffslogs</strong>: Aufbewahrungsfrist vom Betreiber festgelegt."
+    },
+    "s7": {
+      "title": "7. Deine Rechte",
+      "p1": "Gemäß DSGVO (und vergleichbarer Gesetzgebung) hast du das Recht auf:",
+      "access": "<strong>Auskunft</strong> — lade alles herunter, was wir über dich speichern, unter Konto → Daten herunterladen. Der Export ist eine maschinenlesbare JSON-Datei (DSGVO Art. 20).",
+      "deletion": "<strong>Löschung</strong> — lösche dauerhaft dein Konto und alle zugehörigen Daten unter Konto → Konto löschen. Dieser Vorgang ist unwiderruflich. Anonymisierte Statistiken (gehashte Domain, Bestanden/Fehlgeschlagen) sind nicht mit deinem Konto verknüpft und bleiben erhalten.",
+      "correction": "<strong>Berichtigung</strong> — aktualisiere oder ergänze E-Mail-Adressen unter Konto → E-Mail-Adressen.",
+      "portability": "<strong>Datenübertragbarkeit</strong> — der JSON-Export (Konto → Daten herunterladen) umfasst alle strukturierten personenbezogenen Daten, die wir speichern.",
+      "withdrawConsent": "<strong>Widerruf der Einwilligung</strong> — die Statistikeinwilligung erfolgt pro Testlauf über das Kontrollkästchen auf der Startseite; lass es bei zukünftigen Läufen einfach deaktiviert.",
+      "objectOrRestrict": "<strong>Widerspruch oder Einschränkung</strong> — wende dich an den Betreiber, wenn du der Ansicht bist, dass die Verarbeitung unrechtmäßig ist.",
+      "complaint": "Du hast außerdem das Recht, eine Beschwerde bei deiner zuständigen Datenschutzaufsichtsbehörde einzureichen."
+    },
+    "s8": {
+      "title": "8. Änderungen dieser Erklärung",
+      "p1": "Wir können diese Erklärung bei Änderungen des Dienstes aktualisieren. Das Datum \"Zuletzt aktualisiert\" am Anfang dieser Seite wird bei jeder Überarbeitung angepasst. Die weitere Nutzung des Dienstes nach einer Änderung gilt als Zustimmung zur aktualisierten Erklärung."
+    },
+    "s9": {
+      "title": "9. Kontakt",
+      "p1": "Für Datenschutzanfragen oder zur Ausübung deiner Rechte wende dich an den Betreiber dieser Instanz.",
+      "controllerEmail": "Der Verantwortliche für diese Instanz ist erreichbar unter <a>{{email}}</a>."
+    }
   },
   "docs": {
     "nav": {
