@@ -89,6 +89,8 @@ interface DailyApiResponse {
 
 export const statisticsQueryOptions = queryOptions({
   queryKey: ['statistics'],
+  refetchInterval: 2 * 60_000,
+  refetchIntervalInBackground: false,
   queryFn: async (): Promise<StatisticsData | null> => {
     const config = await loadConfig()
 

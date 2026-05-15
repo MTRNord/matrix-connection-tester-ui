@@ -222,7 +222,7 @@ export const resultQueryOptions = (serverName: string, statsOptIn: boolean) =>
         throw new Error(`Federation API returned HTTP ${resp.status}`)
       return resp.json()
     },
-    staleTime: 60_000,
+    refetchInterval: 5 * 60_000,
   })
 
 export const clientServerQueryOptions = (serverName: string) =>
@@ -265,7 +265,6 @@ export const clientServerQueryOptions = (serverName: string) =>
 
       return { baseUrl, wellKnown, versions, msc3266Supported, rtcTransports }
     },
-    staleTime: 120_000,
     retry: false,
     throwOnError: false,
   })
@@ -284,7 +283,6 @@ export const supportInfoQueryOptions = (serverName: string) =>
         return null
       }
     },
-    staleTime: 120_000,
     retry: false,
     throwOnError: false,
   })

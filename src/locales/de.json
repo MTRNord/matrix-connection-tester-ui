@@ -251,6 +251,9 @@
       "title": "Federation-Test läuft…",
       "lead": "DNS, TLS, Signaturschlüssel und Server-Erreichbarkeit werden geprüft. Das dauert in der Regel ein paar Sekunden."
     },
+    "lastRun": "Zuletzt um {{time}} Uhr",
+    "rerun": "Test wiederholen",
+    "rerunning": "Läuft…",
     "error": {
       "title": "Ergebnisse konnten nicht geladen werden",
       "lead": "Der Federation-Test für <mono>{{serverName}}</mono> konnte nicht abgeschlossen werden.",

@@ -363,6 +363,9 @@
       "title": "Running federation test…",
       "lead": "Checking DNS, TLS, signing keys and server connectivity. This usually takes a few seconds."
     },
+    "lastRun": "Last run at {{time}}",
+    "rerun": "Re-run check",
+    "rerunning": "Running…",
     "error": {
       "title": "Could not load results",
       "lead": "The federation test for <mono>{{serverName}}</mono> could not complete.",

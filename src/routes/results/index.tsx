@@ -344,9 +344,15 @@ function RouteComponent() {
   const { serverName, statistics } = Route.useSearch()
   const statsOptIn = statistics === 'opt-in'
 
-  const { data } = useSuspenseQuery(resultQueryOptions(serverName, statsOptIn))
+  const { data, refetch, isFetching, dataUpdatedAt } = useSuspenseQuery(
+    resultQueryOptions(serverName, statsOptIn),
+  )
   const { data: csData } = useQuery(clientServerQueryOptions(serverName))
   const { data: supportData } = useQuery(supportInfoQueryOptions(serverName))
+
+  const handleRefresh = useCallback(() => {
+    void refetch()
+  }, [refetch])
 
   return (
     <div>
@@ -357,6 +363,9 @@ function RouteComponent() {
           serverName={serverName}
           csData={csData}
           supportData={supportData ?? null}
+          onRefresh={handleRefresh}
+          isRefreshing={isFetching}
+          lastUpdatedAt={dataUpdatedAt}
         />
       </main>
       <Footer />
@@ -371,11 +380,17 @@ function ResultsBody({
   serverName,
   csData,
   supportData,
+  onRefresh,
+  isRefreshing,
+  lastUpdatedAt,
 }: {
   data: Root
   serverName: string
   csData: ClientServerData | undefined
   supportData: SupportInfo | null | undefined
+  onRefresh: () => void
+  isRefreshing: boolean
+  lastUpdatedAt: number
 }) {
   const { t } = useTranslation()
 
@@ -572,6 +587,44 @@ function ResultsBody({
       <Banner kind={verdictKind} title={verdictTitle}>
         {verdictBody}
       </Banner>
+
+      {/* Re-run / last run row */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: 12,
+          marginBottom: -8,
+        }}
+      >
+        <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+          {t('results.lastRun', {
+            time: new Intl.DateTimeFormat([], {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+            }).format(new Date(lastUpdatedAt)),
+          })}
+        </span>
+        <button
+          type="button"
+          onClick={onRefresh}
+          disabled={isRefreshing}
+          style={{
+            background: 'none',
+            border: 'none',
+            padding: 0,
+            font: 'inherit',
+            fontSize: 13,
+            color: isRefreshing ? 'var(--ink-3)' : 'var(--ink-2)',
+            cursor: isRefreshing ? 'default' : 'pointer',
+            textDecoration: isRefreshing ? 'none' : 'underline',
+          }}
+        >
+          {isRefreshing ? t('results.rerunning') : t('results.rerun')}
+        </button>
+      </div>
 
       {/* Stat cards */}
       <div className="stat-grid">
