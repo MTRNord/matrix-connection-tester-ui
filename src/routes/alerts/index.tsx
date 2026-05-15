@@ -122,9 +122,9 @@ function LoggedOutView() {
         >
           {features.map(({ key }) => (
             <div key={key} className="card stone">
-              <h3 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>
+              <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 8px' }}>
                 {t(`alerts.loggedOut.features.${key}.title`)}
-              </h3>
+              </h2>
               <p
                 style={{
                   fontSize: 14,

@@ -4,7 +4,7 @@
   margin-bottom: 14px;
 }
 .stat__value {
-  font: 800 48px/1 var(--sans);
+  font: 800 clamp(16px, 15cqw, 48px)/1 var(--sans);
   letter-spacing: -0.035em;
   font-variant-numeric: tabular-nums;
   color: var(--ink);

@@ -89,9 +89,12 @@
 /* Stat grid */
 .stat-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 16px;
   margin-top: 16px;
+}
+.stat-grid > * {
+  container-type: inline-size;
 }
 
 @media (max-width: 900px) {

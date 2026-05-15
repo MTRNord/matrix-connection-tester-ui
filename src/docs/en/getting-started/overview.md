@@ -8,7 +8,7 @@ Most issues fall into one of three buckets: a missing DNS record, a TLS certific
 
 :::card
 
-### If you're new to running a homeserver
+## If you're new to running a homeserver
 
 Start with these four pages, in order. Each one takes about ten minutes to read.
 
