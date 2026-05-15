@@ -58,7 +58,6 @@ function Home() {
                     name="domain-input"
                     type="text"
                     placeholder="example.com"
-                    autoComplete="off"
                     spellCheck="false"
                   />
                 </Field>
