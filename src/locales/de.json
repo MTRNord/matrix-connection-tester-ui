@@ -264,7 +264,7 @@
     },
     "verdict": {
       "okTitle": "Dein Homeserver sieht gesund aus.",
-      "okBody": "Federation und Client-Server-API haben wie erwartet geantwortet – du musst heute nichts beheben.",
+      "okBody": "Federation-Checks bestanden – alle Anforderungen für die Server-zu-Server-Kommunikation sind erfüllt.",
       "warnTitle": "Federation funktioniert, aber mit Warnungen.",
       "warnBodyRetry": "Ein oder mehrere Endpunkte benötigten einen Wiederholungsversuch. Remote-Server könnten beim ersten Verbindungsversuch Instabilität erleben.",
       "warnBodySplitBrain": "Federation hat geantwortet, aber well-known war über IPs hinweg inkonsistent (Split-Brain). Siehe Abschnitt Probleme unten.",
@@ -300,7 +300,24 @@
       "expiredKeys": "{{ip}}: Signaturschlüssel sind abgelaufen",
       "noEd25519Key": "{{ip}}: kein Ed25519-Signaturschlüssel gefunden",
       "ed25519Failed": "{{ip}}: Ed25519-Signaturverifizierung fehlgeschlagen",
-      "serverVersionParse": "{{ip}}: Serverversionstring konnte nicht geparst werden"
+      "serverVersionParse": "{{ip}}: Serverversionstring konnte nicht geparst werden",
+      "connectionErrorHint": "Stelle sicher, dass dein Matrix-Server läuft, Port 8448 (oder dein delegierter Port) offen ist und nicht durch eine Firewall gesperrt wird. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
+      "splitBrainHint": "Deine IPs liefern unterschiedliche <code>m.server</code>-Delegationswerte — andere Server werden inkonsistent weiterleiten. Stelle sicher, dass alle Server-IPs identischen Inhalt unter <code>/.well-known/matrix/server</code> ausliefern. <docsLink>Well-known-Delegation →</docsLink>",
+      "retryNeededHint": "Beim ersten Verbindungsversuch trat ein vorübergehender Fehler auf, der beim zweiten Versuch behoben war. Externe Server könnten dies einmalig erleben — beobachte, ob es sich wiederholt.",
+      "serverNameMismatchHint": "Die Antwort des Signaturschlüssel-Endpunkts enthält nicht <code>{{serverName}}</code> als Servernamen. Überprüfe, ob die <code>server_name</code>-Einstellung deines Homeservers mit der getesteten Domain übereinstimmt und ob <code>/_matrix/key/v2/server</code> den korrekten Namen zurückgibt. <docsLink>Federation-Leitfaden →</docsLink>",
+      "invalidCertHint": "Federation erfordert ein gültiges TLS-Zertifikat einer öffentlich vertrauenswürdigen CA (z. B. Let's Encrypt) für deine Domain. Selbstsignierte oder abgelaufene Zertifikate werden von anderen Homeservern abgelehnt. <docsLink>TLS-Zertifikate-Leitfaden →</docsLink>",
+      "expiredKeysHint": "Deine Signaturschlüssel haben ein <code>valid_until_ts</code> in der Vergangenheit. Andere Homeserver cachen deine Schlüssel und akzeptieren keine mit abgelaufenen Schlüsseln signierten Nachrichten. Ein Neustart deines Homeservers rotiert die Schlüssel in der Regel automatisch. <docsLink>Federation-Leitfaden →</docsLink>",
+      "noEd25519KeyHint": "Jeder Matrix-Homeserver muss mindestens einen Ed25519-Schlüssel unter <code>/_matrix/key/v2/server</code> veröffentlichen. Überprüfe, ob der Signaturschlüssel deines Homeservers konfiguriert und die Schlüsseldatei lesbar ist. <docsLink>Federation-Leitfaden →</docsLink>",
+      "ed25519FailedHint": "Einer oder mehrere Ed25519-Signaturschlüssel haben die Überprüfung nicht bestanden. Der Server stellt möglicherweise veraltetes oder falsches Schlüsselmaterial bereit. Überprüfe die Schlüsseldateien und Konfiguration deines Homeservers. <docsLink>Federation-Leitfaden →</docsLink>",
+      "serverVersionParseHint": "Der von <code>/_matrix/federation/v1/version</code> zurückgegebene Wert entspricht nicht dem erwarteten Format. Dies ist nur informativ — angepasste Server-Builds können nicht standardisierte Versionsstrings verwenden, ohne dass die Federation beeinträchtigt wird.",
+      "csApiUnavailable": "Client-Server-API von diesem Browser aus nicht erreichbar",
+      "csApiUnavailableHint": "Der Test konnte die Client-API deines Servers (<code>/_matrix/client/versions</code>) nicht aus dem Browser erreichen. Dies liegt häufig an fehlenden CORS-Headern — Matrix-Clients verbinden sich anders und funktionieren möglicherweise trotzdem. Falls du Web-Clients unterstützen möchtest, überprüfe deine CORS-Konfiguration. <docsLink>CORS-Leitfaden →</docsLink>",
+      "wellKnownError": "{{ip}}: .well-known/matrix/server-Abfrage fehlgeschlagen",
+      "wellKnownErrorHint": "Die Federation-Well-Known-Abfrage ist für diese IP fehlgeschlagen. Andere Server, die über diese IP deinen Federation-Endpunkt ermitteln, fallen auf SRV oder Port 8448 zurück — das kann funktionieren, aber Inkonsistenzen über IPs hinweg führen oft zu schwer diagnostizierbaren Federation-Problemen. <docsLink>Well-known-Delegation →</docsLink>",
+      "srvTargetError": "SRV-Ziel {{target}} konnte nicht aufgelöst werden",
+      "srvTargetErrorHint": "Einer deiner SRV-Einträge verweist auf einen Hostnamen, der nicht zu einer IP-Adresse aufgelöst werden konnte. Server, die SRV-basierte Erkennung verwenden, können möglicherweise nicht über diese Ziele verbinden. Überprüfe, ob das SRV-Ziel korrekt auflöst, oder entferne den defekten Eintrag. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
+      "tlsOldVersion": "{{ip}}: veraltete TLS-Version {{version}} im Einsatz",
+      "tlsOldVersionHint": "Die Matrix-Spezifikation empfiehlt TLS 1.2 oder neuer. Ältere Versionen (TLS 1.0, TLS 1.1) haben bekannte Schwachstellen und werden von vielen modernen Homeservern abgelehnt. Aktualisiere deine TLS-Konfiguration so, dass mindestens TLS 1.2 verlangt wird. <docsLink>TLS-Zertifikate-Leitfaden →</docsLink>"
     },
     "support": {
       "title": "Moderations- & Sicherheitskontakte",
@@ -336,7 +353,13 @@
       "tls": "TLS- / Zertifikatsfehler",
       "tlsHint": "Überprüfe, ob dein Zertifikat gültig und nicht abgelaufen ist und die richtigen Hostnamen abdeckt. Stelle sicher, dass dein Server die vollständige Zertifikatskette vorlegt. <docsLink>Federation-Fehlerbehebung lesen →</docsLink>",
       "unknown": "Federation-Check fehlgeschlagen",
-      "technicalDetails": "Technische Details"
+      "technicalDetails": "Technische Details",
+      "srvToCname": "SRV-Ziel ist ein CNAME — ungültige DNS-Konfiguration",
+      "srvToCnameHint": "Das Ziel deines SRV-Eintrags ist ein CNAME-Alias. Die Matrix-Spezifikation verlangt, dass SRV-Ziele direkt auf A- oder AAAA-Records verweisen, nicht auf Aliase. Ändere dein DNS so, dass das SRV-Ziel auf den tatsächlichen Hostnamen des Servers zeigt. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
+      "srvTimeout": "SRV-Lookup abgelaufen",
+      "srvTimeoutHint": "Der DNS-SRV-Lookup für deinen Server ist abgelaufen. Der Test fällt auf A/AAAA-Auflösung zurück, aber die SRV-basierte Delegation funktioniert möglicherweise nicht korrekt. Überprüfe die SRV-Einträge und TTLs bei deinem DNS-Anbieter. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
+      "invalidServerName": "Ungültiger Servername",
+      "invalidServerNameHint": "Der Servername scheint keine gültige Matrix-Server-Domain zu sein. Überprüfe den eingegebenen Hostnamen und versuche es erneut. <docsLink>Federation-Einrichtung →</docsLink>"
     },
     "technical": {
       "title": "Technische Details",
@@ -405,7 +428,14 @@
         "validCerts": "Gültige Zertifikate",
         "keysNotExpired": "Schlüssel nicht abgelaufen",
         "ed25519Present": "Ed25519-Schlüssel vorhanden",
-        "ed25519Valid": "Ed25519-Signatur gültig"
+        "ed25519Valid": "Ed25519-Signatur gültig",
+        "certificates": "TLS-Zertifikate",
+        "certSubject": "Aussteller",
+        "certIssuer": "Ausgestellt von",
+        "certDnsNames": "Abgedeckte Namen",
+        "ed25519KeysTitle": "Ed25519-Schlüssel-Details",
+        "keyValidFormat": "Gültiger Schlüssel",
+        "keyMatchingSig": "Passende Signatur"
       },
       "rawJson": {
         "title": "Roh-JSON",

@@ -189,7 +189,37 @@ type ErrorClass = {
   docsPath: string
 }
 
-function classifyFederationError(raw: string): ErrorClass {
+function classifyFederationError(raw: string, errorCode?: unknown): ErrorClass {
+  // Check structured ErrorCode first (more reliable than message text)
+  const code =
+    typeof errorCode === 'string'
+      ? errorCode
+      : typeof errorCode === 'object' && errorCode !== null
+        ? Object.keys(errorCode)[0]
+        : ''
+
+  if (code === 'SRVPointsToCNAME') {
+    return {
+      titleKey: 'results.errors.srvToCname',
+      hintKey: 'results.errors.srvToCnameHint',
+      docsPath: '/docs/troubleshooting/network-issues',
+    }
+  }
+  if (code === 'SRVLookupTimeout') {
+    return {
+      titleKey: 'results.errors.srvTimeout',
+      hintKey: 'results.errors.srvTimeoutHint',
+      docsPath: '/docs/troubleshooting/network-issues',
+    }
+  }
+  if (code === 'InvalidServerName') {
+    return {
+      titleKey: 'results.errors.invalidServerName',
+      hintKey: 'results.errors.invalidServerNameHint',
+      docsPath: '/docs/getting-started/federation-setup',
+    }
+  }
+
   const lower = raw.toLowerCase()
   if (
     lower.includes('no records found') ||
@@ -236,9 +266,18 @@ function classifyFederationError(raw: string): ErrorClass {
   }
 }
 
-function ClassifiedErrorBanner({ raw }: { raw: string }) {
+function ClassifiedErrorBanner({
+  raw,
+  errorCode,
+}: {
+  raw: string
+  errorCode?: unknown
+}) {
   const { t } = useTranslation()
-  const { titleKey, hintKey, docsPath } = classifyFederationError(raw)
+  const { titleKey, hintKey, docsPath } = classifyFederationError(
+    raw,
+    errorCode,
+  )
   return (
     <Banner kind="bad" title={t(titleKey)}>
       {hintKey && (
@@ -276,6 +315,80 @@ function ClassifiedErrorBanner({ raw }: { raw: string }) {
           {raw}
         </code>
       </details>
+    </Banner>
+  )
+}
+
+// ── Problem banner ────────────────────────────────────────────────────────────
+
+type Problem = {
+  key: string
+  severity: 'bad' | 'warn'
+  titleKey: string
+  titleValues?: Record<string, string>
+  hintKey?: string
+  hintValues?: Record<string, string>
+  docsPath?: string
+  detail?: string
+  isSplitBrain?: boolean
+}
+
+function ProblemBanner({
+  problem,
+  children,
+}: {
+  problem: Problem
+  children?: React.ReactNode
+}) {
+  const { t } = useTranslation()
+  return (
+    <Banner
+      kind={problem.severity}
+      title={t(problem.titleKey, problem.titleValues ?? {})}
+    >
+      {problem.hintKey && (
+        <p style={{ margin: '4px 0 8px', fontSize: 14 }}>
+          <Trans
+            i18nKey={problem.hintKey}
+            values={problem.hintValues}
+            components={{
+              code: <code />,
+              docsLink: problem.docsPath ? (
+                <Link to={problem.docsPath} />
+              ) : (
+                <span />
+              ),
+            }}
+          />
+        </p>
+      )}
+      {children}
+      {problem.detail && (
+        <details>
+          <summary
+            style={{
+              fontSize: 12,
+              cursor: 'pointer',
+              opacity: 0.75,
+              userSelect: 'none',
+            }}
+          >
+            {t('results.errors.technicalDetails')}
+          </summary>
+          <code
+            style={{
+              fontSize: 11,
+              display: 'block',
+              marginTop: 6,
+              wordBreak: 'break-all',
+              fontFamily: 'var(--mono)',
+              opacity: 0.85,
+            }}
+          >
+            {problem.detail}
+          </code>
+        </details>
+      )}
     </Banner>
   )
 }
@@ -485,53 +598,227 @@ function ResultsBody({
 
   // Primary API error — shown with rich explanation, separate from per-IP list
   const primaryApiError = data.Error?.Error ?? null
+  const primaryApiErrorCode = data.Error?.ErrorCode
+
+  // Well-known per-IP — declared early so problem loop can reference it
+  const wellKnownEntries = Object.entries(data.WellKnownResult)
 
   // Per-IP / check-failure problems
-  const problems: string[] = []
+  const problems: Problem[] = []
 
-  // Per-IP connection errors
+  // Per-IP connection errors (full failure — couldn't connect at all)
   if (hasErrors) {
     for (const [ip, err] of Object.entries(data.ConnectionErrors ?? {})) {
-      problems.push(
-        t('results.problems.connectionError', { ip, error: err.Error }),
-      )
+      problems.push({
+        key: `conn-error-${ip}`,
+        severity: 'bad',
+        titleKey: 'results.problems.connectionError',
+        titleValues: { ip, error: err.Error },
+        hintKey: 'results.problems.connectionErrorHint',
+        docsPath: '/docs/troubleshooting/network-issues',
+        detail: err.Error,
+      })
     }
   }
 
-  if (hasWarning) problems.push(t('results.problems.splitBrain'))
-  if (hasRetry) problems.push(t('results.problems.retryNeeded'))
+  if (hasWarning) {
+    problems.push({
+      key: 'split-brain',
+      severity: 'warn',
+      titleKey: 'results.problems.splitBrain',
+      hintKey: 'results.problems.splitBrainHint',
+      docsPath: '/docs/api-endpoints/well-known-delegation',
+      isSplitBrain: true,
+    })
+  }
+
+  if (hasRetry) {
+    problems.push({
+      key: 'retry-needed',
+      severity: 'warn',
+      titleKey: 'results.problems.retryNeeded',
+      hintKey: 'results.problems.retryNeededHint',
+    })
+  }
 
   if (data.ConnectionReports) {
     for (const [ip, report] of Object.entries(data.ConnectionReports)) {
-      // Per-report connection error
-      if (report.Error?.Error) problems.push(`${ip}: ${report.Error.Error}`)
+      // Per-report connection error (connected but something failed)
+      if (report.Error?.Error) {
+        problems.push({
+          key: `report-error-${ip}`,
+          severity: 'bad',
+          titleKey: 'results.problems.connectionError',
+          titleValues: { ip, error: report.Error.Error },
+          hintKey: 'results.problems.connectionErrorHint',
+          docsPath: '/docs/troubleshooting/network-issues',
+          detail: report.Error.Error,
+        })
+      }
       if (!report.Checks.AllChecksOK) {
-        if (!report.Checks.MatchingServerName)
-          problems.push(t('results.problems.serverNameMismatch', { ip }))
-        if (!report.Checks.ValidCertificates)
-          problems.push(t('results.problems.invalidCert', { ip }))
-        if (!report.Checks.FutureValidUntilTS)
-          problems.push(t('results.problems.expiredKeys', { ip }))
-        if (!report.Checks.HasEd25519Key)
-          problems.push(t('results.problems.noEd25519Key', { ip }))
-        if (!report.Checks.AllEd25519ChecksOK)
-          problems.push(t('results.problems.ed25519Failed', { ip }))
-        if (!report.Checks.ServerVersionParses)
-          problems.push(t('results.problems.serverVersionParse', { ip }))
+        if (!report.Checks.MatchingServerName) {
+          problems.push({
+            key: `name-mismatch-${ip}`,
+            severity: 'bad',
+            titleKey: 'results.problems.serverNameMismatch',
+            titleValues: { ip },
+            hintKey: 'results.problems.serverNameMismatchHint',
+            hintValues: { serverName },
+            docsPath: '/docs/troubleshooting/federation-network',
+          })
+        }
+        if (!report.Checks.ValidCertificates) {
+          const certDetail = report.Certificates?.map((c) =>
+            [
+              `Subject: ${c.SubjectCommonName}`,
+              `Issuer: ${c.IssuerCommonName}`,
+              c.DNSNames?.length ? `SANs: ${c.DNSNames.join(', ')}` : null,
+            ]
+              .filter(Boolean)
+              .join('\n'),
+          ).join('\n\n')
+          problems.push({
+            key: `invalid-cert-${ip}`,
+            severity: 'bad',
+            titleKey: 'results.problems.invalidCert',
+            titleValues: { ip },
+            hintKey: 'results.problems.invalidCertHint',
+            docsPath: '/docs/configuration/tls-certificates',
+            detail: certDetail ?? undefined,
+          })
+        }
+        if (!report.Checks.FutureValidUntilTS) {
+          const expiry = report.Keys.valid_until_ts
+            ? new Date(report.Keys.valid_until_ts).toISOString()
+            : undefined
+          problems.push({
+            key: `expired-keys-${ip}`,
+            severity: 'bad',
+            titleKey: 'results.problems.expiredKeys',
+            titleValues: { ip },
+            hintKey: 'results.problems.expiredKeysHint',
+            docsPath: '/docs/troubleshooting/federation-network',
+            detail: expiry ? `valid_until_ts expired: ${expiry}` : undefined,
+          })
+        }
+        if (!report.Checks.HasEd25519Key) {
+          problems.push({
+            key: `no-ed25519-${ip}`,
+            severity: 'bad',
+            titleKey: 'results.problems.noEd25519Key',
+            titleValues: { ip },
+            hintKey: 'results.problems.noEd25519KeyHint',
+            docsPath: '/docs/troubleshooting/federation-network',
+          })
+        }
+        if (!report.Checks.AllEd25519ChecksOK) {
+          const failedKeys = Object.entries(report.Checks.Ed25519Checks ?? {})
+            .filter(
+              ([, check]) => !check.ValidEd25519 || !check.MatchingSignature,
+            )
+            .map(
+              ([keyId, check]) =>
+                `${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`,
+            )
+            .join('\n')
+          problems.push({
+            key: `ed25519-failed-${ip}`,
+            severity: 'bad',
+            titleKey: 'results.problems.ed25519Failed',
+            titleValues: { ip },
+            hintKey: 'results.problems.ed25519FailedHint',
+            docsPath: '/docs/troubleshooting/federation-network',
+            detail: failedKeys || undefined,
+          })
+        }
+        if (!report.Checks.ServerVersionParses) {
+          problems.push({
+            key: `version-parse-${ip}`,
+            severity: 'warn',
+            titleKey: 'results.problems.serverVersionParse',
+            titleValues: { ip },
+            hintKey: 'results.problems.serverVersionParseHint',
+          })
+        }
       }
     }
   }
 
   // Generic fallback only when nothing else explains the failure
-  if (!federationOK && problems.length === 0 && !primaryApiError)
-    problems.push(t('results.problems.federationFailed'))
+  if (!federationOK && problems.length === 0 && !primaryApiError) {
+    problems.push({
+      key: 'federation-failed',
+      severity: 'bad',
+      titleKey: 'results.problems.federationFailed',
+    })
+  }
+
+  // Well-known probe errors per IP (federation routing may be inconsistent)
+  for (const [ip, wk] of wellKnownEntries) {
+    if (wk.Error?.Error) {
+      problems.push({
+        key: `wk-error-${ip}`,
+        severity: 'warn',
+        titleKey: 'results.problems.wellKnownError',
+        titleValues: { ip },
+        hintKey: 'results.problems.wellKnownErrorHint',
+        docsPath: '/docs/api-endpoints/well-known-delegation',
+        detail: wk.Error.Error,
+      })
+    }
+  }
+
+  // SRV target resolution errors
+  if (data.DNSResult.SrvTargets) {
+    for (const records of Object.values(data.DNSResult.SrvTargets)) {
+      for (const record of records) {
+        if (record.Error?.Error) {
+          problems.push({
+            key: `srv-error-${record.Target}-${record.Port}`,
+            severity: 'warn',
+            titleKey: 'results.problems.srvTargetError',
+            titleValues: { target: `${record.Target}:${record.Port}` },
+            hintKey: 'results.problems.srvTargetErrorHint',
+            docsPath: '/docs/troubleshooting/network-issues',
+            detail: record.Error.Error,
+          })
+        }
+      }
+    }
+  }
+
+  // Per-connection-report: TLS version and keys-expiring-soon checks
+  if (data.ConnectionReports) {
+    for (const [ip, report] of Object.entries(data.ConnectionReports)) {
+      // TLS 1.0 / 1.1 deprecated — Matrix spec recommends 1.2+
+      const tlsVer = report.Cipher.Version
+      if (tlsVer === 'TLS 1.0' || tlsVer === 'TLS 1.1') {
+        problems.push({
+          key: `tls-old-${ip}`,
+          severity: 'warn',
+          titleKey: 'results.problems.tlsOldVersion',
+          titleValues: { ip, version: tlsVer },
+          hintKey: 'results.problems.tlsOldVersionHint',
+          docsPath: '/docs/configuration/tls-certificates',
+        })
+      }
+    }
+  }
+
+  // Client-server API unreachable (loaded, but no versions returned)
+  if (csData !== undefined && csData.versions === null) {
+    problems.push({
+      key: 'cs-api-unavailable',
+      severity: 'warn',
+      titleKey: 'results.problems.csApiUnavailable',
+      hintKey: 'results.problems.csApiUnavailableHint',
+      docsPath: '/docs/configuration/cors',
+    })
+  }
 
   // Support contacts
   const contacts = supportData?.contacts ?? []
   const supportPage = supportData?.support_page
-
-  // Well-known per-IP
-  const wellKnownEntries = Object.entries(data.WellKnownResult)
 
   // Connection reports
   const connectionReportEntries = Object.entries(data.ConnectionReports ?? {})
@@ -689,11 +976,36 @@ function ResultsBody({
         </Card>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {primaryApiError && <ClassifiedErrorBanner raw={primaryApiError} />}
-          {problems.map((p, i) => (
-            <Banner key={i} kind="bad">
-              {p}
-            </Banner>
+          {primaryApiError && (
+            <ClassifiedErrorBanner
+              raw={primaryApiError}
+              errorCode={primaryApiErrorCode}
+            />
+          )}
+          {problems.map((p) => (
+            <ProblemBanner key={p.key} problem={p}>
+              {p.isSplitBrain && wellKnownEntries.length > 0 && (
+                <div style={{ marginTop: 8 }}>
+                  {wellKnownEntries.map(([ip, wk]) => (
+                    <div
+                      key={ip}
+                      style={{
+                        display: 'flex',
+                        gap: 8,
+                        fontSize: 13,
+                        fontFamily: 'var(--mono)',
+                        marginBottom: 2,
+                      }}
+                    >
+                      <span style={{ color: 'var(--ink-3)', minWidth: 140 }}>
+                        {ip}
+                      </span>
+                      <span>→ {wk['m.server'] || '(none)'}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ProblemBanner>
           ))}
         </div>
       )}
@@ -1371,6 +1683,144 @@ function ResultsBody({
                             <CheckBadge ok={report.Checks.AllEd25519ChecksOK} />
                           </td>
                         </tr>
+                        {!report.Checks.AllEd25519ChecksOK &&
+                          report.Checks.Ed25519Checks &&
+                          Object.keys(report.Checks.Ed25519Checks).length >
+                            0 && (
+                            <tr>
+                              <th
+                                scope="row"
+                                style={{
+                                  fontWeight: 600,
+                                  verticalAlign: 'top',
+                                  paddingTop: 10,
+                                }}
+                              >
+                                {t(
+                                  'results.technical.connectivity.ed25519KeysTitle',
+                                )}
+                              </th>
+                              <td>
+                                {Object.entries(
+                                  report.Checks.Ed25519Checks,
+                                ).map(([keyId, check]) => (
+                                  <div key={keyId} style={{ marginBottom: 8 }}>
+                                    <div
+                                      className="mono"
+                                      style={{
+                                        fontSize: 12,
+                                        color: 'var(--ink-2)',
+                                        marginBottom: 4,
+                                        wordBreak: 'break-all',
+                                      }}
+                                    >
+                                      {keyId}
+                                    </div>
+                                    <div
+                                      style={{
+                                        display: 'flex',
+                                        gap: 6,
+                                        flexWrap: 'wrap',
+                                      }}
+                                    >
+                                      <span
+                                        style={{
+                                          fontSize: 12,
+                                          color: 'var(--ink-3)',
+                                        }}
+                                      >
+                                        {t(
+                                          'results.technical.connectivity.keyValidFormat',
+                                        )}
+                                        :
+                                      </span>
+                                      <CheckBadge ok={check.ValidEd25519} />
+                                      <span
+                                        style={{
+                                          fontSize: 12,
+                                          color: 'var(--ink-3)',
+                                        }}
+                                      >
+                                        {t(
+                                          'results.technical.connectivity.keyMatchingSig',
+                                        )}
+                                        :
+                                      </span>
+                                      <CheckBadge
+                                        ok={check.MatchingSignature}
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </td>
+                            </tr>
+                          )}
+                        {!report.Checks.ValidCertificates &&
+                          report.Certificates &&
+                          report.Certificates.length > 0 && (
+                            <tr>
+                              <th
+                                scope="row"
+                                style={{
+                                  fontWeight: 600,
+                                  verticalAlign: 'top',
+                                  paddingTop: 10,
+                                }}
+                              >
+                                {t(
+                                  'results.technical.connectivity.certificates',
+                                )}
+                              </th>
+                              <td>
+                                {report.Certificates.map((cert, i) => (
+                                  <div
+                                    key={i}
+                                    style={{
+                                      fontSize: 12,
+                                      fontFamily: 'var(--mono)',
+                                      marginBottom:
+                                        i < report.Certificates!.length - 1
+                                          ? 10
+                                          : 0,
+                                    }}
+                                  >
+                                    <div>
+                                      <span style={{ color: 'var(--ink-3)' }}>
+                                        {t(
+                                          'results.technical.connectivity.certSubject',
+                                        )}
+                                        :{' '}
+                                      </span>
+                                      {cert.SubjectCommonName}
+                                    </div>
+                                    <div>
+                                      <span style={{ color: 'var(--ink-3)' }}>
+                                        {t(
+                                          'results.technical.connectivity.certIssuer',
+                                        )}
+                                        :{' '}
+                                      </span>
+                                      {cert.IssuerCommonName}
+                                    </div>
+                                    {cert.DNSNames &&
+                                      cert.DNSNames.length > 0 && (
+                                        <div>
+                                          <span
+                                            style={{ color: 'var(--ink-3)' }}
+                                          >
+                                            {t(
+                                              'results.technical.connectivity.certDnsNames',
+                                            )}
+                                            :{' '}
+                                          </span>
+                                          {cert.DNSNames.join(', ')}
+                                        </div>
+                                      )}
+                                  </div>
+                                ))}
+                              </td>
+                            </tr>
+                          )}
                       </tbody>
                     </Table>
                   </Card>

@@ -376,7 +376,7 @@
     },
     "verdict": {
       "okTitle": "Your homeserver looks healthy.",
-      "okBody": "Federation and client-server APIs both responded as expected — there's nothing for you to fix today.",
+      "okBody": "Federation checks passed — all server-to-server communication requirements are met.",
       "warnTitle": "Federation works, but with warnings.",
       "warnBodyRetry": "One or more endpoints required a retry to succeed. Remote servers may experience instability on their first connection attempt.",
       "warnBodySplitBrain": "Federation responded, but well-known was inconsistent across IPs (split-brain). Check the problems section below.",
@@ -412,7 +412,24 @@
       "expiredKeys": "{{ip}}: signing keys have expired",
       "noEd25519Key": "{{ip}}: no Ed25519 signing key found",
       "ed25519Failed": "{{ip}}: Ed25519 signature verification failed",
-      "serverVersionParse": "{{ip}}: server version string could not be parsed"
+      "serverVersionParse": "{{ip}}: server version string could not be parsed",
+      "connectionErrorHint": "Check that your Matrix server is running, port 8448 (or your delegated port) is open, and not blocked by a firewall. <docsLink>Network troubleshooting guide →</docsLink>",
+      "splitBrainHint": "Your IPs are returning different <code>m.server</code> delegation values — remote servers will route inconsistently. Ensure all server IPs serve identical content at <code>/.well-known/matrix/server</code>. <docsLink>Well-known delegation guide →</docsLink>",
+      "retryNeededHint": "A transient failure occurred on the first connection attempt and resolved on retry. Remote servers connecting for the first time may hit this once — monitor for recurrence.",
+      "serverNameMismatchHint": "The signing key response does not include <code>{{serverName}}</code> as the server name. Verify your homeserver's <code>server_name</code> setting matches the domain being tested and that <code>/_matrix/key/v2/server</code> returns the correct name. <docsLink>Federation guide →</docsLink>",
+      "invalidCertHint": "Federation requires a valid TLS certificate from a publicly trusted CA (e.g. Let's Encrypt) covering your domain. Self-signed or expired certificates are rejected by other homeservers. <docsLink>TLS certificates guide →</docsLink>",
+      "expiredKeysHint": "Your signing keys have a <code>valid_until_ts</code> in the past. Other homeservers cache your keys and will refuse messages signed with expired keys. Restarting your homeserver typically rotates them automatically. <docsLink>Federation guide →</docsLink>",
+      "noEd25519KeyHint": "Every Matrix homeserver must publish at least one Ed25519 key at <code>/_matrix/key/v2/server</code>. Check that your homeserver's signing key is configured and the key file is readable. <docsLink>Federation guide →</docsLink>",
+      "ed25519FailedHint": "One or more Ed25519 signing keys failed verification. The server may be presenting stale, mismatched, or corrupted key material. Check your homeserver's signing key files and configuration. <docsLink>Federation guide →</docsLink>",
+      "serverVersionParseHint": "The value returned by <code>/_matrix/federation/v1/version</code> does not match the expected format. This is informational — custom builds may use non-standard version strings and federation still works normally.",
+      "csApiUnavailable": "Client-server API not reachable from this browser",
+      "csApiUnavailableHint": "This test couldn't reach your server's client API (<code>/_matrix/client/versions</code>) from the browser. This is often caused by missing CORS headers — Matrix clients connect differently and may still work fine. If you intend to support web clients, check your CORS configuration. <docsLink>CORS guide →</docsLink>",
+      "wellKnownError": "{{ip}}: .well-known/matrix/server probe failed",
+      "wellKnownErrorHint": "The federation well-known probe failed for this IP. Other servers trying to discover your federation endpoint via this IP will fall back to SRV or direct port 8448, which may succeed — but inconsistency across IPs can cause hard-to-diagnose federation issues. <docsLink>Well-known delegation guide →</docsLink>",
+      "srvTargetError": "SRV target {{target}} could not be resolved",
+      "srvTargetErrorHint": "One of your SRV records points to a hostname that could not be resolved to an IP address. Servers following SRV-based discovery may fail to connect on those targets. Verify that the SRV target resolves correctly or remove the broken record. <docsLink>Network troubleshooting guide →</docsLink>",
+      "tlsOldVersion": "{{ip}}: uses deprecated TLS version {{version}}",
+      "tlsOldVersionHint": "The Matrix specification recommends TLS 1.2 or later. Older versions (TLS 1.0, TLS 1.1) have known weaknesses and are rejected by many modern homeservers. Update your server's TLS configuration to require TLS 1.2 at minimum. <docsLink>TLS certificates guide →</docsLink>"
     },
     "support": {
       "title": "Moderation & security contacts",
@@ -448,7 +465,13 @@
       "tls": "TLS / certificate error",
       "tlsHint": "Check that your certificate is valid, not expired, and covers the correct hostnames. Make sure your server presents the full certificate chain. <docsLink>Read the federation troubleshooting guide →</docsLink>",
       "unknown": "Federation check failed",
-      "technicalDetails": "Technical details"
+      "technicalDetails": "Technical details",
+      "srvToCname": "SRV record target is a CNAME — invalid DNS",
+      "srvToCnameHint": "Your SRV record target is a CNAME alias. The Matrix spec requires SRV targets to resolve directly to A or AAAA records, not via aliases. Update your DNS so the SRV target points to the server's actual hostname instead of a CNAME. <docsLink>Network troubleshooting guide →</docsLink>",
+      "srvTimeout": "SRV lookup timed out",
+      "srvTimeoutHint": "The DNS SRV lookup for your server timed out. The test falls back to A/AAAA resolution but SRV-based delegation may not be working correctly. Check your DNS provider's SRV record configuration and TTLs. <docsLink>Network troubleshooting guide →</docsLink>",
+      "invalidServerName": "Invalid server name",
+      "invalidServerNameHint": "The server name does not appear to be a valid Matrix server domain. Verify you have entered a correct hostname and try again. <docsLink>Federation setup guide →</docsLink>"
     },
     "technical": {
       "title": "Technical details",
@@ -517,7 +540,14 @@
         "validCerts": "Valid certificates",
         "keysNotExpired": "Keys not expired",
         "ed25519Present": "Ed25519 key present",
-        "ed25519Valid": "Ed25519 signature valid"
+        "ed25519Valid": "Ed25519 signature valid",
+        "certificates": "TLS certificates",
+        "certSubject": "Subject",
+        "certIssuer": "Issued by",
+        "certDnsNames": "Covered names",
+        "ed25519KeysTitle": "Ed25519 key details",
+        "keyValidFormat": "Valid key",
+        "keyMatchingSig": "Matching signature"
       },
       "rawJson": {
         "title": "Raw JSON",
