@@ -6,7 +6,7 @@ import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Stat from '#/components/Stat/Stat'
 import Table from '#/components/Table/Table'
-import type { ClientServerData, Root, SupportInfo } from '#/resultQueryOptions'
+import type { ClientServerData, Root, SupportContact, SupportInfoResult } from '#/resultQueryOptions'
 import {
   clientServerQueryOptions,
   resultQueryOptions,
@@ -481,7 +481,7 @@ function RouteComponent() {
           data={data}
           serverName={serverName}
           csData={csData}
-          supportData={supportData ?? null}
+          supportData={supportData}
           onRefresh={handleRefresh}
           isRefreshing={isFetching}
           lastUpdatedAt={dataUpdatedAt}
@@ -506,7 +506,7 @@ function ResultsBody({
   data: Root
   serverName: string
   csData: ClientServerData | undefined
-  supportData: SupportInfo | null | undefined
+  supportData: SupportInfoResult | undefined
   onRefresh: () => void
   isRefreshing: boolean
   lastUpdatedAt: number
@@ -812,20 +812,63 @@ function ResultsBody({
     }
   }
 
-  // Client-server API unreachable (loaded, but no versions returned)
+  // Client-server API: distinguish CORS failure from genuinely unavailable
   if (csData !== undefined && csData.versions === null) {
+    if (csData.versionsCorsBlocked) {
+      problems.push({
+        key: 'cs-api-cors-blocked',
+        severity: 'warn',
+        titleKey: 'results.problems.csApiCorsBlocked',
+        hintKey: 'results.problems.csApiCorsBlockedHint',
+        docsPath: '/docs/configuration/cors',
+      })
+    } else {
+      problems.push({
+        key: 'cs-api-unavailable',
+        severity: 'warn',
+        titleKey: 'results.problems.csApiUnavailable',
+        hintKey: 'results.problems.csApiUnavailableHint',
+        docsPath: '/docs/configuration/cors',
+      })
+    }
+  }
+
+  // RTC transports CORS blocked (endpoint exists but missing CORS headers)
+  if (csData?.rtcCorsBlocked) {
     problems.push({
-      key: 'cs-api-unavailable',
+      key: 'rtc-cors-blocked',
       severity: 'warn',
-      titleKey: 'results.problems.csApiUnavailable',
-      hintKey: 'results.problems.csApiUnavailableHint',
+      titleKey: 'results.problems.rtcCorsBlocked',
+      hintKey: 'results.problems.rtcCorsBlockedHint',
       docsPath: '/docs/configuration/cors',
     })
   }
 
-  // Support contacts
-  const contacts = supportData?.contacts ?? []
-  const supportPage = supportData?.support_page
+  // MSC3266 room-summary CORS blocked
+  if (csData?.msc3266CorsBlocked) {
+    problems.push({
+      key: 'msc3266-cors-blocked',
+      severity: 'warn',
+      titleKey: 'results.problems.msc3266CorsBlocked',
+      hintKey: 'results.problems.msc3266CorsBlockedHint',
+      docsPath: '/docs/configuration/cors',
+    })
+  }
+
+  // /.well-known/matrix/support CORS problem
+  if (supportData?.corsBlocked) {
+    problems.push({
+      key: 'support-cors-blocked',
+      severity: 'warn',
+      titleKey: 'results.problems.supportCorsBlocked',
+      hintKey: 'results.problems.supportCorsBlockedHint',
+      docsPath: '/docs/api-endpoints/support-endpoint',
+    })
+  }
+
+  // Support contacts (CORS-blocked → info is null but we still know the endpoint exists)
+  const contacts = supportData?.info?.contacts ?? []
+  const supportPage = supportData?.info?.support_page
 
   // Connection reports
   const connectionReportEntries = Object.entries(data.ConnectionReports ?? {})
@@ -1043,7 +1086,7 @@ function ResultsBody({
               <>
                 <p className="support__lead">{t('results.support.copyHint')}</p>
                 <div className="support__grid">
-                  {contacts.map((c) => (
+                  {contacts.map((c: SupportContact) => (
                     <div
                       key={c.email_address ?? c.matrix_id ?? c.role}
                       className="support__row"

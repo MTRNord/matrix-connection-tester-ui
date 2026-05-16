@@ -129,6 +129,12 @@ export interface ClientServerData {
   versions: ClientVersions | null
   msc3266Supported: boolean
   rtcTransports: RtcTransportsResult | null
+  /** True when `/_matrix/client/versions` responded but had no CORS headers. */
+  versionsCorsBlocked: boolean
+  /** True when the RTC transports endpoint responded but had no CORS headers. */
+  rtcCorsBlocked: boolean
+  /** True when the MSC3266 room-summary endpoint responded but had no CORS headers. */
+  msc3266CorsBlocked: boolean
 }
 
 // ── MSC1929 support types ─────────────────────────────────────────────────────
@@ -142,6 +148,25 @@ export interface SupportContact {
 export interface SupportInfo {
   contacts?: SupportContact[]
   support_page?: string
+}
+
+/** Result returned by the backend well-known probe endpoint. */
+export interface WellKnownProbeResult {
+  /** HTTP status code from the remote server; 0 means network/TLS error. */
+  status_code: number
+  /** Value of `Access-Control-Allow-Origin`, or null if the header is absent. */
+  cors_origin: string | null
+  /** Parsed JSON body (2xx only). */
+  body: unknown | null
+}
+
+/** Enriched support-info result including CORS diagnostic information. */
+export interface SupportInfoResult {
+  info: SupportInfo | null
+  /** True when the endpoint responded (non-zero status) but had no CORS headers. */
+  corsBlocked: boolean
+  /** HTTP status code returned by the remote server. */
+  statusCode: number
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -160,53 +185,105 @@ function hasMatrixVersion(
   })
 }
 
+/** Call the backend CORS probe for a client-server API path.
+ *  Returns true if the endpoint responded but had no CORS headers. */
+async function probeCors(
+  apiServerUrl: string,
+  baseUrl: string,
+  path: string,
+  extra?: Record<string, string>,
+): Promise<boolean> {
+  try {
+    const params = new URLSearchParams({
+      base_url: baseUrl,
+      path,
+      ...extra,
+    })
+    const resp = await fetch(`${apiServerUrl}/api/probe/client-api?${params}`)
+    if (!resp.ok) return false
+    const probe = (await resp.json()) as WellKnownProbeResult
+    return probe.status_code !== 0 && probe.cors_origin === null
+  } catch {
+    return false
+  }
+}
+
 async function probeRtcTransports(
   baseUrl: string,
-): Promise<RtcTransportsResult | null> {
-  for (const path of [
+  apiServerUrl: string,
+): Promise<{ result: RtcTransportsResult | null; corsBlocked: boolean }> {
+  const paths = [
     '/_matrix/client/v1/rtc/transports',
     '/_matrix/client/unstable/org.matrix.msc4143/rtc/transports',
-  ]) {
+  ] as const
+
+  let anyFailed = false
+  for (const path of paths) {
     try {
       const resp = await fetch(`${baseUrl}${path}`)
       if (resp.ok) {
         const json = await resp.json().catch(() => null)
         if (json && Array.isArray(json.rtc_transports)) {
           return {
-            transports: json.rtc_transports as RtcTransport[],
-            endpoint: `${baseUrl}${path}`,
+            result: {
+              transports: json.rtc_transports as RtcTransport[],
+              endpoint: `${baseUrl}${path}`,
+            },
+            corsBlocked: false,
           }
         }
       }
     } catch {
       // CORS or network — try next path
+      anyFailed = true
     }
   }
-  return null
+
+  // If all browser fetches failed, check whether CORS is the reason
+  if (anyFailed) {
+    const corsBlocked = await probeCors(apiServerUrl, baseUrl, 'rtc-transports-v1')
+    return { result: null, corsBlocked }
+  }
+  return { result: null, corsBlocked: false }
 }
 
 async function probeMsc3266(
   baseUrl: string,
   serverName: string,
-): Promise<boolean> {
+  apiServerUrl: string,
+): Promise<{ supported: boolean; corsBlocked: boolean }> {
   const roomId = encodeURIComponent(`!probe:${serverName}`)
   const via = encodeURIComponent(serverName)
-  for (const path of [
+  const paths = [
     `/_matrix/client/v1/room_summary/${roomId}?via=${via}`,
     `/_matrix/client/unstable/im.nheko.summary/summary/${roomId}?via=${via}`,
-  ]) {
+  ]
+
+  let anyFailed = false
+  for (const path of paths) {
     try {
       const resp = await fetch(`${baseUrl}${path}`)
-      if (resp.status === 200) return true
+      if (resp.status === 200) return { supported: true, corsBlocked: false }
       if (resp.status === 404) {
         const body = await resp.json().catch(() => null)
-        if (body?.errcode === 'M_NOT_FOUND') return true
+        if (body?.errcode === 'M_NOT_FOUND')
+          return { supported: true, corsBlocked: false }
       }
     } catch {
-      // CORS or network — try next path
+      anyFailed = true
     }
   }
-  return false
+
+  if (anyFailed) {
+    const corsBlocked = await probeCors(
+      apiServerUrl,
+      baseUrl,
+      'room-summary-v1',
+      { room_id: `!probe:${serverName}`, via: serverName },
+    )
+    return { supported: false, corsBlocked }
+  }
+  return { supported: false, corsBlocked: false }
 }
 
 // ── Query factories ───────────────────────────────────────────────────────────
@@ -229,6 +306,9 @@ export const clientServerQueryOptions = (serverName: string) =>
   queryOptions({
     queryKey: ['client-server', serverName],
     queryFn: async (): Promise<ClientServerData> => {
+      const config = await loadConfig()
+      const apiServerUrl = config.api_server_url
+
       let baseUrl = `https://${serverName}`
       let wellKnown: WellKnownClient | null = null
       try {
@@ -245,25 +325,39 @@ export const clientServerQueryOptions = (serverName: string) =>
       }
 
       let versions: ClientVersions | null = null
+      let versionsCorsBlocked = false
       try {
         const vResp = await fetch(`${baseUrl}/_matrix/client/versions`)
         if (vResp.ok) versions = await vResp.json()
       } catch {
-        // unavailable
+        // CORS or network — probe to find out which
+        versionsCorsBlocked = await probeCors(apiServerUrl, baseUrl, 'versions')
       }
 
       const versionList = versions?.versions ?? []
 
       // Run both probes concurrently to keep total latency down
-      const [msc3266Supported, rtcTransports] = await Promise.all([
+      const msc3266Skip =
         hasMatrixVersion(versionList, 1, 15) ||
         versions?.unstable_features?.['org.matrix.msc3266'] === true
-          ? Promise.resolve(true)
-          : probeMsc3266(baseUrl, serverName),
-        probeRtcTransports(baseUrl),
+
+      const [msc3266Result, rtcResult] = await Promise.all([
+        msc3266Skip
+          ? Promise.resolve({ supported: true, corsBlocked: false })
+          : probeMsc3266(baseUrl, serverName, apiServerUrl),
+        probeRtcTransports(baseUrl, apiServerUrl),
       ])
 
-      return { baseUrl, wellKnown, versions, msc3266Supported, rtcTransports }
+      return {
+        baseUrl,
+        wellKnown,
+        versions,
+        msc3266Supported: msc3266Result.supported,
+        rtcTransports: rtcResult.result,
+        versionsCorsBlocked,
+        rtcCorsBlocked: rtcResult.corsBlocked,
+        msc3266CorsBlocked: msc3266Result.corsBlocked,
+      }
     },
     retry: false,
     throwOnError: false,
@@ -272,15 +366,23 @@ export const clientServerQueryOptions = (serverName: string) =>
 export const supportInfoQueryOptions = (serverName: string) =>
   queryOptions({
     queryKey: ['support-info', serverName],
-    queryFn: async (): Promise<SupportInfo | null> => {
+    queryFn: async (): Promise<SupportInfoResult> => {
+      const config = await loadConfig()
+      const url = `${config.api_server_url}/api/probe/well-known?server_name=${encodeURIComponent(serverName)}&endpoint=support`
       try {
-        const resp = await fetch(
-          `https://${serverName}/.well-known/matrix/support`,
-        )
-        if (!resp.ok) return null
-        return resp.json()
+        const resp = await fetch(url)
+        if (!resp.ok) {
+          return { info: null, corsBlocked: false, statusCode: 0 }
+        }
+        const probe = (await resp.json()) as WellKnownProbeResult
+        const corsBlocked = probe.status_code !== 0 && probe.cors_origin === null
+        const info =
+          probe.status_code >= 200 && probe.status_code < 300 && probe.body
+            ? (probe.body as SupportInfo)
+            : null
+        return { info, corsBlocked, statusCode: probe.status_code }
       } catch {
-        return null
+        return { info: null, corsBlocked: false, statusCode: 0 }
       }
     },
     retry: false,

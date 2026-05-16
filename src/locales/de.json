@@ -351,7 +351,15 @@
       "srvTargetError": "SRV-Ziel {{target}} konnte nicht aufgelöst werden",
       "srvTargetErrorHint": "Einer deiner SRV-Einträge verweist auf einen Hostnamen, der nicht zu einer IP-Adresse aufgelöst werden konnte. Server, die SRV-basierte Erkennung verwenden, können möglicherweise nicht über diese Ziele verbinden. Überprüfe, ob das SRV-Ziel korrekt auflöst, oder entferne den defekten Eintrag. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
       "tlsOldVersion": "{{ip}}: veraltete TLS-Version {{version}} im Einsatz",
-      "tlsOldVersionHint": "Die Matrix-Spezifikation empfiehlt TLS 1.2 oder neuer. Ältere Versionen (TLS 1.0, TLS 1.1) haben bekannte Schwachstellen und werden von vielen modernen Homeservern abgelehnt. Aktualisiere deine TLS-Konfiguration so, dass mindestens TLS 1.2 verlangt wird. <docsLink>TLS-Zertifikate-Leitfaden →</docsLink>"
+      "tlsOldVersionHint": "Die Matrix-Spezifikation empfiehlt TLS 1.2 oder neuer. Ältere Versionen (TLS 1.0, TLS 1.1) haben bekannte Schwachstellen und werden von vielen modernen Homeservern abgelehnt. Aktualisiere deine TLS-Konfiguration so, dass mindestens TLS 1.2 verlangt wird. <docsLink>TLS-Zertifikate-Leitfaden →</docsLink>",
+      "csApiCorsBlocked": "Client-Server-API hat keine CORS-Header",
+      "csApiCorsBlockedHint": "Dein Server hat auf <code>/_matrix/client/versions</code> geantwortet, aber ohne einen <code>Access-Control-Allow-Origin: *</code>-Header. Browser können die Antwort nicht lesen, weshalb webbasierte Matrix-Clients keine Verbindung herstellen können. Füge den CORS-Header zu deiner Client-Server-API hinzu. <docsLink>CORS-Leitfaden →</docsLink>",
+      "rtcCorsBlocked": "MatrixRTC-Transports-Endpunkt hat keine CORS-Header",
+      "rtcCorsBlockedHint": "Der RTC-Transports-Endpunkt deines Servers (<code>/_matrix/client/v1/rtc/transports</code>) hat geantwortet, aber ohne einen <code>Access-Control-Allow-Origin: *</code>-Header. Webbasierte MatrixRTC-Clients können die Transportkonfiguration nicht abrufen. Füge den CORS-Header zu diesem Endpunkt hinzu. <docsLink>CORS-Leitfaden →</docsLink>",
+      "msc3266CorsBlocked": "Raumvorschau-Endpunkt hat keine CORS-Header",
+      "msc3266CorsBlockedHint": "Der Raumvorschau-Endpunkt deines Servers hat geantwortet, aber ohne CORS-Header. Web-Clients, die auf MSC3266-Raumvorschauen angewiesen sind (z. B. Element Web), können diesen Endpunkt nicht nutzen. Füge <code>Access-Control-Allow-Origin: *</code> zu deiner Client-Server-API-Konfiguration hinzu. <docsLink>CORS-Leitfaden →</docsLink>",
+      "supportCorsBlocked": "/.well-known/matrix/support hat keine CORS-Header",
+      "supportCorsBlockedHint": "Dein Server hat eine Antwort für <code>/.well-known/matrix/support</code> zurückgegeben, enthält aber keinen <code>Access-Control-Allow-Origin: *</code>-Header. Browser können die Antwort daher nicht lesen, weshalb Supportkontakte und die Seite zur Sicherheitsmeldung in webbasierten Matrix-Tools nicht angezeigt werden. Füge den CORS-Header zu diesem Endpunkt hinzu. <docsLink>Support-Endpunkt-Leitfaden →</docsLink>"
     },
     "support": {
       "title": "Moderations- & Sicherheitskontakte",

@@ -463,7 +463,15 @@
       "srvTargetError": "SRV target {{target}} could not be resolved",
       "srvTargetErrorHint": "One of your SRV records points to a hostname that could not be resolved to an IP address. Servers following SRV-based discovery may fail to connect on those targets. Verify that the SRV target resolves correctly or remove the broken record. <docsLink>Network troubleshooting guide →</docsLink>",
       "tlsOldVersion": "{{ip}}: uses deprecated TLS version {{version}}",
-      "tlsOldVersionHint": "The Matrix specification recommends TLS 1.2 or later. Older versions (TLS 1.0, TLS 1.1) have known weaknesses and are rejected by many modern homeservers. Update your server's TLS configuration to require TLS 1.2 at minimum. <docsLink>TLS certificates guide →</docsLink>"
+      "tlsOldVersionHint": "The Matrix specification recommends TLS 1.2 or later. Older versions (TLS 1.0, TLS 1.1) have known weaknesses and are rejected by many modern homeservers. Update your server's TLS configuration to require TLS 1.2 at minimum. <docsLink>TLS certificates guide →</docsLink>",
+      "csApiCorsBlocked": "Client-server API is missing CORS headers",
+      "csApiCorsBlockedHint": "Your server's <code>/_matrix/client/versions</code> endpoint responded, but without an <code>Access-Control-Allow-Origin: *</code> header. Browsers are blocked from reading the response, so web Matrix clients cannot connect. Add the CORS header to your client-server API. <docsLink>CORS guide →</docsLink>",
+      "rtcCorsBlocked": "MatrixRTC transports endpoint is missing CORS headers",
+      "rtcCorsBlockedHint": "Your server's RTC transports endpoint (<code>/_matrix/client/v1/rtc/transports</code>) responded but without an <code>Access-Control-Allow-Origin: *</code> header. Web-based MatrixRTC clients cannot negotiate transport configuration. Add the CORS header to this endpoint. <docsLink>CORS guide →</docsLink>",
+      "msc3266CorsBlocked": "Room summary endpoint is missing CORS headers",
+      "msc3266CorsBlockedHint": "Your server's room-summary endpoint responded but without CORS headers. Web clients relying on MSC3266 room previews (used by Element Web and others) cannot access this endpoint. Add <code>Access-Control-Allow-Origin: *</code> to your client-server API configuration. <docsLink>CORS guide →</docsLink>",
+      "supportCorsBlocked": "/.well-known/matrix/support is missing CORS headers",
+      "supportCorsBlockedHint": "Your server returned a response for <code>/.well-known/matrix/support</code>, but it does not include an <code>Access-Control-Allow-Origin: *</code> header. Browsers cannot read the response, so support contacts and the security disclosure page will not appear in web-based Matrix tools. Add the CORS header to this endpoint. <docsLink>Support endpoint guide →</docsLink>"
     },
     "support": {
       "title": "Moderation & security contacts",
