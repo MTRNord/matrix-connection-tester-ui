@@ -20,12 +20,17 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
   padding: 10px 14px;
+  border: none;
   border-radius: var(--r-2);
+  background: none;
   text-decoration: none;
   color: var(--ink);
   cursor: pointer;
+  font: inherit;
   font-size: 15px;
+  text-align: left;
 }
 .langmenu__item:hover,
 .langmenu__item:focus-visible {

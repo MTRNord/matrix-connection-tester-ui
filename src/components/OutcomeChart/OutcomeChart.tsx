@@ -1,3 +1,4 @@
+import './OutcomeChart.css'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -131,7 +132,7 @@ export default function OutcomeChart({
               tabIndex={0}
               role="img"
               aria-label={barLabel}
-              style={{ cursor: 'default', outline: 'none' }}
+              className="outcome-chart__bar"
               onMouseEnter={() => showTooltip(d, xFrac, yFrac)}
               onMouseLeave={hideTooltip}
               onFocus={() => showTooltip(d, xFrac, yFrac)}
@@ -189,21 +190,10 @@ export default function OutcomeChart({
 
       {tooltip && (
         <div
+          className="outcome-chart__tooltip"
           style={{
-            position: 'absolute',
             left: `clamp(4px, ${tooltip.xFrac * 100}%, calc(100% - 4px))`,
             top: `${tooltip.yFrac * 100}%`,
-            transform: 'translate(-50%, calc(-100% - 6px))',
-            background: 'var(--surface)',
-            border: '1px solid var(--surface-2)',
-            borderRadius: 6,
-            padding: '6px 10px',
-            fontSize: 12,
-            lineHeight: '1.6',
-            pointerEvents: 'none',
-            whiteSpace: 'nowrap',
-            boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-            zIndex: 20,
           }}
           role="tooltip"
           aria-live="polite"

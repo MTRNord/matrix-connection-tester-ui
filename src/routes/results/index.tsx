@@ -411,6 +411,12 @@ function maturityPillKind(maturity: string): string {
   }
 }
 
+const timeFormatter = new Intl.DateTimeFormat([], {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+})
+
 function versionToNum(v: string): number {
   // v1.12 style (Matrix 1.0+) — always newer than legacy r-style
   const mv = v.match(/^v(\d+)\.(\d+)$/)
@@ -423,9 +429,7 @@ function versionToNum(v: string): number {
 }
 
 function latestVersion(versions: string[]): string {
-  return (
-    [...versions].sort((a, b) => versionToNum(b) - versionToNum(a))[0] ?? ''
-  )
+  return [...versions].sort((a, b) => versionToNum(b) - versionToNum(a))[0] ?? ''
 }
 
 // ── Copy button ───────────────────────────────────────────────────────────────
@@ -645,14 +649,15 @@ function ResultsBody({
     for (const [ip, report] of Object.entries(data.ConnectionReports)) {
       // Per-report connection error (connected but something failed)
       if (report.Error?.Error) {
+        const errMsg = report.Error.Error
         problems.push({
           key: `report-error-${ip}`,
           severity: 'bad',
           titleKey: 'results.problems.connectionError',
-          titleValues: { ip, error: report.Error.Error },
+          titleValues: { ip, error: errMsg },
           hintKey: 'results.problems.connectionErrorHint',
           docsPath: '/docs/troubleshooting/network-issues',
-          detail: report.Error.Error,
+          detail: errMsg,
         })
       }
       if (!report.Checks.AllChecksOK) {
@@ -713,12 +718,10 @@ function ResultsBody({
         }
         if (!report.Checks.AllEd25519ChecksOK) {
           const failedKeys = Object.entries(report.Checks.Ed25519Checks ?? {})
-            .filter(
-              ([, check]) => !check.ValidEd25519 || !check.MatchingSignature,
-            )
-            .map(
-              ([keyId, check]) =>
-                `${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`,
+            .flatMap(([keyId, check]) =>
+              !check.ValidEd25519 || !check.MatchingSignature
+                ? [`${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`]
+                : [],
             )
             .join('\n')
           problems.push({
@@ -826,12 +829,9 @@ function ResultsBody({
   // Enabled unstable features for table
   const enabledFeatures = Object.entries(
     csData?.versions?.unstable_features ?? {},
+  ).flatMap(([key, enabled]) =>
+    enabled ? [{ key, info: unstableFeatures[key] }] : [],
   )
-    .filter(([, enabled]) => enabled)
-    .map(([key]) => ({
-      key,
-      info: unstableFeatures[key],
-    }))
 
   // Inject MSC3266 if detected via stable version or probe but not already listed
   const msc3266AlreadyListed =
@@ -885,13 +885,9 @@ function ResultsBody({
           marginBottom: -8,
         }}
       >
-        <span style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+        <span suppressHydrationWarning style={{ fontSize: 13, color: 'var(--ink-3)' }}>
           {t('results.lastRun', {
-            time: new Intl.DateTimeFormat([], {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            }).format(new Date(lastUpdatedAt)),
+            time: timeFormatter.format(new Date(lastUpdatedAt)),
           })}
         </span>
         <button
@@ -1040,8 +1036,8 @@ function ResultsBody({
               <>
                 <p className="support__lead">{t('results.support.copyHint')}</p>
                 <div className="support__grid">
-                  {contacts.map((c, i) => (
-                    <div key={i} className="support__row">
+                  {contacts.map((c) => (
+                    <div key={c.email_address ?? c.matrix_id ?? c.role} className="support__row">
                       <span className="support__role">{c.role}</span>
                       {c.email_address ? (
                         <a
@@ -1057,7 +1053,7 @@ function ResultsBody({
                           className="support__email"
                           style={{ color: 'var(--ink-3)' }}
                         >
-                          —
+                          {'—'}
                         </span>
                       )}
                       <CopyButton
@@ -1564,8 +1560,8 @@ function ResultsBody({
                     <tbody>
                       {Object.entries(data.DNSResult.SrvTargets).flatMap(
                         ([prefix, records]) =>
-                          records.map((r, i) => (
-                            <tr key={`${prefix}-${i}`}>
+                          records.map((r) => (
+                            <tr key={`${prefix}-${r.Target}-${r.Port}`}>
                               <td className="mono" style={{ fontSize: 13 }}>
                                 {prefix}
                               </td>
@@ -1774,7 +1770,7 @@ function ResultsBody({
                               <td>
                                 {report.Certificates.map((cert, i) => (
                                   <div
-                                    key={i}
+                                    key={`${cert.SubjectCommonName}-${cert.IssuerCommonName}`}
                                     style={{
                                       fontSize: 12,
                                       fontFamily: 'var(--mono)',

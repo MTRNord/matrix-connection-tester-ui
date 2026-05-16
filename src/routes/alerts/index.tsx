@@ -201,9 +201,9 @@ function RouteComponent() {
   const allEmails: string[] = account
     ? [
         account.email,
-        ...account.additional_emails
-          .filter((e) => e.verified)
-          .map((e) => e.email),
+        ...account.additional_emails.flatMap((e) =>
+          e.verified ? [e.email] : [],
+        ),
       ]
     : []
 
@@ -214,9 +214,9 @@ function RouteComponent() {
       account
         ? [
             ...(account.email_verified ? [account.email] : []),
-            ...account.additional_emails
-              .filter((e) => e.verified)
-              .map((e) => e.email),
+            ...account.additional_emails.flatMap((e) =>
+              e.verified ? [e.email] : [],
+            ),
           ]
         : [],
     )

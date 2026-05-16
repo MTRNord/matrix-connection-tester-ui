@@ -13,12 +13,12 @@ import { useTranslation } from 'react-i18next'
 
 export const Route = createFileRoute('/statistics')({ component: Statistics })
 
+const intlNum = new Intl.NumberFormat('en-GB')
+const fmtNum = (n: number) => intlNum.format(Math.round(n))
+
 function Statistics() {
   const { t } = useTranslation()
   const { data: stats, isLoading, error } = useQuery(statisticsQueryOptions)
-
-  const fmtNum = (n: number) =>
-    new Intl.NumberFormat('en-GB').format(Math.round(n))
 
   return (
     <div>

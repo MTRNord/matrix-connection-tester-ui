@@ -17,16 +17,15 @@ export default function LanguageMenu({
     <div className="langmenu" role="menu" aria-label={t('lang.choose')}>
       <div className="langmenu__title">{t('lang.choose')}</div>
       {LANGS.map((l) => (
-        <a
+        <button
           key={l.code}
+          type="button"
           role="menuitemradio"
           aria-checked={l.code === currentLang}
           className={
             'langmenu__item' + (l.code === currentLang ? ' is-active' : '')
           }
-          href="#"
-          onClick={(e) => {
-            e.preventDefault()
+          onClick={() => {
             onPick(l.code)
             onClose?.()
           }}
@@ -38,7 +37,7 @@ export default function LanguageMenu({
               ✓
             </span>
           )}
-        </a>
+        </button>
       ))}
       <div className="langmenu__divider" />
       <a

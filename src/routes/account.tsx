@@ -230,6 +230,9 @@ function RouteComponent() {
       setCurrentPw('')
       setNewPw('')
       setConfirmPw('')
+      void queryClient.invalidateQueries({
+        queryKey: accountQueryOptions(cfg).queryKey,
+      })
     },
   })
 
@@ -510,7 +513,7 @@ function RouteComponent() {
                       >
                         {ta('profile.memberSince')}
                       </th>
-                      <td>{fmt.format(new Date(account.created_at))}</td>
+                      <td suppressHydrationWarning>{fmt.format(new Date(account.created_at))}</td>
                     </tr>
                     <tr>
                       <th
@@ -566,6 +569,7 @@ function RouteComponent() {
                           {account.email}
                         </div>
                         <div
+                          suppressHydrationWarning
                           style={{
                             fontSize: 12,
                             color: 'var(--ink-3)',
@@ -610,13 +614,14 @@ function RouteComponent() {
                           fontSize: 13,
                         }}
                       >
-                        —
+                        {'—'}
                       </td>
                     </tr>
 
                     {/* Additional */}
-                    {account.additional_emails.map((em) => (
-                      <tr key={em.id}>
+                    {account.additional_emails.map((em) => {
+                      const emAddedDate = fmt.format(new Date(em.created_at))
+                      return <tr key={em.id}>
                         <td>
                           <div
                             className="mono"
@@ -636,7 +641,7 @@ function RouteComponent() {
                             }}
                           >
                             {ta('emails.addedSubtext', {
-                              date: fmt.format(new Date(em.created_at)),
+                              date: emAddedDate,
                             })}
                           </div>
                         </td>
@@ -704,7 +709,7 @@ function RouteComponent() {
                           </div>
                         </td>
                       </tr>
-                    ))}
+                    })}
                   </tbody>
                 </Table>
               </Card>
@@ -901,15 +906,15 @@ function RouteComponent() {
                               style={{ display: 'flex', gap: 4 }}
                               aria-hidden="true"
                             >
-                              {[0, 1, 2, 3, 4].map((i) => (
+                              {([0, 1, 2, 3, 4] as const).map((step) => (
                                 <div
-                                  key={i}
+                                  key={step}
                                   style={{
                                     flex: 1,
                                     height: 6,
                                     borderRadius: 2,
                                     background:
-                                      i <= levelIdx
+                                      step <= levelIdx
                                         ? level.color
                                         : 'var(--surface-3)',
                                     transition: 'background 120ms ease',

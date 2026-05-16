@@ -187,9 +187,9 @@ function RouteComponent() {
   const availableEmails: string[] = account
     ? [
         ...(account.email_verified ? [account.email] : []),
-        ...account.additional_emails
-          .filter((e) => e.verified)
-          .map((e) => e.email),
+        ...account.additional_emails.flatMap((e) =>
+          e.verified ? [e.email] : [],
+        ),
       ]
     : []
 
@@ -785,9 +785,9 @@ function RouteComponent() {
                     {(showAllEvents
                       ? eventsData.events
                       : eventsData.events.slice(0, 10)
-                    ).map((ev, i) => (
+                    ).map((ev) => (
                       <li
-                        key={i}
+                        key={ev.when}
                         style={{
                           display: 'grid',
                           gridTemplateColumns: 'max-content 1fr auto',

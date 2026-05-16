@@ -191,15 +191,15 @@ function RouteComponent() {
           {password.length > 0 && (
             <div aria-live="polite" style={{ marginTop: -8, marginBottom: 20 }}>
               <div style={{ display: 'flex', gap: 4 }} aria-hidden="true">
-                {([0, 1, 2, 3, 4] as const).map((i) => (
+                {([0, 1, 2, 3, 4] as const).map((step) => (
                   <div
-                    key={i}
+                    key={step}
                     style={{
                       flex: 1,
                       height: 6,
                       borderRadius: 2,
                       background:
-                        i <= strength ? strengthFill : 'var(--surface-3)',
+                        step <= strength ? strengthFill : 'var(--surface-3)',
                       transition: 'background 120ms ease',
                     }}
                   />
