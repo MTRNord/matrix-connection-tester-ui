@@ -184,6 +184,40 @@
         "noEvents": "Noch keine Ereignisse."
       }
     },
+    "webhooks": {
+      "title": "Webhook-Endpunkte",
+      "description": "Empfange Ereignis-Payloads als signierte HTTP-POST-Anfragen — nützlich für Integrationen mit PagerDuty, Slack oder eigener Automatisierung.",
+      "add": "Webhook hinzufügen",
+      "addButton": "Hinzufügen",
+      "addWebhookOptional": "+ Webhook hinzufügen (optional)",
+      "hideWebhookField": "− Webhook-Feld ausblenden",
+      "url": "URL",
+      "createHint": "HMAC-Secret und weitere Optionen kannst du nach dem Speichern auf der Bearbeitungsseite einrichten.",
+      "secretHint": "HMAC-Secret (optional)",
+      "headerHint": "Signatur-Header",
+      "quietHours": "Ruhezeiten",
+      "quietHoursLabel": "Ruhezeiten einhalten",
+      "test": "Testen",
+      "testQueued": "✓ Test eingereiht",
+      "testFailed": "✗ Fehlgeschlagen",
+      "remove": "Entfernen",
+      "urlRequired": "URL ist erforderlich",
+      "urlHttpsRequired": "URL muss HTTPS verwenden",
+      "noWebhooks": "Keine Webhook-Endpunkte konfiguriert.",
+      "deliveries": "Zustellungen",
+      "noDeliveries": "Noch keine Zustellungen — nutze die Test-Schaltfläche, um einen Ping zu senden.",
+      "colEvent": "Ereignis",
+      "colStatus": "Status",
+      "colHttp": "HTTP",
+      "colWhen": "Wann",
+      "deliveryStatus": {
+        "delivered": "Zugestellt",
+        "failed": "Fehlgeschlagen",
+        "pending": "Ausstehend"
+      },
+      "testEmail": "Test-E-Mail senden",
+      "testEmailSent": "✓ Test an {{count}} Adresse(n) gesendet"
+    },
     "callback": {
       "signingIn": "Du wirst angemeldet…"
     },
@@ -614,6 +648,7 @@
         "timezone": "<strong>Zeitzone</strong> — ein IANA-Zeitzonenname (z. B. <code>Europe/Berlin</code>), der zur Interpretation deiner Ruhezeiten-Einstellungen verwendet wird.",
         "alerts": "<strong>Alert-Konfigurationen</strong> — die Homeserver-Domains, die du beobachtest, zusammen mit Benachrichtigungseinstellungen und Ruhezeiten.",
         "history": "<strong>Benachrichtigungsverlauf</strong> — ein laufendes Protokoll der letzten 50 Ereignisse pro Alert (Ausfälle, Wiederherstellungen u. ä.).",
+        "webhooks": "<strong>Webhook-Endpunkte</strong> (optional) — HTTPS-URLs, die du konfigurierst, um Ereignisbenachrichtigungen als signierte HTTP-POST-Anfragen zu empfangen. Jeder Webhook kann ein optionales HMAC-SHA256-Secret zur Payload-Verifikation haben. Webhook-Secrets werden serverseitig gespeichert und in API-Antworten nie zurückgegeben.",
         "footer": "Diese Daten verwenden wir ausschließlich zur Zustellung der von dir konfigurierten Benachrichtigungen. Wir versenden keine Werbe-E-Mails."
       },
       "s23": {
@@ -631,6 +666,7 @@
     "s4": {
       "title": "4. Drittanbieter und Auftragsverarbeiter",
       "p1": "Wir verkaufen oder teilen keine personenbezogenen Daten mit Dritten. E-Mail-Benachrichtigungen werden über einen vom Betreiber konfigurierten E-Mail-Dienst versendet; dabei werden nur deine E-Mail-Adresse und der Benachrichtigungsinhalt übermittelt.",
+      "webhooks": "Webhook-Benachrichtigungen werden direkt an die von dir konfigurierten HTTPS-URLs zugestellt. Diese können auf Drittanbieterdienste verweisen (z. B. Slack, PagerDuty oder eigene Endpunkte). Jede Zustellung überträgt den Ereignistyp, einen Zeitstempel und den Servernamen über HTTPS. Persönliche Kontodaten sind in Webhook-Payloads nicht enthalten.",
       "p2": "Diese Website enthält keine Analyse-Tools, Werbenetzwerke oder Tracking-Pixel von Drittanbietern."
     },
     "s5": {
@@ -643,6 +679,7 @@
       "accountData": "<strong>Kontodaten</strong> (E-Mail-Adressen, Anzeigename, Zeitzone, Alert-Konfigurationen): bis zur Löschung deines Kontos.",
       "alertHistory": "<strong>Alert-Ereignisverlauf</strong>: laufendes Fenster der letzten 50 Ereignisse pro Alert; wird mit deinem Konto gelöscht.",
       "emailLog": "<strong>E-Mail-Benachrichtigungsprotokoll</strong>: eine Aufzeichnung jeder gesendeten Benachrichtigung (Typ, Server, Zeitstempel) wird nach {{emailLogDays}} Tagen automatisch gelöscht und sofort entfernt, wenn du dein Konto löschst.",
+      "webhookLog": "<strong>Webhook-Zustellungsprotokoll</strong>: Zustellungseinträge (Status, Anzahl der Versuche, HTTP-Statuscode, Zeitstempel) werden 30 Tage aufbewahrt und danach automatisch gelöscht. Vollständige Payloads werden im Zustellungsprotokoll nicht gespeichert.",
       "anonStats": "<strong>Anonymisierte Statistiken</strong> (BLAKE3-Hash mit Salz + Bestanden/Fehlgeschlagen + Softwareversion): Aufbewahrung für {{statsDays}} Tage; sie können nicht mit dir oder deinem Konto verknüpft werden.",
       "serverLogs": "<strong>Server-Zugriffslogs</strong>: Aufbewahrungsfrist vom Betreiber festgelegt."
     },
@@ -679,6 +716,8 @@
       "cors": "CORS",
       "tlsCertificates": "TLS-Zertifikate",
       "serverConfig": "Server-Konfiguration",
+      "alerting": "Alerting",
+      "webhooks": "Webhook-Benachrichtigungen",
       "apiEndpoints": "API-Endpunkte",
       "supportEndpoint": "Support-Endpunkt",
       "clientServerApi": "Client-Server-API",

@@ -184,6 +184,40 @@
         "noEvents": "No events yet."
       }
     },
+    "webhooks": {
+      "title": "Webhook endpoints",
+      "description": "Receive event payloads as signed HTTP POST requests — useful for integrations with PagerDuty, Slack, or custom automation.",
+      "add": "Add webhook",
+      "addButton": "Add",
+      "addWebhookOptional": "+ Add a webhook (optional)",
+      "hideWebhookField": "− Hide webhook field",
+      "url": "URL",
+      "createHint": "You can add an HMAC secret and configure additional options from the edit page after saving.",
+      "secretHint": "HMAC secret (optional)",
+      "headerHint": "Signature header",
+      "quietHours": "Quiet hours",
+      "quietHoursLabel": "Respect quiet hours",
+      "test": "Test",
+      "testQueued": "✓ Test queued",
+      "testFailed": "✗ Failed",
+      "remove": "Remove",
+      "urlRequired": "URL is required",
+      "urlHttpsRequired": "URL must use HTTPS",
+      "noWebhooks": "No webhook endpoints configured.",
+      "deliveries": "Deliveries",
+      "noDeliveries": "No deliveries yet — use the Test button to send a ping.",
+      "colEvent": "Event",
+      "colStatus": "Status",
+      "colHttp": "HTTP",
+      "colWhen": "When",
+      "deliveryStatus": {
+        "delivered": "Delivered",
+        "failed": "Failed",
+        "pending": "Pending"
+      },
+      "testEmail": "Send test email",
+      "testEmailSent": "✓ Test sent to {{count}} address(es)"
+    },
     "callback": {
       "signingIn": "Signing you in…"
     },
@@ -614,6 +648,7 @@
         "timezone": "<strong>Timezone</strong> — an IANA timezone name (e.g. <code>Europe/Berlin</code>) used to interpret your quiet-hours settings.",
         "alerts": "<strong>Alert configurations</strong> — the homeserver domains you choose to watch, together with notification preferences and quiet hours.",
         "history": "<strong>Notification history</strong> — a rolling log of the last 50 events per alert (failures, recoveries, and similar).",
+        "webhooks": "<strong>Webhook endpoints</strong> (optional) — HTTPS URLs you configure to receive event notifications as signed HTTP POST requests. Each webhook may have an optional HMAC-SHA256 secret for payload verification. Webhook secrets are stored server-side and are never returned in API responses.",
         "footer": "We use this data solely to deliver the notifications you configure. We never send marketing email."
       },
       "s23": {
@@ -631,6 +666,7 @@
     "s4": {
       "title": "4. Third-party processors",
       "p1": "We do not sell or share personal data with third parties. Email notifications are routed through an email delivery provider configured by the operator; only your email address and the notification content are transmitted for each delivery.",
+      "webhooks": "Webhook notifications are delivered directly to the HTTPS URLs you configure. These may point to third-party services (e.g. Slack, PagerDuty, or custom endpoints). Each delivery transmits the event type, a timestamp, and the server name over HTTPS. No personal account information is included in webhook payloads.",
       "p2": "No third-party analytics, advertising networks, or tracking pixels are present on this site."
     },
     "s5": {
@@ -643,6 +679,7 @@
       "accountData": "<strong>Account data</strong> (email addresses, display name, timezone, alert configurations): retained until you delete your account.",
       "alertHistory": "<strong>Alert event history</strong>: rolling window of the last 50 events per alert; deleted with your account.",
       "emailLog": "<strong>Email notification log</strong>: a record of each notification sent (type, server, timestamp) is automatically pruned after {{emailLogDays}} days and deleted immediately when you delete your account.",
+      "webhookLog": "<strong>Webhook delivery log</strong>: delivery records (status, attempt count, HTTP status code, timestamps) are retained for 30 days then pruned automatically. Full payloads are not stored in the delivery log.",
       "anonStats": "<strong>Anonymised statistics</strong> (salted BLAKE3 hash + pass/fail + software version): retained for {{statsDays}} days; they cannot be linked back to you or your account.",
       "serverLogs": "<strong>Server access logs</strong>: retention period set by the operator."
     },
@@ -679,6 +716,8 @@
       "cors": "CORS",
       "tlsCertificates": "TLS certificates",
       "serverConfig": "Server config",
+      "alerting": "Alerting",
+      "webhooks": "Webhook notifications",
       "apiEndpoints": "API endpoints",
       "supportEndpoint": "Support endpoint",
       "clientServerApi": "Client-server API",

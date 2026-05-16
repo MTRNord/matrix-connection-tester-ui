@@ -32,8 +32,10 @@ import { Route as DocsConfigurationTlsCertificatesRouteImport } from './routes/d
 import { Route as DocsConfigurationServerConfigRouteImport } from './routes/docs/configuration/server-config'
 import { Route as DocsConfigurationCorsRouteImport } from './routes/docs/configuration/cors'
 import { Route as DocsApiEndpointsWellKnownDelegationRouteImport } from './routes/docs/api-endpoints/well-known-delegation'
+import { Route as DocsApiEndpointsWebhooksRouteImport } from './routes/docs/api-endpoints/webhooks'
 import { Route as DocsApiEndpointsSupportEndpointRouteImport } from './routes/docs/api-endpoints/support-endpoint'
 import { Route as DocsApiEndpointsClientServerApiRouteImport } from './routes/docs/api-endpoints/client-server-api'
+import { Route as DocsAlertingWebhooksRouteImport } from './routes/docs/alerting/webhooks'
 
 const StatisticsRoute = StatisticsRouteImport.update({
   id: '/statistics',
@@ -161,6 +163,12 @@ const DocsApiEndpointsWellKnownDelegationRoute =
     path: '/docs/api-endpoints/well-known-delegation',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DocsApiEndpointsWebhooksRoute =
+  DocsApiEndpointsWebhooksRouteImport.update({
+    id: '/docs/api-endpoints/webhooks',
+    path: '/docs/api-endpoints/webhooks',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DocsApiEndpointsSupportEndpointRoute =
   DocsApiEndpointsSupportEndpointRouteImport.update({
     id: '/docs/api-endpoints/support-endpoint',
@@ -173,6 +181,11 @@ const DocsApiEndpointsClientServerApiRoute =
     path: '/docs/api-endpoints/client-server-api',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DocsAlertingWebhooksRoute = DocsAlertingWebhooksRouteImport.update({
+  id: '/docs/alerting/webhooks',
+  path: '/docs/alerting/webhooks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -186,8 +199,10 @@ export interface FileRoutesByFullPath {
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
+  '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
@@ -213,8 +228,10 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsIndexRoute
   '/docs': typeof DocsIndexRoute
   '/results': typeof ResultsIndexRoute
+  '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
@@ -241,8 +258,10 @@ export interface FileRoutesById {
   '/alerts/': typeof AlertsIndexRoute
   '/docs/': typeof DocsIndexRoute
   '/results/': typeof ResultsIndexRoute
+  '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
+  '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
@@ -270,8 +289,10 @@ export interface FileRouteTypes {
     | '/alerts/'
     | '/docs/'
     | '/results/'
+    | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
     | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
     | '/docs/configuration/server-config'
@@ -297,8 +318,10 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/docs'
     | '/results'
+    | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
     | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
     | '/docs/configuration/server-config'
@@ -324,8 +347,10 @@ export interface FileRouteTypes {
     | '/alerts/'
     | '/docs/'
     | '/results/'
+    | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
     | '/docs/api-endpoints/support-endpoint'
+    | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
     | '/docs/configuration/server-config'
@@ -352,8 +377,10 @@ export interface RootRouteChildren {
   AlertsIndexRoute: typeof AlertsIndexRoute
   DocsIndexRoute: typeof DocsIndexRoute
   ResultsIndexRoute: typeof ResultsIndexRoute
+  DocsAlertingWebhooksRoute: typeof DocsAlertingWebhooksRoute
   DocsApiEndpointsClientServerApiRoute: typeof DocsApiEndpointsClientServerApiRoute
   DocsApiEndpointsSupportEndpointRoute: typeof DocsApiEndpointsSupportEndpointRoute
+  DocsApiEndpointsWebhooksRoute: typeof DocsApiEndpointsWebhooksRoute
   DocsApiEndpointsWellKnownDelegationRoute: typeof DocsApiEndpointsWellKnownDelegationRoute
   DocsConfigurationCorsRoute: typeof DocsConfigurationCorsRoute
   DocsConfigurationServerConfigRoute: typeof DocsConfigurationServerConfigRoute
@@ -531,6 +558,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsApiEndpointsWellKnownDelegationRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/api-endpoints/webhooks': {
+      id: '/docs/api-endpoints/webhooks'
+      path: '/docs/api-endpoints/webhooks'
+      fullPath: '/docs/api-endpoints/webhooks'
+      preLoaderRoute: typeof DocsApiEndpointsWebhooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs/api-endpoints/support-endpoint': {
       id: '/docs/api-endpoints/support-endpoint'
       path: '/docs/api-endpoints/support-endpoint'
@@ -543,6 +577,13 @@ declare module '@tanstack/react-router' {
       path: '/docs/api-endpoints/client-server-api'
       fullPath: '/docs/api-endpoints/client-server-api'
       preLoaderRoute: typeof DocsApiEndpointsClientServerApiRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/alerting/webhooks': {
+      id: '/docs/alerting/webhooks'
+      path: '/docs/alerting/webhooks'
+      fullPath: '/docs/alerting/webhooks'
+      preLoaderRoute: typeof DocsAlertingWebhooksRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -560,8 +601,10 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsIndexRoute: AlertsIndexRoute,
   DocsIndexRoute: DocsIndexRoute,
   ResultsIndexRoute: ResultsIndexRoute,
+  DocsAlertingWebhooksRoute: DocsAlertingWebhooksRoute,
   DocsApiEndpointsClientServerApiRoute: DocsApiEndpointsClientServerApiRoute,
   DocsApiEndpointsSupportEndpointRoute: DocsApiEndpointsSupportEndpointRoute,
+  DocsApiEndpointsWebhooksRoute: DocsApiEndpointsWebhooksRoute,
   DocsApiEndpointsWellKnownDelegationRoute:
     DocsApiEndpointsWellKnownDelegationRoute,
   DocsConfigurationCorsRoute: DocsConfigurationCorsRoute,

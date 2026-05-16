@@ -28,11 +28,9 @@
     "react-markdown": "^10.1.0",
     "remark-directive": "^4.0.0",
     "remark-gfm": "^4.0.1",
-    "tailwindcss": "^4.1.18",
     "unist-util-visit": "^5.1.0"
   },
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.16",
     "@tanstack/devtools-vite": "latest",
     "@tanstack/eslint-config": "latest",
     "@tanstack/eslint-plugin-query": "^5.100.9",

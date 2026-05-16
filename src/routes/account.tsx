@@ -513,7 +513,9 @@ function RouteComponent() {
                       >
                         {ta('profile.memberSince')}
                       </th>
-                      <td suppressHydrationWarning>{fmt.format(new Date(account.created_at))}</td>
+                      <td suppressHydrationWarning>
+                        {fmt.format(new Date(account.created_at))}
+                      </td>
                     </tr>
                     <tr>
                       <th
@@ -621,94 +623,98 @@ function RouteComponent() {
                     {/* Additional */}
                     {account.additional_emails.map((em) => {
                       const emAddedDate = fmt.format(new Date(em.created_at))
-                      return <tr key={em.id}>
-                        <td>
-                          <div
-                            className="mono"
-                            style={{
-                              fontSize: 14,
-                              fontWeight: 600,
-                              color: 'var(--ink)',
-                            }}
-                          >
-                            {em.email}
-                          </div>
-                          <div
-                            style={{
-                              fontSize: 12,
-                              color: 'var(--ink-3)',
-                              marginTop: 2,
-                            }}
-                          >
-                            {ta('emails.addedSubtext', {
-                              date: emAddedDate,
-                            })}
-                          </div>
-                        </td>
-                        <td>
-                          {em.verified ? (
-                            <Pill kind="ok" dot>
-                              {ta('emails.pills.verified')}
-                            </Pill>
-                          ) : (
-                            <Pill kind="warn" dot>
-                              {ta('emails.pills.pending')}
-                            </Pill>
-                          )}
-                        </td>
-                        <td>
-                          <TimezoneSelect
-                            value={tz?.[em.email] ?? em.timezone}
-                            onChange={(z) => {
-                              setTz((prev) => ({ ...prev, [em.email]: z }))
-                              saveEmailTimezone.mutate({
-                                id: em.id,
-                                timezone: z,
-                                receives_alerts: em.receives_alerts,
-                              })
-                            }}
-                            ariaLabel={`Timezone for ${em.email}`}
-                          />
-                        </td>
-                        <td style={{ whiteSpace: 'nowrap' }}>
-                          <div
-                            style={{
-                              display: 'flex',
-                              gap: 6,
-                              justifyContent: 'flex-end',
-                            }}
-                          >
-                            {!em.verified && (
-                              <Button
-                                kind="ghost"
-                                size="small"
-                                disabled={resendVerification.isPending}
-                                onClick={() => resendVerification.mutate(em.id)}
-                              >
-                                {ta('emails.resend')}
-                              </Button>
-                            )}
-                            {em.verified && (
-                              <Button
-                                kind="ghost"
-                                size="small"
-                                disabled={makePrimary.isPending}
-                                onClick={() => makePrimary.mutate(em.id)}
-                              >
-                                {ta('emails.makePrimary')}
-                              </Button>
-                            )}
-                            <Button
-                              kind="danger"
-                              size="small"
-                              disabled={removeEmail.isPending}
-                              onClick={() => removeEmail.mutate(em.id)}
+                      return (
+                        <tr key={em.id}>
+                          <td>
+                            <div
+                              className="mono"
+                              style={{
+                                fontSize: 14,
+                                fontWeight: 600,
+                                color: 'var(--ink)',
+                              }}
                             >
-                              {ta('emails.remove')}
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
+                              {em.email}
+                            </div>
+                            <div
+                              style={{
+                                fontSize: 12,
+                                color: 'var(--ink-3)',
+                                marginTop: 2,
+                              }}
+                            >
+                              {ta('emails.addedSubtext', {
+                                date: emAddedDate,
+                              })}
+                            </div>
+                          </td>
+                          <td>
+                            {em.verified ? (
+                              <Pill kind="ok" dot>
+                                {ta('emails.pills.verified')}
+                              </Pill>
+                            ) : (
+                              <Pill kind="warn" dot>
+                                {ta('emails.pills.pending')}
+                              </Pill>
+                            )}
+                          </td>
+                          <td>
+                            <TimezoneSelect
+                              value={tz?.[em.email] ?? em.timezone}
+                              onChange={(z) => {
+                                setTz((prev) => ({ ...prev, [em.email]: z }))
+                                saveEmailTimezone.mutate({
+                                  id: em.id,
+                                  timezone: z,
+                                  receives_alerts: em.receives_alerts,
+                                })
+                              }}
+                              ariaLabel={`Timezone for ${em.email}`}
+                            />
+                          </td>
+                          <td style={{ whiteSpace: 'nowrap' }}>
+                            <div
+                              style={{
+                                display: 'flex',
+                                gap: 6,
+                                justifyContent: 'flex-end',
+                              }}
+                            >
+                              {!em.verified && (
+                                <Button
+                                  kind="ghost"
+                                  size="small"
+                                  disabled={resendVerification.isPending}
+                                  onClick={() =>
+                                    resendVerification.mutate(em.id)
+                                  }
+                                >
+                                  {ta('emails.resend')}
+                                </Button>
+                              )}
+                              {em.verified && (
+                                <Button
+                                  kind="ghost"
+                                  size="small"
+                                  disabled={makePrimary.isPending}
+                                  onClick={() => makePrimary.mutate(em.id)}
+                                >
+                                  {ta('emails.makePrimary')}
+                                </Button>
+                              )}
+                              <Button
+                                kind="danger"
+                                size="small"
+                                disabled={removeEmail.isPending}
+                                onClick={() => removeEmail.mutate(em.id)}
+                              >
+                                {ta('emails.remove')}
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      )
                     })}
                   </tbody>
                 </Table>

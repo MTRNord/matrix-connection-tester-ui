@@ -181,6 +181,12 @@ function Privacy() {
                 components={{ strong: <strong /> }}
               />
             </li>
+            <li>
+              <Trans
+                i18nKey="privacy.s2.s22.webhooks"
+                components={{ strong: <strong /> }}
+              />
+            </li>
           </Ul>
           <P>{t('privacy.s2.s22.footer')}</P>
 
@@ -216,6 +222,12 @@ function Privacy() {
 
         <Section title={t('privacy.s4.title')}>
           <P>{t('privacy.s4.p1')}</P>
+          <P>
+            <Trans
+              i18nKey="privacy.s4.webhooks"
+              components={{ strong: <strong /> }}
+            />
+          </P>
           <P>{t('privacy.s4.p2')}</P>
         </Section>
 
@@ -249,6 +261,12 @@ function Privacy() {
               <Trans
                 i18nKey="privacy.s6.emailLog"
                 values={{ emailLogDays }}
+                components={{ strong: <strong /> }}
+              />
+            </li>
+            <li>
+              <Trans
+                i18nKey="privacy.s6.webhookLog"
                 components={{ strong: <strong /> }}
               />
             </li>

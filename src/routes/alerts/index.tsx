@@ -176,6 +176,8 @@ function RouteComponent() {
   // null = unmodified, derive from account; Set = user has explicitly chosen
   const [selectedEmails, setSelectedEmails] = useState<Set<string> | null>(null)
   const [confirmDeleteId, setConfirmDeleteId] = useState<number | null>(null)
+  const [webhookUrl, setWebhookUrl] = useState('')
+  const [showWebhookField, setShowWebhookField] = useState(false)
 
   const { data: cfg } = useQuery(configQueryOptions)
 
@@ -234,9 +236,11 @@ function RouteComponent() {
     mutationFn: async ({
       serverName,
       emails,
+      webhookEndpoint,
     }: {
       serverName: string
       emails: string[]
+      webhookEndpoint: string
     }) => {
       const res = await apiReq(`${cfg!.api_server_url}/api/v2/alerts`, {
         method: 'POST',
@@ -249,16 +253,33 @@ function RouteComponent() {
         throw new Error(err.error_description ?? 'Failed to create alert')
       }
       const created = (await res.json()) as { id: number }
+      const follow: Promise<Response>[] = []
       if (emails.length > 0) {
-        await apiReq(
-          `${cfg!.api_server_url}/api/v2/alerts/${created.id}/notify-emails`,
-          { method: 'PUT', body: JSON.stringify({ emails }) },
+        follow.push(
+          apiReq(
+            `${cfg!.api_server_url}/api/v2/alerts/${created.id}/notify-emails`,
+            { method: 'PUT', body: JSON.stringify({ emails }) },
+          ),
         )
       }
+      if (webhookEndpoint.trim()) {
+        follow.push(
+          apiReq(
+            `${cfg!.api_server_url}/api/v2/alerts/${created.id}/notify-webhooks`,
+            {
+              method: 'POST',
+              body: JSON.stringify({ url: webhookEndpoint.trim() }),
+            },
+          ),
+        )
+      }
+      await Promise.all(follow)
     },
     onSuccess: () => {
       setDomain('')
       setSelectedEmails(null)
+      setWebhookUrl('')
+      setShowWebhookField(false)
       queryClient.invalidateQueries({
         queryKey: alertsQueryOptions(cfg).queryKey,
       })
@@ -338,6 +359,7 @@ function RouteComponent() {
               createAlert.mutate({
                 serverName: domain.trim(),
                 emails: [...emailSet],
+                webhookEndpoint: webhookUrl,
               })
             }}
           >
@@ -436,6 +458,59 @@ function RouteComponent() {
                 })}
               </div>
             </fieldset>
+            <div style={{ marginTop: 16 }}>
+              <button
+                type="button"
+                onClick={() => setShowWebhookField((v) => !v)}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                  fontSize: 13,
+                  color: 'var(--ink-3)',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                }}
+              >
+                {showWebhookField
+                  ? t('alerts.webhooks.hideWebhookField')
+                  : t('alerts.webhooks.addWebhookOptional')}
+              </button>
+              {showWebhookField && (
+                <div style={{ marginTop: 8 }}>
+                  <label
+                    htmlFor="create-webhook-url"
+                    style={{
+                      display: 'block',
+                      fontSize: 13,
+                      fontWeight: 500,
+                      color: 'var(--ink-2)',
+                      marginBottom: 4,
+                    }}
+                  >
+                    {t('alerts.webhooks.url')}
+                  </label>
+                  <input
+                    id="create-webhook-url"
+                    className="field__input"
+                    type="url"
+                    placeholder="https://hooks.example.com/…"
+                    value={webhookUrl}
+                    onChange={(e) => setWebhookUrl(e.target.value)}
+                  />
+                  <p
+                    style={{
+                      fontSize: 12,
+                      color: 'var(--ink-3)',
+                      marginTop: 4,
+                    }}
+                  >
+                    {t('alerts.webhooks.createHint')}
+                  </p>
+                </div>
+              )}
+            </div>
+
             <Button
               type="submit"
               style={{ marginTop: 24 }}

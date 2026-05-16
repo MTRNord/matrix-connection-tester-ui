@@ -2,6 +2,14 @@ import { apiReq } from '#/auth/apiReq'
 import type { AppConfig } from '#/config'
 import { queryOptions } from '@tanstack/react-query'
 
+export interface WebhookDto {
+  id: number
+  url: string
+  hmac_header: string
+  respect_quiet_hours: boolean
+  created_at: string
+}
+
 export interface AlertDto {
   id: number
   server_name: string
@@ -10,6 +18,7 @@ export interface AlertDto {
   is_currently_failing: boolean
   last_check_at: string | null
   notify_emails: string[]
+  notify_webhooks: WebhookDto[]
   notify_server_name_change: boolean
   notify_version_change: boolean
   notify_tls_cert_change: boolean

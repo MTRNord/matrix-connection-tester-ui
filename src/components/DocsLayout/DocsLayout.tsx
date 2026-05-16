@@ -56,6 +56,15 @@ const NAV_SECTIONS: NavSection[] = [
     ],
   },
   {
+    headingKey: 'docs.nav.alerting',
+    items: [
+      {
+        labelKey: 'docs.nav.webhooks',
+        to: '/docs/alerting/webhooks',
+      },
+    ],
+  },
+  {
     headingKey: 'docs.nav.troubleshooting',
     items: [
       { labelKey: 'docs.nav.general', to: '/docs/troubleshooting/general' },

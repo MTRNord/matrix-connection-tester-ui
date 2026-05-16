@@ -429,7 +429,9 @@ function versionToNum(v: string): number {
 }
 
 function latestVersion(versions: string[]): string {
-  return [...versions].sort((a, b) => versionToNum(b) - versionToNum(a))[0] ?? ''
+  return (
+    [...versions].sort((a, b) => versionToNum(b) - versionToNum(a))[0] ?? ''
+  )
 }
 
 // ── Copy button ───────────────────────────────────────────────────────────────
@@ -720,7 +722,9 @@ function ResultsBody({
           const failedKeys = Object.entries(report.Checks.Ed25519Checks ?? {})
             .flatMap(([keyId, check]) =>
               !check.ValidEd25519 || !check.MatchingSignature
-                ? [`${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`]
+                ? [
+                    `${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`,
+                  ]
                 : [],
             )
             .join('\n')
@@ -885,7 +889,10 @@ function ResultsBody({
           marginBottom: -8,
         }}
       >
-        <span suppressHydrationWarning style={{ fontSize: 13, color: 'var(--ink-3)' }}>
+        <span
+          suppressHydrationWarning
+          style={{ fontSize: 13, color: 'var(--ink-3)' }}
+        >
           {t('results.lastRun', {
             time: timeFormatter.format(new Date(lastUpdatedAt)),
           })}
@@ -1037,7 +1044,10 @@ function ResultsBody({
                 <p className="support__lead">{t('results.support.copyHint')}</p>
                 <div className="support__grid">
                   {contacts.map((c) => (
-                    <div key={c.email_address ?? c.matrix_id ?? c.role} className="support__row">
+                    <div
+                      key={c.email_address ?? c.matrix_id ?? c.role}
+                      className="support__row"
+                    >
                       <span className="support__role">{c.role}</span>
                       {c.email_address ? (
                         <a
