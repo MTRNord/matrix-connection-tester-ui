@@ -202,7 +202,7 @@ async function probeCors(
     const resp = await fetch(`${apiServerUrl}/api/probe/client-api?${params}`)
     if (!resp.ok) return false
     const probe = (await resp.json()) as WellKnownProbeResult
-    return probe.status_code !== 0 && probe.cors_origin === null
+    return probe.status_code >= 200 && probe.status_code < 300 && probe.cors_origin === null
   } catch {
     return false
   }
@@ -375,7 +375,7 @@ export const supportInfoQueryOptions = (serverName: string) =>
           return { info: null, corsBlocked: false, statusCode: 0 }
         }
         const probe = (await resp.json()) as WellKnownProbeResult
-        const corsBlocked = probe.status_code !== 0 && probe.cors_origin === null
+        const corsBlocked = probe.status_code >= 200 && probe.status_code < 300 && probe.cors_origin === null
         const info =
           probe.status_code >= 200 && probe.status_code < 300 && probe.body
             ? (probe.body as SupportInfo)
