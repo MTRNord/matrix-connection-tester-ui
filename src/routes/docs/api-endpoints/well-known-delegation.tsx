@@ -8,5 +8,10 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="api-endpoints/well-known-delegation" />
+  return (
+    <DocsLayout
+      docPath="api-endpoints/well-known-delegation"
+      lead="Route Matrix IDs and clients to your homeserver using well-known discovery files."
+    />
+  )
 }

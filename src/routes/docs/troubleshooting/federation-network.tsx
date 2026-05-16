@@ -8,5 +8,10 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="troubleshooting/federation-network" />
+  return (
+    <DocsLayout
+      docPath="troubleshooting/federation-network"
+      lead="Network and DNS configuration for Matrix server-to-server federation."
+    />
+  )
 }

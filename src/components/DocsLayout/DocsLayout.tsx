@@ -33,10 +33,6 @@ const NAV_SECTIONS: NavSection[] = [
         to: '/docs/configuration/tls-certificates',
       },
       {
-        labelKey: 'docs.nav.federationTls',
-        to: '/docs/configuration/federation-tls',
-      },
-      {
         labelKey: 'docs.nav.serverConfig',
         to: '/docs/configuration/server-config',
       },
@@ -108,6 +104,16 @@ export default function DocsLayout({
 
         <div className="docs-layout">
           <aside aria-label={t('docs.nav.ariaLabel')}>
+            <div className="docs-nav__section">
+              <Link
+                to="/docs"
+                className="docs-nav__link"
+                activeOptions={{ exact: true }}
+                activeProps={{ className: 'docs-nav__link active' }}
+              >
+                {t('docs.nav.title')}
+              </Link>
+            </div>
             {NAV_SECTIONS.map((section) => (
               <div key={section.headingKey} className="docs-nav__section">
                 <div className="eyebrow" style={{ marginBottom: 10 }}>
@@ -132,6 +138,16 @@ export default function DocsLayout({
 
           <article className="docs-article">
             <DocPage docPath={docPath} />
+            <div className="docs-article__footer">
+              <a
+                href={`https://github.com/MTRNord/matrix-connection-tester-ui/edit/main/src/docs/en/${docPath}.md`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="docs-article__edit-link"
+              >
+                {t('docs.editOnGithub')}
+              </a>
+            </div>
           </article>
         </div>
 

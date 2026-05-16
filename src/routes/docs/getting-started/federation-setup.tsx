@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/getting-started/federation-setup')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="getting-started/federation-setup" />
+  return (
+    <DocsLayout
+      docPath="getting-started/federation-setup"
+      lead="Configure your Matrix server to federate with the rest of the Matrix network."
+    />
+  )
 }

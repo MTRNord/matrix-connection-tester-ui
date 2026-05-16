@@ -678,7 +678,6 @@
       "configuration": "Konfiguration",
       "cors": "CORS",
       "tlsCertificates": "TLS-Zertifikate",
-      "federationTls": "Föderations-TLS",
       "serverConfig": "Server-Konfiguration",
       "apiEndpoints": "API-Endpunkte",
       "supportEndpoint": "Support-Endpunkt",
@@ -690,6 +689,7 @@
       "federationNetwork": "Föderationsnetzwerk",
       "serverLogs": "Server-Logs",
       "performance": "Performance"
-    }
+    },
+    "editOnGithub": "Fehler entdeckt? Diese Seite auf GitHub bearbeiten"
   }
 }

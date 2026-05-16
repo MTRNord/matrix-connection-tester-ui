@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/configuration/tls-certificates')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="configuration/tls-certificates" />
+  return (
+    <DocsLayout
+      docPath="configuration/tls-certificates"
+      lead="Obtain, configure, and troubleshoot TLS certificates for Matrix."
+    />
+  )
 }

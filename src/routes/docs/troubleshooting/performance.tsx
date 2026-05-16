@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/troubleshooting/performance')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="troubleshooting/performance" />
+  return (
+    <DocsLayout
+      docPath="troubleshooting/performance"
+      lead="Identify what is slow and where to look for performance bottlenecks."
+    />
+  )
 }

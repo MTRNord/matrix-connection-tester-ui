@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/configuration/server-config')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="configuration/server-config" />
+  return (
+    <DocsLayout
+      docPath="configuration/server-config"
+      lead="Core configuration options that affect whether your server can be reached."
+    />
+  )
 }

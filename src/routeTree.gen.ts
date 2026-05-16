@@ -30,7 +30,6 @@ import { Route as DocsGettingStartedGettingHelpRouteImport } from './routes/docs
 import { Route as DocsGettingStartedFederationSetupRouteImport } from './routes/docs/getting-started/federation-setup'
 import { Route as DocsConfigurationTlsCertificatesRouteImport } from './routes/docs/configuration/tls-certificates'
 import { Route as DocsConfigurationServerConfigRouteImport } from './routes/docs/configuration/server-config'
-import { Route as DocsConfigurationFederationTlsRouteImport } from './routes/docs/configuration/federation-tls'
 import { Route as DocsConfigurationCorsRouteImport } from './routes/docs/configuration/cors'
 import { Route as DocsApiEndpointsWellKnownDelegationRouteImport } from './routes/docs/api-endpoints/well-known-delegation'
 import { Route as DocsApiEndpointsSupportEndpointRouteImport } from './routes/docs/api-endpoints/support-endpoint'
@@ -151,12 +150,6 @@ const DocsConfigurationServerConfigRoute =
     path: '/docs/configuration/server-config',
     getParentRoute: () => rootRouteImport,
   } as any)
-const DocsConfigurationFederationTlsRoute =
-  DocsConfigurationFederationTlsRouteImport.update({
-    id: '/docs/configuration/federation-tls',
-    path: '/docs/configuration/federation-tls',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const DocsConfigurationCorsRoute = DocsConfigurationCorsRouteImport.update({
   id: '/docs/configuration/cors',
   path: '/docs/configuration/cors',
@@ -197,7 +190,6 @@ export interface FileRoutesByFullPath {
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
-  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
   '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
   '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
@@ -225,7 +217,6 @@ export interface FileRoutesByTo {
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
-  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
   '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
   '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
@@ -254,7 +245,6 @@ export interface FileRoutesById {
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
   '/docs/configuration/cors': typeof DocsConfigurationCorsRoute
-  '/docs/configuration/federation-tls': typeof DocsConfigurationFederationTlsRoute
   '/docs/configuration/server-config': typeof DocsConfigurationServerConfigRoute
   '/docs/configuration/tls-certificates': typeof DocsConfigurationTlsCertificatesRoute
   '/docs/getting-started/federation-setup': typeof DocsGettingStartedFederationSetupRoute
@@ -284,7 +274,6 @@ export interface FileRouteTypes {
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
-    | '/docs/configuration/federation-tls'
     | '/docs/configuration/server-config'
     | '/docs/configuration/tls-certificates'
     | '/docs/getting-started/federation-setup'
@@ -312,7 +301,6 @@ export interface FileRouteTypes {
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
-    | '/docs/configuration/federation-tls'
     | '/docs/configuration/server-config'
     | '/docs/configuration/tls-certificates'
     | '/docs/getting-started/federation-setup'
@@ -340,7 +328,6 @@ export interface FileRouteTypes {
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/well-known-delegation'
     | '/docs/configuration/cors'
-    | '/docs/configuration/federation-tls'
     | '/docs/configuration/server-config'
     | '/docs/configuration/tls-certificates'
     | '/docs/getting-started/federation-setup'
@@ -369,7 +356,6 @@ export interface RootRouteChildren {
   DocsApiEndpointsSupportEndpointRoute: typeof DocsApiEndpointsSupportEndpointRoute
   DocsApiEndpointsWellKnownDelegationRoute: typeof DocsApiEndpointsWellKnownDelegationRoute
   DocsConfigurationCorsRoute: typeof DocsConfigurationCorsRoute
-  DocsConfigurationFederationTlsRoute: typeof DocsConfigurationFederationTlsRoute
   DocsConfigurationServerConfigRoute: typeof DocsConfigurationServerConfigRoute
   DocsConfigurationTlsCertificatesRoute: typeof DocsConfigurationTlsCertificatesRoute
   DocsGettingStartedFederationSetupRoute: typeof DocsGettingStartedFederationSetupRoute
@@ -531,13 +517,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsConfigurationServerConfigRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/docs/configuration/federation-tls': {
-      id: '/docs/configuration/federation-tls'
-      path: '/docs/configuration/federation-tls'
-      fullPath: '/docs/configuration/federation-tls'
-      preLoaderRoute: typeof DocsConfigurationFederationTlsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/docs/configuration/cors': {
       id: '/docs/configuration/cors'
       path: '/docs/configuration/cors'
@@ -586,7 +565,6 @@ const rootRouteChildren: RootRouteChildren = {
   DocsApiEndpointsWellKnownDelegationRoute:
     DocsApiEndpointsWellKnownDelegationRoute,
   DocsConfigurationCorsRoute: DocsConfigurationCorsRoute,
-  DocsConfigurationFederationTlsRoute: DocsConfigurationFederationTlsRoute,
   DocsConfigurationServerConfigRoute: DocsConfigurationServerConfigRoute,
   DocsConfigurationTlsCertificatesRoute: DocsConfigurationTlsCertificatesRoute,
   DocsGettingStartedFederationSetupRoute:

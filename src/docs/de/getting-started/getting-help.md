@@ -107,11 +107,7 @@ Teile mit, welche Troubleshooting-Schritte du bereits unternommen hast:
 
 ## Professioneller Support
 
-### Synapse kommerzieller Support
-
-Kommerzieller Support wird von verschiedenen Organisationen angeboten. Eine aktuelle
-Liste findest du auf der [Hosting-Seite](https://matrix.org/ecosystem/hosting/) der
-Matrix.org-Website.
+Kommerzielles Hosting und Support ist von verschiedenen Organisationen für unterschiedliche Matrix-Homeserver-Implementierungen verfügbar. Eine aktuelle Liste finden Sie auf der [Hosting-Seite](https://matrix.org/ecosystem/hosting/) der Matrix.org-Website.
 
 ## Bugs melden
 

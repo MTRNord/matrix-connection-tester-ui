@@ -57,6 +57,23 @@
   margin-bottom: 4px;
 }
 
+.docs-article__footer {
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+}
+
+.docs-article__edit-link {
+  font-size: 13px;
+  color: var(--ink-2);
+  text-decoration: none;
+}
+
+.docs-article__edit-link:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
 @media (max-width: 860px) {
   .docs-layout {
     grid-template-columns: 1fr;

@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/getting-started/getting-help')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="getting-started/getting-help" />
+  return (
+    <DocsLayout
+      docPath="getting-started/getting-help"
+      lead="Where to find support and connect with the Matrix homeserver community."
+    />
+  )
 }

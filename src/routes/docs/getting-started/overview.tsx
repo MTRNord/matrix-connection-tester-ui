@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/getting-started/overview')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="getting-started/overview" />
+  return (
+    <DocsLayout
+      docPath="getting-started/overview"
+      lead="What the connectivity tester checks and how to read the results."
+    />
+  )
 }

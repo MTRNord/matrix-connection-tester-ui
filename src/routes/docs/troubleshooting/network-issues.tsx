@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/troubleshooting/network-issues')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="troubleshooting/network-issues" />
+  return (
+    <DocsLayout
+      docPath="troubleshooting/network-issues"
+      lead="Step-by-step guide to diagnosing network and firewall problems."
+    />
+  )
 }

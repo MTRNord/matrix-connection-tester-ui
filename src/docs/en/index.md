@@ -1,7 +1,3 @@
-:::banner{kind="warn" title="Still being written."}
-These pages are a work in progress — some bits may be incomplete or out of date. Spotted a mistake? [Edit on GitHub](#).
-:::
-
 A Matrix homeserver needs to be reachable in two distinct ways: by other homeservers (federation) and by user clients (client-server). The Connectivity Tester checks both from outside your network and reports each layer separately.
 
 Most issues fall into one of three buckets: a missing DNS record, a TLS certificate the wider internet doesn't trust, or a reverse proxy that isn't forwarding the right path. The pages below walk through each in plain language.

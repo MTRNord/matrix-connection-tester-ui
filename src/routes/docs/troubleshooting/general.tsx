@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/troubleshooting/general')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="troubleshooting/general" />
+  return (
+    <DocsLayout
+      docPath="troubleshooting/general"
+      lead="Diagnose and fix the most common Matrix homeserver connectivity problems."
+    />
+  )
 }

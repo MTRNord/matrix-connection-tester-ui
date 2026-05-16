@@ -1,68 +1,43 @@
 ## What is Well-Known Delegation?
 
-Well-known delegation allows you to run your Matrix server on a different domain
-or port than your Matrix ID suggests. For example, you can have Matrix IDs like
-`@user:example.com` while actually hosting your Matrix server at
-`matrix.example.com` or on a non-standard port.
+Well-known delegation lets you run your Matrix server on a different domain or port than your Matrix ID suggests. For example, you can have Matrix IDs like `@user:example.com` while actually hosting your server at `matrix.example.com`.
 
-This is the recommended approach for Matrix federation because it's more
-flexible and firewall-friendly than using SRV records or port 8448 directly.
+This is the recommended approach for Matrix server discovery because it is flexible, works on port 443, and handles both federation (server-to-server) and client discovery with a single setup.
 
 :::banner{kind="info" title="Technical Reference"}
-Well-known delegation is specified in the
-[Matrix Server-Server API specification](https://spec.matrix.org/v1.16/server-server-api/#server-discovery)
-and the
-[Matrix Client-Server API specification](https://spec.matrix.org/v1.16/client-server-api/#well-known-uri).
+Well-known delegation is specified in the [Matrix Server-Server API specification](https://spec.matrix.org/latest/server-server-api/#server-discovery) and the [Matrix Client-Server API specification](https://spec.matrix.org/latest/client-server-api/#well-known-uri).
 :::
 
-## Why Use Well-Known Delegation?
-
-Well-known delegation solves several common problems:
-
-- **Separate your server location from your domain:** Your Matrix server can run
-  on `matrix.example.com` while users have IDs like `@user:example.com`
-- **Use port 443 instead of 8448:** Avoids firewall issues and works better with
-  corporate networks
-
-:::banner{kind="warn" title="Warning"}
-Once you set up well-known delegation and users start joining your server,
-changing it is essentially impossible. Changing it would make it a different
-server from the perspective of others. Plan your delegation structure carefully
-before going into production.
+:::banner{kind="warn" title="Cannot be changed once users are on your server"}
+Once well-known delegation is configured and users start joining, changing it is essentially impossible — it would make the server appear as a different server to the rest of the Matrix network. Plan your delegation structure carefully before going into production.
 :::
 
-## How Well-Known Discovery Works (simplified)
+## How discovery works
 
-When a Matrix client or server wants to communicate with your server, here's
-what happens:
+When a Matrix server or client wants to communicate with your server:
 
-1. **Check well-known files:** Looks for
-   `https://example.com/.well-known/matrix/server` (for federation) and
-   `https://example.com/.well-known/matrix/client` (for clients)
-2. **Read delegation target:** The well-known file tells where your actual
-   server is located
-3. **Connect to delegated server:** Makes the actual connection to the delegated
-   location
+1. It fetches `https://example.com/.well-known/matrix/server` (for federation) or `https://example.com/.well-known/matrix/client` (for clients)
+2. The well-known file tells it where your actual server is located
+3. It connects to that delegated address
 
 :::card
 
-### Example: Discovery process
+### Example: Client discovery
 
-**Scenario:** A user wants to send a message to `@alice:example.com`
+A user opens their app and enters `@alice:example.com` as their account.
 
-1. Client requests: `https://example.com/.well-known/matrix/client`
-2. Well-known file responds:
-   `{ "m.homeserver": { "base_url": "https://matrix.example.com" } }`
+1. Client fetches `https://example.com/.well-known/matrix/client`
+2. File responds: `{ "m.homeserver": { "base_url": "https://matrix.example.com" } }`
 3. Client connects to `https://matrix.example.com`
    :::
 
-## Two Types of Well-Known Files
+## The two well-known files
 
-### Server-to-Server (Federation)
+### `/.well-known/matrix/server` (federation)
 
 File location: `https://example.com/.well-known/matrix/server`
 
-This tells other Matrix servers where to find your federation endpoint.
+Tells other Matrix servers where to find your federation endpoint:
 
 ```json
 {
@@ -70,11 +45,13 @@ This tells other Matrix servers where to find your federation endpoint.
 }
 ```
 
-### Client-to-Server
+This file does **not** need CORS headers — it is fetched by other Matrix servers, not by browsers.
+
+### `/.well-known/matrix/client` (clients)
 
 File location: `https://example.com/.well-known/matrix/client`
 
-This tells Matrix clients where to connect.
+Tells Matrix clients where to connect:
 
 ```json
 {
@@ -84,29 +61,39 @@ This tells Matrix clients where to connect.
 }
 ```
 
-## Configuration Examples
+This file **must** include `Access-Control-Allow-Origin: *` because web-based clients (like Element Web) fetch it from a browser.
+
+## Relationship to SRV records
+
+SRV records (`_matrix-fed._tcp`) are an older alternative to well-known delegation for federation discovery only. Well-known is preferred because:
+
+- It covers both federation and client discovery with one setup
+- It works on port 443, which is rarely blocked by firewalls
+- SRV records only affect how other servers find your federation endpoint — they do nothing for client discovery
+
+:::banner{kind="info" title="Deprecated SRV record name"}
+The `_matrix._tcp` SRV record name is deprecated since Matrix spec v1.8. The current name is `_matrix-fed._tcp`. New setups should use well-known delegation instead of SRV records.
+:::
+
+## Configuration examples
 
 ### Nginx
-
-Serve well-known files with Nginx:
 
 ```nginx
 server {
     listen 443 ssl http2;
     server_name example.com;
 
-    # SSL configuration
     ssl_certificate /etc/letsencrypt/live/example.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/example.com/privkey.pem;
 
-    # Server-to-Server (Federation)
+    # Federation well-known — no CORS needed (server-to-server only)
     location /.well-known/matrix/server {
         default_type application/json;
-        add_header Access-Control-Allow-Origin *;
         return 200 '{"m.server": "matrix.example.com:443"}';
     }
 
-    # Client-to-Server
+    # Client well-known — CORS required
     location /.well-known/matrix/client {
         default_type application/json;
         add_header Access-Control-Allow-Origin *;
@@ -117,188 +104,79 @@ server {
 
 ### Caddy
 
-Serve well-known files with Caddy:
-
 ```caddy
 example.com {
-    # Automatic HTTPS with Let's Encrypt
-
-    # Server-to-Server (Federation)
+    # Federation well-known
     header /.well-known/matrix/server Content-Type application/json
-    header /.well-known/matrix/server Access-Control-Allow-Origin *
     respond /.well-known/matrix/server `{"m.server": "matrix.example.com:443"}` 200
 
-    # Client-to-Server
+    # Client well-known — CORS required
     header /.well-known/matrix/client Content-Type application/json
     header /.well-known/matrix/client Access-Control-Allow-Origin *
     respond /.well-known/matrix/client `{"m.homeserver": {"base_url": "https://matrix.example.com"}}` 200
 }
 ```
 
-### Apache
+### Static files
 
-Serve well-known files with Apache:
-
-```apache
-<VirtualHost *:443>
-    ServerName example.com
-
-    SSLEngine on
-    SSLCertificateFile /etc/letsencrypt/live/example.com/fullchain.pem
-    SSLCertificateKeyFile /etc/letsencrypt/live/example.com/privkey.pem
-
-    # Server-to-Server (Federation)
-    <Location "/.well-known/matrix/server">
-        Header set Content-Type "application/json"
-        Header set Access-Control-Allow-Origin "*"
-        RewriteEngine On
-        RewriteRule .* - [R=200,L]
-    </Location>
-
-    # Client-to-Server
-    <Location "/.well-known/matrix/client">
-        Header set Content-Type "application/json"
-        Header set Access-Control-Allow-Origin "*"
-        RewriteEngine On
-        RewriteRule .* - [R=200,L]
-    </Location>
-</VirtualHost>
-```
-
-### Static Files
-
-Alternatively, create actual JSON files on your web server:
+Create the files on your web server:
 
 **`/var/www/html/.well-known/matrix/server`:**
 
 ```json
-{
-  "m.server": "matrix.example.com:443"
-}
+{ "m.server": "matrix.example.com:443" }
 ```
 
 **`/var/www/html/.well-known/matrix/client`:**
 
 ```json
-{
-  "m.homeserver": {
-    "base_url": "https://matrix.example.com"
-  }
-}
+{ "m.homeserver": { "base_url": "https://matrix.example.com" } }
 ```
 
-Make sure these files are served with:
+Both files must be served with `Content-Type: application/json`. The client file also needs `Access-Control-Allow-Origin: *`.
 
-- Content-Type: `application/json`
-- Access-Control-Allow-Origin: `*`
-
-## Testing Your Configuration
-
-### Test with curl
+## Testing
 
 ```bash
-# Test server-to-server well-known
+# Test federation well-known
 curl https://example.com/.well-known/matrix/server
 
-# Test client-to-server well-known
-curl https://example.com/.well-known/matrix/client
+# Test client well-known (check CORS header is present)
+curl -I https://example.com/.well-known/matrix/client
 
-# Should return JSON with proper Content-Type
-curl -I https://example.com/.well-known/matrix/server
+# Validate both as JSON
+curl https://example.com/.well-known/matrix/server | jq .
+curl https://example.com/.well-known/matrix/client | jq .
 ```
 
-Expected response headers:
+Or use the [connectivity tester](/) — it checks both files and reports exactly what is wrong.
 
-- `Content-Type: application/json`
-- `Access-Control-Allow-Origin: *`
+## Common issues
 
-### Test with this tool
+### CORS error on client well-known
 
-Use this connectivity tester to verify your well-known delegation is working
-correctly. Enter your domain on the [homepage](/) and run the tests.
-
-The tool will check:
-
-- Well-known file accessibility
-- Correct JSON format
-- Proper headers
-- Delegation target reachability
-
-## Common Issues
-
-### CORS Errors
-
-**Problem:** Clients cannot access well-known files due to CORS errors.
-
-**Solution:** Ensure you're setting the CORS header:
-
-```
-Access-Control-Allow-Origin: *
-```
+`/.well-known/matrix/client` must include `Access-Control-Allow-Origin: *` because web clients fetch it from a browser. Check your reverse proxy configuration includes that header on the client file.
 
 ### Wrong Content-Type
 
-**Problem:** Well-known files served with wrong content type (e.g., `text/plain`).
-
-**Solution:** Set the content type to `application/json`:
-
-```
-Content-Type: application/json
-```
+Both files must return `Content-Type: application/json`. If your server returns `text/plain`, clients may reject the response.
 
 ### Invalid JSON
 
-**Problem:** Well-known file contains invalid JSON.
-
-**Solution:** Validate your JSON:
-
 ```bash
-# Test if JSON is valid
-cat server.json | jq .
+curl https://example.com/.well-known/matrix/client | jq .
 ```
 
-### HTTPS Not Working
+Any error from `jq` means the JSON is malformed.
 
-**Problem:** Well-known files not accessible over HTTPS.
+### HTTPS not working
 
-**Solution:**
+Well-known delegation requires HTTPS on port 443. Check that your base domain (`example.com`) has a valid TLS certificate.
 
-- Ensure you have a valid TLS certificate for your base domain
-- Well-known delegation requires HTTPS (port 443)
-- Test with `curl -v https://example.com/.well-known/matrix/server`
-
-## Advanced Configurations
-
-### Delegating to Non-Standard Port
+### Delegating to a non-standard port
 
 ```json
-{
-  "m.server": "matrix.example.com:3000"
-}
+{ "m.server": "matrix.example.com:8448" }
 ```
 
-### Multiple Homeservers
-
-You cannot delegate a single domain to multiple homeservers. Each domain can
-only delegate to one Matrix server.
-
-## Security Considerations
-
-- **Use HTTPS:** Well-known files must be served over HTTPS
-- **Valid certificates:** Use trusted CA certificates, not self-signed
-- **No sensitive data:** Well-known files are public
-- **Monitor changes:** Unauthorized changes can redirect federation traffic
-
-## Next Steps
-
-- Learn about [Federation Setup](/docs/getting-started/federation-setup) for complete configuration
-- Understand [TLS Certificates](/docs/configuration/tls-certificates) requirements
-- Review [Network Troubleshooting](/docs/troubleshooting/network-issues) if issues arise
-- Check [Server Configuration](/docs/configuration/server-config) best practices
-
-## Related Documentation
-
-- [Federation Setup](/docs/getting-started/federation-setup)
-- [TLS Certificates](/docs/configuration/tls-certificates)
-- [Network Troubleshooting](/docs/troubleshooting/network-issues)
-- [Server Configuration](/docs/configuration/server-config)
+The port in `m.server` must match the port your server is actually listening on.

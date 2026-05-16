@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/configuration/cors')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="configuration/cors" />
+  return (
+    <DocsLayout
+      docPath="configuration/cors"
+      lead="Enable web-based Matrix clients to connect to your server from any domain."
+    />
+  )
 }

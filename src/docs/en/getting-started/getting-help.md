@@ -106,11 +106,7 @@ Let others know what troubleshooting steps you've already taken:
 
 ## Professional Support
 
-### Synapse Commercial Support
-
-Commercial support is offered by a number of organizations. For an updated list
-have a look at the [Hosting page](https://matrix.org/ecosystem/hosting/) on the
-Matrix.org website.
+Commercial hosting and support is available from a number of organisations for various Matrix homeserver implementations. For an up-to-date list, see the [Hosting page](https://matrix.org/ecosystem/hosting/) on the Matrix.org website.
 
 ## Report Bugs
 

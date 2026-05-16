@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/api-endpoints/client-server-api')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="api-endpoints/client-server-api" />
+  return (
+    <DocsLayout
+      docPath="api-endpoints/client-server-api"
+      lead="How Matrix clients connect to your homeserver and what the tester checks."
+    />
+  )
 }

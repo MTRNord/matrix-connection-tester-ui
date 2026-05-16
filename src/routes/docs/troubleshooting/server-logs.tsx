@@ -6,5 +6,10 @@ export const Route = createFileRoute('/docs/troubleshooting/server-logs')({
 })
 
 function RouteComponent() {
-  return <DocsLayout docPath="troubleshooting/server-logs" />
+  return (
+    <DocsLayout
+      docPath="troubleshooting/server-logs"
+      lead="Find and read your homeserver logs to diagnose problems."
+    />
+  )
 }
