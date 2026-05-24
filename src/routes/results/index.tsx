@@ -730,24 +730,43 @@ function ResultsBody({
           })
         }
         if (!report.Checks.AllEd25519ChecksOK) {
-          const failedKeys = Object.entries(report.Checks.Ed25519Checks ?? {})
-            .flatMap(([keyId, check]) =>
-              !check.ValidEd25519 || !check.MatchingSignature
-                ? [
-                    `${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`,
-                  ]
-                : [],
-            )
-            .join('\n')
-          problems.push({
-            key: `ed25519-failed-${ip}`,
-            severity: 'bad',
-            titleKey: 'results.problems.ed25519Failed',
-            titleValues: { ip },
-            hintKey: 'results.problems.ed25519FailedHint',
-            docsPath: '/docs/troubleshooting/federation-network',
-            detail: failedKeys || undefined,
-          })
+          const failedEntries = Object.entries(report.Checks.Ed25519Checks ?? {}).filter(
+            ([, check]) => !check.ValidEd25519 || !check.MatchingSignature,
+          )
+          const nonCanonical = failedEntries.filter(
+            ([, check]) => check.Error === 'NonCanonicalJson',
+          )
+          const otherFailed = failedEntries.filter(
+            ([, check]) => check.Error !== 'NonCanonicalJson',
+          )
+          if (nonCanonical.length > 0) {
+            problems.push({
+              key: `ed25519-noncanonical-${ip}`,
+              severity: 'bad',
+              titleKey: 'results.problems.ed25519NonCanonical',
+              titleValues: { ip },
+              hintKey: 'results.problems.ed25519NonCanonicalHint',
+              docsPath: '/docs/troubleshooting/federation-network',
+              detail: nonCanonical.map(([keyId]) => keyId).join('\n'),
+            })
+          }
+          if (otherFailed.length > 0) {
+            const failedKeys = otherFailed
+              .map(
+                ([keyId, check]) =>
+                  `${keyId}: valid=${check.ValidEd25519}, matching=${check.MatchingSignature}`,
+              )
+              .join('\n')
+            problems.push({
+              key: `ed25519-failed-${ip}`,
+              severity: 'bad',
+              titleKey: 'results.problems.ed25519Failed',
+              titleValues: { ip },
+              hintKey: 'results.problems.ed25519FailedHint',
+              docsPath: '/docs/troubleshooting/federation-network',
+              detail: failedKeys || undefined,
+            })
+          }
         }
         if (!report.Checks.ServerVersionParses) {
           problems.push({
@@ -1809,6 +1828,13 @@ function ResultsBody({
                                       <CheckBadge
                                         ok={check.MatchingSignature}
                                       />
+                                      {check.Error === 'NonCanonicalJson' && (
+                                        <Pill kind="warn">
+                                          {t(
+                                            'results.technical.connectivity.keyErrorNonCanonical',
+                                          )}
+                                        </Pill>
+                                      )}
                                     </div>
                                   </div>
                                 ))}

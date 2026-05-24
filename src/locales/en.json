@@ -446,6 +446,7 @@
       "expiredKeys": "{{ip}}: signing keys have expired",
       "noEd25519Key": "{{ip}}: no Ed25519 signing key found",
       "ed25519Failed": "{{ip}}: Ed25519 signature verification failed",
+      "ed25519NonCanonical": "{{ip}}: non-canonical JSON numbers in key response",
       "serverVersionParse": "{{ip}}: server version string could not be parsed",
       "connectionErrorHint": "Check that your Matrix server is running, port 8448 (or your delegated port) is open, and not blocked by a firewall. <docsLink>Network troubleshooting guide →</docsLink>",
       "splitBrainHint": "Your IPs are returning different <code>m.server</code> delegation values — remote servers will route inconsistently. Ensure all server IPs serve identical content at <code>/.well-known/matrix/server</code>. <docsLink>Well-known delegation guide →</docsLink>",
@@ -455,6 +456,7 @@
       "expiredKeysHint": "Your signing keys have a <code>valid_until_ts</code> in the past. Other homeservers cache your keys and will refuse messages signed with expired keys. Restarting your homeserver typically rotates them automatically. <docsLink>Federation guide →</docsLink>",
       "noEd25519KeyHint": "Every Matrix homeserver must publish at least one Ed25519 key at <code>/_matrix/key/v2/server</code>. Check that your homeserver's signing key is configured and the key file is readable. <docsLink>Federation guide →</docsLink>",
       "ed25519FailedHint": "One or more Ed25519 signing keys failed verification. The server may be presenting stale, mismatched, or corrupted key material. Check your homeserver's signing key files and configuration. <docsLink>Federation guide →</docsLink>",
+      "ed25519NonCanonicalHint": "The server's <code>/_matrix/key/v2/server</code> response contains floating-point numbers, <code>-0</code>, or integers outside the Matrix-safe range <code>[-(2^53)+1, (2^53)-1]</code>. This violates the Matrix specification's canonical JSON rules. The server operator should update their homeserver software — this usually indicates an outdated or non-compliant implementation. <docsLink>Matrix spec →</docsLink>",
       "serverVersionParseHint": "The value returned by <code>/_matrix/federation/v1/version</code> does not match the expected format. This is informational — custom builds may use non-standard version strings and federation still works normally.",
       "csApiUnavailable": "Client-server API not reachable from this browser",
       "csApiUnavailableHint": "This test couldn't reach your server's client API (<code>/_matrix/client/versions</code>) from the browser. This is often caused by missing CORS headers — Matrix clients connect differently and may still work fine. If you intend to support web clients, check your CORS configuration. <docsLink>CORS guide →</docsLink>",
@@ -589,7 +591,8 @@
         "certDnsNames": "Covered names",
         "ed25519KeysTitle": "Ed25519 key details",
         "keyValidFormat": "Valid key",
-        "keyMatchingSig": "Matching signature"
+        "keyMatchingSig": "Matching signature",
+        "keyErrorNonCanonical": "Non-canonical JSON"
       },
       "rawJson": {
         "title": "Raw JSON",

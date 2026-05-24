@@ -334,6 +334,7 @@
       "expiredKeys": "{{ip}}: Signaturschlüssel sind abgelaufen",
       "noEd25519Key": "{{ip}}: kein Ed25519-Signaturschlüssel gefunden",
       "ed25519Failed": "{{ip}}: Ed25519-Signaturverifizierung fehlgeschlagen",
+      "ed25519NonCanonical": "{{ip}}: Nicht-kanonische JSON-Zahlen in der Schlüsselantwort",
       "serverVersionParse": "{{ip}}: Serverversionstring konnte nicht geparst werden",
       "connectionErrorHint": "Stelle sicher, dass dein Matrix-Server läuft, Port 8448 (oder dein delegierter Port) offen ist und nicht durch eine Firewall gesperrt wird. <docsLink>Netzwerk-Fehlerbehebung →</docsLink>",
       "splitBrainHint": "Deine IPs liefern unterschiedliche <code>m.server</code>-Delegationswerte — andere Server werden inkonsistent weiterleiten. Stelle sicher, dass alle Server-IPs identischen Inhalt unter <code>/.well-known/matrix/server</code> ausliefern. <docsLink>Well-known-Delegation →</docsLink>",
@@ -343,6 +344,7 @@
       "expiredKeysHint": "Deine Signaturschlüssel haben ein <code>valid_until_ts</code> in der Vergangenheit. Andere Homeserver cachen deine Schlüssel und akzeptieren keine mit abgelaufenen Schlüsseln signierten Nachrichten. Ein Neustart deines Homeservers rotiert die Schlüssel in der Regel automatisch. <docsLink>Federation-Leitfaden →</docsLink>",
       "noEd25519KeyHint": "Jeder Matrix-Homeserver muss mindestens einen Ed25519-Schlüssel unter <code>/_matrix/key/v2/server</code> veröffentlichen. Überprüfe, ob der Signaturschlüssel deines Homeservers konfiguriert und die Schlüsseldatei lesbar ist. <docsLink>Federation-Leitfaden →</docsLink>",
       "ed25519FailedHint": "Einer oder mehrere Ed25519-Signaturschlüssel haben die Überprüfung nicht bestanden. Der Server stellt möglicherweise veraltetes oder falsches Schlüsselmaterial bereit. Überprüfe die Schlüsseldateien und Konfiguration deines Homeservers. <docsLink>Federation-Leitfaden →</docsLink>",
+      "ed25519NonCanonicalHint": "Die Antwort des Servers unter <code>/_matrix/key/v2/server</code> enthält Fließkommazahlen, <code>-0</code> oder Ganzzahlen außerhalb des Matrix-sicheren Bereichs <code>[-(2^53)+1, (2^53)-1]</code>. Dies verstößt gegen die Regeln für kanonisches JSON der Matrix-Spezifikation. Der Serverbetreiber sollte die Homeserver-Software aktualisieren – dies weist in der Regel auf eine veraltete oder nicht konforme Implementierung hin. <docsLink>Matrix-Spezifikation →</docsLink>",
       "serverVersionParseHint": "Der von <code>/_matrix/federation/v1/version</code> zurückgegebene Wert entspricht nicht dem erwarteten Format. Dies ist nur informativ — angepasste Server-Builds können nicht standardisierte Versionsstrings verwenden, ohne dass die Federation beeinträchtigt wird.",
       "csApiUnavailable": "Client-Server-API von diesem Browser aus nicht erreichbar",
       "csApiUnavailableHint": "Der Test konnte die Client-API deines Servers (<code>/_matrix/client/versions</code>) nicht aus dem Browser erreichen. Dies liegt häufig an fehlenden CORS-Headern — Matrix-Clients verbinden sich anders und funktionieren möglicherweise trotzdem. Falls du Web-Clients unterstützen möchtest, überprüfe deine CORS-Konfiguration. <docsLink>CORS-Leitfaden →</docsLink>",
@@ -477,7 +479,8 @@
         "certDnsNames": "Abgedeckte Namen",
         "ed25519KeysTitle": "Ed25519-Schlüssel-Details",
         "keyValidFormat": "Gültiger Schlüssel",
-        "keyMatchingSig": "Passende Signatur"
+        "keyMatchingSig": "Passende Signatur",
+        "keyErrorNonCanonical": "Nicht-kanonisches JSON"
       },
       "rawJson": {
         "title": "Roh-JSON",

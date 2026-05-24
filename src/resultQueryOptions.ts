@@ -31,6 +31,7 @@ export interface Certificate {
 export interface Ed25519Check {
   ValidEd25519: boolean
   MatchingSignature: boolean
+  Error?: 'Mismatch' | 'NonCanonicalJson'
 }
 
 export interface Checks {
