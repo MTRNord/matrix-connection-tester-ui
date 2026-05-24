@@ -434,6 +434,17 @@ function latestVersion(versions: string[]): string {
   )
 }
 
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+function isSafeUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'https:' || parsed.protocol === 'http:'
+  } catch {
+    return false
+  }
+}
+
 // ── Copy button ───────────────────────────────────────────────────────────────
 
 function CopyButton({ text, label }: { text: string; label: string }) {
@@ -1066,7 +1077,7 @@ function ResultsBody({
               <h3 style={{ margin: 0 }}>
                 {t('results.support.contactsFor', { serverName })}
               </h3>
-              {contacts.length > 0 || supportPage ? (
+              {contacts.length > 0 || (supportPage && isSafeUrl(supportPage)) ? (
                 <Pill kind="ok" dot>
                   {t('results.support.published')}
                 </Pill>
@@ -1074,7 +1085,7 @@ function ResultsBody({
                 <Pill kind="ink">{t('results.support.notPublished')}</Pill>
               )}
             </div>
-            {contacts.length === 0 && !supportPage ? (
+            {contacts.length === 0 && !(supportPage && isSafeUrl(supportPage)) ? (
               <p className="support__lead" style={{ paddingBottom: 12 }}>
                 <Trans
                   i18nKey="results.support.noneFound"
@@ -1115,7 +1126,7 @@ function ResultsBody({
                       />
                     </div>
                   ))}
-                  {supportPage && (
+                  {supportPage && isSafeUrl(supportPage) && (
                     <div
                       className="support__row"
                       style={{ gridColumn: '1 / -1' }}
