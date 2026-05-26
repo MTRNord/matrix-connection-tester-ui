@@ -15,6 +15,7 @@ import Navbar from '#/components/Navbar/Navbar'
 import Footer from '#/components/Footer/Footer'
 import Banner from '#/components/Banner/Banner'
 import Button from '#/components/Button/Button'
+import { PlausibleAnalytics } from '#/components/PlausibleAnalytics/PlausibleAnalytics'
 import { useTranslation } from 'react-i18next'
 
 import '../inter.css'
@@ -78,6 +79,7 @@ function RootComponent() {
 
   return (
     <>
+      <PlausibleAnalytics />
       <SkipToContent />
       {configError && (
         <div className="config-errorbar" role="alert">

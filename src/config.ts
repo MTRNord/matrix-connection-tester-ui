@@ -23,6 +23,17 @@ export interface AppConfig {
    * Defaults to 30 when not set.
    */
   statistics_raw_retention_days?: number
+  /**
+   * Domain registered in Plausible Analytics (e.g. "matrix-connection-tester.example.com").
+   * Both this AND `plausible_api_host` must be set to enable analytics.
+   * Omit either field to disable analytics entirely.
+   */
+  plausible_domain?: string
+  /**
+   * Base URL of the self-hosted Plausible instance (e.g. "https://plausible.example.com").
+   * Must be set explicitly — no cloud fallback — to prevent accidental data leakage.
+   */
+  plausible_api_host?: string
 }
 
 function isValidConfig(data: unknown): data is AppConfig {

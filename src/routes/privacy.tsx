@@ -56,6 +56,7 @@ function Privacy() {
     (typeof window !== 'undefined' ? window.location.hostname : null)
   const emailLogDays = cfg?.email_log_retention_days ?? 7
   const statsDays = cfg?.statistics_raw_retention_days ?? 30
+  const plausibleApiHost = cfg?.plausible_api_host
 
   return (
     <div>
@@ -194,6 +195,28 @@ function Privacy() {
             {t('privacy.s2.s23.title')}
           </h3>
           <P>{t('privacy.s2.s23.p1')}</P>
+
+          {plausibleApiHost && (
+            <>
+              <h3 style={{ fontSize: 16, marginTop: 20, marginBottom: 4 }}>
+                {t('privacy.s2.s24.title')}
+              </h3>
+              <P>
+                <Trans
+                  i18nKey="privacy.s2.s24.p1"
+                  components={{ strong: <strong /> }}
+                />
+              </P>
+              <P>
+                <Trans
+                  i18nKey="privacy.s2.s24.p2"
+                  values={{ host: plausibleApiHost }}
+                  components={{ strong: <strong />, code: <code /> }}
+                />
+              </P>
+              <P>{t('privacy.s2.s24.dnt')}</P>
+            </>
+          )}
         </Section>
 
         <Section title={t('privacy.s3.title')}>
@@ -228,7 +251,11 @@ function Privacy() {
               components={{ strong: <strong /> }}
             />
           </P>
-          <P>{t('privacy.s4.p2')}</P>
+          <P>
+            {plausibleApiHost
+              ? t('privacy.s4.p2Analytics')
+              : t('privacy.s4.p2')}
+          </P>
         </Section>
 
         <Section title={t('privacy.s5.title')}>

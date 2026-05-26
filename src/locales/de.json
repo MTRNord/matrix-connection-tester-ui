@@ -665,6 +665,12 @@
       "s23": {
         "title": "2.3 Technische / Server-Logs",
         "p1": "Der Server kann IP-Adressen in Zugriffslogs zu Sicherheits- und Betriebszwecken aufzeichnen. Die Aufbewahrungsfrist wird vom Betreiber festgelegt."
+      },
+      "s24": {
+        "title": "2.4 Nutzungsstatistiken",
+        "p1": "Diese Instanz verwendet <strong>Plausible Analytics</strong> — ein datenschutzfreundliches Open-Source-Analysetool. Plausible erfasst ausschließlich aggregierte, anonyme Statistiken: Seitenaufrufe, Referrer, Standort auf Länderebene, Gerätetyp und Browserfamilie. <strong>Es werden keine Cookies gesetzt. Es werden keine personenbezogenen Daten gespeichert. Es findet kein websiteübergreifendes Tracking statt.</strong>",
+        "p2": "Analysedaten werden an eine selbst gehostete Plausible-Instanz unter <code>{{host}}</code> übermittelt. Die Daten verlassen die eigene Infrastruktur des Betreibers nicht.",
+        "dnt": "Wenn dein Browser ein Do-Not-Track-Signal (DNT) sendet, werden keinerlei Daten übertragen."
       }
     },
     "s3": {
@@ -678,7 +684,8 @@
       "title": "4. Drittanbieter und Auftragsverarbeiter",
       "p1": "Wir verkaufen oder teilen keine personenbezogenen Daten mit Dritten. E-Mail-Benachrichtigungen werden über einen vom Betreiber konfigurierten E-Mail-Dienst versendet; dabei werden nur deine E-Mail-Adresse und der Benachrichtigungsinhalt übermittelt.",
       "webhooks": "Webhook-Benachrichtigungen werden direkt an die von dir konfigurierten HTTPS-URLs zugestellt. Diese können auf Drittanbieterdienste verweisen (z. B. Slack, PagerDuty oder eigene Endpunkte). Jede Zustellung überträgt den Ereignistyp, einen Zeitstempel und den Servernamen über HTTPS. Persönliche Kontodaten sind in Webhook-Payloads nicht enthalten.",
-      "p2": "Diese Website enthält keine Analyse-Tools, Werbenetzwerke oder Tracking-Pixel von Drittanbietern."
+      "p2": "Diese Website enthält keine Analyse-Tools, Werbenetzwerke oder Tracking-Pixel von Drittanbietern.",
+      "p2Analytics": "Diese Website enthält keine Werbenetzwerke oder Tracking-Pixel von Drittanbietern. Diese Instanz verwendet eine selbst gehostete Plausible-Analytics-Instanz für aggregierte Nutzungsstatistiken — Details in Abschnitt 2.4."
     },
     "s5": {
       "title": "5. Cookies und Browser-Speicher",

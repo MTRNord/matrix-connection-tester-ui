@@ -665,6 +665,12 @@
       "s23": {
         "title": "2.3 Technical / server logs",
         "p1": "The server may record IP addresses in access logs for security and operational purposes. Log retention period is configured by the operator."
+      },
+      "s24": {
+        "title": "2.4 Usage analytics",
+        "p1": "This instance uses <strong>Plausible Analytics</strong> — a privacy-first, open-source analytics tool. Plausible collects only aggregate, anonymous statistics: page views, referrer, country-level location, device type, and browser family. <strong>No cookies are set. No personal data is stored. No cross-site tracking occurs.</strong>",
+        "p2": "Analytics data is sent to a self-hosted Plausible instance at <code>{{host}}</code>. Data never leaves the operator's own infrastructure.",
+        "dnt": "If your browser sends a Do Not Track (DNT) signal, no data is transmitted at all."
       }
     },
     "s3": {
@@ -678,7 +684,8 @@
       "title": "4. Third-party processors",
       "p1": "We do not sell or share personal data with third parties. Email notifications are routed through an email delivery provider configured by the operator; only your email address and the notification content are transmitted for each delivery.",
       "webhooks": "Webhook notifications are delivered directly to the HTTPS URLs you configure. These may point to third-party services (e.g. Slack, PagerDuty, or custom endpoints). Each delivery transmits the event type, a timestamp, and the server name over HTTPS. No personal account information is included in webhook payloads.",
-      "p2": "No third-party analytics, advertising networks, or tracking pixels are present on this site."
+      "p2": "No third-party analytics, advertising networks, or tracking pixels are present on this site.",
+      "p2Analytics": "No advertising networks or tracking pixels are present on this site. This instance uses a self-hosted Plausible Analytics instance for aggregate usage statistics — see section 2.4 for details."
     },
     "s5": {
       "title": "5. Cookies and browser storage",
