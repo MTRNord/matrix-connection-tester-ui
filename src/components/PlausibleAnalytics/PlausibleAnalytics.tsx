@@ -4,10 +4,6 @@ import { useQuery } from '@tanstack/react-query'
 import { init, track } from '@plausible-analytics/tracker'
 import { configQueryOptions } from '#/config'
 
-function isDntEnabled() {
-  return navigator.doNotTrack === '1'
-}
-
 export function PlausibleAnalytics() {
   const { data: config } = useQuery(configQueryOptions)
   const location = useRouterState({ select: (s) => s.location.href })
@@ -23,7 +19,7 @@ export function PlausibleAnalytics() {
       autoCapturePageviews: false,
     })
     initializedRef.current = true
-    if (!isDntEnabled()) track('pageview', {})
+    track('pageview', {})
   }, [config?.plausible_domain, config?.plausible_api_host])
 
   // Skip first location change — initial pageview is fired by the init effect above
@@ -32,7 +28,7 @@ export function PlausibleAnalytics() {
       isFirstRender.current = false
       return
     }
-    if (!initializedRef.current || isDntEnabled()) return
+    if (!initializedRef.current) return
     track('pageview', {})
   }, [location])
 

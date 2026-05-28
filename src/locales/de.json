@@ -669,8 +669,7 @@
       "s24": {
         "title": "2.4 Nutzungsstatistiken",
         "p1": "Diese Instanz verwendet <strong>Plausible Analytics</strong> — ein datenschutzfreundliches Open-Source-Analysetool. Plausible erfasst ausschließlich aggregierte, anonyme Statistiken: Seitenaufrufe, Referrer, Standort auf Länderebene, Gerätetyp und Browserfamilie. <strong>Es werden keine Cookies gesetzt. Es werden keine personenbezogenen Daten gespeichert. Es findet kein websiteübergreifendes Tracking statt.</strong>",
-        "p2": "Analysedaten werden an eine selbst gehostete Plausible-Instanz unter <code>{{host}}</code> übermittelt. Die Daten verlassen die eigene Infrastruktur des Betreibers nicht.",
-        "dnt": "Wenn dein Browser ein Do-Not-Track-Signal (DNT) sendet, werden keinerlei Daten übertragen."
+        "p2": "Analysedaten werden an eine selbst gehostete Plausible-Instanz unter <code>{{host}}</code> übermittelt. Die Daten verlassen die eigene Infrastruktur des Betreibers nicht."
       }
     },
     "s3": {

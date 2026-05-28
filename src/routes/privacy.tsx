@@ -214,7 +214,6 @@ function Privacy() {
                   components={{ strong: <strong />, code: <code /> }}
                 />
               </P>
-              <P>{t('privacy.s2.s24.dnt')}</P>
             </>
           )}
         </Section>
