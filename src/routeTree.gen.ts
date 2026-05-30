@@ -34,6 +34,7 @@ import { Route as DocsConfigurationCorsRouteImport } from './routes/docs/configu
 import { Route as DocsApiEndpointsWellKnownDelegationRouteImport } from './routes/docs/api-endpoints/well-known-delegation'
 import { Route as DocsApiEndpointsWebhooksRouteImport } from './routes/docs/api-endpoints/webhooks'
 import { Route as DocsApiEndpointsSupportEndpointRouteImport } from './routes/docs/api-endpoints/support-endpoint'
+import { Route as DocsApiEndpointsOidcAuthRouteImport } from './routes/docs/api-endpoints/oidc-auth'
 import { Route as DocsApiEndpointsClientServerApiRouteImport } from './routes/docs/api-endpoints/client-server-api'
 import { Route as DocsAlertingWebhooksRouteImport } from './routes/docs/alerting/webhooks'
 
@@ -175,6 +176,12 @@ const DocsApiEndpointsSupportEndpointRoute =
     path: '/docs/api-endpoints/support-endpoint',
     getParentRoute: () => rootRouteImport,
   } as any)
+const DocsApiEndpointsOidcAuthRoute =
+  DocsApiEndpointsOidcAuthRouteImport.update({
+    id: '/docs/api-endpoints/oidc-auth',
+    path: '/docs/api-endpoints/oidc-auth',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DocsApiEndpointsClientServerApiRoute =
   DocsApiEndpointsClientServerApiRouteImport.update({
     id: '/docs/api-endpoints/client-server-api',
@@ -201,6 +208,7 @@ export interface FileRoutesByFullPath {
   '/results/': typeof ResultsIndexRoute
   '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/oidc-auth': typeof DocsApiEndpointsOidcAuthRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
@@ -230,6 +238,7 @@ export interface FileRoutesByTo {
   '/results': typeof ResultsIndexRoute
   '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/oidc-auth': typeof DocsApiEndpointsOidcAuthRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
@@ -260,6 +269,7 @@ export interface FileRoutesById {
   '/results/': typeof ResultsIndexRoute
   '/docs/alerting/webhooks': typeof DocsAlertingWebhooksRoute
   '/docs/api-endpoints/client-server-api': typeof DocsApiEndpointsClientServerApiRoute
+  '/docs/api-endpoints/oidc-auth': typeof DocsApiEndpointsOidcAuthRoute
   '/docs/api-endpoints/support-endpoint': typeof DocsApiEndpointsSupportEndpointRoute
   '/docs/api-endpoints/webhooks': typeof DocsApiEndpointsWebhooksRoute
   '/docs/api-endpoints/well-known-delegation': typeof DocsApiEndpointsWellKnownDelegationRoute
@@ -291,6 +301,7 @@ export interface FileRouteTypes {
     | '/results/'
     | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/oidc-auth'
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
@@ -320,6 +331,7 @@ export interface FileRouteTypes {
     | '/results'
     | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/oidc-auth'
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
@@ -349,6 +361,7 @@ export interface FileRouteTypes {
     | '/results/'
     | '/docs/alerting/webhooks'
     | '/docs/api-endpoints/client-server-api'
+    | '/docs/api-endpoints/oidc-auth'
     | '/docs/api-endpoints/support-endpoint'
     | '/docs/api-endpoints/webhooks'
     | '/docs/api-endpoints/well-known-delegation'
@@ -379,6 +392,7 @@ export interface RootRouteChildren {
   ResultsIndexRoute: typeof ResultsIndexRoute
   DocsAlertingWebhooksRoute: typeof DocsAlertingWebhooksRoute
   DocsApiEndpointsClientServerApiRoute: typeof DocsApiEndpointsClientServerApiRoute
+  DocsApiEndpointsOidcAuthRoute: typeof DocsApiEndpointsOidcAuthRoute
   DocsApiEndpointsSupportEndpointRoute: typeof DocsApiEndpointsSupportEndpointRoute
   DocsApiEndpointsWebhooksRoute: typeof DocsApiEndpointsWebhooksRoute
   DocsApiEndpointsWellKnownDelegationRoute: typeof DocsApiEndpointsWellKnownDelegationRoute
@@ -572,6 +586,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsApiEndpointsSupportEndpointRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/api-endpoints/oidc-auth': {
+      id: '/docs/api-endpoints/oidc-auth'
+      path: '/docs/api-endpoints/oidc-auth'
+      fullPath: '/docs/api-endpoints/oidc-auth'
+      preLoaderRoute: typeof DocsApiEndpointsOidcAuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/docs/api-endpoints/client-server-api': {
       id: '/docs/api-endpoints/client-server-api'
       path: '/docs/api-endpoints/client-server-api'
@@ -603,6 +624,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResultsIndexRoute: ResultsIndexRoute,
   DocsAlertingWebhooksRoute: DocsAlertingWebhooksRoute,
   DocsApiEndpointsClientServerApiRoute: DocsApiEndpointsClientServerApiRoute,
+  DocsApiEndpointsOidcAuthRoute: DocsApiEndpointsOidcAuthRoute,
   DocsApiEndpointsSupportEndpointRoute: DocsApiEndpointsSupportEndpointRoute,
   DocsApiEndpointsWebhooksRoute: DocsApiEndpointsWebhooksRoute,
   DocsApiEndpointsWellKnownDelegationRoute:

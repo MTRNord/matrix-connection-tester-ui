@@ -896,6 +896,48 @@ function ResultsBody({
     })
   }
 
+  // OIDC auth issuer CORS blocked
+  if (csData?.oidcCorsBlocked) {
+    problems.push({
+      key: 'oidc-cors-blocked',
+      severity: 'warn',
+      titleKey: 'results.problems.oidcCorsBlocked',
+      hintKey: 'results.problems.oidcCorsBlockedHint',
+      docsPath: '/docs/configuration/cors',
+    })
+  }
+
+  // OIDC configured but discovery unreachable
+  if (csData?.oidcCheck && !csData.oidcCheck.discoveryReachable) {
+    problems.push({
+      key: 'oidc-discovery-unreachable',
+      severity: 'warn',
+      titleKey: 'results.problems.oidcDiscoveryUnreachable',
+      hintKey: 'results.problems.oidcDiscoveryUnreachableHint',
+      hintValues: { issuerUrl: csData.oidcCheck.issuerUrl },
+    })
+  }
+
+  // OIDC issuer mismatch
+  if (csData?.oidcCheck?.issuerMismatch) {
+    problems.push({
+      key: 'oidc-issuer-mismatch',
+      severity: 'warn',
+      titleKey: 'results.problems.oidcIssuerMismatch',
+      hintKey: 'results.problems.oidcIssuerMismatchHint',
+    })
+  }
+
+  // JWKS endpoint unreachable (only when discovery succeeded)
+  if (csData?.oidcCheck?.discovery && !csData.oidcCheck.jwksReachable) {
+    problems.push({
+      key: 'oidc-jwks-unreachable',
+      severity: 'warn',
+      titleKey: 'results.problems.oidcJwksUnreachable',
+      hintKey: 'results.problems.oidcJwksUnreachableHint',
+    })
+  }
+
   // Support contacts (CORS-blocked → info is null but we still know the endpoint exists)
   const contacts = supportData?.info?.contacts ?? []
   const supportPage = supportData?.info?.support_page
@@ -1582,6 +1624,102 @@ function ResultsBody({
                     : t('results.technical.rtc.notDetected')}
                 </Pill>
               </div>
+            </div>
+          )}
+        </Disclosure>
+
+        {/* OIDC / Matrix 2.0 auth */}
+        <Disclosure
+          title={t('results.technical.oidc.title')}
+          hint={t('results.technical.oidc.hint')}
+          badge={
+            csData !== undefined ? (
+              <Pill
+                kind={csData.oidcCheck ? 'ok' : 'ink'}
+                dot={!!csData.oidcCheck}
+              >
+                {csData.oidcCheck
+                  ? t('results.technical.oidc.configured')
+                  : t('results.technical.oidc.notConfigured')}
+              </Pill>
+            ) : undefined
+          }
+        >
+          {csData === undefined ? (
+            <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>
+              {t('results.stats.fetching')}
+            </p>
+          ) : !csData.oidcCheck ? (
+            <p style={{ color: 'var(--ink-3)', fontSize: 14 }}>
+              <Trans
+                i18nKey="results.technical.oidc.notConfiguredDetail"
+                components={{ code: <code /> }}
+              />
+            </p>
+          ) : (
+            <div className="kv-grid">
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.oidc.issuer')}
+              </div>
+              <div className="mono" style={{ fontSize: 13 }}>
+                {csData.oidcCheck.issuerUrl}
+              </div>
+
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.oidc.discoveryEndpoint')}
+              </div>
+              <div>
+                <Pill
+                  kind={csData.oidcCheck.discoveryReachable ? 'ok' : 'bad'}
+                  dot={csData.oidcCheck.discoveryReachable}
+                >
+                  {csData.oidcCheck.discoveryReachable
+                    ? t('results.technical.oidc.reachable')
+                    : t('results.technical.oidc.unreachable')}
+                </Pill>
+                {csData.oidcCheck.issuerMismatch && (
+                  <div style={{ fontSize: 12, color: 'var(--warn-deep)', marginTop: 4 }}>
+                    {t('results.technical.oidc.issuerMismatchWarning')}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.oidc.jwks')}
+              </div>
+              <div>
+                <Pill
+                  kind={
+                    !csData.oidcCheck.discovery
+                      ? 'ink'
+                      : csData.oidcCheck.jwksReachable
+                        ? 'ok'
+                        : 'bad'
+                  }
+                  dot={csData.oidcCheck.jwksReachable}
+                >
+                  {!csData.oidcCheck.discovery
+                    ? t('results.technical.oidc.na')
+                    : csData.oidcCheck.jwksReachable
+                      ? t('results.technical.oidc.reachable')
+                      : t('results.technical.oidc.unreachable')}
+                </Pill>
+              </div>
+
+              <div style={{ fontWeight: 600 }}>
+                {t('results.technical.oidc.pkce')}
+              </div>
+              <div>
+                <Pill
+                  kind={csData.oidcCheck.hasPkceS256 ? 'ok' : 'ink'}
+                  dot={csData.oidcCheck.hasPkceS256}
+                >
+                  {csData.oidcCheck.hasPkceS256
+                    ? t('results.technical.oidc.supported')
+                    : t('results.technical.oidc.notSupported')}
+                </Pill>
+              </div>
+
             </div>
           )}
         </Disclosure>

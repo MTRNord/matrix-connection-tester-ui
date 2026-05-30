@@ -53,6 +53,10 @@ const NAV_SECTIONS: NavSection[] = [
         labelKey: 'docs.nav.wellKnownDelegation',
         to: '/docs/api-endpoints/well-known-delegation',
       },
+      {
+        labelKey: 'docs.nav.oidcAuth',
+        to: '/docs/api-endpoints/oidc-auth',
+      },
     ],
   },
   {

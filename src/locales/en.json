@@ -473,7 +473,15 @@
       "msc3266CorsBlocked": "Room summary endpoint is missing CORS headers",
       "msc3266CorsBlockedHint": "Your server's room-summary endpoint responded but without CORS headers. Web clients relying on MSC3266 room previews (used by Element Web and others) cannot access this endpoint. Add <code>Access-Control-Allow-Origin: *</code> to your client-server API configuration. <docsLink>CORS guide →</docsLink>",
       "supportCorsBlocked": "/.well-known/matrix/support is missing CORS headers",
-      "supportCorsBlockedHint": "Your server returned a response for <code>/.well-known/matrix/support</code>, but it does not include an <code>Access-Control-Allow-Origin: *</code> header. Browsers cannot read the response, so support contacts and the security disclosure page will not appear in web-based Matrix tools. Add the CORS header to this endpoint. <docsLink>Support endpoint guide →</docsLink>"
+      "supportCorsBlockedHint": "Your server returned a response for <code>/.well-known/matrix/support</code>, but it does not include an <code>Access-Control-Allow-Origin: *</code> header. Browsers cannot read the response, so support contacts and the security disclosure page will not appear in web-based Matrix tools. Add the CORS header to this endpoint. <docsLink>Support endpoint guide →</docsLink>",
+      "oidcCorsBlocked": "OIDC auth issuer endpoint is missing CORS headers",
+      "oidcCorsBlockedHint": "Your server's <code>/_matrix/client/v1/auth_issuer</code> endpoint responded but without an <code>Access-Control-Allow-Origin: *</code> header. Web-based Matrix clients using OIDC authentication cannot discover the issuer. Add the CORS header to this endpoint. <docsLink>CORS guide →</docsLink>",
+      "oidcDiscoveryUnreachable": "OIDC discovery document is unreachable",
+      "oidcDiscoveryUnreachableHint": "Your server advertises OIDC at <code>/_matrix/client/v1/auth_issuer</code>, but the OpenID Connect discovery document at <code>{{issuerUrl}}/.well-known/openid-configuration</code> could not be fetched. Web clients performing OIDC login will fail. Ensure the OIDC provider (e.g. MAS) is running and its discovery endpoint is publicly reachable.",
+      "oidcIssuerMismatch": "OIDC issuer URL mismatch",
+      "oidcIssuerMismatchHint": "The <code>issuer</code> field in the OpenID Connect discovery document does not match the URL it was fetched from. This violates the OIDC specification — clients may reject the discovery document. Ensure the OIDC provider is configured with the correct <code>issuer</code> URL.",
+      "oidcJwksUnreachable": "OIDC JWKS endpoint is unreachable",
+      "oidcJwksUnreachableHint": "The JWKS endpoint (<code>jwks_uri</code>) from the OIDC discovery document could not be reached. Clients need this endpoint to validate tokens — OIDC logins will fail. Check that the JWKS URL is publicly accessible."
     },
     "support": {
       "title": "Moderation & security contacts",
@@ -539,6 +547,23 @@
         "serverCol": "Delegated server",
         "statusCol": "Status",
         "noData": "No well-known data available."
+      },
+      "oidc": {
+        "title": "OIDC / Matrix 2.0 auth",
+        "hint": "MSC3861 — delegated authentication via OpenID Connect",
+        "configured": "Configured",
+        "notConfigured": "Not configured",
+        "notConfiguredDetail": "This server does not advertise an OIDC issuer via <code>/.well-known/matrix/client</code> or <code>/_matrix/client/v1/auth_issuer</code>. It uses the native Matrix auth flow (password, SSO, or token).",
+        "issuer": "Issuer",
+        "discoveryEndpoint": "OIDC discovery",
+        "jwks": "JWKS endpoint",
+        "pkce": "PKCE (S256)",
+        "reachable": "Reachable",
+        "unreachable": "Unreachable",
+        "supported": "Supported",
+        "notSupported": "Not supported",
+        "na": "N/A",
+        "issuerMismatchWarning": "Issuer field in discovery document does not match the issuer URL"
       },
       "rtc": {
         "title": "MatrixRTC readiness",
@@ -739,6 +764,7 @@
       "supportEndpoint": "Support endpoint",
       "clientServerApi": "Client-server API",
       "wellKnownDelegation": "Well-known delegation",
+      "oidcAuth": "OIDC / Matrix 2.0 auth",
       "troubleshooting": "Troubleshooting",
       "general": "General",
       "networkIssues": "Network issues",

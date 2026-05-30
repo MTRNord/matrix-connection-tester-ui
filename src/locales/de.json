@@ -361,7 +361,15 @@
       "msc3266CorsBlocked": "Raumvorschau-Endpunkt hat keine CORS-Header",
       "msc3266CorsBlockedHint": "Der Raumvorschau-Endpunkt deines Servers hat geantwortet, aber ohne CORS-Header. Web-Clients, die auf MSC3266-Raumvorschauen angewiesen sind (z. B. Element Web), können diesen Endpunkt nicht nutzen. Füge <code>Access-Control-Allow-Origin: *</code> zu deiner Client-Server-API-Konfiguration hinzu. <docsLink>CORS-Leitfaden →</docsLink>",
       "supportCorsBlocked": "/.well-known/matrix/support hat keine CORS-Header",
-      "supportCorsBlockedHint": "Dein Server hat eine Antwort für <code>/.well-known/matrix/support</code> zurückgegeben, enthält aber keinen <code>Access-Control-Allow-Origin: *</code>-Header. Browser können die Antwort daher nicht lesen, weshalb Supportkontakte und die Seite zur Sicherheitsmeldung in webbasierten Matrix-Tools nicht angezeigt werden. Füge den CORS-Header zu diesem Endpunkt hinzu. <docsLink>Support-Endpunkt-Leitfaden →</docsLink>"
+      "supportCorsBlockedHint": "Dein Server hat eine Antwort für <code>/.well-known/matrix/support</code> zurückgegeben, enthält aber keinen <code>Access-Control-Allow-Origin: *</code>-Header. Browser können die Antwort daher nicht lesen, weshalb Supportkontakte und die Seite zur Sicherheitsmeldung in webbasierten Matrix-Tools nicht angezeigt werden. Füge den CORS-Header zu diesem Endpunkt hinzu. <docsLink>Support-Endpunkt-Leitfaden →</docsLink>",
+      "oidcCorsBlocked": "OIDC-Auth-Issuer-Endpunkt hat keine CORS-Header",
+      "oidcCorsBlockedHint": "Der Endpunkt <code>/_matrix/client/v1/auth_issuer</code> deines Servers hat geantwortet, aber ohne den Header <code>Access-Control-Allow-Origin: *</code>. Webbasierte Matrix-Clients, die OIDC-Authentifizierung verwenden, können den Issuer nicht ermitteln. Füge den CORS-Header zu diesem Endpunkt hinzu. <docsLink>CORS-Leitfaden →</docsLink>",
+      "oidcDiscoveryUnreachable": "OIDC-Discovery-Dokument ist nicht erreichbar",
+      "oidcDiscoveryUnreachableHint": "Dein Server bewirbt OIDC über <code>/_matrix/client/v1/auth_issuer</code>, aber das OpenID-Connect-Discovery-Dokument unter <code>{{issuerUrl}}/.well-known/openid-configuration</code> konnte nicht abgerufen werden. Web-Clients, die sich per OIDC anmelden, werden fehlschlagen. Stelle sicher, dass der OIDC-Provider (z. B. MAS) läuft und sein Discovery-Endpunkt öffentlich erreichbar ist.",
+      "oidcIssuerMismatch": "OIDC-Issuer-URL stimmt nicht überein",
+      "oidcIssuerMismatchHint": "Das Feld <code>issuer</code> im OpenID-Connect-Discovery-Dokument stimmt nicht mit der URL überein, unter der es abgerufen wurde. Dies verstößt gegen die OIDC-Spezifikation — Clients lehnen das Discovery-Dokument möglicherweise ab. Stelle sicher, dass der OIDC-Provider mit der richtigen <code>issuer</code>-URL konfiguriert ist.",
+      "oidcJwksUnreachable": "OIDC-JWKS-Endpunkt ist nicht erreichbar",
+      "oidcJwksUnreachableHint": "Der JWKS-Endpunkt (<code>jwks_uri</code>) aus dem OIDC-Discovery-Dokument konnte nicht erreicht werden. Clients benötigen diesen Endpunkt zur Token-Validierung — OIDC-Anmeldungen schlagen fehl. Prüfe, ob die JWKS-URL öffentlich erreichbar ist."
     },
     "support": {
       "title": "Moderations- & Sicherheitskontakte",
@@ -427,6 +435,23 @@
         "serverCol": "Delegierter Server",
         "statusCol": "Status",
         "noData": "Keine well-known-Daten verfügbar."
+      },
+      "oidc": {
+        "title": "OIDC / Matrix-2.0-Auth",
+        "hint": "MSC3861 — delegierte Authentifizierung via OpenID Connect",
+        "configured": "Konfiguriert",
+        "notConfigured": "Nicht konfiguriert",
+        "notConfiguredDetail": "Dieser Server bewirbt keinen OIDC-Issuer über <code>/.well-known/matrix/client</code> oder <code>/_matrix/client/v1/auth_issuer</code>. Er nutzt den nativen Matrix-Authentifizierungsablauf (Passwort, SSO oder Token).",
+        "issuer": "Issuer",
+        "discoveryEndpoint": "OIDC-Discovery",
+        "jwks": "JWKS-Endpunkt",
+        "pkce": "PKCE (S256)",
+        "reachable": "Erreichbar",
+        "unreachable": "Nicht erreichbar",
+        "supported": "Unterstützt",
+        "notSupported": "Nicht unterstützt",
+        "na": "N/A",
+        "issuerMismatchWarning": "Das Issuer-Feld im Discovery-Dokument stimmt nicht mit der Issuer-URL überein"
       },
       "rtc": {
         "title": "MatrixRTC-Bereitschaft",
@@ -739,6 +764,7 @@
       "supportEndpoint": "Support-Endpunkt",
       "clientServerApi": "Client-Server-API",
       "wellKnownDelegation": "Well-known-Delegation",
+      "oidcAuth": "OIDC / Matrix 2.0-Authentifizierung",
       "troubleshooting": "Fehlerbehebung",
       "general": "Allgemein",
       "networkIssues": "Netzwerkprobleme",

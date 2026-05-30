@@ -111,6 +111,8 @@ export interface ClientVersions {
 export interface WellKnownClient {
   'm.homeserver'?: { base_url: string }
   'm.identity_server'?: { base_url: string }
+  /** MSC3861 — OIDC issuer advertised via well-known. */
+  'm.authentication'?: { issuer?: string; account?: string }
   'org.matrix.msc4143.rtc_foci'?: unknown[]
 }
 
@@ -124,18 +126,49 @@ export interface RtcTransportsResult {
   endpoint: string
 }
 
+export interface OidcDiscovery {
+  issuer: string
+  authorization_endpoint: string
+  token_endpoint: string
+  jwks_uri: string
+  response_types_supported?: string[]
+  code_challenge_methods_supported?: string[]
+}
+
+export interface OidcCheckResult {
+  /** The issuer URL, discovered via well-known or auth_issuer endpoint. */
+  issuerUrl: string
+  /** Where the issuer URL was discovered from. */
+  issuerSource: 'well_known' | 'auth_issuer'
+  /** Whether the OIDC discovery document was reachable and valid. */
+  discoveryReachable: boolean
+  /** Parsed OIDC discovery document, or null if unreachable. */
+  discovery: OidcDiscovery | null
+  /** Whether the JWKS endpoint from the discovery doc was reachable. */
+  jwksReachable: boolean
+  /** Whether the discovery doc advertises PKCE S256 support. */
+  hasPkceS256: boolean
+  /** True when the `issuer` field in the discovery doc doesn't match the URL it was fetched from. */
+  issuerMismatch: boolean
+  /** The full `/_matrix/client/v1/auth_issuer` URL that was probed. */
+  endpoint: string
+}
+
 export interface ClientServerData {
   baseUrl: string
   wellKnown: WellKnownClient | null
   versions: ClientVersions | null
   msc3266Supported: boolean
   rtcTransports: RtcTransportsResult | null
+  oidcCheck: OidcCheckResult | null
   /** True when `/_matrix/client/versions` responded but had no CORS headers. */
   versionsCorsBlocked: boolean
   /** True when the RTC transports endpoint responded but had no CORS headers. */
   rtcCorsBlocked: boolean
   /** True when the MSC3266 room-summary endpoint responded but had no CORS headers. */
   msc3266CorsBlocked: boolean
+  /** True when `/_matrix/client/v1/auth_issuer` responded but had no CORS headers. */
+  oidcCorsBlocked: boolean
 }
 
 // ── MSC1929 support types ─────────────────────────────────────────────────────
@@ -287,6 +320,113 @@ async function probeMsc3266(
   return { supported: false, corsBlocked: false }
 }
 
+async function probeOidc(
+  baseUrl: string,
+  apiServerUrl: string,
+  wellKnown: WellKnownClient | null,
+  versions: ClientVersions | null,
+): Promise<{ result: OidcCheckResult | null; corsBlocked: boolean }> {
+  const authIssuerPath = '/_matrix/client/v1/auth_issuer'
+  let issuerUrl: string | null = null
+  let issuerSource: 'well_known' | 'auth_issuer' = 'auth_issuer'
+
+  // Prefer m.authentication.issuer from well-known (works even when the
+  // stable /_matrix/client/v1/auth_issuer endpoint isn't deployed yet)
+  const wellKnownIssuer = wellKnown?.['m.authentication']?.issuer
+  if (typeof wellKnownIssuer === 'string' && wellKnownIssuer) {
+    issuerUrl = wellKnownIssuer
+    issuerSource = 'well_known'
+  } else {
+    const unstable = versions?.unstable_features ?? {}
+    // Build the probe order using advertised features as hints, but always
+    // include every candidate so a server with non-standard advertising still
+    // works. Preferred endpoints come first; duplicates are filtered out.
+    const preferred: string[] = []
+    if (unstable['org.matrix.msc2965'])
+      preferred.push('/_matrix/client/unstable/org.matrix.msc2965/auth_metadata')
+    if (hasMatrixVersion(versions?.versions ?? [], 1, 7) || unstable['org.matrix.msc3861'])
+      preferred.push(authIssuerPath, '/_matrix/client/unstable/org.matrix.msc3861/auth_issuer')
+    const allCandidates = [
+      authIssuerPath,
+      '/_matrix/client/unstable/org.matrix.msc3861/auth_issuer',
+      '/_matrix/client/unstable/org.matrix.msc2965/auth_metadata',
+    ]
+    const endpointsToTry = [
+      ...preferred,
+      ...allCandidates.filter((ep) => !preferred.includes(ep)),
+    ]
+
+    let fetchFailed = false
+    for (const path of endpointsToTry) {
+      try {
+        const resp = await fetch(`${baseUrl}${path}`)
+        if (resp.status === 404) continue
+        if (resp.ok) {
+          const json = await resp.json().catch(() => null)
+          if (typeof (json as Record<string, unknown> | null)?.issuer === 'string') {
+            issuerUrl = (json as { issuer: string }).issuer
+            issuerSource = 'auth_issuer'
+            break
+          }
+        }
+      } catch {
+        fetchFailed = true
+      }
+    }
+    if (!issuerUrl && fetchFailed) {
+      const corsBlocked = await probeCors(apiServerUrl, baseUrl, 'auth-issuer')
+      return { result: null, corsBlocked }
+    }
+  }
+
+  if (!issuerUrl) return { result: null, corsBlocked: false }
+
+  const issuerBase = issuerUrl.replace(/\/$/, '')
+  let discovery: OidcDiscovery | null = null
+  let discoveryReachable = false
+  try {
+    const resp = await fetch(`${issuerBase}/.well-known/openid-configuration`)
+    if (resp.ok) {
+      const json = await resp.json().catch(() => null)
+      if (json && typeof (json as Record<string, unknown>).issuer === 'string') {
+        discovery = json as OidcDiscovery
+        discoveryReachable = true
+      }
+    }
+  } catch {
+    // CORS or network — discovery unreachable from this browser
+  }
+
+  let jwksReachable = false
+  if (discovery?.jwks_uri) {
+    try {
+      const resp = await fetch(discovery.jwks_uri)
+      if (resp.ok) {
+        const json = await resp.json().catch(() => null)
+        jwksReachable = Array.isArray((json as Record<string, unknown> | null)?.keys)
+      }
+    } catch {
+      // unreachable
+    }
+  }
+
+  return {
+    result: {
+      issuerUrl,
+      issuerSource,
+      discoveryReachable,
+      discovery,
+      jwksReachable,
+      hasPkceS256:
+        discovery?.code_challenge_methods_supported?.includes('S256') ?? false,
+      issuerMismatch:
+        discoveryReachable && discovery !== null && discovery.issuer !== issuerUrl,
+      endpoint: `${baseUrl}${authIssuerPath}`,
+    },
+    corsBlocked: false,
+  }
+}
+
 // ── Query factories ───────────────────────────────────────────────────────────
 
 export const resultQueryOptions = (serverName: string, statsOptIn: boolean) =>
@@ -342,11 +482,12 @@ export const clientServerQueryOptions = (serverName: string) =>
         hasMatrixVersion(versionList, 1, 15) ||
         versions?.unstable_features?.['org.matrix.msc3266'] === true
 
-      const [msc3266Result, rtcResult] = await Promise.all([
+      const [msc3266Result, rtcResult, oidcResult] = await Promise.all([
         msc3266Skip
           ? Promise.resolve({ supported: true, corsBlocked: false })
           : probeMsc3266(baseUrl, serverName, apiServerUrl),
         probeRtcTransports(baseUrl, apiServerUrl),
+        probeOidc(baseUrl, apiServerUrl, wellKnown, versions),
       ])
 
       return {
@@ -355,9 +496,11 @@ export const clientServerQueryOptions = (serverName: string) =>
         versions,
         msc3266Supported: msc3266Result.supported,
         rtcTransports: rtcResult.result,
+        oidcCheck: oidcResult.result,
         versionsCorsBlocked,
         rtcCorsBlocked: rtcResult.corsBlocked,
         msc3266CorsBlocked: msc3266Result.corsBlocked,
+        oidcCorsBlocked: oidcResult.corsBlocked,
       }
     },
     retry: false,
