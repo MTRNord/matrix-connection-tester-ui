@@ -39,10 +39,13 @@ Die Datei unter `https://matrix.beispiel.de/.well-known/matrix/support` gibt JSO
 
 ### Rollen
 
-| Rolle             | Zweck                                       |
-| ----------------- | ------------------------------------------- |
-| `m.role.admin`    | Allgemeine Serveradministration und Support |
-| `m.role.security` | Meldung von Sicherheitslücken               |
+| Rolle                              | Zweck                                       |
+| ---------------------------------- | ------------------------------------------- |
+| `m.role.admin`                     | Allgemeine Serveradministration und Support |
+| `m.role.security`                  | Meldung von Sicherheitslücken               |
+| `m.role.dpo` _(MSC4265)_          | Datenschutzbeauftragter (DSGVO-Kontakt)     |
+
+Verwenden Sie den instabilen Präfix `org.matrix.msc4265.role.dpo`, bis MSC4265 in die Spezifikation aufgenommen wurde.
 
 ### Kontaktfelder
 
@@ -51,6 +54,64 @@ Jedes Kontaktobjekt muss mindestens eines von `matrix_id` oder `email_address` e
 - `matrix_id` — eine Matrix-ID auf Ihrem Server (verwenden Sie ein aktiv überwachtes Konto)
 - `email_address` — eine E-Mail-Adresse (bevorzugen Sie rollenbasierte Adressen wie `admin@` oder `security@`)
 - `support_page` — eine URL zu einer Support-Seite, Dokumentation oder einem Kontaktformular
+- `pgp_key` _(MSC4439)_ — eine URI, die auf einen PGP-Schlüssel für verschlüsselte Kommunikation zeigt (z. B. `https://beispiel.de/key.pub` oder `openpgp4fpr:FINGERPRINT`)
+
+## Optionale Erweiterungen
+
+### MSC4265 — Datenschutzbeauftragter
+
+[MSC4265](https://github.com/matrix-org/matrix-spec-proposals/pull/4265) fügt die dedizierte Kontaktrolle `m.role.dpo` hinzu, um den gemäß DSGVO-Artikel 37 erforderlichen Datenschutzbeauftragten zu veröffentlichen. Verwenden Sie den instabilen Präfix `org.matrix.msc4265.role.dpo`, bis der Vorschlag in die Spezifikation aufgenommen wurde:
+
+```json
+{
+  "contacts": [
+    {
+      "email_address": "dpo@beispiel.de",
+      "role": "org.matrix.msc4265.role.dpo"
+    }
+  ]
+}
+```
+
+### MSC4266 — Richtliniendokumente
+
+[MSC4266](https://github.com/matrix-org/matrix-spec-proposals/pull/4266) fügt ein `policies`-Feld (instabil: `org.matrix.msc4266.policies`) hinzu, um Ihre Datenschutzerklärung, Nutzungsbedingungen oder andere Dokumente zu veröffentlichen. Richtlinien sind nach einem Dokumentbezeichner geordnet, und jeder Eintrag ordnet Sprachcodes einer Bezeichnung und URL zu:
+
+```json
+{
+  "org.matrix.msc4266.policies": {
+    "privacy_policy": {
+      "version": "1.2",
+      "en": {
+        "name": "Privacy Policy",
+        "url": "https://beispiel.de/datenschutz-en.html"
+      },
+      "de": {
+        "name": "Datenschutzerklärung",
+        "url": "https://beispiel.de/datenschutz-de.html"
+      }
+    }
+  }
+}
+```
+
+### MSC4439 — PGP-Schlüssel für Kontakte
+
+[MSC4439](https://github.com/matrix-org/matrix-spec-proposals/pull/4439) fügt jedem Kontakteintrag ein `pgp_key`-Feld (instabil: `dev.zirco.msc4439.pgp_key`) hinzu, das eine PGP-Schlüssel-URI für verschlüsselte Kommunikation veröffentlicht — nützlich für Sicherheitsmeldungen:
+
+```json
+{
+  "contacts": [
+    {
+      "email_address": "security@beispiel.de",
+      "role": "m.role.security",
+      "dev.zirco.msc4439.pgp_key": "https://beispiel.de/security.pub"
+    }
+  ]
+}
+```
+
+Weitere unterstützte URI-Schemas: `openpgp4fpr:FINGERPRINT` und `dns:HASH._openpgpkey.beispiel.de?type=OPENPGPKEY`.
 
 ## Konfigurationsbeispiele
 

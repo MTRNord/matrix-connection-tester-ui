@@ -41,6 +41,10 @@
   border-bottom: none;
 }
 
+.support__row--policy {
+  grid-template-columns: auto 1fr auto;
+}
+
 .support__role {
   font-size: 13px;
   font-weight: 600;

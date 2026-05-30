@@ -494,7 +494,9 @@
       "copy": "Copy",
       "copied": "Copied!",
       "open": "Open ↗",
-      "supportPage": "Support page"
+      "supportPage": "Support page",
+      "pgpKey": "PGP key",
+      "policies": "Policies"
     },
     "overview": {
       "title": "Server overview",

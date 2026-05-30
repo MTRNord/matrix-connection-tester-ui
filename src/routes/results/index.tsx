@@ -6,7 +6,7 @@ import Navbar from '#/components/Navbar/Navbar'
 import Pill from '#/components/Pill/Pill'
 import Stat from '#/components/Stat/Stat'
 import Table from '#/components/Table/Table'
-import type { ClientServerData, Root, SupportContact, SupportInfoResult } from '#/resultQueryOptions'
+import type { ClientServerData, PolicyEntry, PolicyLocale, Root, SupportContact, SupportInfoResult } from '#/resultQueryOptions'
 import {
   clientServerQueryOptions,
   resultQueryOptions,
@@ -25,7 +25,7 @@ import {
   redirect,
   useRouter,
 } from '@tanstack/react-router'
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import './index.css'
 
@@ -468,6 +468,37 @@ function CopyButton({ text, label }: { text: string; label: string }) {
   )
 }
 
+// ── Support helpers ───────────────────────────────────────────────────────────
+
+function formatRole(role: string): string {
+  switch (role) {
+    case 'm.role.admin': return 'Admin'
+    case 'm.role.security': return 'Security'
+    case 'm.role.dpo':
+    case 'org.matrix.msc4265.role.dpo': return 'DPO'
+    default: return role
+  }
+}
+
+function getPgpKey(c: SupportContact): string | undefined {
+  return c.pgp_key ?? c['dev.zirco.msc4439.pgp_key']
+}
+
+function getBestPolicyLocale(
+  entry: PolicyEntry,
+  lang: string,
+): PolicyLocale | null {
+  const candidates = [lang, lang.split('-')[0], 'en']
+  for (const l of candidates) {
+    const v = entry[l]
+    if (v && typeof v === 'object' && v.url) return v
+  }
+  for (const [k, v] of Object.entries(entry)) {
+    if (k !== 'version' && v && typeof v === 'object' && v.url) return v
+  }
+  return null
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 function RouteComponent() {
@@ -522,7 +553,7 @@ function ResultsBody({
   isRefreshing: boolean
   lastUpdatedAt: number
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const federationOK = data.FederationOK
   const hasWarning = !!data.FederationWarning
@@ -939,8 +970,12 @@ function ResultsBody({
   }
 
   // Support contacts (CORS-blocked → info is null but we still know the endpoint exists)
-  const contacts = supportData?.info?.contacts ?? []
+  const contacts: SupportContact[] = supportData?.info?.contacts ?? []
   const supportPage = supportData?.info?.support_page
+  const policies =
+    supportData?.info?.policies ??
+    supportData?.info?.['org.matrix.msc4266.policies'] ??
+    {}
 
   // Connection reports
   const connectionReportEntries = Object.entries(data.ConnectionReports ?? {})
@@ -1158,35 +1193,55 @@ function ResultsBody({
               <>
                 <p className="support__lead">{t('results.support.copyHint')}</p>
                 <div className="support__grid">
-                  {contacts.map((c: SupportContact) => (
-                    <div
-                      key={c.email_address ?? c.matrix_id ?? c.role}
-                      className="support__row"
-                    >
-                      <span className="support__role">{c.role}</span>
-                      {c.email_address ? (
-                        <a
-                          className="support__email"
-                          href={`mailto:${c.email_address}`}
-                        >
-                          {c.email_address}
-                        </a>
-                      ) : c.matrix_id ? (
-                        <span className="support__email">{c.matrix_id}</span>
-                      ) : (
-                        <span
-                          className="support__email"
-                          style={{ color: 'var(--ink-3)' }}
-                        >
-                          {'—'}
-                        </span>
-                      )}
-                      <CopyButton
-                        text={c.email_address ?? c.matrix_id ?? ''}
-                        label={`Copy ${c.email_address ?? c.matrix_id}`}
-                      />
-                    </div>
-                  ))}
+                  {contacts.map((c: SupportContact) => {
+                    const pgpKey = getPgpKey(c)
+                    return (
+                      <React.Fragment key={c.email_address ?? c.matrix_id ?? c.role}>
+                        <div className="support__row">
+                          <span className="support__role">{formatRole(c.role)}</span>
+                          {c.email_address ? (
+                            <a
+                              className="support__email"
+                              href={`mailto:${c.email_address}`}
+                            >
+                              {c.email_address}
+                            </a>
+                          ) : c.matrix_id ? (
+                            <span className="support__email">{c.matrix_id}</span>
+                          ) : (
+                            <span
+                              className="support__email"
+                              style={{ color: 'var(--ink-3)' }}
+                            >
+                              {'—'}
+                            </span>
+                          )}
+                          <CopyButton
+                            text={c.email_address ?? c.matrix_id ?? ''}
+                            label={`Copy ${c.email_address ?? c.matrix_id}`}
+                          />
+                        </div>
+                        {pgpKey && (
+                          <div className="support__row">
+                            <span className="support__role">
+                              {t('results.support.pgpKey')}
+                            </span>
+                            {isSafeUrl(pgpKey) ? (
+                              <a href={pgpKey} className="support__email">
+                                {pgpKey}
+                              </a>
+                            ) : (
+                              <span className="support__email">{pgpKey}</span>
+                            )}
+                            <CopyButton
+                              text={pgpKey}
+                              label={t('results.support.pgpKey')}
+                            />
+                          </div>
+                        )}
+                      </React.Fragment>
+                    )
+                  })}
                   {supportPage && isSafeUrl(supportPage) && (
                     <div
                       className="support__row"
@@ -1207,6 +1262,34 @@ function ResultsBody({
                       </button>
                     </div>
                   )}
+                </div>
+              </>
+            )}
+            {Object.keys(policies).length > 0 && (
+              <>
+                <p className="support__lead" style={{ paddingTop: 12 }}>
+                  {t('results.support.policies')}
+                </p>
+                <div className="support__grid">
+                  {Object.entries(policies).map(([policyId, entry]) => {
+                    const locale = getBestPolicyLocale(entry, i18n.language)
+                    if (!locale) return null
+                    return (
+                      <div key={policyId} className="support__row support__row--policy">
+                        <span className="support__role">{locale.name}</span>
+                        <a href={locale.url} className="support__email">
+                          {locale.url}
+                        </a>
+                        <button
+                          type="button"
+                          className="support__copy"
+                          onClick={() => window.open(locale.url, '_blank')}
+                        >
+                          {t('results.support.open')}
+                        </button>
+                      </div>
+                    )
+                  })}
                 </div>
               </>
             )}

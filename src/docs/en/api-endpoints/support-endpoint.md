@@ -39,10 +39,13 @@ The file at `https://matrix.example.com/.well-known/matrix/support` returns JSON
 
 ### Roles
 
-| Role              | Purpose                                   |
-| ----------------- | ----------------------------------------- |
-| `m.role.admin`    | General server administration and support |
-| `m.role.security` | Security vulnerability reports            |
+| Role                              | Purpose                                   |
+| --------------------------------- | ----------------------------------------- |
+| `m.role.admin`                    | General server administration and support |
+| `m.role.security`                 | Security vulnerability reports            |
+| `m.role.dpo` _(MSC4265)_         | Data Protection Officer (GDPR contact)    |
+
+Use the unstable prefix `org.matrix.msc4265.role.dpo` until MSC4265 is merged into the spec.
 
 ### Contact fields
 
@@ -51,6 +54,70 @@ Each contact object must have at least one of `matrix_id` or `email_address`. Th
 - `matrix_id` — a Matrix ID on your server (use an account that is actively monitored)
 - `email_address` — an email address (prefer role-based addresses like `admin@` or `security@`)
 - `support_page` — a URL to a support page, documentation, or contact form
+- `pgp_key` _(MSC4439)_ — a URI pointing to a PGP key for encrypted communication (e.g. `https://example.com/key.pub` or `openpgp4fpr:FINGERPRINT`)
+
+## Optional extensions
+
+### MSC4265 — Data Protection Officer contact
+
+[MSC4265](https://github.com/matrix-org/matrix-spec-proposals/pull/4265) adds a dedicated `m.role.dpo` contact role for publishing the Data Protection Officer required by GDPR Article 37. Use the unstable prefix `org.matrix.msc4265.role.dpo` until the proposal is merged into the spec:
+
+```json
+{
+  "contacts": [
+    {
+      "email_address": "dpo@example.com",
+      "role": "org.matrix.msc4265.role.dpo"
+    }
+  ]
+}
+```
+
+### MSC4266 — Policy documents
+
+[MSC4266](https://github.com/matrix-org/matrix-spec-proposals/pull/4266) adds a `policies` field (unstable: `org.matrix.msc4266.policies`) to publish your privacy policy, terms of service, or other documents. Policies are keyed by a document identifier and each entry maps language codes to a name and URL:
+
+```json
+{
+  "org.matrix.msc4266.policies": {
+    "privacy_policy": {
+      "version": "1.2",
+      "en": {
+        "name": "Privacy Policy",
+        "url": "https://example.com/privacy-en.html"
+      },
+      "de": {
+        "name": "Datenschutzerklärung",
+        "url": "https://example.com/privacy-de.html"
+      }
+    },
+    "terms_of_service": {
+      "en": {
+        "name": "Terms of Service",
+        "url": "https://example.com/tos.html"
+      }
+    }
+  }
+}
+```
+
+### MSC4439 — PGP key for contacts
+
+[MSC4439](https://github.com/matrix-org/matrix-spec-proposals/pull/4439) adds a `pgp_key` field (unstable: `dev.zirco.msc4439.pgp_key`) to each contact entry, allowing you to publish a PGP key URI for encrypted communication — useful for security disclosures:
+
+```json
+{
+  "contacts": [
+    {
+      "email_address": "security@example.com",
+      "role": "m.role.security",
+      "dev.zirco.msc4439.pgp_key": "https://example.com/security.pub"
+    }
+  ]
+}
+```
+
+Other supported URI schemes: `openpgp4fpr:FINGERPRINT` and `dns:HASH._openpgpkey.example.com?type=OPENPGPKEY`.
 
 ## Configuration examples
 

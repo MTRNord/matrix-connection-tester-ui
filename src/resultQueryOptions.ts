@@ -177,11 +177,29 @@ export interface SupportContact {
   email_address?: string
   matrix_id?: string
   role: string
+  /** MSC4439 stable: URI of a PGP key for encrypted communication */
+  pgp_key?: string
+  /** MSC4439 unstable prefix */
+  'dev.zirco.msc4439.pgp_key'?: string
+}
+
+export interface PolicyLocale {
+  name: string
+  url: string
+}
+
+export interface PolicyEntry {
+  version?: string
+  [lang: string]: PolicyLocale | string | undefined
 }
 
 export interface SupportInfo {
   contacts?: SupportContact[]
   support_page?: string
+  /** MSC4266 stable: policy documents keyed by policy ID */
+  policies?: Record<string, PolicyEntry>
+  /** MSC4266 unstable prefix */
+  'org.matrix.msc4266.policies'?: Record<string, PolicyEntry>
 }
 
 /** Result returned by the backend well-known probe endpoint. */

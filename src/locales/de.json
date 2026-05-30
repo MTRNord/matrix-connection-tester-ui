@@ -382,7 +382,9 @@
       "copy": "Kopieren",
       "copied": "Kopiert!",
       "open": "Öffnen ↗",
-      "supportPage": "Support-Seite"
+      "supportPage": "Support-Seite",
+      "pgpKey": "PGP-Schlüssel",
+      "policies": "Richtlinien"
     },
     "overview": {
       "title": "Server-Übersicht",
